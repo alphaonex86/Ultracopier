@@ -75,7 +75,7 @@ private:
     FileErrorAction			alwaysDoThisActionForFileError;
     FileErrorAction			alwaysDoThisActionForFolderError;
     FolderExistsAction		alwaysDoThisActionForFolderExists;
-    bool                    dialogIsOpen;
+    volatile bool                    dialogIsOpen;
     volatile bool			stopIt;
     std::string                 defaultDestinationFolder;
     /// \brief error queue
@@ -140,15 +140,15 @@ private slots:
 
     //dialog message
     /// \note Can be call without queue because all call will be serialized
-    void fileAlreadyExists(INTERNALTYPEPATH source, INTERNALTYPEPATH destination, bool isSame, TransferThreadAsync * thread, bool isCalledByShowOneNewDialog=false);
+    void fileAlreadyExists(INTERNALTYPEPATH source, INTERNALTYPEPATH destination, bool isSame, TransferThreadAsync * thread);
     /// \note Can be call without queue because all call will be serialized
-    void errorOnFile(INTERNALTYPEPATH fileInfo, std::string errorString, TransferThreadAsync * thread, const ErrorType &errorType, bool isCalledByShowOneNewDialog=false);
+    void errorOnFile(INTERNALTYPEPATH fileInfo, std::string errorString, TransferThreadAsync * thread, const ErrorType &errorType);
     /// \note Can be call without queue because all call will be serialized
-    void folderAlreadyExists(INTERNALTYPEPATH source,INTERNALTYPEPATH destination,bool isSame,ScanFileOrFolder * thread,bool isCalledByShowOneNewDialog=false);
+    void folderAlreadyExists(INTERNALTYPEPATH source,INTERNALTYPEPATH destination,bool isSame,ScanFileOrFolder * thread);
     /// \note Can be call without queue because all call will be serialized
-    void errorOnFolder(INTERNALTYPEPATH fileInfo, std::string errorString, ScanFileOrFolder * thread, ErrorType errorType, bool isCalledByShowOneNewDialog=false);
+    void errorOnFolder(INTERNALTYPEPATH fileInfo, std::string errorString, ScanFileOrFolder * thread, ErrorType errorType);
     //mkpath event
-    void mkPathErrorOnFolder(INTERNALTYPEPATH, std::string, const ErrorType &errorType, bool isCalledByShowOneNewDialog=false);
+    void mkPathErrorOnFolder(INTERNALTYPEPATH, std::string, const ErrorType &errorType);
 
     //show one new dialog if needed
     void showOneNewDialog();

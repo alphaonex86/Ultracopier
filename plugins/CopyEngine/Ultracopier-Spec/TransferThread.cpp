@@ -93,6 +93,10 @@ void TransferThread::run()
     if(!connect(&driveManagement,&DriveManagement::debugInformation,this,                   &TransferThread::debugInformation,	Qt::QueuedConnection))
         abort();
     #endif
+    if(!connect(this,&TransferThread::setFileRenameSend,this,                   &TransferThread::setFileRenameInternal,	Qt::QueuedConnection))
+        abort();
+    if(!connect(this,&TransferThread::setAlwaysFileExistsActionSend,this,                   &TransferThread::setAlwaysFileExistsActionInternal,	Qt::QueuedConnection))
+        abort();
 }
 
 TransferStat TransferThread::getStat() const
@@ -166,6 +170,11 @@ bool TransferThread::setFiles(const INTERNALTYPEPATH& source, const int64_t &siz
 }
 
 void TransferThread::setFileRename(const std::string &nameForRename)
+{
+    emit setFileRenameSend(nameForRename);
+}
+
+void TransferThread::setFileRenameInternal(const std::string &nameForRename)
 {
     if(transfer_stat!=TransferStat_PreOperation)
     {
@@ -256,6 +265,11 @@ bool TransferThread::rename(const INTERNALTYPEPATH &source, const INTERNALTYPEPA
 }
 
 void TransferThread::setAlwaysFileExistsAction(const FileExistsAction &action)
+{
+    emit setAlwaysFileExistsActionSend(action);
+}
+
+void TransferThread::setAlwaysFileExistsActionInternal(const FileExistsAction &action)
 {
     //ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+QStringLiteral("] action to do always: ")+QString::number(action)));
     alwaysDoFileExistsAction=action;
@@ -771,7 +785,7 @@ bool TransferThread::mkpath(const INTERNALTYPEPATH &path)
             return false;
         #endif
 
-	pathCedit.resize(lastpos);
+    pathCedit.resize(lastpos);
         previouspos=lastpos;
 
         errno=0;

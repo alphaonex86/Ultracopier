@@ -169,6 +169,9 @@ signals:
     void tryPutAtBottom() const;
     /// \brief update the transfer stat
     void pushStat(const TransferStat &stat,const uint64_t &pos) const;
+
+    void setFileRenameSend(const std::string &nameForRename);
+    void setAlwaysFileExistsActionSend(const FileExistsAction &action);
 public slots:
     /// \brief to set files to transfer
     virtual bool setFiles(const INTERNALTYPEPATH& source,const int64_t &size,const INTERNALTYPEPATH& destination,const Ultracopier::CopyMode &mode);
@@ -195,6 +198,8 @@ public slots:
     void setRenameTheOriginalDestination(const bool &renameTheOriginalDestination);
     void set_updateMount();
 protected:
+    void setFileRenameInternal(const std::string &nameForRename);
+    void setAlwaysFileExistsActionInternal(const FileExistsAction &action);
     enum MoveReturn
     {
         MoveReturn_skip=0,
@@ -220,8 +225,8 @@ protected:
     INTERNALTYPEPATH	source;
     INTERNALTYPEPATH		destination;
     int64_t			size;
-    FileExistsAction	fileExistsAction;
-    FileExistsAction	alwaysDoFileExistsAction;
+    volatile FileExistsAction	fileExistsAction;
+    volatile FileExistsAction	alwaysDoFileExistsAction;
     bool			needSkip,needRemove;
     int             id;
     bool            deletePartiallyTransferredFiles;

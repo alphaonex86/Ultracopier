@@ -166,7 +166,23 @@ void ListThread::transferInodeIsClosed()
     {
         if(actionToDoListTransfer.at(int_for_internal_loop).id==temp_transfer_thread->transferId)
         {
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("[%1] have finish, put at idle; for id: %2").arg(int_for_internal_loop).arg(temp_transfer_thread->transferId).toStdString());
+            #ifdef ULTRACOPIER_PLUGIN_DEBUG
+            std::string threadidstring="?";
+            {
+                size_t index=0;
+                while(index<transferThreadList.size())
+                {
+                    if(transferThreadList.at(index)==temp_transfer_thread)
+                    {
+                        threadidstring=std::to_string(index);
+                        break;
+                    }
+                    index++;
+                }
+            }
+            #endif
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("[%1] have finish, put at idle; for id: %2").arg(QString::fromStdString(threadidstring))
+                                     .arg(temp_transfer_thread->transferId).toStdString()+" "+TransferThread::internalStringTostring(temp_transfer_thread->getDestinationPath()));
             Ultracopier::ReturnActionOnCopyList newAction;
             newAction.type=Ultracopier::RemoveItem;
             newAction.userAction.moveAt=0;
@@ -196,6 +212,8 @@ void ListThread::transferInodeIsClosed()
             }
             bytesTransfered+=temp_transfer_thread->transferSize;
 
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+threadidstring+"] transferId=0 currentTransferThread->transferId: "+
+                                     std::to_string(temp_transfer_thread->transferId)+" on thread "+std::to_string((quint64)QThread::currentThread()));
             temp_transfer_thread->transferId=0;
             temp_transfer_thread->transferSize=0;
             #ifdef ULTRACOPIER_PLUGIN_DEBUG
@@ -215,7 +233,9 @@ void ListThread::transferInodeIsClosed()
         int_for_internal_loop++;
     }
     if(isFound)
-        deleteTransferThread();
+    {
+        //deleteTransferThread();//why? generate use after free!
+    }
     else
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,QStringLiteral("unable to found item into the todo list, id: %1, index: %2").arg(temp_transfer_thread->transferId).arg(int_for_internal_loop).toStdString());
@@ -271,6 +291,24 @@ void ListThread::transferPutAtBottom()
             //move at the end
             actionToDoListTransfer.push_back(actionToDoListTransfer.at(indexAction));
             actionToDoListTransfer.erase(actionToDoListTransfer.cbegin()+indexAction);
+            #ifdef ULTRACOPIER_PLUGIN_DEBUG
+            {
+                size_t index=0;
+                while(index<transferThreadList.size())
+                {
+                    if(transferThreadList.at(index)==transfer)
+                    {
+                        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(index)+"] currentTransferThread->transferId: "+
+                                             std::to_string(transfer->transferId)+" on thread "+std::to_string((quint64)QThread::currentThread()));
+                        break;
+                    }
+                    index++;
+                }
+                if(index>=transferThreadList.size())
+                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"[?] currentTransferThread->transferId: "+
+                                     std::to_string(transfer->transferId)+" on thread "+std::to_string((quint64)QThread::currentThread()));
+            }
+            #endif
             transfer->transferId=0;
             transfer->transferSize=0;
             #ifdef ULTRACOPIER_PLUGIN_DEBUG
@@ -850,6 +888,24 @@ void ListThread::doNewActions_inode_manipulation()
                 if(currentTransferThread->getStat()==TransferStat_Idle && currentTransferThread->transferId==0 &&
                         overCheckUsedThread.find(currentTransferThread)==overCheckUsedThread.cend()) // /!\ important!
                 {
+                    #ifdef ULTRACOPIER_PLUGIN_DEBUG
+                    {
+                        size_t index=0;
+                        while(index<transferThreadList.size())
+                        {
+                            if(transferThreadList.at(index)==currentTransferThread)
+                            {
+                                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(index)+"] currentTransferThread->transferId: "+
+                                                     std::to_string(currentTransferThread->transferId)+" on thread "+std::to_string((quint64)QThread::currentThread()));
+                                break;
+                            }
+                            index++;
+                        }
+                        if(index>=transferThreadList.size())
+                            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"[?] currentTransferThread->transferId: "+
+                                             std::to_string(currentTransferThread->transferId)+" on thread "+std::to_string((quint64)QThread::currentThread()));
+                    }
+                    #endif
                     overCheckUsedThread.insert(currentTransferThread);
 
                     std::string drive=driveManagement.getDrive(TransferThread::internalStringTostring(currentActionToDoTransfer.destination));
@@ -871,11 +927,18 @@ void ListThread::doNewActions_inode_manipulation()
                         currentActionToDoTransfer.mode
                         ))
                     {
-                        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(int_for_loop)+"] id: "+
+                        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(int_for_loop)+"] id: "+
                                                  std::to_string(currentTransferThread->transferId)+
                                                  " is idle, but seam busy at set name: "+TransferThread::internalStringTostring(currentActionToDoTransfer.destination)
                                                  );
                         break;
+                    }
+                    else
+                    {
+                        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(int_for_loop)+"] id: "+
+                                                 std::to_string(currentTransferThread->transferId)+
+                                                 " is idle, but seam busy at set name: "+TransferThread::internalStringTostring(currentActionToDoTransfer.destination)
+                                                 );
                     }
                     currentActionToDoTransfer.isRunning=true;
 
@@ -1121,6 +1184,7 @@ void ListThread::getNeedPutAtBottom(const INTERNALTYPEPATH &fileInfo, const std:
 /// \to create transfer thread
 void ListThread::createTransferThread()
 {
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
     if(stopIt)
         return;
     if(transferThreadList.size()>=(unsigned int)inodeThreads)
@@ -1206,6 +1270,7 @@ void ListThread::deleteTransferThread()
         int index=0;
         while(index<loop_size && loop_size>inodeThreads)
         {
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"delete thread ["+std::to_string(index)+"]");
             if(transferThreadList.at(index)->getStat()==TransferStat_Idle && transferThreadList.at(index)->transferId==0)
             {
                 transferThreadList.at(index)->stop();

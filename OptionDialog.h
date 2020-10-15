@@ -106,7 +106,7 @@ private:
         PluginType category;
     };
     std::vector<pluginOptionsWidget> pluginOptionsWidgetList;
-    int number_of_listener;
+    int number_of_listener,number_of_pluginloader;
     void addLanguage(const PluginsAvailable &plugin);
     void removeLanguage(const PluginsAvailable &plugin);
     void addTheme(const PluginsAvailable &plugin);

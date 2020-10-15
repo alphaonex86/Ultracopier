@@ -39,8 +39,9 @@ OptionDialog::OptionDialog() :
     ui->treeWidget->expandAll();
     ui->pluginList->expandAll();
     number_of_listener=0;
-    ui->labelCatchCopyDefault->setEnabled(number_of_listener>0);
-    ui->CatchCopyAsDefault->setEnabled(number_of_listener>0);
+    number_of_pluginloader=0;
+    ui->labelCatchCopyDefault->setEnabled(number_of_listener>0 && number_of_pluginloader>0);
+    ui->CatchCopyAsDefault->setEnabled(number_of_listener>0 && number_of_pluginloader>0);
     ui->Language->setEnabled(false);
     on_treeWidget_itemSelectionChanged();
 
@@ -108,11 +109,14 @@ void OptionDialog::onePluginAdded(const PluginsAvailable &plugin)
         case PluginType_Listener:
             ui->pluginList->topLevelItem(2)->addChild(newItem.item);
             number_of_listener++;
-            ui->labelCatchCopyDefault->setEnabled(number_of_listener>0);
-            ui->CatchCopyAsDefault->setEnabled(number_of_listener>0);
+            ui->labelCatchCopyDefault->setEnabled(number_of_listener>0 && number_of_pluginloader>0);
+            ui->CatchCopyAsDefault->setEnabled(number_of_listener>0 && number_of_pluginloader>0);
         break;
         case PluginType_PluginLoader:
             ui->pluginList->topLevelItem(3)->addChild(newItem.item);
+            number_of_pluginloader++;
+            ui->labelCatchCopyDefault->setEnabled(number_of_listener>0 && number_of_pluginloader>0);
+            ui->CatchCopyAsDefault->setEnabled(number_of_listener>0 && number_of_pluginloader>0);
         break;
         case PluginType_SessionLoader:
             ui->pluginList->topLevelItem(4)->addChild(newItem.item);
@@ -140,10 +144,13 @@ void OptionDialog::onePluginWillBeRemoved(const PluginsAvailable &plugin)
         break;
         case PluginType_Listener:
             number_of_listener--;
-            ui->labelCatchCopyDefault->setEnabled(number_of_listener>0);
-            ui->CatchCopyAsDefault->setEnabled(number_of_listener>0);
+            ui->labelCatchCopyDefault->setEnabled(number_of_listener>0 && number_of_pluginloader>0);
+            ui->CatchCopyAsDefault->setEnabled(number_of_listener>0 && number_of_pluginloader>0);
         break;
         case PluginType_PluginLoader:
+            number_of_pluginloader--;
+            ui->labelCatchCopyDefault->setEnabled(number_of_listener>0 && number_of_pluginloader>0);
+            ui->CatchCopyAsDefault->setEnabled(number_of_listener>0 && number_of_pluginloader>0);
         break;
         case PluginType_SessionLoader:
         break;

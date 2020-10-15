@@ -27,6 +27,7 @@ std::string stringimplode2(const std::vector<std::string>& elems, const std::str
 
 ServerCatchcopy::ServerCatchcopy()
 {
+    nextOrderId=0;
     name="Default avanced copier";
     idNextClient=0;
     error_string="Unknown error";

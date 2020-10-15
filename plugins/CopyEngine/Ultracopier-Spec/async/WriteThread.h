@@ -124,6 +124,7 @@ signals:
     void internalStartClose() const;
     void internalStartEndOfFile() const;
     void internalStartFlushAndSeekToZero() const;
+    void openWriteSend(const INTERNALTYPEPATH &file,const uint64_t &startSize);
     /// \brief To debug source
     void debugInformation(const Ultracopier::DebugLevel &level,const std::string &fonction,const std::string &text,const std::string &file,const int &ligne) const;
 private:
@@ -176,6 +177,7 @@ private slots:
     void internalReopen();
     void internalEndOfFile();
     void internalFlushAndSeekToZero();
+    void openWriteInternal(const INTERNALTYPEPATH &file,const uint64_t &startSize);
 };
 
 #endif // WRITETHREAD_H

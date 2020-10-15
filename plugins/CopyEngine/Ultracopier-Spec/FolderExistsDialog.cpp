@@ -2,6 +2,7 @@
 #include "ui_folderExistsDialog.h"
 #include "TransferThread.h"
 #include "../../../cpp11addition.h"
+#include <cstring>
 
 #ifdef Q_OS_WIN32
 #define CURRENTSEPARATOR "\\"
@@ -40,7 +41,8 @@ FolderExistsDialog::FolderExistsDialog(QWidget *parent, INTERNALTYPEPATH source,
         size|=fileInfoW.nFileSizeLow;
 #else
     struct stat source_statbuf;
-    if(TransferThread::exists(source))
+    memset(&source_statbuf,0,sizeof(source_statbuf));
+    if (lstat(TransferThread::internalStringTostring(source).c_str(), &source_statbuf) < 0)
     {
         #ifdef Q_OS_UNIX
             #ifdef Q_OS_MAC
@@ -83,6 +85,7 @@ FolderExistsDialog::FolderExistsDialog(QWidget *parent, INTERNALTYPEPATH source,
         this->destinationInfo=TransferThread::internalStringTostring(destination);
         this->setWindowTitle(tr("Folder already exists"));
         struct stat destination_statbuf;
+        memset(&destination_statbuf,0,sizeof(destination_statbuf));
         if(TransferThread::exists(destination))
         {
             #ifdef Q_OS_UNIX

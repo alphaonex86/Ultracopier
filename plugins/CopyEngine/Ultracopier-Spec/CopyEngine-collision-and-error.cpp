@@ -38,7 +38,7 @@ void CopyEngine::mkPathErrorOnFolderSlot(INTERNALTYPEPATH folder,std::string err
 }
 
 /// \note Can be call without queue because all call will be serialized
-void CopyEngine::fileAlreadyExists(INTERNALTYPEPATH source,INTERNALTYPEPATH destination,bool isSame,TransferThreadAsync * thread,bool isCalledByShowOneNewDialog)
+void CopyEngine::fileAlreadyExists(INTERNALTYPEPATH source,INTERNALTYPEPATH destination,bool isSame,TransferThreadAsync * thread)
 {
     if(stopIt)
         return;
@@ -106,13 +106,9 @@ void CopyEngine::fileAlreadyExists(INTERNALTYPEPATH source,INTERNALTYPEPATH dest
                 else
                     thread->setFileRename(dialog.getNewName());
                 dialogIsOpen=false;
-                if(!isCalledByShowOneNewDialog)
-                {
-                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"emit queryOneNewDialog()");
-                    emit queryOneNewDialog();
-                }
-                else
-                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"NOT emit queryOneNewDialog(), !isCalledByShowOneNewDialog");
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"emit queryOneNewDialog()");
+                //always call to check if pending dialog
+                emit queryOneNewDialog();
                 return;
             break;
         }
@@ -161,11 +157,14 @@ void CopyEngine::fileAlreadyExists(INTERNALTYPEPATH source,INTERNALTYPEPATH dest
                 ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"close dialog: "+std::to_string(newAction));
                 if(newAction==FileExists_Cancel)
                 {
+                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"cancel");
                     emit cancelAll();
                     return;
                 }
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"close dialog: newAction!=FileExists_Cancel");
                 if(dialog.getAlways() && newAction!=alwaysDoThisActionForFileExists)
                 {
+                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"close dialog: always");
                     alwaysDoThisActionForFileExists=newAction;
                     listThread->setAlwaysFileExistsAction(alwaysDoThisActionForFileExists);
                     if(uiIsInstalled)
@@ -198,18 +197,16 @@ void CopyEngine::fileAlreadyExists(INTERNALTYPEPATH source,INTERNALTYPEPATH dest
                             break;
                         }
                 }
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"close dialog: post always");
                 if(dialog.getAlways() || newAction!=FileExists_Rename)
                     thread->setFileExistsAction(newAction);
                 else
                     thread->setFileRename(dialog.getNewName());
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"close dialog: post set thread");
                 dialogIsOpen=false;
-                if(!isCalledByShowOneNewDialog)
-                {
-                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"emit queryOneNewDialog()");
-                    emit queryOneNewDialog();
-                }
-                else
-                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"NOT emit queryOneNewDialog(), !isCalledByShowOneNewDialog");
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"emit queryOneNewDialog()");
+                //always call to check if pending dialog
+                emit queryOneNewDialog();
                 return;
             break;
         }
@@ -254,7 +251,7 @@ void CopyEngine::missingDiskSpace(std::vector<Diskspace> list)
 }
 
 /// \note Can be call without queue because all call will be serialized
-void CopyEngine::errorOnFile(INTERNALTYPEPATH fileInfo,std::string errorString,TransferThreadAsync * thread,const ErrorType &errorType,bool isCalledByShowOneNewDialog)
+void CopyEngine::errorOnFile(INTERNALTYPEPATH fileInfo, std::string errorString, TransferThreadAsync * thread, const ErrorType &errorType)
 {
     if(stopIt)
         return;
@@ -381,13 +378,9 @@ void CopyEngine::errorOnFile(INTERNALTYPEPATH fileInfo,std::string errorString,T
                 break;
             }
             dialogIsOpen=false;
-            if(!isCalledByShowOneNewDialog)
-            {
-                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"emit queryOneNewDialog()");
-                emit queryOneNewDialog();
-            }
-            else
-                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"isCalledByShowOneNewDialog==true then not show other dial");
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"emit queryOneNewDialog()");
+            //always call to check if pending dialog
+            emit queryOneNewDialog();
             return;
         break;
     }
@@ -395,7 +388,7 @@ void CopyEngine::errorOnFile(INTERNALTYPEPATH fileInfo,std::string errorString,T
 }
 
 /// \note Can be call without queue because all call will be serialized
-void CopyEngine::folderAlreadyExists(INTERNALTYPEPATH source,INTERNALTYPEPATH destination,bool isSame,ScanFileOrFolder * thread,bool isCalledByShowOneNewDialog)
+void CopyEngine::folderAlreadyExists(INTERNALTYPEPATH source, INTERNALTYPEPATH destination, bool isSame, ScanFileOrFolder * thread)
 {
     if(stopIt)
         return;
@@ -445,13 +438,9 @@ void CopyEngine::folderAlreadyExists(INTERNALTYPEPATH source,INTERNALTYPEPATH de
             else
                 thread->setFolderExistsAction(newAction);
             dialogIsOpen=false;
-            if(!isCalledByShowOneNewDialog)
-            {
-                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"emit queryOneNewDialog()");
-                emit queryOneNewDialog();
-            }
-            else
-                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"NOT emit queryOneNewDialog(), !isCalledByShowOneNewDialog");
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"emit queryOneNewDialog()");
+            //always call to check if pending dialog
+            emit queryOneNewDialog();
             return;
         break;
     }
@@ -459,7 +448,7 @@ void CopyEngine::folderAlreadyExists(INTERNALTYPEPATH source,INTERNALTYPEPATH de
 
 /// \note Can be call without queue because all call will be serialized
 /// \todo all this part
-void CopyEngine::errorOnFolder(INTERNALTYPEPATH fileInfo, std::string errorString, ScanFileOrFolder * thread, ErrorType errorType, bool isCalledByShowOneNewDialog)
+void CopyEngine::errorOnFolder(INTERNALTYPEPATH fileInfo, std::string errorString, ScanFileOrFolder * thread, ErrorType errorType)
 {
     if(stopIt)
         return;
@@ -546,13 +535,9 @@ void CopyEngine::errorOnFolder(INTERNALTYPEPATH fileInfo, std::string errorStrin
             }
             dialogIsOpen=false;
             thread->setFolderErrorAction(newAction);
-            if(!isCalledByShowOneNewDialog)
-            {
-                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"emit queryOneNewDialog()");
-                emit queryOneNewDialog();
-            }
-            else
-                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"NOT emit queryOneNewDialog(), !isCalledByShowOneNewDialog");
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"emit queryOneNewDialog()");
+            //always call to check if pending dialog
+            emit queryOneNewDialog();
             return;
         break;
     }
@@ -562,7 +547,7 @@ void CopyEngine::errorOnFolder(INTERNALTYPEPATH fileInfo, std::string errorStrin
 // -----------------------------------------------------
 
 //mkpath event
-void CopyEngine::mkPathErrorOnFolder(INTERNALTYPEPATH folder, std::string errorString, const ErrorType &errorType, bool isCalledByShowOneNewDialog)
+void CopyEngine::mkPathErrorOnFolder(INTERNALTYPEPATH folder, std::string errorString, const ErrorType &errorType)
 {
     if(stopIt)
         return;
@@ -656,13 +641,9 @@ void CopyEngine::mkPathErrorOnFolder(INTERNALTYPEPATH folder, std::string errorS
                     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Unknow switch case: "+std::to_string(newAction));
                 break;
             }
-            if(!isCalledByShowOneNewDialog)
-            {
-                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"emit queryOneNewDialog()");
-                emit queryOneNewDialog();
-            }
-            else
-                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"NOT emit queryOneNewDialog(), !isCalledByShowOneNewDialog");
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"emit queryOneNewDialog()");
+            //always call to check if pending dialog
+            emit queryOneNewDialog();
             return;
         break;
     }
@@ -676,44 +657,42 @@ void CopyEngine::showOneNewDialog()
         return;
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"alreadyExistsQueue.size(): "+std::to_string(alreadyExistsQueue.size()));
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"errorQueue.size(): "+std::to_string(errorQueue.size()));
-    //reset to always show the dialog
-    dialogIsOpen=false;
-    int loop_size=alreadyExistsQueue.size();
-    while(loop_size>0)
+    if(dialogIsOpen)
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"dialogIsOpen should false here");
     {
-        if(alreadyExistsQueue.front().transfer!=NULL)
+        const std::vector<alreadyExistsQueueItem> alreadyExistsQueue=this->alreadyExistsQueue;
+        this->alreadyExistsQueue.clear();
+        for(const alreadyExistsQueueItem &u : alreadyExistsQueue)
         {
-            fileAlreadyExists(alreadyExistsQueue.front().source,
-                      alreadyExistsQueue.front().destination,
-                      alreadyExistsQueue.front().isSame,
-                      alreadyExistsQueue.front().transfer,
-                      true);
+            if(u.transfer!=NULL)
+            {
+                fileAlreadyExists(u.source,
+                          u.destination,
+                          u.isSame,
+                          u.transfer);
+            }
+            else if(u.scan!=NULL)
+                folderAlreadyExists(u.source,
+                            u.destination,
+                            u.isSame,
+                            u.scan);
+            else
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"bug, no thread actived");
         }
-        else if(alreadyExistsQueue.front().scan!=NULL)
-            folderAlreadyExists(alreadyExistsQueue.front().source,
-                        alreadyExistsQueue.front().destination,
-                        alreadyExistsQueue.front().isSame,
-                        alreadyExistsQueue.front().scan,
-                        true);
-        else
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"bug, no thread actived");
-        alreadyExistsQueue.erase(alreadyExistsQueue.cbegin());
-        loop_size--;
     }
-    loop_size=errorQueue.size();
-    while(errorQueue.size()>0 && loop_size>0)
     {
-        if(errorQueue.front().transfer!=NULL)
-            errorOnFile(errorQueue.front().inode,errorQueue.front().errorString,errorQueue.front().transfer,errorQueue.front().errorType,true);
-        else if(errorQueue.front().scan!=NULL)
-            errorOnFolder(errorQueue.front().inode,errorQueue.front().errorString,errorQueue.front().scan,errorQueue.front().errorType,true);
-        else if(errorQueue.front().mkPath)
-            mkPathErrorOnFolder(errorQueue.front().inode,errorQueue.front().errorString,errorQueue.front().errorType,true);
-        else
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"bug, no thread actived");
-        errorQueue.erase(errorQueue.cbegin());
-        loop_size--;
+        const std::vector<errorQueueItem> errorQueue=this->errorQueue;
+        this->errorQueue.clear();
+        for(const errorQueueItem &u : errorQueue)
+        {
+            if(u.transfer!=NULL)
+                errorOnFile(u.inode,u.errorString,u.transfer,u.errorType);
+            else if(u.scan!=NULL)
+                errorOnFolder(u.inode,u.errorString,u.scan,u.errorType);
+            else if(u.mkPath)
+                mkPathErrorOnFolder(u.inode,u.errorString,u.errorType);
+            else
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"bug, no thread actived");
+        }
     }
-    //no more to show then reset
-    dialogIsOpen=false;
 }

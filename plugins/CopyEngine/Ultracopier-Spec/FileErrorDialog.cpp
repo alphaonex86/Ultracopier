@@ -33,6 +33,7 @@ FileErrorDialog::FileErrorDialog(QWidget *parent, INTERNALTYPEPATH fileInfo, std
         size|=fileInfoW.nFileSizeLow;
 #else
     struct stat p_statbuf;
+    memset(&p_statbuf,0,sizeof(p_statbuf));
     if(stat(TransferThread::internalStringTostring(fileInfo).c_str(), &p_statbuf)==0)
     {
         #ifdef Q_OS_UNIX

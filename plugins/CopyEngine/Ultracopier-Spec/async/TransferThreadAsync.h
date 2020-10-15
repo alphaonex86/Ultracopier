@@ -112,6 +112,8 @@ signals:
     void openRead(const INTERNALTYPEPATH &file, const Ultracopier::CopyMode &mode);
     //async due to tread conflict on to, if(to>=0) {do something, abort() -> on abort to =-1}
     void openWrite(const INTERNALTYPEPATH &file,const uint64_t &startSize);
+
+    void setFileExistsActionSend(const FileExistsAction &action);
 public slots:
     /// \brief to start the transfer of data
     void startTheTransfer();
@@ -133,6 +135,7 @@ public slots:
     void setProgression(const uint64_t &pos,const uint64_t &size);
     #endif
 private:
+    void setFileExistsActionInternal(const FileExistsAction &action);
     //ready = open + ready to operation (no error to resolv)
     bool			transferIsReadyVariable;
     uint64_t transferProgression;

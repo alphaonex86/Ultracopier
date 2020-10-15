@@ -73,6 +73,8 @@ void WriteThread::run()
         abort();
     if(!connect(this,&WriteThread::internalStartFlushAndSeekToZero,	this,&WriteThread::internalFlushAndSeekToZero,	Qt::QueuedConnection))
         abort();
+    if(!connect(this,&WriteThread::openWriteSend,	this,&WriteThread::openWriteInternal,	Qt::QueuedConnection))
+        abort();
     exec();
 }
 
@@ -449,6 +451,11 @@ bool WriteThread::internalOpen()
 }
 
 void WriteThread::openWrite(const INTERNALTYPEPATH &file, const uint64_t &startSize)
+{
+    emit openWriteInternal(file,startSize);
+}
+
+void WriteThread::openWriteInternal(const INTERNALTYPEPATH &file, const uint64_t &startSize)
 {
     if(!isRunning())
     {

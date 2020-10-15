@@ -130,6 +130,8 @@ TransferThreadAsync::TransferThreadAsync() :
     if(!connect(&driveManagement,&DriveManagement::debugInformation,this,                   &TransferThreadAsync::debugInformation,	Qt::QueuedConnection))
         abort();
     #endif
+    if(!connect(this,&TransferThreadAsync::setFileExistsActionSend,this,                   &TransferThreadAsync::setFileExistsActionInternal,	Qt::QueuedConnection))
+        abort();
 
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] start: "+std::to_string((int64_t)QThread::currentThreadId()));
     start();
@@ -177,7 +179,7 @@ void TransferThreadAsync::run()
 
 void TransferThreadAsync::startTheTransfer()
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+("] start"));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+("] start")+", transfert id: "+std::to_string(transferId));
     if(transferId==0)
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"["+std::to_string(id)+("] can't start transfert if transferId==0"));
@@ -194,7 +196,7 @@ void TransferThreadAsync::internalStartTheTransfer()
     if(QThread::currentThread()!=this)
         abort();
     #endif
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+("] start"));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+("] start")+", transfert id: "+std::to_string(transferId));
     if(transfer_stat==TransferStat_Idle)
     {
         if(mode!=Ultracopier::Move)
@@ -204,25 +206,25 @@ void TransferThreadAsync::internalStartTheTransfer()
         }
         return;
     }
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+("] start"));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+("] start")+", transfert id: "+std::to_string(transferId));
     if(transfer_stat==TransferStat_PostOperation)
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"["+std::to_string(id)+("] can't start transfert at PostOperation"));
         return;
     }
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+("] start"));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+("] start")+", transfert id: "+std::to_string(transferId));
     if(transfer_stat==TransferStat_Transfer)
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"["+std::to_string(id)+("] can't start transfert at Transfer"));
         return;
     }
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+("] start"));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+("] start")+", transfert id: "+std::to_string(transferId));
     if(canStartTransfer)
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+("] canStartTransfer is already set to true"));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+("] canStartTransfer is already set to true")+", transfert id: "+std::to_string(transferId)+", transfer_stat: "+std::to_string((int)transfer_stat));
         // call for second time, first time was not ready, if blocked in preop why?
         //ifCanStartTransfer();
-        return;
+        //return;-> try call again, protected by if(transfer_stat!=TransferStat_WaitForTheTransfer /*wait preoperation*/ || !canStartTransfer/*wait start call*/) into ifCanStartTransfer()
     }
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+("] check how start the transfer"));
     canStartTransfer=true;
@@ -308,7 +310,7 @@ void TransferThreadAsync::preOperation()
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] before destination exists");
     if(destinationExists())
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] destination exists: "+TransferThread::internalStringTostring(destination));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] destination exists: "+TransferThread::internalStringTostring(destination)+", alwaysDoFileExistsAction: "+std::to_string((int)alwaysDoFileExistsAction));
         return;
     }
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] after destination exists");
@@ -409,7 +411,7 @@ void TransferThreadAsync::ifCanStartTransfer()
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"["+std::to_string(id)+
                                  "] transfer_stat:"+std::to_string(transfer_stat)+
-                                 ", canStartTransfer: "+std::to_string(canStartTransfer));
+                                 ", canStartTransfer: "+std::to_string(canStartTransfer)+", transfert id: "+std::to_string(transferId));
         //preOperationStopped();//tiger to seam maybe is can be started, maybe this generate a bug
         return;
     }
@@ -1109,6 +1111,11 @@ std::pair<uint64_t, uint64_t> TransferThreadAsync::progression() const
 }
 
 void TransferThreadAsync::setFileExistsAction(const FileExistsAction &action)
+{
+    emit setFileExistsActionSend(action);
+}
+
+void TransferThreadAsync::setFileExistsActionInternal(const FileExistsAction &action)
 {
     if(transfer_stat!=TransferStat_PreOperation)
     {

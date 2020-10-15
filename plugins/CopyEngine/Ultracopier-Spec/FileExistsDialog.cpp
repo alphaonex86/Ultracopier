@@ -60,6 +60,7 @@ FileExistsDialog::FileExistsDialog(QWidget *parent, INTERNALTYPEPATH source,
         size|=sourceW.nFileSizeLow;
 #else
     struct stat source_statbuf;
+    memset(&source_statbuf,0,sizeof(source_statbuf));
     #ifdef Q_OS_UNIX
     if(lstat(TransferThread::internalStringTostring(source).c_str(), &source_statbuf)==0)
     #else
@@ -104,6 +105,7 @@ FileExistsDialog::FileExistsDialog(QWidget *parent, INTERNALTYPEPATH source,
         size|=destinationW.nFileSizeLow;
 #else
     struct stat destination_statbuf;
+    memset(&destination_statbuf,0,sizeof(destination_statbuf));
     #ifdef Q_OS_UNIX
     if(lstat(TransferThread::internalStringTostring(destination).c_str(), &destination_statbuf)==0)
     #else

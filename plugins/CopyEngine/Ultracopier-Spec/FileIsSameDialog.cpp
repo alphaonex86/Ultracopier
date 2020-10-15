@@ -47,6 +47,7 @@ FileIsSameDialog::FileIsSameDialog(QWidget *parent, INTERNALTYPEPATH fileInfo,
         size|=fileInfoW.nFileSizeLow;
 #else
     struct stat source_statbuf;
+    memset(&source_statbuf,0,sizeof(source_statbuf));
     #ifdef Q_OS_UNIX
     if(lstat(TransferThread::internalStringTostring(fileInfo).c_str(), &source_statbuf)==0)
     #else
