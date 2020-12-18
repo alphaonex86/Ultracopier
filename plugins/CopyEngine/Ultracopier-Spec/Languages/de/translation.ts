@@ -4,91 +4,91 @@
 <context>
     <name>CopyEngine</name>
     <message>
-        <location filename="../../CopyEngine.cpp" line="438"/>
-        <location filename="../../CopyEngine.cpp" line="461"/>
+        <location filename="../../CopyEngine.cpp" line="442"/>
+        <location filename="../../CopyEngine.cpp" line="465"/>
         <source>The engine is forced to move, you can&apos;t copy with it</source>
         <translation>Verschiebemodus - Sie können nicht kopieren</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="473"/>
-        <location filename="../../CopyEngine.cpp" line="496"/>
+        <location filename="../../CopyEngine.cpp" line="519"/>
+        <location filename="../../CopyEngine.cpp" line="542"/>
         <source>The engine is forced to copy, you can&apos;t move with it</source>
         <translation>Kopiermodus - Sie können nicht verschieben</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="520"/>
+        <location filename="../../CopyEngine.cpp" line="566"/>
         <source>Destination</source>
         <translation>Ziel</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="520"/>
+        <location filename="../../CopyEngine.cpp" line="566"/>
         <source>Use the actual destination &quot;%1&quot;?</source>
         <translation>Aktuelles Ziel: &quot;%1&quot; benutzen?</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="685"/>
+        <location filename="../../CopyEngine.cpp" line="731"/>
         <source>The mode has been forced previously. This is an internal error, please report it</source>
         <translation>Der Modus wurde vorher erzwungen. Interner Fehler - Bitte bei mir melden</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="976"/>
-        <location filename="../../CopyEngine.cpp" line="979"/>
-        <location filename="../../CopyEngine.cpp" line="984"/>
-        <location filename="../../CopyEngine.cpp" line="988"/>
+        <location filename="../../CopyEngine.cpp" line="1022"/>
+        <location filename="../../CopyEngine.cpp" line="1025"/>
+        <location filename="../../CopyEngine.cpp" line="1030"/>
+        <location filename="../../CopyEngine.cpp" line="1034"/>
         <source>Ask</source>
         <translation>Fragen</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="977"/>
-        <location filename="../../CopyEngine.cpp" line="981"/>
-        <location filename="../../CopyEngine.cpp" line="985"/>
-        <location filename="../../CopyEngine.cpp" line="989"/>
+        <location filename="../../CopyEngine.cpp" line="1023"/>
+        <location filename="../../CopyEngine.cpp" line="1027"/>
+        <location filename="../../CopyEngine.cpp" line="1031"/>
+        <location filename="../../CopyEngine.cpp" line="1035"/>
         <source>Skip</source>
         <translation>Überspringen</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="980"/>
+        <location filename="../../CopyEngine.cpp" line="1026"/>
         <source>Merge</source>
         <translation>Fusionieren</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="982"/>
-        <location filename="../../CopyEngine.cpp" line="994"/>
+        <location filename="../../CopyEngine.cpp" line="1028"/>
+        <location filename="../../CopyEngine.cpp" line="1040"/>
         <source>Rename</source>
         <translation>Umbenennen</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="986"/>
+        <location filename="../../CopyEngine.cpp" line="1032"/>
         <source>Put at the end</source>
         <translation>Ans Ende verschieben</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="990"/>
+        <location filename="../../CopyEngine.cpp" line="1036"/>
         <source>Overwrite</source>
         <translation>Überschreiben</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="991"/>
+        <location filename="../../CopyEngine.cpp" line="1037"/>
         <source>Overwrite if different</source>
         <translation>Überschreiben, falls verschieden</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="992"/>
+        <location filename="../../CopyEngine.cpp" line="1038"/>
         <source>Overwrite if newer</source>
         <translation>Überschreiben, falls neuer</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="993"/>
+        <location filename="../../CopyEngine.cpp" line="1039"/>
         <source>Overwrite if older</source>
         <translation>Überschreiben, falls älter</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="1064"/>
+        <location filename="../../CopyEngine.cpp" line="1110"/>
         <source>Options error</source>
         <translation>Fehlerhafte Optionen</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="1064"/>
+        <location filename="../../CopyEngine.cpp" line="1110"/>
         <source>Options engine is not loaded. Unable to access the filters</source>
         <translation>Optionen nicht geladen - Kein Zugriff auf Filter</translation>
     </message>
@@ -497,18 +497,18 @@
         <translation>Kann den Ordner nicht endgültig verschieben</translation>
     </message>
     <message>
-        <location filename="../../MkPath.cpp" line="309"/>
+        <location filename="../../MkPath.cpp" line="310"/>
         <source>Unable to move the folder</source>
         <translation>Kann den Ordner nicht verschieben</translation>
     </message>
     <message>
-        <location filename="../../MkPath.cpp" line="315"/>
+        <location filename="../../MkPath.cpp" line="316"/>
         <source>Unable to move the folder: errno: %1</source>
         <translation>Kann Ordner nicht verschieben: Fehler Nummer: %1</translation>
     </message>
     <message>
         <location filename="../../MkPath.cpp" line="124"/>
-        <location filename="../../MkPath.cpp" line="394"/>
+        <location filename="../../MkPath.cpp" line="395"/>
         <source>Unable to remove</source>
         <translation>Kann nicht löschen</translation>
     </message>

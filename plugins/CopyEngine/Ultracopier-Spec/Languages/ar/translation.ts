@@ -4,91 +4,91 @@
 <context>
     <name>CopyEngine</name>
     <message>
-        <location filename="../../CopyEngine.cpp" line="438"/>
-        <location filename="../../CopyEngine.cpp" line="461"/>
+        <location filename="../../CopyEngine.cpp" line="442"/>
+        <location filename="../../CopyEngine.cpp" line="465"/>
         <source>The engine is forced to move, you can&apos;t copy with it</source>
         <translation>تم إجبار المحرك على الحركة ، لا يمكنك نسخه</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="473"/>
-        <location filename="../../CopyEngine.cpp" line="496"/>
+        <location filename="../../CopyEngine.cpp" line="519"/>
+        <location filename="../../CopyEngine.cpp" line="542"/>
         <source>The engine is forced to copy, you can&apos;t move with it</source>
         <translation>تم إجبار المحرك على النسخ ، لا يمكنك التحرك معه</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="520"/>
+        <location filename="../../CopyEngine.cpp" line="566"/>
         <source>Destination</source>
         <translation>الوجهه</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="520"/>
+        <location filename="../../CopyEngine.cpp" line="566"/>
         <source>Use the actual destination &quot;%1&quot;?</source>
         <translation>استخدام الوجهة الفعلية  &quot;%1&quot; ؟</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="685"/>
+        <location filename="../../CopyEngine.cpp" line="731"/>
         <source>The mode has been forced previously. This is an internal error, please report it</source>
         <translation>تم فرض الوضع مسبقا. هذا خطا داخلي ، الرجاء الإبلاغ عنه</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="976"/>
-        <location filename="../../CopyEngine.cpp" line="979"/>
-        <location filename="../../CopyEngine.cpp" line="984"/>
-        <location filename="../../CopyEngine.cpp" line="988"/>
+        <location filename="../../CopyEngine.cpp" line="1022"/>
+        <location filename="../../CopyEngine.cpp" line="1025"/>
+        <location filename="../../CopyEngine.cpp" line="1030"/>
+        <location filename="../../CopyEngine.cpp" line="1034"/>
         <source>Ask</source>
         <translation>اسال</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="977"/>
-        <location filename="../../CopyEngine.cpp" line="981"/>
-        <location filename="../../CopyEngine.cpp" line="985"/>
-        <location filename="../../CopyEngine.cpp" line="989"/>
+        <location filename="../../CopyEngine.cpp" line="1023"/>
+        <location filename="../../CopyEngine.cpp" line="1027"/>
+        <location filename="../../CopyEngine.cpp" line="1031"/>
+        <location filename="../../CopyEngine.cpp" line="1035"/>
         <source>Skip</source>
         <translation>تخطي</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="980"/>
+        <location filename="../../CopyEngine.cpp" line="1026"/>
         <source>Merge</source>
         <translation>دمج</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="982"/>
-        <location filename="../../CopyEngine.cpp" line="994"/>
+        <location filename="../../CopyEngine.cpp" line="1028"/>
+        <location filename="../../CopyEngine.cpp" line="1040"/>
         <source>Rename</source>
         <translation>اعاده تسميه</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="986"/>
+        <location filename="../../CopyEngine.cpp" line="1032"/>
         <source>Put at the end</source>
         <translation>وضع في نهاية</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="990"/>
+        <location filename="../../CopyEngine.cpp" line="1036"/>
         <source>Overwrite</source>
         <translation>الكتابة فوق</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="991"/>
+        <location filename="../../CopyEngine.cpp" line="1037"/>
         <source>Overwrite if different</source>
         <translation>الكتابة فوق إذا كان مختلفا</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="992"/>
+        <location filename="../../CopyEngine.cpp" line="1038"/>
         <source>Overwrite if newer</source>
         <translation>الكتابة فوق إذا كان أحدث</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="993"/>
+        <location filename="../../CopyEngine.cpp" line="1039"/>
         <source>Overwrite if older</source>
         <translation>الكتابة فوق إذا كان أقدم</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="1064"/>
+        <location filename="../../CopyEngine.cpp" line="1110"/>
         <source>Options error</source>
         <translation>خطا في الخيارات</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="1064"/>
+        <location filename="../../CopyEngine.cpp" line="1110"/>
         <source>Options engine is not loaded. Unable to access the filters</source>
         <translation>لم يتم تحميل محرك الخيارات. غير قادر علي الوصول إلى الفلاتر</translation>
     </message>
@@ -497,18 +497,18 @@
         <translation>غير قادر على القيام بالخطوة الحقيقية النهائية المجلد</translation>
     </message>
     <message>
-        <location filename="../../MkPath.cpp" line="309"/>
+        <location filename="../../MkPath.cpp" line="310"/>
         <source>Unable to move the folder</source>
         <translation>غير قادر على نقل المجلد</translation>
     </message>
     <message>
-        <location filename="../../MkPath.cpp" line="315"/>
+        <location filename="../../MkPath.cpp" line="316"/>
         <source>Unable to move the folder: errno: %1</source>
         <translation>errno: %1 :غير قادر على نقل المجلد</translation>
     </message>
     <message>
         <location filename="../../MkPath.cpp" line="124"/>
-        <location filename="../../MkPath.cpp" line="394"/>
+        <location filename="../../MkPath.cpp" line="395"/>
         <source>Unable to remove</source>
         <translation>غير قادر على أزاله</translation>
     </message>

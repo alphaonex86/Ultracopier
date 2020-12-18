@@ -4,61 +4,61 @@
 <context>
     <name>Themes</name>
     <message>
-        <location filename="../../interface.cpp" line="328"/>
+        <location filename="../../interface.cpp" line="331"/>
         <source>Buy the Ultimate version to fund development</source>
         <translation>Vásárold meg az Ultimate verziót a fejlesztés támogatásához</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="328"/>
+        <location filename="../../interface.cpp" line="331"/>
         <source>Register your key</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="427"/>
+        <location filename="../../interface.cpp" line="430"/>
         <source>File %1/%2, size: %3/%4</source>
         <translation>Fájl %1/%2, méret: %3/%4</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="661"/>
+        <location filename="../../interface.cpp" line="664"/>
         <source>Copy list</source>
         <translation>Lista másolása</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="663"/>
+        <location filename="../../interface.cpp" line="666"/>
         <source>Move list</source>
         <translation>Lista mozgatása</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="1091"/>
+        <location filename="../../interface.cpp" line="1094"/>
         <source>Don&apos;t close if errors are found</source>
         <translation>Ne zárja be, ha hiba történik</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="1092"/>
+        <location filename="../../interface.cpp" line="1095"/>
         <source>Never close</source>
         <translation>Sose zárja be</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="1093"/>
+        <location filename="../../interface.cpp" line="1096"/>
         <source>Always close</source>
         <translation>Mindig zárja be</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="1095"/>
+        <location filename="../../interface.cpp" line="1098"/>
         <source>File Name, 0KB</source>
         <translation>Fájlnév, 0KB</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="1289"/>
-        <location filename="../../interface.cpp" line="1301"/>
-        <location filename="../../interface.cpp" line="1313"/>
+        <location filename="../../interface.cpp" line="1372"/>
+        <location filename="../../interface.cpp" line="1384"/>
+        <location filename="../../interface.cpp" line="1396"/>
         <source>Select a color</source>
         <translation>Válassz egy színt</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="1388"/>
-        <location filename="../../interface.cpp" line="1392"/>
-        <location filename="../../interface.cpp" line="1394"/>
+        <location filename="../../interface.cpp" line="1471"/>
+        <location filename="../../interface.cpp" line="1475"/>
+        <location filename="../../interface.cpp" line="1477"/>
         <source>%1 %2% of %3</source>
         <translation type="unfinished"></translation>
     </message>

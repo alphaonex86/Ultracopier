@@ -73,16 +73,16 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="1534"/>
-        <location filename="../../interface.cpp" line="1546"/>
-        <location filename="../../interface.cpp" line="1558"/>
+        <location filename="../../interface.cpp" line="1549"/>
+        <location filename="../../interface.cpp" line="1561"/>
+        <location filename="../../interface.cpp" line="1573"/>
         <source>Select a color</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="1646"/>
-        <location filename="../../interface.cpp" line="1657"/>
-        <location filename="../../interface.cpp" line="1666"/>
+        <location filename="../../interface.cpp" line="1661"/>
+        <location filename="../../interface.cpp" line="1672"/>
+        <location filename="../../interface.cpp" line="1681"/>
         <source>%1 %2% of %3 into %4 files</source>
         <translation type="unfinished"></translation>
     </message>
