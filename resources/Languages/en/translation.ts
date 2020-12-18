@@ -670,12 +670,12 @@
 <context>
     <name>FileErrorDialog</name>
     <message>
-        <location filename="../../../plugins/CopyEngine/Ultracopier-Spec/FileErrorDialog.cpp" line="87"/>
+        <location filename="../../../plugins/CopyEngine/Ultracopier-Spec/FileErrorDialog.cpp" line="88"/>
         <source>Error on folder</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../plugins/CopyEngine/Ultracopier-Spec/FileErrorDialog.cpp" line="90"/>
+        <location filename="../../../plugins/CopyEngine/Ultracopier-Spec/FileErrorDialog.cpp" line="91"/>
         <source>Folder name</source>
         <translation type="unfinished"></translation>
     </message>
@@ -683,22 +683,22 @@
 <context>
     <name>FileExistsDialog</name>
     <message>
-        <location filename="../../../plugins/CopyEngine/Ultracopier-Spec/FileExistsDialog.cpp" line="191"/>
+        <location filename="../../../plugins/CopyEngine/Ultracopier-Spec/FileExistsDialog.cpp" line="193"/>
         <source>%name% - copy%suffix%</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../plugins/CopyEngine/Ultracopier-Spec/FileExistsDialog.cpp" line="198"/>
+        <location filename="../../../plugins/CopyEngine/Ultracopier-Spec/FileExistsDialog.cpp" line="200"/>
         <source>%name% - copy (%number%)%suffix%</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../plugins/CopyEngine/Ultracopier-Spec/FileExistsDialog.cpp" line="289"/>
+        <location filename="../../../plugins/CopyEngine/Ultracopier-Spec/FileExistsDialog.cpp" line="291"/>
         <source>Error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../plugins/CopyEngine/Ultracopier-Spec/FileExistsDialog.cpp" line="289"/>
+        <location filename="../../../plugins/CopyEngine/Ultracopier-Spec/FileExistsDialog.cpp" line="291"/>
         <source>Try rename with using special characters</source>
         <translation type="unfinished"></translation>
     </message>
@@ -706,22 +706,22 @@
 <context>
     <name>FileIsSameDialog</name>
     <message>
-        <location filename="../../../plugins/CopyEngine/Ultracopier-Spec/FileIsSameDialog.cpp" line="140"/>
+        <location filename="../../../plugins/CopyEngine/Ultracopier-Spec/FileIsSameDialog.cpp" line="141"/>
         <source>%name% - copy%suffix%</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../plugins/CopyEngine/Ultracopier-Spec/FileIsSameDialog.cpp" line="147"/>
+        <location filename="../../../plugins/CopyEngine/Ultracopier-Spec/FileIsSameDialog.cpp" line="148"/>
         <source>%name% - copy (%number%)%suffix%</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../plugins/CopyEngine/Ultracopier-Spec/FileIsSameDialog.cpp" line="220"/>
+        <location filename="../../../plugins/CopyEngine/Ultracopier-Spec/FileIsSameDialog.cpp" line="221"/>
         <source>Error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../plugins/CopyEngine/Ultracopier-Spec/FileIsSameDialog.cpp" line="220"/>
+        <location filename="../../../plugins/CopyEngine/Ultracopier-Spec/FileIsSameDialog.cpp" line="221"/>
         <source>Try rename with using special characters</source>
         <translation type="unfinished"></translation>
     </message>
@@ -868,27 +868,27 @@
 <context>
     <name>FolderExistsDialog</name>
     <message>
-        <location filename="../../../plugins/CopyEngine/Ultracopier-Spec/FolderExistsDialog.cpp" line="84"/>
+        <location filename="../../../plugins/CopyEngine/Ultracopier-Spec/FolderExistsDialog.cpp" line="86"/>
         <source>Folder already exists</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../plugins/CopyEngine/Ultracopier-Spec/FolderExistsDialog.cpp" line="164"/>
+        <location filename="../../../plugins/CopyEngine/Ultracopier-Spec/FolderExistsDialog.cpp" line="167"/>
         <source>%name% - copy%suffix%</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../plugins/CopyEngine/Ultracopier-Spec/FolderExistsDialog.cpp" line="173"/>
+        <location filename="../../../plugins/CopyEngine/Ultracopier-Spec/FolderExistsDialog.cpp" line="176"/>
         <source>%name% - copy (%number%)%suffix%</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../plugins/CopyEngine/Ultracopier-Spec/FolderExistsDialog.cpp" line="240"/>
+        <location filename="../../../plugins/CopyEngine/Ultracopier-Spec/FolderExistsDialog.cpp" line="243"/>
         <source>Error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../plugins/CopyEngine/Ultracopier-Spec/FolderExistsDialog.cpp" line="240"/>
+        <location filename="../../../plugins/CopyEngine/Ultracopier-Spec/FolderExistsDialog.cpp" line="243"/>
         <source>Try rename with using special characters</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1206,28 +1206,28 @@ This version is compiled as version: %1.</source>
     <message>
         <location filename="../../../OptionDialog.ui" line="75"/>
         <location filename="../../../OptionDialog.ui" line="366"/>
-        <location filename="../../../OptionDialog.cpp" line="290"/>
+        <location filename="../../../OptionDialog.cpp" line="297"/>
         <source>Copy engine</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../../OptionDialog.ui" line="80"/>
         <location filename="../../../OptionDialog.ui" line="379"/>
-        <location filename="../../../OptionDialog.cpp" line="291"/>
+        <location filename="../../../OptionDialog.cpp" line="298"/>
         <source>Listener</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../../OptionDialog.ui" line="85"/>
         <location filename="../../../OptionDialog.ui" line="384"/>
-        <location filename="../../../OptionDialog.cpp" line="292"/>
+        <location filename="../../../OptionDialog.cpp" line="299"/>
         <source>Plugin loader</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../../OptionDialog.ui" line="93"/>
         <location filename="../../../OptionDialog.ui" line="389"/>
-        <location filename="../../../OptionDialog.cpp" line="293"/>
+        <location filename="../../../OptionDialog.cpp" line="300"/>
         <source>Session loader</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1431,75 +1431,75 @@ This version is compiled as version: %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.cpp" line="197"/>
-        <location filename="../../../OptionDialog.cpp" line="211"/>
+        <location filename="../../../OptionDialog.cpp" line="204"/>
+        <location filename="../../../OptionDialog.cpp" line="218"/>
         <source>Load</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.cpp" line="197"/>
+        <location filename="../../../OptionDialog.cpp" line="204"/>
         <source>Load the theme?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.cpp" line="211"/>
+        <location filename="../../../OptionDialog.cpp" line="218"/>
         <source>Load the language?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.cpp" line="298"/>
+        <location filename="../../../OptionDialog.cpp" line="305"/>
         <source>Do nothing</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.cpp" line="299"/>
+        <location filename="../../../OptionDialog.cpp" line="306"/>
         <source>Ask source as folder</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.cpp" line="300"/>
+        <location filename="../../../OptionDialog.cpp" line="307"/>
         <source>Ask sources as files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.cpp" line="301"/>
+        <location filename="../../../OptionDialog.cpp" line="308"/>
         <source>Never</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.cpp" line="302"/>
+        <location filename="../../../OptionDialog.cpp" line="309"/>
         <source>When source is same</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.cpp" line="303"/>
+        <location filename="../../../OptionDialog.cpp" line="310"/>
         <source>When destination is same</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.cpp" line="304"/>
+        <location filename="../../../OptionDialog.cpp" line="311"/>
         <source>When source and destination are same</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.cpp" line="305"/>
+        <location filename="../../../OptionDialog.cpp" line="312"/>
         <source>When source or destination are same</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.cpp" line="306"/>
+        <location filename="../../../OptionDialog.cpp" line="313"/>
         <source>Always</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.cpp" line="320"/>
-        <location filename="../../../OptionDialog.cpp" line="321"/>
-        <location filename="../../../OptionDialog.cpp" line="322"/>
+        <location filename="../../../OptionDialog.cpp" line="327"/>
+        <location filename="../../../OptionDialog.cpp" line="328"/>
+        <location filename="../../../OptionDialog.cpp" line="329"/>
         <source>The variables are %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.cpp" line="962"/>
+        <location filename="../../../OptionDialog.cpp" line="969"/>
         <source>Save logs as: </source>
         <translation type="unfinished"></translation>
     </message>
@@ -2118,29 +2118,29 @@ Error:%2</source>
 <context>
     <name>TransferThread</name>
     <message>
-        <location filename="../../../plugins/CopyEngine/Ultracopier-Spec/TransferThread.cpp" line="179"/>
+        <location filename="../../../plugins/CopyEngine/Ultracopier-Spec/TransferThread.cpp" line="188"/>
         <source>Try rename with using special characters</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../plugins/CopyEngine/Ultracopier-Spec/TransferThread.cpp" line="613"/>
+        <location filename="../../../plugins/CopyEngine/Ultracopier-Spec/TransferThread.cpp" line="627"/>
         <source>%name% - copy%suffix%</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../plugins/CopyEngine/Ultracopier-Spec/TransferThread.cpp" line="620"/>
+        <location filename="../../../plugins/CopyEngine/Ultracopier-Spec/TransferThread.cpp" line="634"/>
         <source>%name% - copy (%number%)%suffix%</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../plugins/CopyEngine/Ultracopier-Spec/TransferThread.cpp" line="648"/>
-        <location filename="../../../plugins/CopyEngine/Ultracopier-Spec/TransferThread.cpp" line="889"/>
+        <location filename="../../../plugins/CopyEngine/Ultracopier-Spec/TransferThread.cpp" line="662"/>
+        <location filename="../../../plugins/CopyEngine/Ultracopier-Spec/TransferThread.cpp" line="903"/>
         <source>File not found</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../plugins/CopyEngine/Ultracopier-Spec/TransferThread.cpp" line="889"/>
-        <location filename="../../../plugins/CopyEngine/Ultracopier-Spec/TransferThread.cpp" line="925"/>
+        <location filename="../../../plugins/CopyEngine/Ultracopier-Spec/TransferThread.cpp" line="903"/>
+        <location filename="../../../plugins/CopyEngine/Ultracopier-Spec/TransferThread.cpp" line="939"/>
         <source>Unable to change the date</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2148,19 +2148,19 @@ Error:%2</source>
 <context>
     <name>TransferThreadAsync</name>
     <message>
-        <location filename="../../../plugins/CopyEngine/Ultracopier-Spec/async/TransferThreadAsync.cpp" line="340"/>
+        <location filename="../../../plugins/CopyEngine/Ultracopier-Spec/async/TransferThreadAsync.cpp" line="342"/>
         <source>Wrong modification date or unable to get it, you can disable time transfer to do it</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../plugins/CopyEngine/Ultracopier-Spec/async/TransferThreadAsync.cpp" line="428"/>
-        <location filename="../../../plugins/CopyEngine/Ultracopier-Spec/async/TransferThreadAsync.cpp" line="446"/>
+        <location filename="../../../plugins/CopyEngine/Ultracopier-Spec/async/TransferThreadAsync.cpp" line="430"/>
+        <location filename="../../../plugins/CopyEngine/Ultracopier-Spec/async/TransferThreadAsync.cpp" line="448"/>
         <source>Unable to create the destination folder: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../plugins/CopyEngine/Ultracopier-Spec/async/TransferThreadAsync.cpp" line="431"/>
-        <location filename="../../../plugins/CopyEngine/Ultracopier-Spec/async/TransferThreadAsync.cpp" line="448"/>
+        <location filename="../../../plugins/CopyEngine/Ultracopier-Spec/async/TransferThreadAsync.cpp" line="433"/>
+        <location filename="../../../plugins/CopyEngine/Ultracopier-Spec/async/TransferThreadAsync.cpp" line="450"/>
         <source>Unable to create the destination folder, errno: %1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2168,24 +2168,24 @@ Error:%2</source>
 <context>
     <name>WriteThread</name>
     <message>
-        <location filename="../../../plugins/CopyEngine/Ultracopier-Spec/async/WriteThread.cpp" line="135"/>
+        <location filename="../../../plugins/CopyEngine/Ultracopier-Spec/async/WriteThread.cpp" line="137"/>
         <source>Path resolution error (Empty path)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../plugins/CopyEngine/Ultracopier-Spec/async/WriteThread.cpp" line="164"/>
-        <location filename="../../../plugins/CopyEngine/Ultracopier-Spec/async/WriteThread.cpp" line="197"/>
+        <location filename="../../../plugins/CopyEngine/Ultracopier-Spec/async/WriteThread.cpp" line="166"/>
+        <location filename="../../../plugins/CopyEngine/Ultracopier-Spec/async/WriteThread.cpp" line="199"/>
         <source>Unable to create the destination folder: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../plugins/CopyEngine/Ultracopier-Spec/async/WriteThread.cpp" line="175"/>
-        <location filename="../../../plugins/CopyEngine/Ultracopier-Spec/async/WriteThread.cpp" line="199"/>
+        <location filename="../../../plugins/CopyEngine/Ultracopier-Spec/async/WriteThread.cpp" line="177"/>
+        <location filename="../../../plugins/CopyEngine/Ultracopier-Spec/async/WriteThread.cpp" line="201"/>
         <source>Unable to create the destination folder, errno: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../plugins/CopyEngine/Ultracopier-Spec/async/WriteThread.cpp" line="456"/>
+        <location filename="../../../plugins/CopyEngine/Ultracopier-Spec/async/WriteThread.cpp" line="463"/>
         <source>Internal error, please report it!</source>
         <translation type="unfinished"></translation>
     </message>

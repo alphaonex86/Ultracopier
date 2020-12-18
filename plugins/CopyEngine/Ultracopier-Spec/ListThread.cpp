@@ -339,6 +339,13 @@ void ListThread::fileTransfer(const INTERNALTYPEPATH &sourceFileInfo,const INTER
 {
     if(stopIt)
         return;
+    #ifdef Q_OS_WIN32
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"source: "+TransferThread::internalStringTostring(sourceFileInfo)+
+                             ", destination: "+TransferThread::internalStringTostring(destinationFileInfo)+" windows");
+    #else
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"source: "+TransferThread::internalStringTostring(sourceFileInfo)+
+                             ", destination: "+TransferThread::internalStringTostring(destinationFileInfo)+" unix");
+    #endif
     addToTransfer(sourceFileInfo,destinationFileInfo,mode);
 }
 
@@ -348,9 +355,13 @@ void ListThread::fileTransferWithInode(const INTERNALTYPEPATH &sourceFileInfo,co
     if(stopIt)
         return;
     #ifdef Q_OS_WIN32
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"source: "+TransferThread::internalStringTostring(sourceFileInfo)+
+                             ", destination: "+TransferThread::internalStringTostring(destinationFileInfo)+" windows "+std::to_string(inode.isFolder));
     addToTransfer(sourceFileInfo,destinationFileInfo,mode,inode.size);
     #else
     (void)inode;
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"source: "+TransferThread::internalStringTostring(sourceFileInfo)+
+                             ", destination: "+TransferThread::internalStringTostring(destinationFileInfo)+" unix");
     addToTransfer(sourceFileInfo,destinationFileInfo,mode);
     #endif
 }
@@ -680,6 +691,13 @@ uint64_t ListThread::addToTransfer(const INTERNALTYPEPATH &source, const INTERNA
         const int64_t tempSize=TransferThread::file_stat_size(source);
         if(tempSize>=0)
             size=tempSize;
+        else
+        {
+            if(TransferThread::is_file(source))
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Unable to detect size on "+TransferThread::internalStringTostring(source));
+            else
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"File not existing during listing "+TransferThread::internalStringTostring(source));
+        }
     }
     const std::string &drive=driveManagement.getDrive(TransferThread::internalStringTostring(destination));
     if(!drive.empty())//can be a network drive

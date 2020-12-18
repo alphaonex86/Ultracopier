@@ -1264,7 +1264,8 @@ bool TransferThread::is_file(const char * const filename)
     #ifdef Q_OS_WIN32
     DWORD dwAttrib = GetFileAttributesA(TransferThread::toFinalPath(filename).c_str());
     return (dwAttrib != INVALID_FILE_ATTRIBUTES &&
-           (dwAttrib & FILE_ATTRIBUTE_DIRECTORY));
+           (dwAttrib & FILE_ATTRIBUTE_NORMAL || dwAttrib & FILE_ATTRIBUTE_ARCHIVE)
+            );
     #else
     struct stat p_statbuf;
     if (lstat(filename, &p_statbuf) < 0)

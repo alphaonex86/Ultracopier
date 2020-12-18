@@ -60,6 +60,35 @@ bool ListThread::newCopy(const std::vector<std::string> &sources,const std::stri
 bool ListThread::newMove(const std::vector<std::string> &sources,const std::string &destination)
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
+
+    #ifdef ULTRACOPIER_PLUGIN_DEBUG
+    {
+        unsigned int index=0;
+        while(index<sources.size())
+        {
+            std::string source=sources.at(index);
+            //can be: file://192.168.0.99/share/file.txt
+            //can be: file:///C:/file.txt
+            //can be: file:///home/user/fileatrootunderunix
+            #ifndef Q_OS_WIN
+            if(stringStartWith(source,"file:///"))
+                source.replace(0,7,"");
+            #else
+            if(stringStartWith(source,"file:///"))
+                source.replace(0,8,"");
+            else if(stringStartWith(source,"file://"))
+                source.replace(0,5,"");
+            else if(stringStartWith(source,"file:/"))
+                source.replace(0,6,"");
+            #endif
+            if(index<99)
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,sources.at(index)+" -> "+source);
+            index++;
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"source is_file: "+std::to_string(TransferThread::is_file(TransferThread::stringToInternalString(source)))+" is_dir: "+std::to_string(TransferThread::is_dir(TransferThread::stringToInternalString(source))));
+        }
+    }
+    #endif
+
     ScanFileOrFolder * scanFileOrFolderThread = newScanThread(Ultracopier::Move);
     if(scanFileOrFolderThread==NULL)
     {
@@ -92,6 +121,7 @@ bool ListThread::newMove(const std::vector<std::string> &sources,const std::stri
         if(index<99)
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,sources.at(index)+" -> "+source);
         index++;
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"source is_file: "+std::to_string(TransferThread::is_file(TransferThread::stringToInternalString(source)))+" is_dir: "+std::to_string(TransferThread::is_dir(TransferThread::stringToInternalString(source))));
         sourcesClean.push_back(TransferThread::stringToInternalString(source));
     }
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"destination: "+destination);

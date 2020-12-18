@@ -295,6 +295,7 @@ void MkPath::internalDoThisPath()
                     return;
                 }
             }*/
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"move/rename: "+TransferThread::internalStringTostring(item.source)+" to "+TransferThread::internalStringTostring(item.destination));
             if(!TransferThread::rename(item.source,item.destination)!=0)
             {
                 if(stopIt)

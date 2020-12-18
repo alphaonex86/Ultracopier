@@ -5,6 +5,10 @@
 #include <QFileDialog>
 #include <QMessageBox>
 #include <cmath>
+#ifdef ULTRACOPIER_PLUGIN_DEBUG
+#include <sys/stat.h>
+#include <regex>
+#endif
 
 #include "CopyEngine.h"
 #include "FolderExistsDialog.h"
@@ -464,8 +468,50 @@ bool CopyEngine::newCopy(const std::vector<std::string> &sources,const std::stri
     return listThread->newCopy(sources,destination);
 }
 
+#ifdef ULTRACOPIER_PLUGIN_DEBUG
+bool stringStartWithC(std::string const &fullString, std::string const &starting)
+{
+    if (fullString.length() >= starting.length()) {
+        return (fullString.substr(0,starting.length())==starting);
+    } else {
+        return false;
+    }
+}
+#endif
+
 bool CopyEngine::newMove(const std::vector<std::string> &sources)
 {
+    #ifdef ULTRACOPIER_PLUGIN_DEBUG
+    {
+        std::regex base_regex("^[a-z][a-z][a-z]*:/.*");
+        std::smatch base_match;
+
+        unsigned int index=0;
+        while(index<sources.size())
+        {
+            std::string source=sources.at(index);
+            //can be: file://192.168.0.99/share/file.txt
+            //can be: file:///C:/file.txt
+            //can be: file:///home/user/fileatrootunderunix
+            #ifndef Q_OS_WIN
+            if(stringStartWithC(source,"file:///"))
+                source.replace(0,7,"");
+            #else
+            if(stringStartWithC(source,"file:///"))
+                source.replace(0,8,"");
+            else if(stringStartWithC(source,"file://"))
+                source.replace(0,5,"");
+            else if(stringStartWithC(source,"file:/"))
+                source.replace(0,6,"");
+            #endif
+            if(index<99)
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,sources.at(index)+" -> "+source);
+            index++;
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"source is_file: "+std::to_string(TransferThread::is_file(TransferThread::stringToInternalString(source)))+" is_dir: "+std::to_string(TransferThread::is_dir(TransferThread::stringToInternalString(source))));
+        }
+    }
+    #endif
+
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,stringimplode(sources,", "));
     if(forcedMode && mode!=Ultracopier::Move)
     {

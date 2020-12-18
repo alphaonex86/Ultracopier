@@ -19,6 +19,9 @@
     #endif
     #include <windows.h>
 #endif
+#ifdef ULTRACOPIER_PLUGIN_DEBUG
+#include <sys/stat.h>
+#endif
 
 #include "interface.h"
 #include "ui_interface.h"
@@ -1210,6 +1213,26 @@ void Themes::on_moreButton_toggled(bool checked)
     this->adjustSize();
 }
 
+#ifdef ULTRACOPIER_PLUGIN_DEBUG
+bool stringStartWithInter(std::string const &fullString, std::string const &starting)
+{
+    if (fullString.length() >= starting.length()) {
+        return (fullString.substr(0,starting.length())==starting);
+    } else {
+        return false;
+    }
+}
+
+#ifdef WIDESTRING
+#define INTERNALTYPEPATH std::wstring
+#define INTERNALTYPECHAR wchar_t
+#else
+#define INTERNALTYPEPATH std::string
+#define INTERNALTYPECHAR char
+#endif
+
+#endif
+
 /* drag event processing
 
 need setAcceptDrops(true); into the constructor
@@ -1224,6 +1247,13 @@ void Themes::dropEvent(QDropEvent *event)
     const QMimeData* mimeData = event->mimeData();
     if(mimeData->hasUrls())
     {
+        if(event->dropAction()!=Qt::CopyAction)
+        {
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"event->dropAction()!=Qt::CopyAction ignore");
+            //drag'n'drop with shift pressed send the file to trash
+            event->ignore();
+            return;
+        }
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"hasUrls");
         std::vector<std::string> urls;
         unsigned int index=0;
@@ -1235,6 +1265,51 @@ void Themes::dropEvent(QDropEvent *event)
             urls.push_back(urlString);
             index++;
         }
+
+        #ifdef ULTRACOPIER_PLUGIN_DEBUG
+        {
+
+            unsigned int index=0;
+            while(index<urls.size())
+            {
+                std::string source=urls.at(index);
+                //can be: file://192.168.0.99/share/file.txt
+                //can be: file:///C:/file.txt
+                //can be: file:///home/user/fileatrootunderunix
+                #ifndef Q_OS_WIN
+                if(stringStartWithInter(source,"file:///"))
+                    source.replace(0,7,"");
+                #else
+                if(stringStartWithInter(source,"file:///"))
+                    source.replace(0,8,"");
+                else if(stringStartWithInter(source,"file://"))
+                    source.replace(0,5,"");
+                else if(stringStartWithInter(source,"file:/"))
+                    source.replace(0,6,"");
+                #endif
+                if(index<99)
+                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,urls.at(index)+" -> "+source);
+                index++;
+
+                #ifndef __WIN32__
+                struct stat sb;
+                if (::stat(source.c_str(), &sb) == -1)
+                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"source is_file: 0");
+                else
+                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"source is_file: 1");
+                #else
+                DWORD dwAttrib = GetFileAttributesA(source.c_str());
+                if(dwAttrib != INVALID_FILE_ATTRIBUTES &&
+                        (dwAttrib & FILE_ATTRIBUTE_NORMAL || dwAttrib & FILE_ATTRIBUTE_ARCHIVE)
+                         )
+                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"source is_file: 1");
+                else
+                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"source is_file: 0");
+                #endif
+            }
+        }
+        #endif
+
         emit urlDropped(urls);
         event->acceptProposedAction();
     }
@@ -1248,7 +1323,10 @@ void Themes::dragEnterEvent(QDragEnterEvent* event)
     if(mimeData->hasUrls())
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"hasUrls");
-        event->acceptProposedAction();
+        if(event->dropAction()==Qt::CopyAction)
+            event->acceptProposedAction();
+        else
+            event->ignore();//drag'n'drop with shift pressed send the file to trash
     }
 }
 
@@ -1257,7 +1335,12 @@ void Themes::dragMoveEvent(QDragMoveEvent* event)
     // if some actions should not be usable, like move, this code must be adopted
     const QMimeData* mimeData = event->mimeData();
     if(mimeData->hasUrls())
-        event->acceptProposedAction();
+    {
+        if(event->dropAction()==Qt::CopyAction)
+            event->acceptProposedAction();
+        else
+            event->ignore();//drag'n'drop with shift pressed send the file to trash
+    }
 }
 
 void Themes::dragLeaveEvent(QDragLeaveEvent* event)

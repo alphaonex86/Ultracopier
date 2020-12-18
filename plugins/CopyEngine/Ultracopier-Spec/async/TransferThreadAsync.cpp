@@ -477,8 +477,9 @@ void TransferThreadAsync::ifCanStartTransfer()
     writeError=false;
     if(realMove)
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] start real move");
-        successFull=TransferThread::rename(source,destination);
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] start real move, source "+TransferThread::internalStringTostring(source)+" exists: "+std::to_string(TransferThread::exists(source)));
+        if(TransferThread::exists(source))
+            successFull=TransferThread::rename(source,destination);
         #ifdef Q_OS_UNIX
         if(!successFull && errno==18)
         {
@@ -748,12 +749,18 @@ void TransferThreadAsync::checkIfAllIsClosedAndDoOperations()
     }
     if(!source.empty() && needRemove && (stopIt || needSkip))
         if(is_file(source) && source!=destination)
+        {
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"remove because: is_file(source): "+std::to_string(is_file(source))+", source: "+TransferThread::internalStringTostring(source));
             unlink(destination);
+        }
     transfer_stat=TransferStat_Idle;
 
     transferSize=readThread.getLastGoodPosition();
 
     if(mode==Ultracopier::Move && !realMove)
+    {
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] remove mode==Ultracopier::Move && !realMove: "+
+                                 TransferThread::internalStringTostring(source));
         if(exists(destination))
             if(!unlink(source))
                 ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] move and unable to remove: "+
@@ -764,6 +771,7 @@ void TransferThreadAsync::checkIfAllIsClosedAndDoOperations()
                                          strerror(errno)
                          #endif
                                          );
+    }
     transfer_stat=TransferStat_PostTransfer;
     emit pushStat(transfer_stat,transferId);
     transfer_stat=TransferStat_PostOperation;

@@ -200,12 +200,12 @@
 <context>
     <name>FileErrorDialog</name>
     <message>
-        <location filename="../../FileErrorDialog.cpp" line="87"/>
+        <location filename="../../FileErrorDialog.cpp" line="88"/>
         <source>Error on folder</source>
         <translation>Erreur sur un dossier</translation>
     </message>
     <message>
-        <location filename="../../FileErrorDialog.cpp" line="90"/>
+        <location filename="../../FileErrorDialog.cpp" line="91"/>
         <source>Folder name</source>
         <translation>Nom de répertoire</translation>
     </message>
@@ -213,22 +213,22 @@
 <context>
     <name>FileExistsDialog</name>
     <message>
-        <location filename="../../FileExistsDialog.cpp" line="191"/>
+        <location filename="../../FileExistsDialog.cpp" line="193"/>
         <source>%name% - copy%suffix%</source>
         <translation>%name% - copie%suffix%</translation>
     </message>
     <message>
-        <location filename="../../FileExistsDialog.cpp" line="198"/>
+        <location filename="../../FileExistsDialog.cpp" line="200"/>
         <source>%name% - copy (%number%)%suffix%</source>
         <translation>%name% - copie (%number%)%suffix%</translation>
     </message>
     <message>
-        <location filename="../../FileExistsDialog.cpp" line="289"/>
+        <location filename="../../FileExistsDialog.cpp" line="291"/>
         <source>Error</source>
         <translation>Erreur</translation>
     </message>
     <message>
-        <location filename="../../FileExistsDialog.cpp" line="289"/>
+        <location filename="../../FileExistsDialog.cpp" line="291"/>
         <source>Try rename with using special characters</source>
         <translation>Essaie de renommage avec caratéres interdits</translation>
     </message>
@@ -236,22 +236,22 @@
 <context>
     <name>FileIsSameDialog</name>
     <message>
-        <location filename="../../FileIsSameDialog.cpp" line="140"/>
+        <location filename="../../FileIsSameDialog.cpp" line="141"/>
         <source>%name% - copy%suffix%</source>
         <translation>%name% - copie%suffix%</translation>
     </message>
     <message>
-        <location filename="../../FileIsSameDialog.cpp" line="147"/>
+        <location filename="../../FileIsSameDialog.cpp" line="148"/>
         <source>%name% - copy (%number%)%suffix%</source>
         <translation>%name% - copie (%number%)%suffix%</translation>
     </message>
     <message>
-        <location filename="../../FileIsSameDialog.cpp" line="220"/>
+        <location filename="../../FileIsSameDialog.cpp" line="221"/>
         <source>Error</source>
         <translation>Erreur</translation>
     </message>
     <message>
-        <location filename="../../FileIsSameDialog.cpp" line="220"/>
+        <location filename="../../FileIsSameDialog.cpp" line="221"/>
         <source>Try rename with using special characters</source>
         <translation>Essaie de renommage avec caratéres interdits</translation>
     </message>
@@ -398,27 +398,27 @@
 <context>
     <name>FolderExistsDialog</name>
     <message>
-        <location filename="../../FolderExistsDialog.cpp" line="84"/>
+        <location filename="../../FolderExistsDialog.cpp" line="86"/>
         <source>Folder already exists</source>
         <translation>Dossier déjà existant</translation>
     </message>
     <message>
-        <location filename="../../FolderExistsDialog.cpp" line="164"/>
+        <location filename="../../FolderExistsDialog.cpp" line="167"/>
         <source>%name% - copy%suffix%</source>
         <translation>%name% - copie%suffix%</translation>
     </message>
     <message>
-        <location filename="../../FolderExistsDialog.cpp" line="173"/>
+        <location filename="../../FolderExistsDialog.cpp" line="176"/>
         <source>%name% - copy (%number%)%suffix%</source>
         <translation>%name% - copie (%number%)%suffix%</translation>
     </message>
     <message>
-        <location filename="../../FolderExistsDialog.cpp" line="240"/>
+        <location filename="../../FolderExistsDialog.cpp" line="243"/>
         <source>Error</source>
         <translation>Erreur</translation>
     </message>
     <message>
-        <location filename="../../FolderExistsDialog.cpp" line="240"/>
+        <location filename="../../FolderExistsDialog.cpp" line="243"/>
         <source>Try rename with using special characters</source>
         <translation>Essaie de renommage avec caratéres interdits</translation>
     </message>
@@ -615,29 +615,29 @@
 <context>
     <name>TransferThread</name>
     <message>
-        <location filename="../../TransferThread.cpp" line="613"/>
+        <location filename="../../TransferThread.cpp" line="627"/>
         <source>%name% - copy%suffix%</source>
         <translation>%name% - copie%suffix%</translation>
     </message>
     <message>
-        <location filename="../../TransferThread.cpp" line="620"/>
+        <location filename="../../TransferThread.cpp" line="634"/>
         <source>%name% - copy (%number%)%suffix%</source>
         <translation>%name% - copie (%number%)%suffix%</translation>
     </message>
     <message>
-        <location filename="../../TransferThread.cpp" line="648"/>
-        <location filename="../../TransferThread.cpp" line="889"/>
+        <location filename="../../TransferThread.cpp" line="662"/>
+        <location filename="../../TransferThread.cpp" line="903"/>
         <source>File not found</source>
         <translation>Fichier non trouvé</translation>
     </message>
     <message>
-        <location filename="../../TransferThread.cpp" line="179"/>
+        <location filename="../../TransferThread.cpp" line="188"/>
         <source>Try rename with using special characters</source>
         <translation>Essaie de renommage avec caratéres interdits</translation>
     </message>
     <message>
-        <location filename="../../TransferThread.cpp" line="889"/>
-        <location filename="../../TransferThread.cpp" line="925"/>
+        <location filename="../../TransferThread.cpp" line="903"/>
+        <location filename="../../TransferThread.cpp" line="939"/>
         <source>Unable to change the date</source>
         <translation>Impossible de changer la date</translation>
     </message>
@@ -645,19 +645,19 @@
 <context>
     <name>TransferThreadAsync</name>
     <message>
-        <location filename="../../async/TransferThreadAsync.cpp" line="340"/>
+        <location filename="../../async/TransferThreadAsync.cpp" line="342"/>
         <source>Wrong modification date or unable to get it, you can disable time transfer to do it</source>
         <translation>Mauvaise date de modification ou impossible de l&apos;avoir, vous pouvez désactiver le transfert de celui-ci</translation>
     </message>
     <message>
-        <location filename="../../async/TransferThreadAsync.cpp" line="428"/>
-        <location filename="../../async/TransferThreadAsync.cpp" line="446"/>
+        <location filename="../../async/TransferThreadAsync.cpp" line="430"/>
+        <location filename="../../async/TransferThreadAsync.cpp" line="448"/>
         <source>Unable to create the destination folder: </source>
         <translation>Impossible de créer le dossier de destination: </translation>
     </message>
     <message>
-        <location filename="../../async/TransferThreadAsync.cpp" line="431"/>
-        <location filename="../../async/TransferThreadAsync.cpp" line="448"/>
+        <location filename="../../async/TransferThreadAsync.cpp" line="433"/>
+        <location filename="../../async/TransferThreadAsync.cpp" line="450"/>
         <source>Unable to create the destination folder, errno: %1</source>
         <translation>Impossible de créer le dossier de destination, errno: %1</translation>
     </message>
@@ -665,24 +665,24 @@
 <context>
     <name>WriteThread</name>
     <message>
-        <location filename="../../async/WriteThread.cpp" line="135"/>
+        <location filename="../../async/WriteThread.cpp" line="137"/>
         <source>Path resolution error (Empty path)</source>
         <translation>Erreur de résolution de chemin (chemin vide)</translation>
     </message>
     <message>
-        <location filename="../../async/WriteThread.cpp" line="164"/>
-        <location filename="../../async/WriteThread.cpp" line="197"/>
+        <location filename="../../async/WriteThread.cpp" line="166"/>
+        <location filename="../../async/WriteThread.cpp" line="199"/>
         <source>Unable to create the destination folder: </source>
         <translation>Impossible de créer le dossier de destination: </translation>
     </message>
     <message>
-        <location filename="../../async/WriteThread.cpp" line="175"/>
-        <location filename="../../async/WriteThread.cpp" line="199"/>
+        <location filename="../../async/WriteThread.cpp" line="177"/>
+        <location filename="../../async/WriteThread.cpp" line="201"/>
         <source>Unable to create the destination folder, errno: %1</source>
         <translation>Impossible de créer le dossier de destination, errno: %1</translation>
     </message>
     <message>
-        <location filename="../../async/WriteThread.cpp" line="456"/>
+        <location filename="../../async/WriteThread.cpp" line="463"/>
         <source>Internal error, please report it!</source>
         <translation>Erreur interne, veuillez la signaler!</translation>
     </message>

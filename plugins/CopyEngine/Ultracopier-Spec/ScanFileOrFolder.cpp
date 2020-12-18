@@ -313,7 +313,7 @@ void ScanFileOrFolder::run()
         }
         else
         {
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"source: "+TransferThread::internalStringTostring(source)+" is file or symblink");
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"source: "+TransferThread::internalStringTostring(source)+" is file or symblink, is_file: "+std::to_string(TransferThread::is_file(source)));
             if(stringEndsWith(destination,'/') || stringEndsWith(destination,'\\'))
                 emit fileTransfer(source,destination+TransferThread::resolvedName(source),mode);
             else
