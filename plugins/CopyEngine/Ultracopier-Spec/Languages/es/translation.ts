@@ -98,7 +98,7 @@
     <message>
         <location filename="../../CopyEngineFactory.cpp" line="303"/>
         <source>Supported only on Windows</source>
-        <translation type="unfinished"></translation>
+        <translation>Compatible solo con Windows</translation>
     </message>
     <message>
         <location filename="../../CopyEngineFactory.cpp" line="430"/>
@@ -582,32 +582,38 @@
 <context>
     <name>ScanFileOrFolder</name>
     <message>
-        <location filename="../../ScanFileOrFolder.cpp" line="452"/>
-        <location filename="../../ScanFileOrFolder.cpp" line="454"/>
-        <source>%1 - copy</source>
-        <translation>%1 - copia</translation>
+        <location filename="../../ScanFileOrFolder.cpp" line="331"/>
+        <location filename="../../ScanFileOrFolder.cpp" line="681"/>
+        <source>Blacklisted folder</source>
+        <translation>Carpeta en la lista negra</translation>
     </message>
     <message>
         <location filename="../../ScanFileOrFolder.cpp" line="463"/>
         <location filename="../../ScanFileOrFolder.cpp" line="465"/>
+        <source>%1 - copy</source>
+        <translation>%1 - copia</translation>
+    </message>
+    <message>
+        <location filename="../../ScanFileOrFolder.cpp" line="474"/>
+        <location filename="../../ScanFileOrFolder.cpp" line="476"/>
         <source>%1 - copy (%2)</source>
         <translation>%1 - copia (%2)</translation>
     </message>
     <message>
-        <location filename="../../ScanFileOrFolder.cpp" line="576"/>
-        <location filename="../../ScanFileOrFolder.cpp" line="578"/>
+        <location filename="../../ScanFileOrFolder.cpp" line="587"/>
+        <location filename="../../ScanFileOrFolder.cpp" line="589"/>
         <source>%name% - copy</source>
         <translation>%name% - copia</translation>
     </message>
     <message>
-        <location filename="../../ScanFileOrFolder.cpp" line="587"/>
-        <location filename="../../ScanFileOrFolder.cpp" line="589"/>
+        <location filename="../../ScanFileOrFolder.cpp" line="598"/>
+        <location filename="../../ScanFileOrFolder.cpp" line="600"/>
         <source>%name% - copy (%number%)</source>
         <translation>%name% - copia (%number%)</translation>
     </message>
     <message>
-        <location filename="../../ScanFileOrFolder.cpp" line="673"/>
-        <location filename="../../ScanFileOrFolder.cpp" line="677"/>
+        <location filename="../../ScanFileOrFolder.cpp" line="691"/>
+        <location filename="../../ScanFileOrFolder.cpp" line="695"/>
         <source>Problem with folder read</source>
         <translation>Problema con la carpeta leída</translation>
     </message>
@@ -793,7 +799,7 @@
         <location filename="../../copyEngineOptions.ui" line="397"/>
         <location filename="../../copyEngineOptions.ui" line="413"/>
         <source>MB</source>
-        <translation type="unfinished"></translation>
+        <translation>MB</translation>
     </message>
     <message>
         <location filename="../../copyEngineOptions.ui" line="429"/>
@@ -803,32 +809,32 @@
     <message>
         <location filename="../../copyEngineOptions.ui" line="436"/>
         <source>OS Buffer</source>
-        <translation type="unfinished"></translation>
+        <translation>Búfer del SO</translation>
     </message>
     <message>
         <location filename="../../copyEngineOptions.ui" line="456"/>
         <source>Disable parallel transfer when are different devices</source>
-        <translation type="unfinished"></translation>
+        <translation>Deshabilitar la transferencia paralela cuando hay diferentes dispositivos</translation>
     </message>
     <message>
         <location filename="../../copyEngineOptions.ui" line="463"/>
         <source>Buffer for different device</source>
-        <translation type="unfinished"></translation>
+        <translation>Búfer para diferentes dispositivos</translation>
     </message>
     <message>
         <location filename="../../copyEngineOptions.ui" line="470"/>
         <source>OS FLags</source>
-        <translation type="unfinished"></translation>
+        <translation>Banderas de SO</translation>
     </message>
     <message>
         <location filename="../../copyEngineOptions.ui" line="477"/>
         <source>Buffer for same device</source>
-        <translation type="unfinished"></translation>
+        <translation>Búfer para el mismo dispositivo</translation>
     </message>
     <message>
         <location filename="../../copyEngineOptions.ui" line="484"/>
         <source>OS native copy (disable speed limitation)</source>
-        <translation type="unfinished"></translation>
+        <translation>Copia nativa del sistema operativo (deshabilitar la limitación de velocidad)</translation>
     </message>
     <message>
         <location filename="../../copyEngineOptions.ui" line="514"/>

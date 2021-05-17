@@ -79,6 +79,8 @@ private:
     std::vector<INTERNALTYPEPATH>         sources;
     INTERNALTYPEPATH             destination;
     volatile bool		stopIt;
+    std::vector<INTERNALTYPEPATH> blackList;
+    bool isBlackListed(const INTERNALTYPEPATH &path);
     void                listFolder(INTERNALTYPEPATH source, INTERNALTYPEPATH destination);
     #ifdef Q_OS_UNIX
     INTERNALTYPEPATH           resolvDestination(const INTERNALTYPEPATH &destination);

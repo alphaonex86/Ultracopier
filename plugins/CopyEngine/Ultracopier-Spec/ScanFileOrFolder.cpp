@@ -45,17 +45,22 @@ ScanFileOrFolder::ScanFileOrFolder(const Ultracopier::CopyMode &mode) :
     this->mode          = mode;
     folder_isolation    = std::regex("^(.*/)?([^/]+)/$");
     setObjectName(QStringLiteral("ScanFileOrFolder"));
-    /*#ifdef Q_OS_WIN32
+    #ifdef Q_OS_WIN32
     QString userName;
     DWORD size=255;
     WCHAR * userNameW=new WCHAR[size];
     if(GetUserNameW(userNameW,&size))
     {
-        userName=QString::fromWCharArray(userNameW,size-1);
-        blackList.push_back(QFileInfo(QStringLiteral("C:/Users/%1/AppData/Roaming/").arg(userName)));
+        #ifdef WIDESTRING
+        blackList.push_back(INTERNALTYPEPATH(L"C:/Users/")+userNameW+L"/AppData/Roaming/");
+        blackList.push_back(INTERNALTYPEPATH(L"C:\\Users\\")+userNameW+L"\\AppData\\Roaming\\");
+        #else
+        blackList.push_back(INTERNALTYPEPATH("C:/Users/")+userNameW+"/AppData/Roaming/");
+        blackList.push_back(INTERNALTYPEPATH("C:\\Users\\")+userNameW+"\\AppData\\Roaming\\");
+        #endif
     }
     delete userNameW;
-    #endif*/
+    #endif
 }
 
 ScanFileOrFolder::~ScanFileOrFolder()
@@ -302,8 +307,8 @@ void ScanFileOrFolder::run()
             }
             else
             {
-                //ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"tempString: "+tempString+" normal listing, blacklist size: "+std::to_string(blackList.size()));
-                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"tempString: "+TransferThread::internalStringTostring(tempString)+" normal listing");
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"tempString: "+TransferThread::internalStringTostring(tempString)+" normal listing, blacklist size: "+std::to_string(blackList.size()));
+                //ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"tempString: "+TransferThread::internalStringTostring(tempString)+" normal listing");
                 if(stringEndsWith(source,'/'))
                     source.erase(source.end()-1);
                 if(stringEndsWith(tempString,'/'))
@@ -313,11 +318,23 @@ void ScanFileOrFolder::run()
         }
         else
         {
+            INTERNALTYPEPATH destinationFinish=destination;
+            if(stringEndsWith(destinationFinish,'/') || stringEndsWith(destinationFinish,'\\'))
+                destinationFinish.pop_back();
+            destinationFinish+=text_slash;
+            do
+            {
+                fileErrorAction=FileError_NotSet;
+                if(isBlackListed(destination))
+                {
+                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"isBlackListed: "+TransferThread::internalStringTostring(destination));
+                    emit errorOnFolder(destination,tr("Blacklisted folder").toStdString(),ErrorType_Folder);
+                    waitOneAction.acquire();
+                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,std::string("actionNum: ")+std::to_string((int)fileErrorAction));
+                }
+            } while(fileErrorAction==FileError_Retry);
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"source: "+TransferThread::internalStringTostring(source)+" is file or symblink, is_file: "+std::to_string(TransferThread::is_file(source)));
-            if(stringEndsWith(destination,'/') || stringEndsWith(destination,'\\'))
-                emit fileTransfer(source,destination+TransferThread::resolvedName(source),mode);
-            else
-                emit fileTransfer(source,destination+text_slash+TransferThread::resolvedName(source),mode);
+            emit fileTransfer(source,destinationFinish+TransferThread::resolvedName(source),mode);
         }
         sourceIndex++;
     }
@@ -362,38 +379,32 @@ INTERNALTYPEPATH ScanFileOrFolder::resolvDestination(const INTERNALTYPEPATH &des
           buf.resize(nbytes);
     }
     return temp;
-    /*do
-    {
-        fileErrorAction=FileError_NotSet;
-        if(isBlackListed(destination))
-        {
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"isBlackListed: "+destination);
-            emit errorOnFolder(destination,tr("Blacklisted folder").toStdString(),ErrorType_Folder);
-            waitOneAction.acquire();
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"actionNum: "+std::to_string(fileErrorAction));
-        }
-    } while(fileErrorAction==FileError_Retry || fileErrorAction==FileError_PutToEndOfTheList);
-    return newDestination;*/
 }
 #endif
 
-/*bool ScanFileOrFolder::isBlackListed(const QFileInfo &destination)
+bool ScanFileOrFolder::isBlackListed(const INTERNALTYPEPATH &path)
 {
     int index=0;
     int size=blackList.size();
+    INTERNALTYPEPATH path2=path;
     while(index<size)
     {
-        if(stringStartWith(destination,blackList.at(index)))
+        #ifdef WIDESTRING
+        stringreplaceAll(path2,L"\\",L"/");
+        #else
+        stringreplaceAll(path2,"\\","/");
+        #endif
+        if(stringStartWith(path2,blackList.at(index)))
         {
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,destination+" start with: "+blackList.at(index));
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,TransferThread::internalStringTostring(path)+" start with: "+TransferThread::internalStringTostring(blackList.at(index)));
             return true;
         }
         else
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,destination+" not start with: "+blackList.at(index));
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,TransferThread::internalStringTostring(path)+" not start with: "+TransferThread::internalStringTostring(blackList.at(index)));
         index++;
     }
     return false;
-}*/
+}
 
 void ScanFileOrFolder::listFolder(INTERNALTYPEPATH source,INTERNALTYPEPATH destination)
 {
@@ -664,7 +675,14 @@ void ScanFileOrFolder::listFolder(INTERNALTYPEPATH source,INTERNALTYPEPATH desti
     do
     {
         fileErrorAction=FileError_NotSet;
-        if(!TransferThread::entryInfoList(source,entryList))
+        if(isBlackListed(destination))
+        {
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"isBlackListed: "+TransferThread::internalStringTostring(destination));
+            emit errorOnFolder(destination,tr("Blacklisted folder").toStdString(),ErrorType_Folder);
+            waitOneAction.acquire();
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,std::string("actionNum: ")+std::to_string((int)fileErrorAction));
+        }
+        else if(!TransferThread::entryInfoList(source,entryList))
         {
             #ifdef Q_OS_UNIX
             int saveerrno=errno;

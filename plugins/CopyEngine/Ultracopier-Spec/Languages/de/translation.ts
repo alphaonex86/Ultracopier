@@ -582,32 +582,38 @@
 <context>
     <name>ScanFileOrFolder</name>
     <message>
-        <location filename="../../ScanFileOrFolder.cpp" line="452"/>
-        <location filename="../../ScanFileOrFolder.cpp" line="454"/>
-        <source>%1 - copy</source>
-        <translation>%1 - Kopie</translation>
+        <location filename="../../ScanFileOrFolder.cpp" line="331"/>
+        <location filename="../../ScanFileOrFolder.cpp" line="681"/>
+        <source>Blacklisted folder</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../ScanFileOrFolder.cpp" line="463"/>
         <location filename="../../ScanFileOrFolder.cpp" line="465"/>
+        <source>%1 - copy</source>
+        <translation>%1 - Kopie</translation>
+    </message>
+    <message>
+        <location filename="../../ScanFileOrFolder.cpp" line="474"/>
+        <location filename="../../ScanFileOrFolder.cpp" line="476"/>
         <source>%1 - copy (%2)</source>
         <translation>%1 - Kopie (%2)</translation>
     </message>
     <message>
-        <location filename="../../ScanFileOrFolder.cpp" line="576"/>
-        <location filename="../../ScanFileOrFolder.cpp" line="578"/>
+        <location filename="../../ScanFileOrFolder.cpp" line="587"/>
+        <location filename="../../ScanFileOrFolder.cpp" line="589"/>
         <source>%name% - copy</source>
         <translation>%name% - Kopie</translation>
     </message>
     <message>
-        <location filename="../../ScanFileOrFolder.cpp" line="587"/>
-        <location filename="../../ScanFileOrFolder.cpp" line="589"/>
+        <location filename="../../ScanFileOrFolder.cpp" line="598"/>
+        <location filename="../../ScanFileOrFolder.cpp" line="600"/>
         <source>%name% - copy (%number%)</source>
         <translation>%name% - Kopie (%number%)</translation>
     </message>
     <message>
-        <location filename="../../ScanFileOrFolder.cpp" line="673"/>
-        <location filename="../../ScanFileOrFolder.cpp" line="677"/>
+        <location filename="../../ScanFileOrFolder.cpp" line="691"/>
+        <location filename="../../ScanFileOrFolder.cpp" line="695"/>
         <source>Problem with folder read</source>
         <translation>Problem beim Lesen des Ordners</translation>
     </message>
