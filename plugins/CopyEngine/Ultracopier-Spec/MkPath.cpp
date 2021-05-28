@@ -238,63 +238,96 @@ void MkPath::internalDoThisPath()
         }
         if(stringStartWith(item.destination,(item.source+text_slash)))
         {
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"move into it self: "+TransferThread::internalStringTostring(item.destination));
+            INTERNALTYPEPATH source=item.source;
+            INTERNALTYPEPATH destination=item.destination;
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"move into it self: "+TransferThread::internalStringTostring(destination));
             int random=rand();
-            INTERNALTYPEPATH tempFolder=FSabsolutePath(item.source)+text_slash+TransferThread::stringToInternalString(std::to_string(random));
+            INTERNALTYPEPATH tempFolder=FSabsolutePath(source)+text_slash+TransferThread::stringToInternalString(std::to_string(random));
+            #ifdef _WIN32
+            stringreplaceAll(tempFolder,L"\\",L"/");
+            #endif
+            stringreplaceAll(tempFolder,L"//",L"/");
             while(TransferThread::is_dir(tempFolder))
             {
                 random=rand();
-                tempFolder=FSabsolutePath(item.source)+text_slash+TransferThread::stringToInternalString(std::to_string(random));
+                tempFolder=FSabsolutePath(source)+text_slash+TransferThread::stringToInternalString(std::to_string(random));
+                #ifdef _WIN32
+                stringreplaceAll(tempFolder,L"\\",L"/");
+                #endif
+                stringreplaceAll(tempFolder,L"//",L"/");
             }
-            if(!TransferThread::rename(item.source,tempFolder))
+            #ifdef _WIN32
+            stringreplaceAll(tempFolder,L"/",L"\\");
+            #endif
+
+            #ifdef _WIN32
+            stringreplaceAll(source,L"\\",L"/");
+            #endif
+            stringreplaceAll(source,L"//",L"/");
+            #ifdef _WIN32
+            stringreplaceAll(source,L"/",L"\\");
+            #endif
+            if(!TransferThread::rename(source,tempFolder))
             {
                 if(stopIt)
                     return;
                 waitAction=true;
-                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Unable to temporary rename the folder: "+TransferThread::internalStringTostring(item.destination));
-                emit errorOnFolder(item.destination,tr("Unable to temporary rename the folder").toStdString());
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Unable to temporary rename the folder: from "+TransferThread::internalStringTostring(source)+" to "+TransferThread::internalStringTostring(tempFolder));
+                emit errorOnFolder(destination,tr("Unable to temporary rename the folder").toStdString());
                 return;
             }
-            /* http://doc.qt.io/qt-5/qdir.html#rename
-             * On most file systems, rename() fails only if oldName does not exist, or if a file with the new name already exists.
-            if(!dir.mkpath(FSabsolutePath(item.destination)))
+            if(!TransferThread::mkpath(FSabsolutePath(destination)))
             {
-                if(!dir.exists(FSabsolutePath(item.destination)))
+                if(!TransferThread::is_dir(FSabsolutePath(destination)))
                 {
                     if(stopIt)
                         return;
                     waitAction=true;
-                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Unable to make the folder: "+item.destination.absoluteFilePath());
-                    emit errorOnFolder(item.destination,tr("Unable to create the folder"));
+                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Unable to make the folder: "+TransferThread::internalStringTostring(destination));
+                    emit errorOnFolder(destination,tr("Unable to create the folder").toStdString());
                     return;
                 }
-            }*/
-            if(!TransferThread::rename(tempFolder,item.destination))
+            }
+            #ifdef _WIN32
+            stringreplaceAll(tempFolder,L"\\",L"/");
+            #endif
+            stringreplaceAll(tempFolder,L"//",L"/");
+            if(!TransferThread::rename(tempFolder,destination))
             {
-                if(stopIt)
+                if(!TransferThread::rename(tempFolder,source))
+                {
+                    if(stopIt)
+                        return;
+                    waitAction=true;
+                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Unable to reverse temporary rename the folder: from "+TransferThread::internalStringTostring(tempFolder)+" to "+TransferThread::internalStringTostring(destination));
+                    emit errorOnFolder(destination,tr("Unable to reverse temporary rename for real move").toStdString());
                     return;
-                waitAction=true;
-                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Unable to do the final real move the folder: "+TransferThread::internalStringTostring(item.destination));
-                emit errorOnFolder(item.destination,tr("Unable to do the final real move the folder").toStdString());
-                return;
+                }
+                else
+                {
+                    if(stopIt)
+                        return;
+                    waitAction=true;
+                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Unable to temporary rename the folder: from "+TransferThread::internalStringTostring(tempFolder)+" to "+TransferThread::internalStringTostring(destination));
+                    emit errorOnFolder(destination,tr("Unable to do the final real move the folder").toStdString());
+                    return;
+                }
             }
         }
         else
         {
-            /* http://doc.qt.io/qt-5/qdir.html#rename
-             * On most file systems, rename() fails only if oldName does not exist, or if a file with the new name already exists.
-            if(!dir.mkpath(FSabsolutePath(item.destination)))
+            if(!TransferThread::mkpath(FSabsolutePath(item.destination)))
             {
-                if(!dir.exists(FSabsolutePath(item.destination)))
+                if(!TransferThread::is_dir(FSabsolutePath(item.destination)))
                 {
                     if(stopIt)
                         return;
                     waitAction=true;
-                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Unable to make the folder: "+item.destination.absoluteFilePath());
-                    emit errorOnFolder(item.destination,tr("Unable to create the folder"));
+                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Unable to make the folder: "+TransferThread::internalStringTostring(item.destination));
+                    emit errorOnFolder(item.destination,tr("Unable to create the folder").toStdString());
                     return;
                 }
-            }*/
+            }
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"move/rename: "+TransferThread::internalStringTostring(item.source)+" to "+TransferThread::internalStringTostring(item.destination));
             if(!TransferThread::rename(item.source,item.destination)!=0)
             {
