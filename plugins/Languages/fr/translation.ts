@@ -1100,13 +1100,15 @@ Cette version est compilée comme version : %1.</translation>
     <name>MkPath</name>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/MkPath.cpp" line="124"/>
-        <location filename="../../CopyEngine/Ultracopier-Spec/MkPath.cpp" line="395"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/MkPath.cpp" line="428"/>
         <source>Unable to remove</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/MkPath.cpp" line="187"/>
         <location filename="../../CopyEngine/Ultracopier-Spec/MkPath.cpp" line="210"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/MkPath.cpp" line="287"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/MkPath.cpp" line="327"/>
         <source>Unable to create the folder</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1116,22 +1118,27 @@ Cette version est compilée comme version : %1.</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/MkPath.cpp" line="255"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/MkPath.cpp" line="276"/>
         <source>Unable to temporary rename the folder</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/MkPath.cpp" line="278"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/MkPath.cpp" line="303"/>
+        <source>Unable to reverse temporary rename for real move</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../CopyEngine/Ultracopier-Spec/MkPath.cpp" line="312"/>
         <source>Unable to do the final real move the folder</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/MkPath.cpp" line="310"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/MkPath.cpp" line="343"/>
         <source>Unable to move the folder</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/MkPath.cpp" line="316"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/MkPath.cpp" line="349"/>
         <source>Unable to move the folder: errno: %1</source>
         <translation type="unfinished"></translation>
     </message>

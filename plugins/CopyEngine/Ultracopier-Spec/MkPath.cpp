@@ -244,28 +244,56 @@ void MkPath::internalDoThisPath()
             int random=rand();
             INTERNALTYPEPATH tempFolder=FSabsolutePath(source)+text_slash+TransferThread::stringToInternalString(std::to_string(random));
             #ifdef _WIN32
-            stringreplaceAll(tempFolder,L"\\",L"/");
+                #ifdef WIDESTRING
+                stringreplaceAll(tempFolder,L"\\",L"/");
+                #else
+                stringreplaceAll(tempFolder,"\\","/");
+                #endif
             #endif
+            #ifdef WIDESTRING
             stringreplaceAll(tempFolder,L"//",L"/");
+            #else
+            stringreplaceAll(tempFolder,"//","/");
+            #endif
             while(TransferThread::is_dir(tempFolder))
             {
                 random=rand();
                 tempFolder=FSabsolutePath(source)+text_slash+TransferThread::stringToInternalString(std::to_string(random));
                 #ifdef _WIN32
-                stringreplaceAll(tempFolder,L"\\",L"/");
+                    #ifdef WIDESTRING
+                    stringreplaceAll(tempFolder,L"\\",L"/");
+                    #else
+                    stringreplaceAll(tempFolder,"\\","/");
+                    #endif
                 #endif
+                #ifdef WIDESTRING
                 stringreplaceAll(tempFolder,L"//",L"/");
+                #else
+                stringreplaceAll(tempFolder,"//","/");
+                #endif
             }
             #ifdef _WIN32
             stringreplaceAll(tempFolder,L"/",L"\\");
             #endif
 
             #ifdef _WIN32
-            stringreplaceAll(source,L"\\",L"/");
+                #ifdef WIDESTRING
+                stringreplaceAll(tempFolder,L"\\",L"/");
+                #else
+                stringreplaceAll(tempFolder,"\\","/");
+                #endif
             #endif
-            stringreplaceAll(source,L"//",L"/");
+            #ifdef WIDESTRING
+            stringreplaceAll(tempFolder,L"//",L"/");
+            #else
+            stringreplaceAll(tempFolder,"//","/");
+            #endif
             #ifdef _WIN32
-            stringreplaceAll(source,L"/",L"\\");
+                #ifdef WIDESTRING
+                stringreplaceAll(tempFolder,L"/",L"\\");
+                #else
+                stringreplaceAll(tempFolder,"/","\\");
+                #endif
             #endif
             if(!TransferThread::rename(source,tempFolder))
             {
@@ -289,9 +317,17 @@ void MkPath::internalDoThisPath()
                 }
             }
             #ifdef _WIN32
-            stringreplaceAll(tempFolder,L"\\",L"/");
+                #ifdef WIDESTRING
+                stringreplaceAll(tempFolder,L"\\",L"/");
+                #else
+                stringreplaceAll(tempFolder,"\\","/");
+                #endif
             #endif
+            #ifdef WIDESTRING
             stringreplaceAll(tempFolder,L"//",L"/");
+            #else
+            stringreplaceAll(tempFolder,"//","/");
+            #endif
             if(!TransferThread::rename(tempFolder,destination))
             {
                 if(!TransferThread::rename(tempFolder,source))

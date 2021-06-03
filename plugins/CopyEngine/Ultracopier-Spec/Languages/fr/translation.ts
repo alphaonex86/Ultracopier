@@ -478,6 +478,8 @@
     <message>
         <location filename="../../MkPath.cpp" line="187"/>
         <location filename="../../MkPath.cpp" line="210"/>
+        <location filename="../../MkPath.cpp" line="287"/>
+        <location filename="../../MkPath.cpp" line="327"/>
         <source>Unable to create the folder</source>
         <translation>Impossible de créer le répertoire</translation>
     </message>
@@ -487,28 +489,33 @@
         <translation>Le dossier source n&apos;éxiste pas</translation>
     </message>
     <message>
-        <location filename="../../MkPath.cpp" line="255"/>
+        <location filename="../../MkPath.cpp" line="276"/>
         <source>Unable to temporary rename the folder</source>
         <translation>Impossible de renommer le dossier</translation>
     </message>
     <message>
-        <location filename="../../MkPath.cpp" line="278"/>
+        <location filename="../../MkPath.cpp" line="303"/>
+        <source>Unable to reverse temporary rename for real move</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../MkPath.cpp" line="312"/>
         <source>Unable to do the final real move the folder</source>
         <translation>Impossible de faire le déplacement final du dossier</translation>
     </message>
     <message>
-        <location filename="../../MkPath.cpp" line="310"/>
+        <location filename="../../MkPath.cpp" line="343"/>
         <source>Unable to move the folder</source>
         <translation>Impossible de déplacer le dossier</translation>
     </message>
     <message>
-        <location filename="../../MkPath.cpp" line="316"/>
+        <location filename="../../MkPath.cpp" line="349"/>
         <source>Unable to move the folder: errno: %1</source>
         <translation>Impossible de déplacer le dossier: errno: %1</translation>
     </message>
     <message>
         <location filename="../../MkPath.cpp" line="124"/>
-        <location filename="../../MkPath.cpp" line="395"/>
+        <location filename="../../MkPath.cpp" line="428"/>
         <source>Unable to remove</source>
         <translation>Impossible de supprimer</translation>
     </message>

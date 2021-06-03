@@ -478,6 +478,8 @@
     <message>
         <location filename="../../MkPath.cpp" line="187"/>
         <location filename="../../MkPath.cpp" line="210"/>
+        <location filename="../../MkPath.cpp" line="287"/>
+        <location filename="../../MkPath.cpp" line="327"/>
         <source>Unable to create the folder</source>
         <translation type="unfinished">폴더를 만들 수 없습니다</translation>
     </message>
@@ -487,28 +489,33 @@
         <translation>원본 폴더가 존재하지 않습니다.</translation>
     </message>
     <message>
-        <location filename="../../MkPath.cpp" line="255"/>
+        <location filename="../../MkPath.cpp" line="276"/>
         <source>Unable to temporary rename the folder</source>
         <translation>폴더 이름을 임시로 바꿀 수 없습니다.</translation>
     </message>
     <message>
-        <location filename="../../MkPath.cpp" line="278"/>
+        <location filename="../../MkPath.cpp" line="303"/>
+        <source>Unable to reverse temporary rename for real move</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../MkPath.cpp" line="312"/>
         <source>Unable to do the final real move the folder</source>
         <translation>폴더를 이동할 수 없습니다.</translation>
     </message>
     <message>
-        <location filename="../../MkPath.cpp" line="310"/>
+        <location filename="../../MkPath.cpp" line="343"/>
         <source>Unable to move the folder</source>
         <translation>폴더를 이동할 수 없습니다.</translation>
     </message>
     <message>
-        <location filename="../../MkPath.cpp" line="316"/>
+        <location filename="../../MkPath.cpp" line="349"/>
         <source>Unable to move the folder: errno: %1</source>
         <translation type="unfinished">폴더를 이동할 수 없습니다. Errno: %1 </translation>
     </message>
     <message>
         <location filename="../../MkPath.cpp" line="124"/>
-        <location filename="../../MkPath.cpp" line="395"/>
+        <location filename="../../MkPath.cpp" line="428"/>
         <source>Unable to remove</source>
         <translation>제거할 수 없습니다.</translation>
     </message>
