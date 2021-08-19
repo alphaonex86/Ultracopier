@@ -41,7 +41,9 @@ PluginInterface_Themes * ThemesFactory::getInstance()
                 ui->checkBoxStartWithMoreButtonPushed->isChecked(),
                 ui->minimizeToSystray->isChecked(),
                 ui->startMinimized->isChecked(),
-                ui->savePosition->isChecked()
+                ui->savePosition->isChecked(),
+                ui->generalMargin->value(),
+                ui->generalSpacing->value()
                 );
     #ifdef ULTRACOPIER_PLUGIN_DEBUG
     if(!connect(newInterface,&Themes::debugInformation,this,&PluginInterface_ThemesFactory::debugInformation))
@@ -106,6 +108,8 @@ void ThemesFactory::setResources(OptionInterface * optionsEngine,const std::stri
         KeysList.push_back(std::pair<std::string, std::string>("savePosition","false"));
         KeysList.push_back(std::pair<std::string, std::string>("savePositionX","0"));
         KeysList.push_back(std::pair<std::string, std::string>("savePositionY","0"));
+        KeysList.push_back(std::pair<std::string, std::string>("generalMargin","0"));
+        KeysList.push_back(std::pair<std::string, std::string>("generalSpacing","0"));
         optionsEngine->addOptionGroup(KeysList);
         connect(optionsEngine,&OptionInterface::resetOptions,this,&ThemesFactory::resetOptions);
         updateSpeed();
@@ -135,6 +139,8 @@ QWidget * ThemesFactory::options()
         ui->minimizeToSystray->setChecked(stringtobool(optionsEngine->getOptionValue("minimizeToSystray")));
         ui->startMinimized->setChecked(stringtobool(optionsEngine->getOptionValue("startMinimized")));
         ui->savePosition->setChecked(stringtobool(optionsEngine->getOptionValue("savePosition")));
+        ui->generalMargin->setValue(stringtoint8(optionsEngine->getOptionValue("generalMargin")));
+        ui->generalSpacing->setValue(stringtoint8(optionsEngine->getOptionValue("generalSpacing")));
 
         progressColorWrite=QVariant(QString::fromStdString(optionsEngine->getOptionValue("progressColorWrite"))).value<QColor>();
         progressColorRead=QVariant(QString::fromStdString(optionsEngine->getOptionValue("progressColorRead"))).value<QColor>();
@@ -185,6 +191,10 @@ QWidget * ThemesFactory::options()
         if(!connect(ui->startMinimized,&QCheckBox::stateChanged,this,&ThemesFactory::startMinimized))
             abort();
         if(!connect(ui->savePosition,&QCheckBox::stateChanged,this,&ThemesFactory::savePositionHaveChanged))
+            abort();
+        if(!connect(ui->generalSpacing,static_cast<void(QSpinBox::*)(int)>(&QSpinBox::valueChanged),	this,	&ThemesFactory::uigeneralSpacing))
+            abort();
+        if(!connect(ui->generalMargin,static_cast<void(QSpinBox::*)(int)>(&QSpinBox::valueChanged),	this,	&ThemesFactory::uigeneralMargin))
             abort();
     }
     else
@@ -378,6 +388,24 @@ void ThemesFactory::uiUpdateSpeed()
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"emit newSpeedLimitation: "+std::to_string(currentSpeed));
     if(optionsEngine!=NULL)
         optionsEngine->setOptionValue("currentSpeed",std::to_string(currentSpeed));
+    else
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"internal error, crash prevented");
+}
+
+void ThemesFactory::uigeneralSpacing()
+{
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"emit uigeneralSpacing: "+std::to_string(currentSpeed));
+    if(optionsEngine!=NULL)
+        optionsEngine->setOptionValue("generalSpacing",std::to_string(ui->generalSpacing->value()));
+    else
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"internal error, crash prevented");
+}
+
+void ThemesFactory::uigeneralMargin()
+{
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"emit uigeneralMargin: "+std::to_string(currentSpeed));
+    if(optionsEngine!=NULL)
+        optionsEngine->setOptionValue("generalMargin",std::to_string(ui->generalMargin->value()));
     else
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"internal error, crash prevented");
 }

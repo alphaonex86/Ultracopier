@@ -71,6 +71,8 @@ private slots:
     void startMinimized(bool checked);
     void savePositionBeforeClose(QObject *obj);
     void savePositionHaveChanged(bool checked);
+    void uigeneralMargin();
+    void uigeneralSpacing();
 public slots:
     void resetOptions();
     void newLanguageLoaded();

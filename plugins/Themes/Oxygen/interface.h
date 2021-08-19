@@ -53,7 +53,7 @@ public:
            const bool &moreButtonPushed,
            const bool &minimizeToSystray,
            const bool &startMinimized,
-           const bool &savePosition);
+           const bool &savePosition, const qint8 &generalMargin, const qint8 &generalSpacing);
     ~Themes();
     //send information about the copy
     /// \brief to set the action in progress
@@ -129,6 +129,8 @@ private slots:
     void forcedModeAddFileToMove();
     void forcedModeAddFolderToMove();
     void uiUpdateSpeed();
+    void uigeneralSpacing();
+    void uigeneralMargin();
     void on_pushButtonCloseSearch_clicked();
     //close the search box
     void closeTheSearchBox();

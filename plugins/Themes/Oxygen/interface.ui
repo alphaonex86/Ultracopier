@@ -17,7 +17,7 @@
    <iconset resource="interfaceResources.qrc">
     <normaloff>:/Themes/Oxygen/resources/main.png</normaloff>:/Themes/Oxygen/resources/main.png</iconset>
   </property>
-  <layout class="QVBoxLayout">
+  <layout class="QVBoxLayout" name="interfaceLayout">
    <property name="spacing">
     <number>2</number>
    </property>

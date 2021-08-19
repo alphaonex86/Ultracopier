@@ -59,7 +59,9 @@ Themes::Themes(const bool &alwaysOnTop,
                const bool &moreButtonPushed,
                const bool &minimizeToSystray,
                const bool &startMinimized,
-               const bool &savePosition) :
+               const bool &savePosition,
+               const qint8 &generalMargin,
+               const qint8 &generalSpacing) :
     duration(0),
     durationStarted(false),
     ui(new Ui::interfaceCopy()),
@@ -108,6 +110,8 @@ Themes::Themes(const bool &alwaysOnTop,
     uiOptions->showDualProgression->setChecked(showDualProgression);
     uiOptions->startMinimized->setEnabled(false);
     uiOptions->alwaysOnTop->setChecked(alwaysOnTop);
+    uiOptions->generalMargin->setValue(generalMargin);
+    uiOptions->generalSpacing->setValue(generalSpacing);
     uiOptions->minimizeToSystray->setChecked(minimizeToSystray);
     //uiOptions->setupUi(ui->tabWidget->widget(ui->tabWidget->count()-1));
     uiOptions->labelStartWithMoreButtonPushed->setVisible(false);
@@ -136,6 +140,9 @@ Themes::Themes(const bool &alwaysOnTop,
     uiOptions->checkBoxShowSpeed->setChecked(checkBoxShowSpeed);
     menu=new QMenu(this);
     ui->add->setMenu(menu);
+    ui->interfaceLayout->setSpacing(uiOptions->generalSpacing->value());
+    const quint8 &margin=uiOptions->generalMargin->value();
+    ui->interfaceLayout->setContentsMargins(margin, margin, margin, margin);
 
     //connect the options
     checkBoxShowSpeed_toggled(uiOptions->checkBoxShowSpeed->isChecked());
@@ -148,10 +155,13 @@ Themes::Themes(const bool &alwaysOnTop,
     connect(uiOptions->progressColorRemaining,&QAbstractButton::clicked,this,&Themes::progressColorRemaining_clicked);
     connect(uiOptions->alwaysOnTop,&QAbstractButton::clicked,this,&Themes::alwaysOnTop_clickedSlot);
 
-    isInPause(false);
-
     connect(uiOptions->limitSpeed,		static_cast<void(QSpinBox::*)(int)>(&QSpinBox::valueChanged),	this,	&Themes::uiUpdateSpeed);
     connect(uiOptions->checkBox_limitSpeed,&QAbstractButton::toggled,		this,	&Themes::uiUpdateSpeed);
+
+    isInPause(false);
+
+    connect(uiOptions->generalMargin,		static_cast<void(QSpinBox::*)(int)>(&QSpinBox::valueChanged),	this,	&Themes::uigeneralMargin);
+    connect(uiOptions->generalSpacing,		static_cast<void(QSpinBox::*)(int)>(&QSpinBox::valueChanged),	this,	&Themes::uigeneralSpacing);
 
     connect(ui->actionAddFile,&QAction::triggered,this,&Themes::forcedModeAddFile);
     connect(ui->actionAddFileToCopy,&QAction::triggered,this,&Themes::forcedModeAddFileToCopy);
@@ -918,6 +928,19 @@ void Themes::uiUpdateSpeed()
         currentSpeed=uiOptions->limitSpeed->value();
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"emit newSpeedLimitation"+std::to_string(currentSpeed));
     emit newSpeedLimitation(currentSpeed);
+}
+
+void Themes::uigeneralSpacing()
+{
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"emit uigeneralSpacing"+std::to_string(uiOptions->generalSpacing->value()));
+    ui->interfaceLayout->setSpacing(uiOptions->generalSpacing->value());
+}
+
+void Themes::uigeneralMargin()
+{
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"emit uigeneralMargin"+std::to_string(uiOptions->generalMargin->value()));
+    const quint8 &margin=uiOptions->generalMargin->value();
+    ui->interfaceLayout->setContentsMargins(margin, margin, margin, margin);
 }
 
 void Themes::updateSpeed()
