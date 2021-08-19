@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>615</width>
+    <width>620</width>
     <height>222</height>
    </rect>
   </property>
@@ -338,7 +338,7 @@
   </layout>
   <action name="actionOverwrite_if_newer">
    <property name="text">
-    <string>Overwrite if newer</string>
+    <string>Overwrite if destination newer</string>
    </property>
   </action>
   <action name="actionOverwrite_if_not_same_modification_date">
@@ -351,10 +351,10 @@
   </action>
   <action name="actionOverwrite_if_older">
    <property name="text">
-    <string>Overwrite if older</string>
+    <string>Overwrite if destination older</string>
    </property>
    <property name="toolTip">
-    <string>Overwrite if older</string>
+    <string>Overwrite if destination older</string>
    </property>
   </action>
   <action name="actionOverwrite_if_not_same_size">

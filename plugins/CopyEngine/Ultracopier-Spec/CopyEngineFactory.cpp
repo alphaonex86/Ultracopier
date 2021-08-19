@@ -54,6 +54,11 @@ CopyEngineFactory::CopyEngineFactory() :
     connect(ui->doRightTransfer,            &QCheckBox::toggled,                                            this,&CopyEngineFactory::setDoRightTransfer);
     connect(ui->keepDate,                   &QCheckBox::toggled,                                            this,&CopyEngineFactory::setKeepDate);
     connect(ui->native_copy,                   &QCheckBox::toggled,                                            this,&CopyEngineFactory::setNativeCopy);
+    #ifndef Q_OS_WIN32
+    ui->native_copy->setEnabled(false);
+    ui->label_native_copy->setEnabled(false);
+    ui->native_copy->setToolTip(tr("Supported only on Windows"));
+    #endif
     connect(ui->os_spec_flags,                   &QCheckBox::toggled,                                            this,&CopyEngineFactory::setOsSpecFlags);
     connect(ui->inodeThreads,               static_cast<void(QSpinBox::*)(int)>(&QSpinBox::valueChanged),	this,&CopyEngineFactory::on_inodeThreads_editingFinished);
     connect(ui->autoStart,                  &QCheckBox::toggled,                                            this,&CopyEngineFactory::setAutoStart);
@@ -298,8 +303,9 @@ void CopyEngineFactory::resetOptions()
     ui->keepDate->setChecked(stringtobool(options->getOptionValue("keepDate")));
     ui->os_spec_flags->setChecked(stringtobool(options->getOptionValue("os_spec_flags")));
     ui->native_copy->setChecked(stringtobool(options->getOptionValue("native_copy")));
-    #ifdef Q_OS_WIN32
+    #ifndef Q_OS_WIN32
     ui->native_copy->setEnabled(false);
+    ui->label_native_copy->setEnabled(false);
     ui->native_copy->setToolTip(tr("Supported only on Windows"));
     #endif
     ui->autoStart->setChecked(stringtobool(options->getOptionValue("autoStart")));

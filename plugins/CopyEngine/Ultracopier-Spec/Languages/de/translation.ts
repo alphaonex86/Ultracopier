@@ -478,8 +478,8 @@
     <message>
         <location filename="../../MkPath.cpp" line="187"/>
         <location filename="../../MkPath.cpp" line="210"/>
-        <location filename="../../MkPath.cpp" line="287"/>
-        <location filename="../../MkPath.cpp" line="327"/>
+        <location filename="../../MkPath.cpp" line="315"/>
+        <location filename="../../MkPath.cpp" line="363"/>
         <source>Unable to create the folder</source>
         <translation>Der Ordner kann nicht erstellt werden</translation>
     </message>
@@ -489,33 +489,33 @@
         <translation>Quell-Ordner existiert nicht</translation>
     </message>
     <message>
-        <location filename="../../MkPath.cpp" line="276"/>
+        <location filename="../../MkPath.cpp" line="304"/>
         <source>Unable to temporary rename the folder</source>
         <translation>Kann den Ordner nicht temporär umbenennen</translation>
     </message>
     <message>
-        <location filename="../../MkPath.cpp" line="303"/>
+        <location filename="../../MkPath.cpp" line="339"/>
         <source>Unable to reverse temporary rename for real move</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../MkPath.cpp" line="312"/>
+        <location filename="../../MkPath.cpp" line="348"/>
         <source>Unable to do the final real move the folder</source>
         <translation>Kann den Ordner nicht endgültig verschieben</translation>
     </message>
     <message>
-        <location filename="../../MkPath.cpp" line="343"/>
+        <location filename="../../MkPath.cpp" line="379"/>
         <source>Unable to move the folder</source>
         <translation>Kann den Ordner nicht verschieben</translation>
     </message>
     <message>
-        <location filename="../../MkPath.cpp" line="349"/>
+        <location filename="../../MkPath.cpp" line="385"/>
         <source>Unable to move the folder: errno: %1</source>
         <translation>Kann Ordner nicht verschieben: Fehler Nummer: %1</translation>
     </message>
     <message>
         <location filename="../../MkPath.cpp" line="124"/>
-        <location filename="../../MkPath.cpp" line="428"/>
+        <location filename="../../MkPath.cpp" line="464"/>
         <source>Unable to remove</source>
         <translation>Kann nicht löschen</translation>
     </message>
@@ -989,10 +989,21 @@
         <translation>&amp;Aktion immer ausführen</translation>
     </message>
     <message>
+        <location filename="../../fileExistsDialog.ui" line="341"/>
+        <source>Overwrite if destination newer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../../fileExistsDialog.ui" line="346"/>
         <location filename="../../fileExistsDialog.ui" line="349"/>
         <source>Overwrite if modification date differs</source>
         <translation>Überschreiben, falls Änderungsdatum verschieden</translation>
+    </message>
+    <message>
+        <location filename="../../fileExistsDialog.ui" line="354"/>
+        <location filename="../../fileExistsDialog.ui" line="357"/>
+        <source>Overwrite if destination older</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../fileExistsDialog.ui" line="362"/>
@@ -1025,17 +1036,6 @@
         <location filename="../../fileExistsDialog.ui" line="332"/>
         <source>&amp;Cancel</source>
         <translation>Abbrechen (&amp;C)</translation>
-    </message>
-    <message>
-        <location filename="../../fileExistsDialog.ui" line="341"/>
-        <source>Overwrite if newer</source>
-        <translation>Überschreiben, falls neuer</translation>
-    </message>
-    <message>
-        <location filename="../../fileExistsDialog.ui" line="354"/>
-        <location filename="../../fileExistsDialog.ui" line="357"/>
-        <source>Overwrite if older</source>
-        <translation>Überschreiben, falls älter</translation>
     </message>
 </context>
 <context>

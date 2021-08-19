@@ -478,8 +478,8 @@
     <message>
         <location filename="../../MkPath.cpp" line="187"/>
         <location filename="../../MkPath.cpp" line="210"/>
-        <location filename="../../MkPath.cpp" line="287"/>
-        <location filename="../../MkPath.cpp" line="327"/>
+        <location filename="../../MkPath.cpp" line="315"/>
+        <location filename="../../MkPath.cpp" line="363"/>
         <source>Unable to create the folder</source>
         <translation>Impossible de créer le répertoire</translation>
     </message>
@@ -489,33 +489,33 @@
         <translation>Le dossier source n&apos;éxiste pas</translation>
     </message>
     <message>
-        <location filename="../../MkPath.cpp" line="276"/>
+        <location filename="../../MkPath.cpp" line="304"/>
         <source>Unable to temporary rename the folder</source>
         <translation>Impossible de renommer le dossier</translation>
     </message>
     <message>
-        <location filename="../../MkPath.cpp" line="303"/>
+        <location filename="../../MkPath.cpp" line="339"/>
         <source>Unable to reverse temporary rename for real move</source>
-        <translation type="unfinished"></translation>
+        <translation>Impossible d&apos;inverser le renommage temporaire pour un déplacement réel</translation>
     </message>
     <message>
-        <location filename="../../MkPath.cpp" line="312"/>
+        <location filename="../../MkPath.cpp" line="348"/>
         <source>Unable to do the final real move the folder</source>
         <translation>Impossible de faire le déplacement final du dossier</translation>
     </message>
     <message>
-        <location filename="../../MkPath.cpp" line="343"/>
+        <location filename="../../MkPath.cpp" line="379"/>
         <source>Unable to move the folder</source>
         <translation>Impossible de déplacer le dossier</translation>
     </message>
     <message>
-        <location filename="../../MkPath.cpp" line="349"/>
+        <location filename="../../MkPath.cpp" line="385"/>
         <source>Unable to move the folder: errno: %1</source>
         <translation>Impossible de déplacer le dossier: errno: %1</translation>
     </message>
     <message>
         <location filename="../../MkPath.cpp" line="124"/>
-        <location filename="../../MkPath.cpp" line="428"/>
+        <location filename="../../MkPath.cpp" line="464"/>
         <source>Unable to remove</source>
         <translation>Impossible de supprimer</translation>
     </message>
@@ -989,10 +989,21 @@
         <translation>&amp;Toujours faire cette action</translation>
     </message>
     <message>
+        <location filename="../../fileExistsDialog.ui" line="341"/>
+        <source>Overwrite if destination newer</source>
+        <translation>Écraser si la destination est plus récente</translation>
+    </message>
+    <message>
         <location filename="../../fileExistsDialog.ui" line="346"/>
         <location filename="../../fileExistsDialog.ui" line="349"/>
         <source>Overwrite if modification date differs</source>
         <translation>Écraser si les dates différes</translation>
+    </message>
+    <message>
+        <location filename="../../fileExistsDialog.ui" line="354"/>
+        <location filename="../../fileExistsDialog.ui" line="357"/>
+        <source>Overwrite if destination older</source>
+        <translation>Écraser si destination plus ancienne</translation>
     </message>
     <message>
         <location filename="../../fileExistsDialog.ui" line="362"/>
@@ -1025,17 +1036,6 @@
         <location filename="../../fileExistsDialog.ui" line="332"/>
         <source>&amp;Cancel</source>
         <translation>&amp;Annuler</translation>
-    </message>
-    <message>
-        <location filename="../../fileExistsDialog.ui" line="341"/>
-        <source>Overwrite if newer</source>
-        <translation>Écraser si plus récent</translation>
-    </message>
-    <message>
-        <location filename="../../fileExistsDialog.ui" line="354"/>
-        <location filename="../../fileExistsDialog.ui" line="357"/>
-        <source>Overwrite if older</source>
-        <translation>Écraser si plus vieux</translation>
     </message>
 </context>
 <context>

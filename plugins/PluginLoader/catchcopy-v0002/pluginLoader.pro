@@ -43,7 +43,8 @@ TRANSLATIONS += \
     $$PWD/Languages/tr/translation.ts \
     $$PWD/Languages/zh/translation.ts
 
-win32:LIBS += -lole32 -lshell32
+#comment here why need -lole32 -lshell32
+#win32:LIBS += -lole32 -lshell32
 
 FORMS += \
     $$PWD/OptionsWidget.ui

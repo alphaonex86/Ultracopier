@@ -1098,15 +1098,15 @@ Ez a verzió a következő verzióként került lefordításra: %1.</translation
     <name>MkPath</name>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/MkPath.cpp" line="124"/>
-        <location filename="../../CopyEngine/Ultracopier-Spec/MkPath.cpp" line="428"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/MkPath.cpp" line="464"/>
         <source>Unable to remove</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/MkPath.cpp" line="187"/>
         <location filename="../../CopyEngine/Ultracopier-Spec/MkPath.cpp" line="210"/>
-        <location filename="../../CopyEngine/Ultracopier-Spec/MkPath.cpp" line="287"/>
-        <location filename="../../CopyEngine/Ultracopier-Spec/MkPath.cpp" line="327"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/MkPath.cpp" line="315"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/MkPath.cpp" line="363"/>
         <source>Unable to create the folder</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1116,27 +1116,27 @@ Ez a verzió a következő verzióként került lefordításra: %1.</translation
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/MkPath.cpp" line="276"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/MkPath.cpp" line="304"/>
         <source>Unable to temporary rename the folder</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/MkPath.cpp" line="303"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/MkPath.cpp" line="339"/>
         <source>Unable to reverse temporary rename for real move</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/MkPath.cpp" line="312"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/MkPath.cpp" line="348"/>
         <source>Unable to do the final real move the folder</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/MkPath.cpp" line="343"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/MkPath.cpp" line="379"/>
         <source>Unable to move the folder</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/MkPath.cpp" line="349"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/MkPath.cpp" line="385"/>
         <source>Unable to move the folder: errno: %1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1782,12 +1782,12 @@ Error:%2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../ProductKey.cpp" line="56"/>
+        <location filename="../../../ProductKey.cpp" line="60"/>
         <source>Error</source>
         <translation type="unfinished">Hiba</translation>
     </message>
     <message>
-        <location filename="../../../ProductKey.cpp" line="56"/>
+        <location filename="../../../ProductKey.cpp" line="60"/>
         <source>Your product key was rejected.&lt;br /&gt;If you buy key, unmark check your spam and unmark the mail as spam&lt;br /&gt;If you have not buy your key, go to &lt;a href=&quot;https://shop.first-world.info/&quot;&gt;https://shop.first-world.info/&lt;/a&gt;</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2517,8 +2517,8 @@ Error:%2</source>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/fileExistsDialog.ui" line="341"/>
-        <source>Overwrite if newer</source>
-        <translation type="unfinished">Felülírás, ha újabb</translation>
+        <source>Overwrite if destination newer</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/fileExistsDialog.ui" line="346"/>
@@ -2529,7 +2529,7 @@ Error:%2</source>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/fileExistsDialog.ui" line="354"/>
         <location filename="../../CopyEngine/Ultracopier-Spec/fileExistsDialog.ui" line="357"/>
-        <source>Overwrite if older</source>
+        <source>Overwrite if destination older</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

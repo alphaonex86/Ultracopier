@@ -17,6 +17,8 @@
 //#define ULTRACOPIER_VERSION_PORTABLE
 //#define ULTRACOPIER_VERSION_PORTABLEAPPS
 // define if the version is ultimate, need change only the name in the code
+//ULTIMATE variable is needed for special case as DVD version
+//#define ULTRACOPIER_VERSION_ULTIMATE
 //#define ULTRACOPIER_PLUGIN_ALL_IN_ONE
 /// \brief define time to update the speed detection update ont the interface (in ms)
 #define ULTRACOPIER_TIME_INTERFACE_UPDATE 500

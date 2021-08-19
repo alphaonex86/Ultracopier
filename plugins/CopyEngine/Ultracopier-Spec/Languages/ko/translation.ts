@@ -478,8 +478,8 @@
     <message>
         <location filename="../../MkPath.cpp" line="187"/>
         <location filename="../../MkPath.cpp" line="210"/>
-        <location filename="../../MkPath.cpp" line="287"/>
-        <location filename="../../MkPath.cpp" line="327"/>
+        <location filename="../../MkPath.cpp" line="315"/>
+        <location filename="../../MkPath.cpp" line="363"/>
         <source>Unable to create the folder</source>
         <translation type="unfinished">폴더를 만들 수 없습니다</translation>
     </message>
@@ -489,33 +489,33 @@
         <translation>원본 폴더가 존재하지 않습니다.</translation>
     </message>
     <message>
-        <location filename="../../MkPath.cpp" line="276"/>
+        <location filename="../../MkPath.cpp" line="304"/>
         <source>Unable to temporary rename the folder</source>
         <translation>폴더 이름을 임시로 바꿀 수 없습니다.</translation>
     </message>
     <message>
-        <location filename="../../MkPath.cpp" line="303"/>
+        <location filename="../../MkPath.cpp" line="339"/>
         <source>Unable to reverse temporary rename for real move</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../MkPath.cpp" line="312"/>
+        <location filename="../../MkPath.cpp" line="348"/>
         <source>Unable to do the final real move the folder</source>
         <translation>폴더를 이동할 수 없습니다.</translation>
     </message>
     <message>
-        <location filename="../../MkPath.cpp" line="343"/>
+        <location filename="../../MkPath.cpp" line="379"/>
         <source>Unable to move the folder</source>
         <translation>폴더를 이동할 수 없습니다.</translation>
     </message>
     <message>
-        <location filename="../../MkPath.cpp" line="349"/>
+        <location filename="../../MkPath.cpp" line="385"/>
         <source>Unable to move the folder: errno: %1</source>
         <translation type="unfinished">폴더를 이동할 수 없습니다. Errno: %1 </translation>
     </message>
     <message>
         <location filename="../../MkPath.cpp" line="124"/>
-        <location filename="../../MkPath.cpp" line="428"/>
+        <location filename="../../MkPath.cpp" line="464"/>
         <source>Unable to remove</source>
         <translation>제거할 수 없습니다.</translation>
     </message>
@@ -989,10 +989,21 @@
         <translation type="unfinished">&amp;항상 이 동작 수행</translation>
     </message>
     <message>
+        <location filename="../../fileExistsDialog.ui" line="341"/>
+        <source>Overwrite if destination newer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../../fileExistsDialog.ui" line="346"/>
         <location filename="../../fileExistsDialog.ui" line="349"/>
         <source>Overwrite if modification date differs</source>
         <translation type="unfinished">수정한 날짜가 다르면 덮어쓰기</translation>
+    </message>
+    <message>
+        <location filename="../../fileExistsDialog.ui" line="354"/>
+        <location filename="../../fileExistsDialog.ui" line="357"/>
+        <source>Overwrite if destination older</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../fileExistsDialog.ui" line="362"/>
@@ -1025,17 +1036,6 @@
         <location filename="../../fileExistsDialog.ui" line="332"/>
         <source>&amp;Cancel</source>
         <translation>&amp;취소</translation>
-    </message>
-    <message>
-        <location filename="../../fileExistsDialog.ui" line="341"/>
-        <source>Overwrite if newer</source>
-        <translation type="unfinished">더 최신이면 덮어쓰기</translation>
-    </message>
-    <message>
-        <location filename="../../fileExistsDialog.ui" line="354"/>
-        <location filename="../../fileExistsDialog.ui" line="357"/>
-        <source>Overwrite if older</source>
-        <translation type="unfinished">더 이전이면 덮어쓰기</translation>
     </message>
 </context>
 <context>

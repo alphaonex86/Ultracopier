@@ -478,8 +478,8 @@
     <message>
         <location filename="../../MkPath.cpp" line="187"/>
         <location filename="../../MkPath.cpp" line="210"/>
-        <location filename="../../MkPath.cpp" line="287"/>
-        <location filename="../../MkPath.cpp" line="327"/>
+        <location filename="../../MkPath.cpp" line="315"/>
+        <location filename="../../MkPath.cpp" line="363"/>
         <source>Unable to create the folder</source>
         <translation>غير قادر على إنشاء المجلد</translation>
     </message>
@@ -489,33 +489,33 @@
         <translation>مجلد المصدر غير موجود</translation>
     </message>
     <message>
-        <location filename="../../MkPath.cpp" line="276"/>
+        <location filename="../../MkPath.cpp" line="304"/>
         <source>Unable to temporary rename the folder</source>
         <translation>غير قادر على أعاده تسميه المجلد المؤقت</translation>
     </message>
     <message>
-        <location filename="../../MkPath.cpp" line="303"/>
+        <location filename="../../MkPath.cpp" line="339"/>
         <source>Unable to reverse temporary rename for real move</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../MkPath.cpp" line="312"/>
+        <location filename="../../MkPath.cpp" line="348"/>
         <source>Unable to do the final real move the folder</source>
         <translation>غير قادر على القيام بالخطوة الحقيقية النهائية المجلد</translation>
     </message>
     <message>
-        <location filename="../../MkPath.cpp" line="343"/>
+        <location filename="../../MkPath.cpp" line="379"/>
         <source>Unable to move the folder</source>
         <translation>غير قادر على نقل المجلد</translation>
     </message>
     <message>
-        <location filename="../../MkPath.cpp" line="349"/>
+        <location filename="../../MkPath.cpp" line="385"/>
         <source>Unable to move the folder: errno: %1</source>
         <translation>errno: %1 :غير قادر على نقل المجلد</translation>
     </message>
     <message>
         <location filename="../../MkPath.cpp" line="124"/>
-        <location filename="../../MkPath.cpp" line="428"/>
+        <location filename="../../MkPath.cpp" line="464"/>
         <source>Unable to remove</source>
         <translation>غير قادر على أزاله</translation>
     </message>
@@ -989,10 +989,21 @@
         <translation>&amp; تنفيذ هذا الاجراء دوما</translation>
     </message>
     <message>
+        <location filename="../../fileExistsDialog.ui" line="341"/>
+        <source>Overwrite if destination newer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../../fileExistsDialog.ui" line="346"/>
         <location filename="../../fileExistsDialog.ui" line="349"/>
         <source>Overwrite if modification date differs</source>
         <translation>الكتابة فوق إذا اختلف تاريخ التعديل</translation>
+    </message>
+    <message>
+        <location filename="../../fileExistsDialog.ui" line="354"/>
+        <location filename="../../fileExistsDialog.ui" line="357"/>
+        <source>Overwrite if destination older</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../fileExistsDialog.ui" line="362"/>
@@ -1025,17 +1036,6 @@
         <location filename="../../fileExistsDialog.ui" line="332"/>
         <source>&amp;Cancel</source>
         <translation>&amp;الغاء الامر</translation>
-    </message>
-    <message>
-        <location filename="../../fileExistsDialog.ui" line="341"/>
-        <source>Overwrite if newer</source>
-        <translation>الكتابة فوق إذا كان أحدث</translation>
-    </message>
-    <message>
-        <location filename="../../fileExistsDialog.ui" line="354"/>
-        <location filename="../../fileExistsDialog.ui" line="357"/>
-        <source>Overwrite if older</source>
-        <translation>الكتابة فوق إذا كان أقدم</translation>
     </message>
 </context>
 <context>

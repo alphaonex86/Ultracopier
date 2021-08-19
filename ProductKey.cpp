@@ -47,7 +47,11 @@ bool ProductKey::parseKey(QString orgkey)
 
 bool ProductKey::isUltimate() const
 {
+#ifdef ULTRACOPIER_VERSION_ULTIMATE
+    return true;
+#else
     return ultimate;
+#endif
 }
 
 void ProductKey::on_buttonBox_accepted()
