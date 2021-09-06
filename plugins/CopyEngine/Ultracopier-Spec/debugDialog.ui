@@ -56,16 +56,6 @@
       <string notr="true">Variables</string>
      </property>
      <layout class="QGridLayout" name="gridLayout_2">
-      <item row="0" column="0">
-       <widget class="QLabel" name="label">
-        <property name="text">
-         <string notr="true">Active transfer:</string>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="1">
-       <widget class="QSpinBox" name="alreadyExistsQueue"/>
-      </item>
       <item row="1" column="1">
        <widget class="QSpinBox" name="spinBoxNumberOfInode">
         <property name="readOnly">
@@ -73,6 +63,20 @@
         </property>
         <property name="maximum">
          <number>9999</number>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="0">
+       <widget class="QLabel" name="label_3">
+        <property name="text">
+         <string notr="true">alreadyExistsQueueItem:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="0">
+       <widget class="QLabel" name="label">
+        <property name="text">
+         <string notr="true">Active transfer:</string>
         </property>
        </widget>
       </item>
@@ -96,17 +100,27 @@
       <item row="3" column="1">
        <widget class="QSpinBox" name="errorQueue"/>
       </item>
-      <item row="2" column="0">
-       <widget class="QLabel" name="label_3">
-        <property name="text">
-         <string notr="true">alreadyExistsQueueItem:</string>
-        </property>
-       </widget>
+      <item row="2" column="1">
+       <widget class="QSpinBox" name="alreadyExistsQueue"/>
       </item>
       <item row="3" column="0">
        <widget class="QLabel" name="label_4">
         <property name="text">
          <string notr="true">errorQueueItem:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="0">
+       <widget class="QLabel" name="label_5">
+        <property name="text">
+         <string>realByteTransfered:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="1">
+       <widget class="QSpinBox" name="realByteTransfered">
+        <property name="maximum">
+         <number>999999999</number>
         </property>
        </widget>
       </item>

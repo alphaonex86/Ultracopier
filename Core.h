@@ -53,6 +53,7 @@ class Core : public QObject
         struct CopyInstance
         {
             unsigned int id;
+            QTime lastProgressionTime;//to compute the speed in B/s
             PluginInterface_CopyEngine * engine;
             PluginInterface_Themes * interface;
             bool ignoreMode;
@@ -124,7 +125,6 @@ class Core : public QObject
         unsigned int incrementId();
         unsigned int nextId;
         std::vector<unsigned int> idList;
-        QTime lastProgressionTime;
         QTimer forUpateInformation;///< used to call \see periodicSynchronization()
         void resetSpeedDetected(const unsigned int &bindex);
 

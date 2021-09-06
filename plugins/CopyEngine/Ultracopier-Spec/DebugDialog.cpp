@@ -58,6 +58,7 @@ void DebugDialog::updateOnTimer()
 {
     ui->alreadyExistsQueue->setValue(copyEngine->alreadyExistsQueue.size());
     ui->errorQueue->setValue(copyEngine->errorQueue.size());
+    ui->realByteTransfered->setValue(copyEngine->realByteTransfered()/1024);
 }
 
 #endif

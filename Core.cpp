@@ -816,15 +816,15 @@ void Core::periodicSynchronizationWithIndex(const int &index)
             currentCopyInstance.interface->remainingTime(transferAddedTime*((double)currentCopyInstance.totalProgression/(double)currentCopyInstance.currentProgression-1)/1000);*/
 
         //do the speed calculation
-        if(lastProgressionTime.isNull())
-            lastProgressionTime.start();
+        if(currentCopyInstance.lastProgressionTime.isNull())
+            currentCopyInstance.lastProgressionTime.start();
         else
         {
             if((currentCopyInstance.action==Ultracopier::Copying || currentCopyInstance.action==Ultracopier::CopyingAndListing))
             {
-                currentCopyInstance.lastSpeedTime.push_back(lastProgressionTime.elapsed());
+                currentCopyInstance.lastSpeedTime.push_back(currentCopyInstance.lastProgressionTime.elapsed());
                 currentCopyInstance.lastSpeedDetected.push_back(diffCopiedSize);
-                currentCopyInstance.lastAverageSpeedTime.push_back(lastProgressionTime.elapsed());
+                currentCopyInstance.lastAverageSpeedTime.push_back(currentCopyInstance.lastProgressionTime.elapsed());
                 currentCopyInstance.lastAverageSpeedDetected.push_back(diffCopiedSize);
                 while(currentCopyInstance.lastSpeedTime.size()>ULTRACOPIER_MAXVALUESPEEDSTORED)
                     currentCopyInstance.lastSpeedTime.erase(currentCopyInstance.lastSpeedTime.cbegin());
@@ -928,7 +928,7 @@ void Core::periodicSynchronizationWithIndex(const int &index)
                         {}//error case
                     }
             }
-            lastProgressionTime.restart();
+            currentCopyInstance.lastProgressionTime.restart();
         }
     }
 }

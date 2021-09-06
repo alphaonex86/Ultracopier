@@ -4,7 +4,7 @@
 <context>
     <name>Themes</name>
     <message>
-        <location filename="../../interface.cpp" line="+331"/>
+        <location filename="../../interface.cpp" line="+341"/>
         <source>Buy the Ultimate version to fund development</source>
         <translation type="unfinished">개발 지원을 위해 Ultimate 버전 구입</translation>
     </message>
@@ -29,7 +29,7 @@
         <translation type="unfinished">이동 목록</translation>
     </message>
     <message>
-        <location line="+428"/>
+        <location line="+441"/>
         <source>Don&apos;t close if errors are found</source>
         <translation type="unfinished">오류가 발견될 경우 닫지 않음</translation>
     </message>
@@ -66,7 +66,7 @@
 <context>
     <name>ThemesFactory</name>
     <message>
-        <location filename="../../ThemesFactory.cpp" line="+284"/>
+        <location filename="../../ThemesFactory.cpp" line="+294"/>
         <source>Don&apos;t close if errors are found</source>
         <translation type="unfinished">오류가 발견된 경우 닫지 않음</translation>
     </message>
@@ -81,7 +81,7 @@
         <translation type="unfinished">항상 닫기</translation>
     </message>
     <message>
-        <location line="+196"/>
+        <location line="+214"/>
         <location line="+15"/>
         <location line="+15"/>
         <source>Select a color</source>
@@ -250,12 +250,12 @@
 <context>
     <name>themesOptions</name>
     <message>
-        <location filename="../../themesOptions.ui" line="+267"/>
+        <location filename="../../themesOptions.ui" line="+402"/>
         <source>Show dual progression</source>
         <translation type="unfinished">이중 진행 표시</translation>
     </message>
     <message>
-        <location line="-48"/>
+        <location line="-183"/>
         <source>Show speed as main information</source>
         <translation type="unfinished">주요 정보로 속도 표시</translation>
     </message>
@@ -291,12 +291,12 @@
         <translation type="unfinished">최소화된 시작</translation>
     </message>
     <message>
-        <location line="+253"/>
+        <location line="+216"/>
         <source>Click to edit the color</source>
         <translation type="unfinished">색상 편집 클릭</translation>
     </message>
     <message>
-        <location line="-159"/>
+        <location line="-122"/>
         <source> KB/s</source>
         <translation type="unfinished"> KB/초</translation>
     </message>
@@ -316,22 +316,32 @@
         <translation type="unfinished">표시</translation>
     </message>
     <message>
-        <location line="+6"/>
+        <location line="+117"/>
         <source>Speed with progress bar</source>
         <translation type="unfinished">진행 표시줄이 있는 속도</translation>
     </message>
     <message>
-        <location line="+30"/>
+        <location line="+10"/>
         <source>Progression color</source>
         <translation type="unfinished">진행 색상</translation>
     </message>
     <message>
-        <location line="-10"/>
+        <location line="+10"/>
         <source>Show progression in the title</source>
         <translation type="unfinished">제목에 진행률 표시</translation>
     </message>
     <message>
-        <location line="-94"/>
+        <location line="+7"/>
+        <source>General margin</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+30"/>
+        <source>General spacing</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="-242"/>
         <source>Always on top</source>
         <translation type="unfinished">항상 위에 놓기</translation>
     </message>

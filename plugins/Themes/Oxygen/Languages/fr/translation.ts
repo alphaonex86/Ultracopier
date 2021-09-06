@@ -4,7 +4,7 @@
 <context>
     <name>Themes</name>
     <message>
-        <location filename="../../interface.cpp" line="+331"/>
+        <location filename="../../interface.cpp" line="+341"/>
         <source>Buy the Ultimate version to fund development</source>
         <translation>Achetez la version Ultimate pour financer le développement</translation>
     </message>
@@ -29,7 +29,7 @@
         <translation>Liste de déplacements</translation>
     </message>
     <message>
-        <location line="+428"/>
+        <location line="+441"/>
         <source>Don&apos;t close if errors are found</source>
         <translation>Garder ouvert s&apos;il y a des erreurs</translation>
     </message>
@@ -66,7 +66,7 @@
 <context>
     <name>ThemesFactory</name>
     <message>
-        <location filename="../../ThemesFactory.cpp" line="+284"/>
+        <location filename="../../ThemesFactory.cpp" line="+294"/>
         <source>Don&apos;t close if errors are found</source>
         <translation>Garder ouvert s&apos;il y a des erreurs</translation>
     </message>
@@ -81,7 +81,7 @@
         <translation>Toujours fermer</translation>
     </message>
     <message>
-        <location line="+196"/>
+        <location line="+214"/>
         <location line="+15"/>
         <location line="+15"/>
         <source>Select a color</source>
@@ -250,12 +250,12 @@
 <context>
     <name>themesOptions</name>
     <message>
-        <location filename="../../themesOptions.ui" line="+267"/>
+        <location filename="../../themesOptions.ui" line="+402"/>
         <source>Show dual progression</source>
         <translation>Afficher une double progression</translation>
     </message>
     <message>
-        <location line="-48"/>
+        <location line="-183"/>
         <source>Show speed as main information</source>
         <translation>Afficher la vitesse comme information principale</translation>
     </message>
@@ -291,12 +291,12 @@
         <translation>Démarrer minimisé</translation>
     </message>
     <message>
-        <location line="+253"/>
+        <location line="+216"/>
         <source>Click to edit the color</source>
         <translation>Cliquer pour éditer la couleur</translation>
     </message>
     <message>
-        <location line="-159"/>
+        <location line="-122"/>
         <source> KB/s</source>
         <translation> Ko/s</translation>
     </message>
@@ -316,22 +316,32 @@
         <translation>Affichage</translation>
     </message>
     <message>
-        <location line="+6"/>
+        <location line="+117"/>
         <source>Speed with progress bar</source>
         <translation>Vitesse avec barre de progression</translation>
     </message>
     <message>
-        <location line="+30"/>
+        <location line="+10"/>
         <source>Progression color</source>
         <translation>Couleur de progression</translation>
     </message>
     <message>
-        <location line="-10"/>
+        <location line="+10"/>
         <source>Show progression in the title</source>
         <translation>Afficher la progression dans le titre</translation>
     </message>
     <message>
-        <location line="-94"/>
+        <location line="+7"/>
+        <source>General margin</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+30"/>
+        <source>General spacing</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="-242"/>
         <source>Always on top</source>
         <translation>Toujours au 1er plan</translation>
     </message>

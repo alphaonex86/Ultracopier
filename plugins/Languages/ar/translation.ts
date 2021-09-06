@@ -120,64 +120,69 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngine.cpp" line="1022"/>
-        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngine.cpp" line="1025"/>
-        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngine.cpp" line="1030"/>
-        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngine.cpp" line="1034"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngine.cpp" line="880"/>
+        <source>Supported only on Windows</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngine.cpp" line="1029"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngine.cpp" line="1032"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngine.cpp" line="1037"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngine.cpp" line="1041"/>
         <source>Ask</source>
         <translation type="unfinished">اسال</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngine.cpp" line="1023"/>
-        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngine.cpp" line="1027"/>
-        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngine.cpp" line="1031"/>
-        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngine.cpp" line="1035"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngine.cpp" line="1030"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngine.cpp" line="1034"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngine.cpp" line="1038"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngine.cpp" line="1042"/>
         <source>Skip</source>
         <translation type="unfinished">تخطي</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngine.cpp" line="1026"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngine.cpp" line="1033"/>
         <source>Merge</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngine.cpp" line="1028"/>
-        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngine.cpp" line="1040"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngine.cpp" line="1035"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngine.cpp" line="1047"/>
         <source>Rename</source>
         <translation type="unfinished">اعاده تسميه</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngine.cpp" line="1032"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngine.cpp" line="1039"/>
         <source>Put at the end</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngine.cpp" line="1036"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngine.cpp" line="1043"/>
         <source>Overwrite</source>
         <translation type="unfinished">الكتابة فوق</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngine.cpp" line="1037"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngine.cpp" line="1044"/>
         <source>Overwrite if different</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngine.cpp" line="1038"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngine.cpp" line="1045"/>
         <source>Overwrite if newer</source>
         <translation type="unfinished">الكتابة فوق إذا كان أحدث</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngine.cpp" line="1039"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngine.cpp" line="1046"/>
         <source>Overwrite if older</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngine.cpp" line="1110"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngine.cpp" line="1117"/>
         <source>Options error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngine.cpp" line="1110"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngine.cpp" line="1117"/>
         <source>Options engine is not loaded. Unable to access the filters</source>
         <translation type="unfinished"></translation>
     </message>
@@ -185,75 +190,76 @@
 <context>
     <name>CopyEngineFactory</name>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="303"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="60"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="309"/>
         <source>Supported only on Windows</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="430"/>
-        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="433"/>
-        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="438"/>
-        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="442"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="436"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="439"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="444"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="448"/>
         <source>Ask</source>
         <translation type="unfinished">اسال</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="431"/>
-        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="435"/>
-        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="439"/>
-        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="443"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="437"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="441"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="445"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="449"/>
         <source>Skip</source>
         <translation type="unfinished">تخطي</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="434"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="440"/>
         <source>Merge</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="436"/>
-        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="448"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="442"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="454"/>
         <source>Rename</source>
         <translation type="unfinished">اعاده تسميه</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="440"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="446"/>
         <source>Put at the end</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="444"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="450"/>
         <source>Overwrite</source>
         <translation type="unfinished">الكتابة فوق</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="445"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="451"/>
         <source>Overwrite if different</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="446"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="452"/>
         <source>Overwrite if newer</source>
         <translation type="unfinished">الكتابة فوق إذا كان أحدث</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="447"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="453"/>
         <source>Overwrite if older</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="463"/>
-        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="502"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="469"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="508"/>
         <source>Options error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="463"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="469"/>
         <source>Options engine is not loaded. Unable to access the filters</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="502"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="508"/>
         <source>Options engine is not loaded, can&apos;t access to the filters</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2052,61 +2058,61 @@ Error:%2</source>
 <context>
     <name>Themes</name>
     <message>
-        <location filename="../../Themes/Oxygen/interface.cpp" line="331"/>
+        <location filename="../../Themes/Oxygen/interface.cpp" line="341"/>
         <source>Buy the Ultimate version to fund development</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../Themes/Oxygen/interface.cpp" line="331"/>
+        <location filename="../../Themes/Oxygen/interface.cpp" line="341"/>
         <source>Register your key</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../Themes/Oxygen/interface.cpp" line="430"/>
+        <location filename="../../Themes/Oxygen/interface.cpp" line="440"/>
         <source>File %1/%2, size: %3/%4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../Themes/Oxygen/interface.cpp" line="664"/>
+        <location filename="../../Themes/Oxygen/interface.cpp" line="674"/>
         <source>Copy list</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../Themes/Oxygen/interface.cpp" line="666"/>
+        <location filename="../../Themes/Oxygen/interface.cpp" line="676"/>
         <source>Move list</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../Themes/Oxygen/interface.cpp" line="1094"/>
+        <location filename="../../Themes/Oxygen/interface.cpp" line="1117"/>
         <source>Don&apos;t close if errors are found</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../Themes/Oxygen/interface.cpp" line="1095"/>
+        <location filename="../../Themes/Oxygen/interface.cpp" line="1118"/>
         <source>Never close</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../Themes/Oxygen/interface.cpp" line="1096"/>
+        <location filename="../../Themes/Oxygen/interface.cpp" line="1119"/>
         <source>Always close</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../Themes/Oxygen/interface.cpp" line="1098"/>
+        <location filename="../../Themes/Oxygen/interface.cpp" line="1121"/>
         <source>File Name, 0KB</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../Themes/Oxygen/interface.cpp" line="1372"/>
-        <location filename="../../Themes/Oxygen/interface.cpp" line="1384"/>
-        <location filename="../../Themes/Oxygen/interface.cpp" line="1396"/>
+        <location filename="../../Themes/Oxygen/interface.cpp" line="1395"/>
+        <location filename="../../Themes/Oxygen/interface.cpp" line="1407"/>
+        <location filename="../../Themes/Oxygen/interface.cpp" line="1419"/>
         <source>Select a color</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../Themes/Oxygen/interface.cpp" line="1471"/>
-        <location filename="../../Themes/Oxygen/interface.cpp" line="1475"/>
-        <location filename="../../Themes/Oxygen/interface.cpp" line="1477"/>
+        <location filename="../../Themes/Oxygen/interface.cpp" line="1494"/>
+        <location filename="../../Themes/Oxygen/interface.cpp" line="1498"/>
+        <location filename="../../Themes/Oxygen/interface.cpp" line="1500"/>
         <source>%1 %2% of %3</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2114,24 +2120,24 @@ Error:%2</source>
 <context>
     <name>ThemesFactory</name>
     <message>
-        <location filename="../../Themes/Oxygen/ThemesFactory.cpp" line="284"/>
+        <location filename="../../Themes/Oxygen/ThemesFactory.cpp" line="294"/>
         <source>Don&apos;t close if errors are found</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../Themes/Oxygen/ThemesFactory.cpp" line="285"/>
+        <location filename="../../Themes/Oxygen/ThemesFactory.cpp" line="295"/>
         <source>Never close</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../Themes/Oxygen/ThemesFactory.cpp" line="286"/>
+        <location filename="../../Themes/Oxygen/ThemesFactory.cpp" line="296"/>
         <source>Always close</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../Themes/Oxygen/ThemesFactory.cpp" line="482"/>
-        <location filename="../../Themes/Oxygen/ThemesFactory.cpp" line="497"/>
-        <location filename="../../Themes/Oxygen/ThemesFactory.cpp" line="512"/>
+        <location filename="../../Themes/Oxygen/ThemesFactory.cpp" line="510"/>
+        <location filename="../../Themes/Oxygen/ThemesFactory.cpp" line="525"/>
+        <location filename="../../Themes/Oxygen/ThemesFactory.cpp" line="540"/>
         <source>Select a color</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2935,28 +2941,38 @@ Error:%2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../Themes/Oxygen/themesOptions.ui" line="257"/>
+        <location filename="../../Themes/Oxygen/themesOptions.ui" line="269"/>
+        <source>Click to edit the color</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../Themes/Oxygen/themesOptions.ui" line="368"/>
         <source>Speed with progress bar</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../Themes/Oxygen/themesOptions.ui" line="267"/>
-        <source>Show dual progression</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../Themes/Oxygen/themesOptions.ui" line="277"/>
-        <source>Show progression in the title</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../Themes/Oxygen/themesOptions.ui" line="287"/>
+        <location filename="../../Themes/Oxygen/themesOptions.ui" line="378"/>
         <source>Progression color</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../Themes/Oxygen/themesOptions.ui" line="306"/>
-        <source>Click to edit the color</source>
+        <location filename="../../Themes/Oxygen/themesOptions.ui" line="388"/>
+        <source>Show progression in the title</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../Themes/Oxygen/themesOptions.ui" line="395"/>
+        <source>General margin</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../Themes/Oxygen/themesOptions.ui" line="402"/>
+        <source>Show dual progression</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../Themes/Oxygen/themesOptions.ui" line="425"/>
+        <source>General spacing</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

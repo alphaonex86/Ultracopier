@@ -4,61 +4,61 @@
 <context>
     <name>Themes</name>
     <message>
-        <location filename="../../interface.cpp" line="331"/>
+        <location filename="../../interface.cpp" line="341"/>
         <source>Buy the Ultimate version to fund development</source>
         <translation>شراء النسخة النهائية لتمويل التنمية</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="331"/>
+        <location filename="../../interface.cpp" line="341"/>
         <source>Register your key</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="430"/>
+        <location filename="../../interface.cpp" line="440"/>
         <source>File %1/%2, size: %3/%4</source>
         <translation>الملف %1/%2 ، الحجم: %3/%4</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="664"/>
+        <location filename="../../interface.cpp" line="674"/>
         <source>Copy list</source>
         <translation>قائمة النسخ</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="666"/>
+        <location filename="../../interface.cpp" line="676"/>
         <source>Move list</source>
         <translation>قائمة النقل</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="1094"/>
+        <location filename="../../interface.cpp" line="1117"/>
         <source>Don&apos;t close if errors are found</source>
         <translation>عدم الإغلاق في حاله العثور على أخطاء</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="1095"/>
+        <location filename="../../interface.cpp" line="1118"/>
         <source>Never close</source>
         <translation>لا تغلق أبدا</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="1096"/>
+        <location filename="../../interface.cpp" line="1119"/>
         <source>Always close</source>
         <translation>إغلاق دائم</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="1098"/>
+        <location filename="../../interface.cpp" line="1121"/>
         <source>File Name, 0KB</source>
         <translation>اسم الملف ، 0KB</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="1372"/>
-        <location filename="../../interface.cpp" line="1384"/>
-        <location filename="../../interface.cpp" line="1396"/>
+        <location filename="../../interface.cpp" line="1395"/>
+        <location filename="../../interface.cpp" line="1407"/>
+        <location filename="../../interface.cpp" line="1419"/>
         <source>Select a color</source>
         <translation>تحديد لون</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="1471"/>
-        <location filename="../../interface.cpp" line="1475"/>
-        <location filename="../../interface.cpp" line="1477"/>
+        <location filename="../../interface.cpp" line="1494"/>
+        <location filename="../../interface.cpp" line="1498"/>
+        <location filename="../../interface.cpp" line="1500"/>
         <source>%1 %2% of %3</source>
         <translation>%1 %2% من %3</translation>
     </message>
@@ -66,24 +66,24 @@
 <context>
     <name>ThemesFactory</name>
     <message>
-        <location filename="../../ThemesFactory.cpp" line="284"/>
+        <location filename="../../ThemesFactory.cpp" line="294"/>
         <source>Don&apos;t close if errors are found</source>
         <translation>عدم الإغلاق في حاله العثور على أخطاء</translation>
     </message>
     <message>
-        <location filename="../../ThemesFactory.cpp" line="285"/>
+        <location filename="../../ThemesFactory.cpp" line="295"/>
         <source>Never close</source>
         <translation>لا تغلق أبدا</translation>
     </message>
     <message>
-        <location filename="../../ThemesFactory.cpp" line="286"/>
+        <location filename="../../ThemesFactory.cpp" line="296"/>
         <source>Always close</source>
         <translation>إغلاق دائم</translation>
     </message>
     <message>
-        <location filename="../../ThemesFactory.cpp" line="482"/>
-        <location filename="../../ThemesFactory.cpp" line="497"/>
-        <location filename="../../ThemesFactory.cpp" line="512"/>
+        <location filename="../../ThemesFactory.cpp" line="510"/>
+        <location filename="../../ThemesFactory.cpp" line="525"/>
+        <location filename="../../ThemesFactory.cpp" line="540"/>
         <source>Select a color</source>
         <translation>تحديد لون</translation>
     </message>
@@ -250,7 +250,7 @@
 <context>
     <name>themesOptions</name>
     <message>
-        <location filename="../../themesOptions.ui" line="267"/>
+        <location filename="../../themesOptions.ui" line="402"/>
         <source>Show dual progression</source>
         <translation>إظهار التقدم المزدوج</translation>
     </message>
@@ -311,22 +311,32 @@
         <translation>عرض</translation>
     </message>
     <message>
-        <location filename="../../themesOptions.ui" line="257"/>
+        <location filename="../../themesOptions.ui" line="368"/>
         <source>Speed with progress bar</source>
         <translation>السرعة مع شريط التقدم</translation>
     </message>
     <message>
-        <location filename="../../themesOptions.ui" line="287"/>
+        <location filename="../../themesOptions.ui" line="378"/>
         <source>Progression color</source>
         <translation>تدرج اللون</translation>
     </message>
     <message>
-        <location filename="../../themesOptions.ui" line="306"/>
+        <location filename="../../themesOptions.ui" line="395"/>
+        <source>General margin</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../themesOptions.ui" line="425"/>
+        <source>General spacing</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../themesOptions.ui" line="269"/>
         <source>Click to edit the color</source>
         <translation>انقر لتحرير اللون</translation>
     </message>
     <message>
-        <location filename="../../themesOptions.ui" line="277"/>
+        <location filename="../../themesOptions.ui" line="388"/>
         <source>Show progression in the title</source>
         <translation>إظهار التقدم في العنوان</translation>
     </message>
