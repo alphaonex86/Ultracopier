@@ -25,9 +25,13 @@ FileErrorDialog::FileErrorDialog(QWidget *parent, INTERNALTYPEPATH fileInfo, std
     WIN32_FILE_ATTRIBUTE_DATA fileInfoW;
     if(GetFileAttributesExW(fileInfo.c_str(),GetFileExInfoStandard,&fileInfoW))
     {
-        uint64_t mdate=fileInfoW.ftLastWriteTime.dwHighDateTime;
-        mdate<<=32;
-        mdate|=fileInfoW.ftLastWriteTime.dwLowDateTime;
+        LARGE_INTEGER li;
+        li.LowPart  = fileInfoW.ftLastWriteTime.dwLowDateTime;
+        li.HighPart = fileInfoW.ftLastWriteTime.dwHighDateTime;
+        const uint64_t mdate=(li.QuadPart - 0x019DB1DED53E8000) / 10000000;
+        //uint64_t mdate=fileInfoW.ftLastWriteTime.dwHighDateTime;
+        /*mdate<<=32;
+        mdate|=fileInfoW.ftLastWriteTime.dwLowDateTime;*/
         uint64_t size=fileInfoW.nFileSizeHigh;
         size<<=32;
         size|=fileInfoW.nFileSizeLow;

@@ -810,8 +810,14 @@ void CopyEngine::setFileCollision(int index)
         case 6:
             alwaysDoThisActionForFileExists=FileExists_Rename;
         break;
+        case 7:
+            alwaysDoThisActionForFileExists=FileExists_OverwriteIfNotSameSize;
+        break;
+        case 8:
+            alwaysDoThisActionForFileExists=FileExists_OverwriteIfNotSameSizeAndDate;
+        break;
         default:
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Error, unknow index, ignored");
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Error, unknow index, ignored: "+std::to_string(index));
             alwaysDoThisActionForFileExists=FileExists_NotSet;
         break;
     }
@@ -836,7 +842,7 @@ void CopyEngine::setFileError(int index)
             alwaysDoThisActionForFileError=FileError_PutToEndOfTheList;
         break;
         default:
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Error, unknow index, ignored");
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Error, unknow index, ignored: "+std::to_string(index));
             alwaysDoThisActionForFileError=FileError_NotSet;
         break;
     }

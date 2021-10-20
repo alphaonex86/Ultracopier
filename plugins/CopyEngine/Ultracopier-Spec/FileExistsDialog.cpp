@@ -52,9 +52,13 @@ FileExistsDialog::FileExistsDialog(QWidget *parent, INTERNALTYPEPATH source,
     WIN32_FILE_ATTRIBUTE_DATA sourceW;
     if(GetFileAttributesExW(source.c_str(),GetFileExInfoStandard,&sourceW))
     {
-        uint64_t mdate=sourceW.ftLastWriteTime.dwHighDateTime;
+        LARGE_INTEGER li;
+        li.LowPart  = sourceW.ftLastWriteTime.dwLowDateTime;
+        li.HighPart = sourceW.ftLastWriteTime.dwHighDateTime;
+        const uint64_t mdate=(li.QuadPart - 0x019DB1DED53E8000) / 10000000;
+        /*uint64_t mdate=sourceW.ftLastWriteTime.dwHighDateTime;
         mdate<<=32;
-        mdate|=sourceW.ftLastWriteTime.dwLowDateTime;
+        mdate|=sourceW.ftLastWriteTime.dwLowDateTime;*/
         uint64_t size=sourceW.nFileSizeHigh;
         size<<=32;
         size|=sourceW.nFileSizeLow;
@@ -97,9 +101,13 @@ FileExistsDialog::FileExistsDialog(QWidget *parent, INTERNALTYPEPATH source,
     WIN32_FILE_ATTRIBUTE_DATA destinationW;
     if(GetFileAttributesExW(destination.c_str(),GetFileExInfoStandard,&destinationW))
     {
-        uint64_t mdate=destinationW.ftLastWriteTime.dwHighDateTime;
+        LARGE_INTEGER li;
+        li.LowPart  = destinationW.ftLastWriteTime.dwLowDateTime;
+        li.HighPart = destinationW.ftLastWriteTime.dwHighDateTime;
+        const uint64_t mdate=(li.QuadPart - 0x019DB1DED53E8000) / 10000000;
+        /*uint64_t mdate=destinationW.ftLastWriteTime.dwHighDateTime;
         mdate<<=32;
-        mdate|=destinationW.ftLastWriteTime.dwLowDateTime;
+        mdate|=destinationW.ftLastWriteTime.dwLowDateTime;*/
         uint64_t size=destinationW.nFileSizeHigh;
         size<<=32;
         size|=destinationW.nFileSizeLow;

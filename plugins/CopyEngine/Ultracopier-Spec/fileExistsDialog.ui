@@ -338,7 +338,7 @@
   </layout>
   <action name="actionOverwrite_if_newer">
    <property name="text">
-    <string>Overwrite if destination newer</string>
+    <string>Overwrite if source newer than destination</string>
    </property>
   </action>
   <action name="actionOverwrite_if_not_same_modification_date">
@@ -351,7 +351,7 @@
   </action>
   <action name="actionOverwrite_if_older">
    <property name="text">
-    <string>Overwrite if destination older</string>
+    <string>Overwrite if source older than destination</string>
    </property>
    <property name="toolTip">
     <string>Overwrite if destination older</string>

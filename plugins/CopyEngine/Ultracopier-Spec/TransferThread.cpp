@@ -995,12 +995,13 @@ int64_t TransferThread::readFileMDateTime(const INTERNALTYPEPATH &source)
                 return -1;
             }
             CloseHandle(hFileSouce);
-            const int64_t UNIX_TIME_START = 0x019DB1DED53E8000; //January 1, 1970 (start of Unix epoch) in "ticks"
-            const int64_t TICKS_PER_SECOND = 10000000; //a tick is 100ns
+            //const int64_t UNIX_TIME_START = 0x019DB1DED53E8000; //January 1, 1970 (start of Unix epoch) in "ticks"
+            //const int64_t TICKS_PER_SECOND = 10000000; //a tick is 100ns
             LARGE_INTEGER li;
             li.LowPart  = ftWrite.dwLowDateTime;
             li.HighPart = ftWrite.dwHighDateTime;
-            return (li.QuadPart - UNIX_TIME_START) / TICKS_PER_SECOND;
+            //return (li.QuadPart - UNIX_TIME_START) / TICKS_PER_SECOND;
+            return (li.QuadPart - 0x019DB1DED53E8000) / 10000000;
         #else
             return -1;
         #endif
@@ -1058,7 +1059,10 @@ bool TransferThread::readSourceFileDateTime(const INTERNALTYPEPATH &source)
             this->ftAccess=ftAccess;
             this->ftWrite=ftWrite;
             CloseHandle(hFileSouce);
-            const uint64_t modtime=(uint64_t)ftWrite.dwLowDateTime + ((uint64_t)2^32 * (uint64_t)ftWrite.dwHighDateTime);
+            LARGE_INTEGER li;
+            li.LowPart  = ftWrite.dwLowDateTime;
+            li.HighPart = ftWrite.dwHighDateTime;
+            const uint64_t modtime=(li.QuadPart - 0x019DB1DED53E8000) / 10000000;
             if(modtime<ULTRACOPIER_PLUGIN_MINIMALYEAR_TIMESTAMPS)
             {
                 //ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] the sources is older to copy the time: "+source+": "+source.lastModified().toString().toStdString());

@@ -306,9 +306,13 @@ void CopyEngine::errorOnFile(INTERNALTYPEPATH fileInfo, std::string errorString,
             WIN32_FILE_ATTRIBUTE_DATA sourceW;
             if(GetFileAttributesExW(fileInfo.c_str(),GetFileExInfoStandard,&sourceW))
             {
-                mdate=sourceW.ftLastWriteTime.dwHighDateTime;
+                LARGE_INTEGER li;
+                li.LowPart  = sourceW.ftLastWriteTime.dwLowDateTime;
+                li.HighPart = sourceW.ftLastWriteTime.dwHighDateTime;
+                mdate=(li.QuadPart - 0x019DB1DED53E8000) / 10000000;
+                /*mdate=sourceW.ftLastWriteTime.dwHighDateTime;
                 mdate<<=32;
-                mdate|=sourceW.ftLastWriteTime.dwLowDateTime;
+                mdate|=sourceW.ftLastWriteTime.dwLowDateTime;*/
                 size=sourceW.nFileSizeHigh;
                 size<<=32;
                 size|=sourceW.nFileSizeLow;
@@ -489,9 +493,13 @@ void CopyEngine::errorOnFolder(INTERNALTYPEPATH fileInfo, std::string errorStrin
             WIN32_FILE_ATTRIBUTE_DATA sourceW;
             if(GetFileAttributesExW(fileInfo.c_str(),GetFileExInfoStandard,&sourceW))
             {
-                mdate=sourceW.ftLastWriteTime.dwHighDateTime;
+                LARGE_INTEGER li;
+                li.LowPart  = sourceW.ftLastWriteTime.dwLowDateTime;
+                li.HighPart = sourceW.ftLastWriteTime.dwHighDateTime;
+                mdate=(li.QuadPart - 0x019DB1DED53E8000) / 10000000;
+                /*mdate=sourceW.ftLastWriteTime.dwHighDateTime;
                 mdate<<=32;
-                mdate|=sourceW.ftLastWriteTime.dwLowDateTime;
+                mdate|=sourceW.ftLastWriteTime.dwLowDateTime;*/
                 size=sourceW.nFileSizeHigh;
                 size<<=32;
                 size|=sourceW.nFileSizeLow;
@@ -585,9 +593,13 @@ void CopyEngine::mkPathErrorOnFolder(INTERNALTYPEPATH folder, std::string errorS
             WIN32_FILE_ATTRIBUTE_DATA sourceW;
             if(GetFileAttributesExW(folder.c_str(),GetFileExInfoStandard,&sourceW))
             {
-                mdate=sourceW.ftLastWriteTime.dwHighDateTime;
+                LARGE_INTEGER li;
+                li.LowPart  = sourceW.ftLastWriteTime.dwLowDateTime;
+                li.HighPart = sourceW.ftLastWriteTime.dwHighDateTime;
+                mdate=(li.QuadPart - 0x019DB1DED53E8000) / 10000000;
+                /*mdate=sourceW.ftLastWriteTime.dwHighDateTime;
                 mdate<<=32;
-                mdate|=sourceW.ftLastWriteTime.dwLowDateTime;
+                mdate|=sourceW.ftLastWriteTime.dwLowDateTime;*/
                 size=sourceW.nFileSizeHigh;
                 size<<=32;
                 size|=sourceW.nFileSizeLow;

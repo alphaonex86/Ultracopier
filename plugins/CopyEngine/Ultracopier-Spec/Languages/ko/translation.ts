@@ -31,69 +31,69 @@
         <translation>모드가 이전에 강제되었습니다. 내부 오류입니다. 문제를 보고해 주세요.</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="880"/>
+        <location filename="../../CopyEngine.cpp" line="886"/>
         <source>Supported only on Windows</source>
         <translation type="unfinished">Windows에서만 지원</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="1029"/>
-        <location filename="../../CopyEngine.cpp" line="1032"/>
-        <location filename="../../CopyEngine.cpp" line="1037"/>
-        <location filename="../../CopyEngine.cpp" line="1041"/>
+        <location filename="../../CopyEngine.cpp" line="1035"/>
+        <location filename="../../CopyEngine.cpp" line="1038"/>
+        <location filename="../../CopyEngine.cpp" line="1043"/>
+        <location filename="../../CopyEngine.cpp" line="1047"/>
         <source>Ask</source>
         <translation type="unfinished">확인</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="1030"/>
-        <location filename="../../CopyEngine.cpp" line="1034"/>
-        <location filename="../../CopyEngine.cpp" line="1038"/>
-        <location filename="../../CopyEngine.cpp" line="1042"/>
+        <location filename="../../CopyEngine.cpp" line="1036"/>
+        <location filename="../../CopyEngine.cpp" line="1040"/>
+        <location filename="../../CopyEngine.cpp" line="1044"/>
+        <location filename="../../CopyEngine.cpp" line="1048"/>
         <source>Skip</source>
         <translation type="unfinished">건너뛰기</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="1033"/>
+        <location filename="../../CopyEngine.cpp" line="1039"/>
         <source>Merge</source>
         <translation type="unfinished">합치기</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="1035"/>
-        <location filename="../../CopyEngine.cpp" line="1047"/>
+        <location filename="../../CopyEngine.cpp" line="1041"/>
+        <location filename="../../CopyEngine.cpp" line="1053"/>
         <source>Rename</source>
         <translation type="unfinished">이름 바꾸기</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="1039"/>
+        <location filename="../../CopyEngine.cpp" line="1045"/>
         <source>Put at the end</source>
         <translation type="unfinished">끝에 놓기</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="1043"/>
+        <location filename="../../CopyEngine.cpp" line="1049"/>
         <source>Overwrite</source>
         <translation type="unfinished">덮어쓰기</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="1044"/>
+        <location filename="../../CopyEngine.cpp" line="1050"/>
         <source>Overwrite if different</source>
         <translation type="unfinished">다르면 덮어쓰기</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="1045"/>
+        <location filename="../../CopyEngine.cpp" line="1051"/>
         <source>Overwrite if newer</source>
         <translation type="unfinished">더 최신이면 덮어쓰기</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="1046"/>
+        <location filename="../../CopyEngine.cpp" line="1052"/>
         <source>Overwrite if older</source>
         <translation type="unfinished">더 이전이면 덮어쓰기</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="1117"/>
+        <location filename="../../CopyEngine.cpp" line="1123"/>
         <source>Options error</source>
         <translation type="unfinished">옵션 오류</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="1117"/>
+        <location filename="../../CopyEngine.cpp" line="1123"/>
         <source>Options engine is not loaded. Unable to access the filters</source>
         <translation>옵션 엔진이 호출되지 않았습니다. 필터에 액세스할 수 없습니다. </translation>
     </message>
@@ -206,12 +206,12 @@
 <context>
     <name>FileErrorDialog</name>
     <message>
-        <location filename="../../FileErrorDialog.cpp" line="88"/>
+        <location filename="../../FileErrorDialog.cpp" line="92"/>
         <source>Error on folder</source>
         <translation type="unfinished">폴더 오류</translation>
     </message>
     <message>
-        <location filename="../../FileErrorDialog.cpp" line="91"/>
+        <location filename="../../FileErrorDialog.cpp" line="95"/>
         <source>Folder name</source>
         <translation type="unfinished">폴더 이름</translation>
     </message>
@@ -219,22 +219,22 @@
 <context>
     <name>FileExistsDialog</name>
     <message>
-        <location filename="../../FileExistsDialog.cpp" line="193"/>
+        <location filename="../../FileExistsDialog.cpp" line="201"/>
         <source>%name% - copy%suffix%</source>
         <translation type="unfinished">%name% - 복사%suffix%</translation>
     </message>
     <message>
-        <location filename="../../FileExistsDialog.cpp" line="200"/>
+        <location filename="../../FileExistsDialog.cpp" line="208"/>
         <source>%name% - copy (%number%)%suffix%</source>
         <translation type="unfinished">%name% - 복사 (%number%)%suffix%</translation>
     </message>
     <message>
-        <location filename="../../FileExistsDialog.cpp" line="291"/>
+        <location filename="../../FileExistsDialog.cpp" line="299"/>
         <source>Error</source>
         <translation type="unfinished">오류</translation>
     </message>
     <message>
-        <location filename="../../FileExistsDialog.cpp" line="291"/>
+        <location filename="../../FileExistsDialog.cpp" line="299"/>
         <source>Try rename with using special characters</source>
         <translation>특수 문자를 사용하여 이름을 바꾸세요.</translation>
     </message>
@@ -242,22 +242,22 @@
 <context>
     <name>FileIsSameDialog</name>
     <message>
-        <location filename="../../FileIsSameDialog.cpp" line="141"/>
+        <location filename="../../FileIsSameDialog.cpp" line="145"/>
         <source>%name% - copy%suffix%</source>
         <translation type="unfinished">%name% - 복사%suffix%</translation>
     </message>
     <message>
-        <location filename="../../FileIsSameDialog.cpp" line="148"/>
+        <location filename="../../FileIsSameDialog.cpp" line="152"/>
         <source>%name% - copy (%number%)%suffix%</source>
         <translation type="unfinished">%name% - 복사 (%number%)%suffix%</translation>
     </message>
     <message>
-        <location filename="../../FileIsSameDialog.cpp" line="221"/>
+        <location filename="../../FileIsSameDialog.cpp" line="225"/>
         <source>Error</source>
         <translation type="unfinished">오류</translation>
     </message>
     <message>
-        <location filename="../../FileIsSameDialog.cpp" line="221"/>
+        <location filename="../../FileIsSameDialog.cpp" line="225"/>
         <source>Try rename with using special characters</source>
         <translation>특수 문자를 사용하여 이름을 바꾸세요.</translation>
     </message>
@@ -404,27 +404,27 @@
 <context>
     <name>FolderExistsDialog</name>
     <message>
-        <location filename="../../FolderExistsDialog.cpp" line="86"/>
+        <location filename="../../FolderExistsDialog.cpp" line="90"/>
         <source>Folder already exists</source>
         <translation>폴더가 이미 존재합니다.</translation>
     </message>
     <message>
-        <location filename="../../FolderExistsDialog.cpp" line="167"/>
+        <location filename="../../FolderExistsDialog.cpp" line="171"/>
         <source>%name% - copy%suffix%</source>
         <translation type="unfinished">%name% - 복사%suffix%</translation>
     </message>
     <message>
-        <location filename="../../FolderExistsDialog.cpp" line="176"/>
+        <location filename="../../FolderExistsDialog.cpp" line="180"/>
         <source>%name% - copy (%number%)%suffix%</source>
         <translation type="unfinished">%name% - 복사 (%number%)%suffix%</translation>
     </message>
     <message>
-        <location filename="../../FolderExistsDialog.cpp" line="243"/>
+        <location filename="../../FolderExistsDialog.cpp" line="247"/>
         <source>Error</source>
         <translation>오류</translation>
     </message>
     <message>
-        <location filename="../../FolderExistsDialog.cpp" line="243"/>
+        <location filename="../../FolderExistsDialog.cpp" line="247"/>
         <source>Try rename with using special characters</source>
         <translation>특수 문자를 사용하여 이름을 바꾸세요.</translation>
     </message>
@@ -996,7 +996,7 @@
     </message>
     <message>
         <location filename="../../fileExistsDialog.ui" line="341"/>
-        <source>Overwrite if destination newer</source>
+        <source>Overwrite if source newer than destination</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1007,6 +1007,10 @@
     </message>
     <message>
         <location filename="../../fileExistsDialog.ui" line="354"/>
+        <source>Overwrite if source older than destination</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../../fileExistsDialog.ui" line="357"/>
         <source>Overwrite if destination older</source>
         <translation type="unfinished"></translation>
