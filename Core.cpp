@@ -816,7 +816,7 @@ void Core::periodicSynchronizationWithIndex(const int &index)
             currentCopyInstance.interface->remainingTime(transferAddedTime*((double)currentCopyInstance.totalProgression/(double)currentCopyInstance.currentProgression-1)/1000);*/
 
         //do the speed calculation
-        if(currentCopyInstance.lastProgressionTime.isNull())
+        if(!currentCopyInstance.lastProgressionTime.isValid())
             currentCopyInstance.lastProgressionTime.start();
         else
         {

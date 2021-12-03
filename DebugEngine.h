@@ -12,8 +12,8 @@
 #include <string>
 #include <QFile>
 #include <QMutex>
-#include <QTime>
 #include <QTimer>
+#include <QElapsedTimer>
 #include <QList>
 #include <QCoreApplication>
 #include <QAbstractTableModel>
@@ -110,7 +110,7 @@ class DebugEngine : public QObject
         QMutex mutex;
         QMutex mutexList;
         /// \brief For record the start time
-        QTime startTime;
+        QElapsedTimer startTime;
         /// \brief String for the end of log file
         std::string endOfLogFile;
         /// \brief Drop the html entities

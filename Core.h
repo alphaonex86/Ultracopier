@@ -11,7 +11,7 @@
 #include <QString>
 #include <QList>
 #include <QTimer>
-#include <QTime>
+#include <QElapsedTimer>
 #include <QFile>
 #include <QUrl>
 #ifndef NOAUDIO
@@ -53,7 +53,7 @@ class Core : public QObject
         struct CopyInstance
         {
             unsigned int id;
-            QTime lastProgressionTime;//to compute the speed in B/s
+            QElapsedTimer lastProgressionTime;//to compute the speed in B/s
             PluginInterface_CopyEngine * engine;
             PluginInterface_Themes * interface;
             bool ignoreMode;
@@ -74,7 +74,7 @@ class Core : public QObject
             Ultracopier::CopyType type;
             Ultracopier::TransferListOperation transferListOperation;
             bool haveError;
-            QTime lastConditionalSync;
+            QElapsedTimer lastConditionalSync;
             QTimer *nextConditionalSync;
             bool copyEngineIsSync;
             bool canceled;//to not try groun when is in canceling

@@ -4,7 +4,7 @@
 \licence GPL3, see the file COPYING */
 
 #include <QObject>
-#include <QTime>
+#include <QElapsedTimer>
 #include <QThread>
 
 #include <regex>
@@ -263,7 +263,7 @@ protected:
     //different post-operation
     bool doFilePostOperation();
 protected:
-    QTime startTransferTime;
+    QElapsedTimer startTransferTime;
     bool haveTransferTime;
 };
 

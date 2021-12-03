@@ -3,6 +3,7 @@
 #include "TransferThread.h"
 #include "../../../cpp11addition.h"
 #include <cstring>
+#include <QDateTime>
 
 #ifdef Q_OS_WIN32
 #define CURRENTSEPARATOR "\\"
