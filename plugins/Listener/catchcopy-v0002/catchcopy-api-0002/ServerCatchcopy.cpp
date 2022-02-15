@@ -152,7 +152,11 @@ void ServerCatchcopy::newConnection()
             newClient.detectTimeOut->setSingleShot(true);
             newClient.detectTimeOut->setInterval(CATCHCOPY_COMMUNICATION_TIMEOUT);
             newClient.name="Unknown";
+            #if QT_VERSION < QT_VERSION_CHECK(5, 15, 0)
+            connect(newClient.socket,	static_cast<void(QLocalSocket::*)(QLocalSocket::LocalSocketError)>(&QLocalSocket::error),	this, &ServerCatchcopy::connectionError,Qt::QueuedConnection);
+            #else
             connect(newClient.socket,	static_cast<void(QLocalSocket::*)(QLocalSocket::LocalSocketError)>(&QLocalSocket::errorOccurred),	this, &ServerCatchcopy::connectionError,Qt::QueuedConnection);
+            #endif
             connect(newClient.socket,	&QIODevice::readyRead,										this, &ServerCatchcopy::readyRead,Qt::QueuedConnection);
             connect(newClient.socket,	&QLocalSocket::disconnected,				 					this, &ServerCatchcopy::disconnected,Qt::QueuedConnection);
             connect(newClient.detectTimeOut,&QTimer::timeout,										this, &ServerCatchcopy::checkTimeOut,Qt::QueuedConnection);

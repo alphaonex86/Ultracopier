@@ -404,27 +404,27 @@
 <context>
     <name>FolderExistsDialog</name>
     <message>
-        <location filename="../../FolderExistsDialog.cpp" line="90"/>
+        <location filename="../../FolderExistsDialog.cpp" line="91"/>
         <source>Folder already exists</source>
         <translation>폴더가 이미 존재합니다.</translation>
     </message>
     <message>
-        <location filename="../../FolderExistsDialog.cpp" line="171"/>
+        <location filename="../../FolderExistsDialog.cpp" line="172"/>
         <source>%name% - copy%suffix%</source>
         <translation type="unfinished">%name% - 복사%suffix%</translation>
     </message>
     <message>
-        <location filename="../../FolderExistsDialog.cpp" line="180"/>
+        <location filename="../../FolderExistsDialog.cpp" line="181"/>
         <source>%name% - copy (%number%)%suffix%</source>
         <translation type="unfinished">%name% - 복사 (%number%)%suffix%</translation>
     </message>
     <message>
-        <location filename="../../FolderExistsDialog.cpp" line="247"/>
+        <location filename="../../FolderExistsDialog.cpp" line="248"/>
         <source>Error</source>
         <translation>오류</translation>
     </message>
     <message>
-        <location filename="../../FolderExistsDialog.cpp" line="247"/>
+        <location filename="../../FolderExistsDialog.cpp" line="248"/>
         <source>Try rename with using special characters</source>
         <translation>특수 문자를 사용하여 이름을 바꾸세요.</translation>
     </message>

@@ -303,7 +303,11 @@ void LocalListener::newConnexion()
     ComposedData newClient;
     newClient.socket = localServer.nextPendingConnection();
     #ifdef ULTRACOPIER_DEBUG
+    #if QT_VERSION < QT_VERSION_CHECK(5, 15, 0)
+    connect(newClient.socket, static_cast<void(QLocalSocket::*)(QLocalSocket::LocalSocketError)>(&QLocalSocket::error), this, &LocalListener::error);
+    #else
     connect(newClient.socket, static_cast<void(QLocalSocket::*)(QLocalSocket::LocalSocketError)>(&QLocalSocket::errorOccurred), this, &LocalListener::error);
+    #endif
     //connect(newClient.socket, &QLocalSocket::error, this, &LocalListener::error);
     //connect(newClient.socket, SIGNAL(error(QLocalSocket::LocalSocketError)), this, SLOT(error(QLocalSocket::LocalSocketError)));
     #endif

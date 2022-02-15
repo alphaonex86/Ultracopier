@@ -901,7 +901,8 @@ static int op_find_initial_pcm_offset(OggOpusFile *_of,
   cur_page_gp=_of->op[op_count-1].granulepos;
   /*But getting a packet without a valid granule position on the page is not
      okay.*/
-  if(cur_page_gp==-1)return OP_EBADTIMESTAMP;
+  if(cur_page_gp==-1)
+      return OP_EBADTIMESTAMP;
   cur_page_eos=_of->op[op_count-1].e_o_s;
   if(OP_LIKELY(!cur_page_eos)){
     /*The EOS flag wasn't set.
@@ -997,7 +998,8 @@ static int op_find_final_pcm_offset(OggOpusFile *_of,
      64-bit number.*/
   duration-=_link->head.pre_skip;
   total_duration=*_total_duration;
-  if(OP_UNLIKELY(OP_INT64_MAX-duration<total_duration))return OP_EBADTIMESTAMP;
+  if(OP_UNLIKELY(OP_INT64_MAX-duration<total_duration))
+      return OP_EBADTIMESTAMP;
   *_total_duration=total_duration+duration;
   _link->pcm_end=_end_gp;
   _link->end_offset=_offset;

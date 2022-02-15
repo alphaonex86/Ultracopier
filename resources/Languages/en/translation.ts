@@ -874,27 +874,27 @@
 <context>
     <name>FolderExistsDialog</name>
     <message>
-        <location filename="../../../plugins/CopyEngine/Ultracopier-Spec/FolderExistsDialog.cpp" line="90"/>
+        <location filename="../../../plugins/CopyEngine/Ultracopier-Spec/FolderExistsDialog.cpp" line="91"/>
         <source>Folder already exists</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../plugins/CopyEngine/Ultracopier-Spec/FolderExistsDialog.cpp" line="171"/>
+        <location filename="../../../plugins/CopyEngine/Ultracopier-Spec/FolderExistsDialog.cpp" line="172"/>
         <source>%name% - copy%suffix%</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../plugins/CopyEngine/Ultracopier-Spec/FolderExistsDialog.cpp" line="180"/>
+        <location filename="../../../plugins/CopyEngine/Ultracopier-Spec/FolderExistsDialog.cpp" line="181"/>
         <source>%name% - copy (%number%)%suffix%</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../plugins/CopyEngine/Ultracopier-Spec/FolderExistsDialog.cpp" line="247"/>
+        <location filename="../../../plugins/CopyEngine/Ultracopier-Spec/FolderExistsDialog.cpp" line="248"/>
         <source>Error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../plugins/CopyEngine/Ultracopier-Spec/FolderExistsDialog.cpp" line="247"/>
+        <location filename="../../../plugins/CopyEngine/Ultracopier-Spec/FolderExistsDialog.cpp" line="248"/>
         <source>Try rename with using special characters</source>
         <translation type="unfinished"></translation>
     </message>

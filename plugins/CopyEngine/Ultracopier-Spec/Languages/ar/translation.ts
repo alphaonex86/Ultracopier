@@ -404,27 +404,27 @@
 <context>
     <name>FolderExistsDialog</name>
     <message>
-        <location filename="../../FolderExistsDialog.cpp" line="90"/>
+        <location filename="../../FolderExistsDialog.cpp" line="91"/>
         <source>Folder already exists</source>
         <translation>المجلد موجود بالفعل</translation>
     </message>
     <message>
-        <location filename="../../FolderExistsDialog.cpp" line="171"/>
+        <location filename="../../FolderExistsDialog.cpp" line="172"/>
         <source>%name% - copy%suffix%</source>
         <translation>% اسم%-نسخ% لاحقه%</translation>
     </message>
     <message>
-        <location filename="../../FolderExistsDialog.cpp" line="180"/>
+        <location filename="../../FolderExistsDialog.cpp" line="181"/>
         <source>%name% - copy (%number%)%suffix%</source>
         <translation>(% الاسم%-النسخ (% العدد%% اللاحق +ه%</translation>
     </message>
     <message>
-        <location filename="../../FolderExistsDialog.cpp" line="247"/>
+        <location filename="../../FolderExistsDialog.cpp" line="248"/>
         <source>Error</source>
         <translation>الخطا</translation>
     </message>
     <message>
-        <location filename="../../FolderExistsDialog.cpp" line="247"/>
+        <location filename="../../FolderExistsDialog.cpp" line="248"/>
         <source>Try rename with using special characters</source>
         <translation>حاول أعاده التسميه باستخدام أحرف خاصه</translation>
     </message>

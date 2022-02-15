@@ -6,12 +6,12 @@
     <message>
         <location filename="../../interface.cpp" line="341"/>
         <source>Buy the Ultimate version to fund development</source>
-        <translation>Acquista versione ultimate per finanziare lo sviluppo</translation>
+        <translation>Acquista versione Ultimate per finanziare lo sviluppo</translation>
     </message>
     <message>
         <location filename="../../interface.cpp" line="341"/>
         <source>Register your key</source>
-        <translation type="unfinished"></translation>
+        <translation>Registrate la vostra chiave</translation>
     </message>
     <message>
         <location filename="../../interface.cpp" line="440"/>
@@ -31,7 +31,7 @@
     <message>
         <location filename="../../interface.cpp" line="1117"/>
         <source>Don&apos;t close if errors are found</source>
-        <translation>Non chiudere se vengono trovati errori</translation>
+        <translation>Non chiudere se vengono rilevati errori</translation>
     </message>
     <message>
         <location filename="../../interface.cpp" line="1118"/>
@@ -41,7 +41,7 @@
     <message>
         <location filename="../../interface.cpp" line="1119"/>
         <source>Always close</source>
-        <translation>Chiudere sempre</translation>
+        <translation>Chiudi sempre</translation>
     </message>
     <message>
         <location filename="../../interface.cpp" line="1121"/>
@@ -53,7 +53,7 @@
         <location filename="../../interface.cpp" line="1407"/>
         <location filename="../../interface.cpp" line="1419"/>
         <source>Select a color</source>
-        <translation>Selezionare colore</translation>
+        <translation>Seleziona colore</translation>
     </message>
     <message>
         <location filename="../../interface.cpp" line="1494"/>
@@ -78,14 +78,14 @@
     <message>
         <location filename="../../ThemesFactory.cpp" line="296"/>
         <source>Always close</source>
-        <translation>Chiudere sempre</translation>
+        <translation>Chiudi sempre</translation>
     </message>
     <message>
         <location filename="../../ThemesFactory.cpp" line="510"/>
         <location filename="../../ThemesFactory.cpp" line="525"/>
         <location filename="../../ThemesFactory.cpp" line="540"/>
         <source>Select a color</source>
-        <translation>Selezionare colore</translation>
+        <translation>Seleziona colore</translation>
     </message>
 </context>
 <context>
@@ -103,22 +103,22 @@
     <message>
         <location filename="../../interface.ui" line="235"/>
         <source>&amp;More</source>
-        <translation>Avanzate</translation>
+        <translation>&amp;Altro</translation>
     </message>
     <message>
         <location filename="../../interface.ui" line="255"/>
         <source>&amp;Pause</source>
-        <translation>Pausa</translation>
+        <translation>&amp;Pausa</translation>
     </message>
     <message>
         <location filename="../../interface.ui" line="269"/>
         <source>&amp;Skip</source>
-        <translation>Salta</translation>
+        <translation>&amp;Salta</translation>
     </message>
     <message>
         <location filename="../../interface.ui" line="280"/>
         <source>&amp;Cancel</source>
-        <translation>Annulla</translation>
+        <translation>&amp;Annulla</translation>
     </message>
     <message>
         <location filename="../../interface.ui" line="127"/>
@@ -138,22 +138,22 @@
     <message>
         <location filename="../../interface.ui" line="361"/>
         <source>Move the selected items to the top</source>
-        <translation>Metti elementi selezionati in cima</translation>
+        <translation>Sposta elementi selezionati in cima</translation>
     </message>
     <message>
         <location filename="../../interface.ui" line="387"/>
         <source>Move up the selected items</source>
-        <translation>Sposta elementi selezionati in sù</translation>
+        <translation>Sposta in su gli elementi selezionati</translation>
     </message>
     <message>
         <location filename="../../interface.ui" line="413"/>
         <source>Move down the selected items</source>
-        <translation>Sposta elementi selezionati in giù</translation>
+        <translation>Sposta in giù gli elementi selezionati</translation>
     </message>
     <message>
         <location filename="../../interface.ui" line="439"/>
         <source>Move the selected items to the bottom</source>
-        <translation>Metti elementi selezionati in coda</translation>
+        <translation>Sposta elementi selezionati in fondo</translation>
     </message>
     <message>
         <location filename="../../interface.ui" line="465"/>
@@ -163,7 +163,7 @@
     <message>
         <location filename="../../interface.ui" line="494"/>
         <source>Delete the selected items</source>
-        <translation>Elimina elementi selezionati</translation>
+        <translation>Elimina gli elementi selezionati</translation>
     </message>
     <message>
         <location filename="../../interface.ui" line="520"/>
@@ -199,7 +199,7 @@
     <message>
         <location filename="../../interface.ui" line="692"/>
         <source>Export the errors into transfer list</source>
-        <translation>Esporta errori in lista di trasferimento</translation>
+        <translation>Esporta nella lista di trasferimento gli errori</translation>
     </message>
     <message>
         <location filename="../../interface.ui" line="731"/>
@@ -229,22 +229,22 @@
     <message>
         <location filename="../../interface.ui" line="814"/>
         <source>Move file(s)</source>
-        <translation>Spostare file</translation>
+        <translation>Sposta (i) file</translation>
     </message>
     <message>
         <location filename="../../interface.ui" line="823"/>
         <source>Move folder</source>
-        <translation>Spostare cartella/e</translation>
+        <translation>Sposta cartella</translation>
     </message>
     <message>
         <location filename="../../interface.ui" line="832"/>
         <source>Copy file(s)</source>
-        <translation>Copiare file</translation>
+        <translation>Copia (i) file</translation>
     </message>
     <message>
         <location filename="../../interface.ui" line="841"/>
         <source>Copy folder</source>
-        <translation>Copiare cartella/e</translation>
+        <translation>Copia cartella</translation>
     </message>
 </context>
 <context>
@@ -252,7 +252,7 @@
     <message>
         <location filename="../../themesOptions.ui" line="402"/>
         <source>Show dual progression</source>
-        <translation>Mostrare progressione duale</translation>
+        <translation>Visualizza progressione duale</translation>
     </message>
     <message>
         <location filename="../../themesOptions.ui" line="219"/>
@@ -262,12 +262,12 @@
     <message>
         <location filename="../../themesOptions.ui" line="44"/>
         <source>Use</source>
-        <translation>Funzionalità</translation>
+        <translation>Utilizza</translation>
     </message>
     <message>
         <location filename="../../themesOptions.ui" line="173"/>
         <source>Start with the &quot;more button&quot; pushed</source>
-        <translation>Avvio con bottone &quot;Avanzate&quot; premuto</translation>
+        <translation>Avvia con pulsante &quot;Altro&quot; attivo</translation>
     </message>
     <message>
         <location filename="../../themesOptions.ui" line="67"/>
@@ -318,7 +318,7 @@
     <message>
         <location filename="../../themesOptions.ui" line="368"/>
         <source>Speed with progress bar</source>
-        <translation>Velocità in barra progresso</translation>
+        <translation>Velocità nella barra di progresso</translation>
     </message>
     <message>
         <location filename="../../themesOptions.ui" line="378"/>
@@ -328,17 +328,17 @@
     <message>
         <location filename="../../themesOptions.ui" line="388"/>
         <source>Show progression in the title</source>
-        <translation>Mostra percentuale di progresso nel titolo</translation>
+        <translation>Visualizza progresso nel titolo</translation>
     </message>
     <message>
         <location filename="../../themesOptions.ui" line="395"/>
         <source>General margin</source>
-        <translation type="unfinished"></translation>
+        <translation>Margine generale</translation>
     </message>
     <message>
         <location filename="../../themesOptions.ui" line="425"/>
         <source>General spacing</source>
-        <translation type="unfinished"></translation>
+        <translation>Spaziatura generale</translation>
     </message>
     <message>
         <location filename="../../themesOptions.ui" line="183"/>

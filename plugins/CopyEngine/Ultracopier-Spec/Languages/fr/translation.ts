@@ -404,27 +404,27 @@
 <context>
     <name>FolderExistsDialog</name>
     <message>
-        <location filename="../../FolderExistsDialog.cpp" line="90"/>
+        <location filename="../../FolderExistsDialog.cpp" line="91"/>
         <source>Folder already exists</source>
         <translation>Dossier déjà existant</translation>
     </message>
     <message>
-        <location filename="../../FolderExistsDialog.cpp" line="171"/>
+        <location filename="../../FolderExistsDialog.cpp" line="172"/>
         <source>%name% - copy%suffix%</source>
         <translation>%name% - copie%suffix%</translation>
     </message>
     <message>
-        <location filename="../../FolderExistsDialog.cpp" line="180"/>
+        <location filename="../../FolderExistsDialog.cpp" line="181"/>
         <source>%name% - copy (%number%)%suffix%</source>
         <translation>%name% - copie (%number%)%suffix%</translation>
     </message>
     <message>
-        <location filename="../../FolderExistsDialog.cpp" line="247"/>
+        <location filename="../../FolderExistsDialog.cpp" line="248"/>
         <source>Error</source>
         <translation>Erreur</translation>
     </message>
     <message>
-        <location filename="../../FolderExistsDialog.cpp" line="247"/>
+        <location filename="../../FolderExistsDialog.cpp" line="248"/>
         <source>Try rename with using special characters</source>
         <translation>Essaie de renommage avec caratéres interdits</translation>
     </message>

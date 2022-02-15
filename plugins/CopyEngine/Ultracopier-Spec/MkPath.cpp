@@ -388,22 +388,6 @@ void MkPath::internalDoThisPath()
             }
         }
     }
-    if(doTheDateTransfer)
-        if(!writeFileDateTime(item.destination))
-        {
-            if(!TransferThread::exists(item.destination))
-                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Unable to set destination folder time (not exists): "+TransferThread::internalStringTostring(item.destination));
-            else if(!TransferThread::is_dir(item.destination))
-                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Unable to set destination folder time (not a dir): "+TransferThread::internalStringTostring(item.destination));
-            else
-                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Unable to set destination folder time: "+TransferThread::internalStringTostring(item.destination));
-            /*if(stopIt)
-                return;
-            waitAction=true;
-
-            emit errorOnFolder(item.source,tr("Unable to set time"));
-            return;*/
-        }
     if(doRightTransfer && item.actionType!=ActionType_RealMove)
     {
         #ifdef Q_OS_UNIX
@@ -453,6 +437,22 @@ void MkPath::internalDoThisPath()
         }
         #endif
     }
+    if(doTheDateTransfer)
+        if(!writeFileDateTime(item.destination))
+        {
+            if(!TransferThread::exists(item.destination))
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Unable to set destination folder time (not exists): "+TransferThread::internalStringTostring(item.destination));
+            else if(!TransferThread::is_dir(item.destination))
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Unable to set destination folder time (not a dir): "+TransferThread::internalStringTostring(item.destination));
+            else
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Unable to set destination folder time: "+TransferThread::internalStringTostring(item.destination));
+            /*if(stopIt)
+                return;
+            waitAction=true;
+
+            emit errorOnFolder(item.source,tr("Unable to set time"));
+            return;*/
+        }
     if(item.actionType==ActionType_MovePath)
     {
         if(!rmpath(item.source))

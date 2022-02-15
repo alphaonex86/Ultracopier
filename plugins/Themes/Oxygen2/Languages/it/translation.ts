@@ -35,7 +35,7 @@
         <location filename="../../interface.cpp" line="293"/>
         <location filename="../../interface.cpp" line="314"/>
         <source>Register your key</source>
-        <translation type="unfinished"></translation>
+        <translation>Registrate la vostra chiave</translation>
     </message>
     <message>
         <location filename="../../interface.cpp" line="525"/>
@@ -77,7 +77,7 @@
         <location filename="../../interface.cpp" line="1561"/>
         <location filename="../../interface.cpp" line="1573"/>
         <source>Select a color</source>
-        <translation>Scegliere un colore</translation>
+        <translation>Seleziona colore</translation>
     </message>
     <message>
         <location filename="../../interface.cpp" line="1661"/>
@@ -109,7 +109,7 @@
         <location filename="../../ThemesFactory.cpp" line="533"/>
         <location filename="../../ThemesFactory.cpp" line="548"/>
         <source>Select a color</source>
-        <translation>Scegliere un colore</translation>
+        <translation>Seleziona colore</translation>
     </message>
 </context>
 <context>
@@ -122,27 +122,27 @@
     <message>
         <location filename="../../interface.ui" line="301"/>
         <source>&amp;More</source>
-        <translation>Avanzate</translation>
+        <translation>&amp;Altro</translation>
     </message>
     <message>
         <location filename="../../interface.ui" line="321"/>
         <source>&amp;Pause</source>
-        <translation>Pausa</translation>
+        <translation>&amp;Pausa</translation>
     </message>
     <message>
         <location filename="../../interface.ui" line="482"/>
         <source>&amp;Skip</source>
-        <translation>Salta</translation>
+        <translation>&amp;Salta</translation>
     </message>
     <message>
         <location filename="../../interface.ui" line="493"/>
         <source>&amp;Cancel</source>
-        <translation>Annulla</translation>
+        <translation>&amp;Annulla</translation>
     </message>
     <message>
         <location filename="../../interface.ui" line="389"/>
         <source>Close on transfer completion</source>
-        <translation>Arresta il sistema a trasferimento comletato</translation>
+        <translation>Chiudi a trasferimento comletato</translation>
     </message>
     <message>
         <location filename="../../interface.ui" line="232"/>
@@ -157,7 +157,7 @@
     <message>
         <location filename="../../interface.ui" line="527"/>
         <source>Limit copy speed to:</source>
-        <translation>Limitare la velocità di copia a:</translation>
+        <translation>Limita velocità di copia a:</translation>
     </message>
     <message>
         <location filename="../../interface.ui" line="570"/>
@@ -233,12 +233,12 @@
     <message>
         <location filename="../../interface.ui" line="963"/>
         <source>Source</source>
-        <translation>Cartella di origine</translation>
+        <translation>Origine</translation>
     </message>
     <message>
         <location filename="../../interface.ui" line="968"/>
         <source>Destination</source>
-        <translation>Cartella di destinazione</translation>
+        <translation>Destinazione</translation>
     </message>
     <message>
         <location filename="../../interface.ui" line="982"/>
@@ -258,7 +258,7 @@
     <message>
         <location filename="../../interface.ui" line="1046"/>
         <source>Move file(s)</source>
-        <translation>Sposta file</translation>
+        <translation>Sposta (i) file</translation>
     </message>
     <message>
         <location filename="../../interface.ui" line="1055"/>
@@ -268,12 +268,12 @@
     <message>
         <location filename="../../interface.ui" line="1064"/>
         <source>Copy file(s)</source>
-        <translation>Copia file</translation>
+        <translation>Copia (i) file</translation>
     </message>
     <message>
         <location filename="../../interface.ui" line="1073"/>
         <source>Copy folder</source>
-        <translation>Copia la cartella</translation>
+        <translation>Copia cartella</translation>
     </message>
 </context>
 <context>
@@ -281,27 +281,27 @@
     <message>
         <location filename="../../themesOptions.ui" line="293"/>
         <source>Show dual progression</source>
-        <translation>Mostrare la doppia progressione</translation>
+        <translation>Mostrare doppia progressione</translation>
     </message>
     <message>
         <location filename="../../themesOptions.ui" line="245"/>
         <source>Show speed as main information</source>
-        <translation>Mostrare la velocità come principale informazione</translation>
+        <translation>Mostrare velocità come informazione principale</translation>
     </message>
     <message>
         <location filename="../../themesOptions.ui" line="44"/>
         <source>Use</source>
-        <translation>Utilità</translation>
+        <translation>Utilizza</translation>
     </message>
     <message>
         <location filename="../../themesOptions.ui" line="110"/>
         <source>Start with the &quot;more button&quot; pushed</source>
-        <translation>Iniziare col pulsante &quot;Altro&quot; attivo</translation>
+        <translation>Avvia con pulsante &quot;Altro&quot; attivo</translation>
     </message>
     <message>
         <location filename="../../themesOptions.ui" line="57"/>
         <source>Minimize on close to systray</source>
-        <translation>Alla chiusura riduci nella&apos;area di notifica</translation>
+        <translation>Alla chiusura riduci in area di notifica</translation>
     </message>
     <message>
         <location filename="../../themesOptions.ui" line="80"/>
@@ -312,7 +312,7 @@
         <location filename="../../themesOptions.ui" line="70"/>
         <location filename="../../themesOptions.ui" line="87"/>
         <source>Limit copy speed to</source>
-        <translation>Limitare velocità di copia a:</translation>
+        <translation>Limita velocità di copia a</translation>
     </message>
     <message>
         <location filename="../../themesOptions.ui" line="117"/>
@@ -322,7 +322,7 @@
     <message>
         <location filename="../../themesOptions.ui" line="144"/>
         <source>Position at start</source>
-        <translation>Posizione di partenza</translation>
+        <translation>Posizione all&apos;avvio</translation>
     </message>
     <message>
         <location filename="../../themesOptions.ui" line="332"/>
@@ -347,7 +347,7 @@
     <message>
         <location filename="../../themesOptions.ui" line="217"/>
         <source>Save as previous</source>
-        <translation>Mantenere come precedente</translation>
+        <translation>Salva come il precedente</translation>
     </message>
     <message>
         <location filename="../../themesOptions.ui" line="222"/>
@@ -377,7 +377,7 @@
     <message>
         <location filename="../../themesOptions.ui" line="303"/>
         <source>Show progression in the title</source>
-        <translation>Mostrare la percentuale di progresso sul titolo</translation>
+        <translation>Mostra progressione titolo</translation>
     </message>
     <message>
         <location filename="../../themesOptions.ui" line="137"/>

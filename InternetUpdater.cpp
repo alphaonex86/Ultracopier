@@ -116,7 +116,7 @@ void InternetUpdater::httpFinished()
         return;
     }
     newVersion.remove("\n");
-    if(!newVersion.contains(QRegularExpression(QLatin1Literal("^[0-9]+(\\.[0-9]+)+$"))))
+    if(!newVersion.contains(QRegularExpression("^[0-9]+(\\.[0-9]+)+$")))
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"version string don't match: "+newVersion.toStdString());
         reply->deleteLater();

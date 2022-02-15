@@ -42,6 +42,6 @@
 /// \brief to disable plugin support, import and remove
 #define ULTRACOPIER_PLUGIN_IMPORT_SUPPORT
 
-#define ULTRACOPIER_UPDATER_URL "http://cdn.confiared.com/ultracopier-update.first-world.info/updater.txt"
+#define ULTRACOPIER_UPDATER_URL "https://cdn.confiared.com/ultracopier.first-world.info/files/updater.txt"
 
 #endif // VARIABLE_H

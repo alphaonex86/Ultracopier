@@ -8,7 +8,7 @@
 // -> add thread safe, by Qt::BlockingQueuedConnection
 bool ListThread::newCopy(const std::vector<std::string> &sources,const std::string &destination)
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start: "+stringimplode(sources,";")+", destination: "+destination);
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"sources: "+stringimplode(sources,";")+", destination: "+destination);
     ScanFileOrFolder * scanFileOrFolderThread=newScanThread(Ultracopier::Copy);
     if(scanFileOrFolderThread==NULL)
     {
