@@ -1,0 +1,32 @@
+2.2.0.0: Code lot of to make again pause and speed limitation
+2.2.0.1: Start position windows option (Default, As previous, Center), update url change (sorry for that's), update Qt version to 5.13 for mac
+2.2.0.2: Update arabic translation, Crash Fix under Windows, Move fix under Windows
+2.2.0.3: Win32: Fix the previous release, fix crash
+2.2.0.4: .qm into source archive, drop french translation deep, fix file progression
+2.2.0.5: Fix real move with error, Unix: change from real move to full move when errno=18 (wrong drive detection on Linux), Fix drive detection on Linux
+2.2.0.6: More clear file installed, better send arguments, fix crash/block when copy 2 time with ultracopier
+2.2.0.7: Close better the file, fix remove on cancel
+2.2.0.8: Fix filter raw text, fix filter dialog, fix for error dialog, fix always folder error action, fix and clean lot of warning and deprecated function, fix collision check, fix cancel on collision, Win32: fix keep date
+2.2.0.9: Win32: Better error message, Win32: Can read file open by other software, fix file progression and file size detection
+2.2.3.0: Cumulating fixes and try fix
+2.2.3.1: Work on symbolic link on Linux and jointure point on Windows
+2.2.3.2: Fix for haiku os, fix file time detection for overwrite if newer/older, fix for overwrite options, improve the french and spanish translation
+2.2.3.3: Fix packaging on windows to have sound at end of copy/move
+2.2.3.4: Improve italian translation, disable debug by default under source (due to inegration of debug version into some Linux)
+2.2.4.0: Change default skin, change default algo for time remaining
+2.2.4.1: Temporary disable parallel transfer to improve performance on windows, detect device to change buffer, fix bug into filter, Fix performance problem due to big file copy in parallel, Add options to do OS flags, Add option to do internal OS copy for Windows
+2.2.4.2: Multiple fixes around filters, fix for windows share drive detection with path: \\X\y, fix when not able to open the destination file
+2.2.4.3: http://forums.winamp.com/showthread.php?t=353366 disable auto start after install, fix checksum checkbox
+2.2.4.4: Improvement transfert list export/import into separate thread, somes minor fixes
+2.2.4.5: Update korean translation, small translation fixes, more easy key register
+2.2.4.6: Update to fix ui link, update to fix some unix MAX_PATH
+2.2.4.7: Fix some warning, some user don't found where register their key, then put at more place
+2.2.4.8: Fix possible bug into copy engine and around always do same action
+2.2.4.9: Improve some code, disable drag'n'drop file move (with shift on windows) due to windows send file to trash, without shift will copy or move depending of window mode (copy or move).
+2.2.4.10: Black list some network folder to prevent data lost
+2.2.4.11: Fix move folder into it self
+2.2.4.12: Add option to change interface margin/spacing, Fix checkbox os native copy
+2.2.4.13: Fix speed and remaining time compute on multiple transfer. Fix combobox always OverwriteIfNotSameSize OverwriteIfNotSameSizeAndDate
+2.2.4.14: Fix for display modification date on Windows
+2.2.5.0: Minor fix on modification time
+2.2.5.1: Update the compilation platform and then Qt version to 5.15
