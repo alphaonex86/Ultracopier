@@ -13,15 +13,35 @@ Main features include:
 - plugin support
 
 # Dependency
-- libogg and libopus if audio support is enabled
+- make
+- gcc
+- qt5-default
+- qtmultimedia5-dev
+- libogg-dev 
+- libopus-dev
+- libgl1-mesa-dev
+
+For example on Debian based distros:
+
+```bash
+sudo apt install make gcc qt5-default qtmultimedia5-dev libogg-dev libopus-dev libgl1-mesa-dev
+```
 
 # Building
 
 Building an all-in-one version is as easy as compiling the main Qt project:
 
-    find ./ -name '*.ts' -exec lrelease {} \;
-    qmake ultracopier.pro
+```bash
+find ./ -name '*.ts' -exec lrelease {} \;
+qmake ultracopier.pro
+make -j$(nproc)
+```
 
+# Run
+
+```bash
+./ultracopier
+```
 
 # Translations
 
