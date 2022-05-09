@@ -29,4 +29,4 @@
 2.2.4.13: Fix speed and remaining time compute on multiple transfer. Fix combobox always OverwriteIfNotSameSize OverwriteIfNotSameSizeAndDate
 2.2.4.14: Fix for display modification date on Windows
 2.2.5.0: Minor fix on modification time
-2.2.5.1: Update the compilation platform and then Qt version to 5.15. fix native copy progression
+2.2.5.1: Update the compilation platform and then Qt version to 5.15. fix native copy progression, Update NSIS/installer system for windows.
