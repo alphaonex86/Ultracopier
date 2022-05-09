@@ -669,14 +669,14 @@
         <translation>Mauvaise date de modification ou impossible de l&apos;avoir, vous pouvez désactiver le transfert de celui-ci</translation>
     </message>
     <message>
-        <location filename="../../async/TransferThreadAsync.cpp" line="430"/>
-        <location filename="../../async/TransferThreadAsync.cpp" line="448"/>
+        <location filename="../../async/TransferThreadAsync.cpp" line="436"/>
+        <location filename="../../async/TransferThreadAsync.cpp" line="454"/>
         <source>Unable to create the destination folder: </source>
         <translation>Impossible de créer le dossier de destination: </translation>
     </message>
     <message>
-        <location filename="../../async/TransferThreadAsync.cpp" line="433"/>
-        <location filename="../../async/TransferThreadAsync.cpp" line="450"/>
+        <location filename="../../async/TransferThreadAsync.cpp" line="439"/>
+        <location filename="../../async/TransferThreadAsync.cpp" line="456"/>
         <source>Unable to create the destination folder, errno: %1</source>
         <translation>Impossible de créer le dossier de destination, errno: %1</translation>
     </message>

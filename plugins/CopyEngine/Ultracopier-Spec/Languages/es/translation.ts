@@ -669,14 +669,14 @@
         <translation>Fecha de modificación incorrecta o incapaz de obtenerla, puede desactivar la transferencia de tiempo para hacerlo</translation>
     </message>
     <message>
-        <location filename="../../async/TransferThreadAsync.cpp" line="430"/>
-        <location filename="../../async/TransferThreadAsync.cpp" line="448"/>
+        <location filename="../../async/TransferThreadAsync.cpp" line="436"/>
+        <location filename="../../async/TransferThreadAsync.cpp" line="454"/>
         <source>Unable to create the destination folder: </source>
         <translation>No se puede crear la carpeta de destino: </translation>
     </message>
     <message>
-        <location filename="../../async/TransferThreadAsync.cpp" line="433"/>
-        <location filename="../../async/TransferThreadAsync.cpp" line="450"/>
+        <location filename="../../async/TransferThreadAsync.cpp" line="439"/>
+        <location filename="../../async/TransferThreadAsync.cpp" line="456"/>
         <source>Unable to create the destination folder, errno: %1</source>
         <translation>No se puede crear la carpeta de destino, errno: %1</translation>
     </message>

@@ -394,6 +394,12 @@ void TransferThreadAsync::setProgression(const uint64_t &pos, const uint64_t &si
             emit readStopped();
         transferProgression=pos;
     }
+    else
+    {
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"["+std::to_string(id)+
+                             "] transfer_stat:"+std::to_string(transfer_stat)+
+                             ", canStartTransfer: "+std::to_string(canStartTransfer)+", transfert id: "+std::to_string(transferId));
+    }
 }
 #endif
 
@@ -989,9 +995,22 @@ int64_t TransferThreadAsync::copiedSize()
     switch(static_cast<TransferStat>(transfer_stat))
     {
     case TransferStat_Transfer:
+        if(transferProgression>0)//then native copy started, read/write thread not used
+            return transferProgression;
+        else
+            return (readThread.getLastGoodPosition()+writeThread.getLastGoodPosition())/2;
+        break;
     case TransferStat_PostOperation:
+        if(transferProgression>0)//then native copy started, read/write thread not used
+            return transferSize;
+        else
+            return (readThread.getLastGoodPosition()+writeThread.getLastGoodPosition())/2;
+        break;
     case TransferStat_PostTransfer:
-        return (readThread.getLastGoodPosition()+writeThread.getLastGoodPosition())/2;
+        if(transferProgression>0)//then native copy started, read/write thread not used
+            return transferProgression;
+        else
+            return (readThread.getLastGoodPosition()+writeThread.getLastGoodPosition())/2;
     default:
         return 0;
     }
@@ -1076,14 +1095,17 @@ char TransferThreadAsync::writingLetter() const
 //not copied size, ...
 uint64_t TransferThreadAsync::realByteTransfered() const
 {
-    const uint64_t &l=readThread.getLastGoodPosition();
     switch(static_cast<TransferStat>(transfer_stat))
     {
     case TransferStat_Transfer:
+        if(transferProgression>0)//then native copy started, read/write thread not used
+            return transferProgression;
+        else
+            return readThread.getLastGoodPosition();
     case TransferStat_PostTransfer:
-        return l;
+        return readThread.getLastGoodPosition();
     case TransferStat_PostOperation:
-        return l;
+        return readThread.getLastGoodPosition();
     default:
         return 0;
     }
@@ -1096,8 +1118,16 @@ std::pair<uint64_t, uint64_t> TransferThreadAsync::progression() const
     switch(static_cast<TransferStat>(transfer_stat))
     {
     case TransferStat_Transfer:
-        returnVar.first=readThread.getLastGoodPosition();
-        returnVar.second=writeThread.getLastGoodPosition();
+        if(transferProgression>0)//then native copy started, read/write thread not used
+        {
+            returnVar.first=transferProgression;
+            returnVar.second=transferProgression;
+        }
+        else
+        {
+            returnVar.first=readThread.getLastGoodPosition();
+            returnVar.second=writeThread.getLastGoodPosition();
+        }
         /*if(returnVar.first<returnVar.second)
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+QStringLiteral("] read is smaller than write"));*/
     break;

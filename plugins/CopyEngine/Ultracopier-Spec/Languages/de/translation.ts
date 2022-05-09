@@ -669,14 +669,14 @@
         <translation>Falsches Änderungsdatum oder Fehler beim Auslesen, Sie können die Übertragung des Zeitstempels deaktivieren</translation>
     </message>
     <message>
-        <location filename="../../async/TransferThreadAsync.cpp" line="430"/>
-        <location filename="../../async/TransferThreadAsync.cpp" line="448"/>
+        <location filename="../../async/TransferThreadAsync.cpp" line="436"/>
+        <location filename="../../async/TransferThreadAsync.cpp" line="454"/>
         <source>Unable to create the destination folder: </source>
         <translation type="unfinished">Zielordner konnte nicht erstellt werden: </translation>
     </message>
     <message>
-        <location filename="../../async/TransferThreadAsync.cpp" line="433"/>
-        <location filename="../../async/TransferThreadAsync.cpp" line="450"/>
+        <location filename="../../async/TransferThreadAsync.cpp" line="439"/>
+        <location filename="../../async/TransferThreadAsync.cpp" line="456"/>
         <source>Unable to create the destination folder, errno: %1</source>
         <translation type="unfinished">Zielordner konnte nicht erstellt werden, Fehler Nummer: %1</translation>
     </message>
