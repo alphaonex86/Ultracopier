@@ -214,6 +214,21 @@ void DebugEngine::saveBugReport()
                     puts(qPrintable(fileName+" unable to open it as write: "+logFile.errorString()));
                     QMessageBox::critical(NULL,"Error","Unable to save the bug report"+logFile.errorString());
                 }
+                /* https://doc.qt.io/qt-5/qfile.html#copy
+                 * This file is closed before it is copied. */
+                if(!logFile.isOpen())
+                {
+                    if(!logFile.open(QIODevice::ReadWrite|QIODevice::Unbuffered|QIODevice::Append))
+                    {
+                        currentBackend=Memory;
+                        puts(qPrintable(logFile.fileName()+" unable to reopen it as write, log into file disabled"));
+                        removeTheLockFile();
+                    }
+                    else
+                        currentBackend=File;
+                }
+                else
+                    std::cerr << "Error, strange, this case should not be exists, see Qt doc" << std::endl;
             }
         }
     } while(errorFound!=false);
@@ -324,7 +339,13 @@ void DebugEngine::addDebugInformation(const DebugLevel_custom &level,const std::
             if(logFile.size()<ULTRACOPIER_DEBUG_MAX_ALL_SIZE*1024*1024 || (important && logFile.size()<ULTRACOPIER_DEBUG_MAX_IMPORTANT_SIZE*1024*1024))
             {
                 std::cout << addDebugInformation_textFormat << std::endl;
-                logFile.write(addDebugInformation_htmlFormat.data(),static_cast<qint64>(addDebugInformation_htmlFormat.size()));
+                if(logFile.write(addDebugInformation_htmlFormat.data(),static_cast<qint64>(addDebugInformation_htmlFormat.size()))!=(qint64)addDebugInformation_htmlFormat.size())
+                {
+                    if(!logFile.isOpen())
+                        std::cerr << "Error to write (not open): " << logFile.errorString().toStdString() << std::endl;
+                    else
+                        std::cerr << "Error to write: " << logFile.errorString().toStdString() << std::endl;
+                }
             }
         }
         else

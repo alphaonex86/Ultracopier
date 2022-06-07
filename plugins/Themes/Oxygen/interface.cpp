@@ -550,7 +550,7 @@ void Themes::detectedSpeed(const uint64_t &speed)//in byte per seconds
             tempSpeed=999999999;
         if(tempSpeed>(quint64)ui->progressBarCurrentSpeed->maximum())
         {
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"set max speed to: "+std::to_string(tempSpeed));
+            //ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"set max speed to: "+std::to_string(tempSpeed));
             ui->progressBarCurrentSpeed->setMaximum(tempSpeed);
         }
         ui->progressBarCurrentSpeed->setValue(tempSpeed);
