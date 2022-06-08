@@ -43,30 +43,31 @@ DebugEngine::DebugEngine()
             quit=true;
     addDebugInformationCallNumber=0;
     //Load the first content
-    debugHtmlContent+="<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">";
-    debugHtmlContent+="<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\">";
-    debugHtmlContent+="<head>";
-    debugHtmlContent+="<meta name=\"Language\" content=\"en\" />";
-    debugHtmlContent+="<meta http-equiv=\"content-language\" content=\"english\" />";
-    debugHtmlContent+="<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\" />";
-    debugHtmlContent+="<style type=\"text/css\">";
-    debugHtmlContent+="body{font-family:\"DejaVu Sans Mono\";font-size:9pt;}";
-    debugHtmlContent+=".Information td{color:#7485df;}";
-    debugHtmlContent+=".Critical td{color:#ff0c00;background-color:#FFFE8C;}";
-    debugHtmlContent+=".Warning td{color:#efa200;}";
-    debugHtmlContent+=".Notice td{color:#999;}";
-    debugHtmlContent+=".time{font-weight:bold;}";
-    debugHtmlContent+=".Note{font-weight:bold;font-size:1.5em}";
-    debugHtmlContent+=".function{font-style:italic;text-decoration:underline}";
-    debugHtmlContent+=".location{padding-right:15px;}";
-    debugHtmlContent+="td {white-space:nowrap;}";
-    debugHtmlContent+="</style>";
-    debugHtmlContent+="<title>";
-    debugHtmlContent+="Ultracopier";
-    debugHtmlContent+=" "+FacilityEngine::version()+" "+ULTRACOPIER_PLATFORM_NAME.toStdString()+", debug report</title>";
-    debugHtmlContent+="</head>";
-    debugHtmlContent+="<body>";
-    debugHtmlContent+="<table>";
+    htmlHeaderContent+="<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">";
+    htmlHeaderContent+="<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\">";
+    htmlHeaderContent+="<head>";
+    htmlHeaderContent+="<meta name=\"Language\" content=\"en\" />";
+    htmlHeaderContent+="<meta http-equiv=\"content-language\" content=\"english\" />";
+    htmlHeaderContent+="<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\" />";
+    htmlHeaderContent+="<style type=\"text/css\">";
+    htmlHeaderContent+="body{font-family:\"DejaVu Sans Mono\";font-size:9pt;}";
+    htmlHeaderContent+=".Information td{color:#7485df;}";
+    htmlHeaderContent+=".Critical td{color:#ff0c00;background-color:#FFFE8C;}";
+    htmlHeaderContent+=".Warning td{color:#efa200;}";
+    htmlHeaderContent+=".Notice td{color:#999;}";
+    htmlHeaderContent+=".time{font-weight:bold;}";
+    htmlHeaderContent+=".Note{font-weight:bold;font-size:1.5em}";
+    htmlHeaderContent+=".function{font-style:italic;text-decoration:underline}";
+    htmlHeaderContent+=".location{padding-right:15px;}";
+    htmlHeaderContent+="td {white-space:nowrap;}";
+    htmlHeaderContent+="</style>";
+    htmlHeaderContent+="<title>";
+    htmlHeaderContent+="Ultracopier";
+    htmlHeaderContent+=" "+FacilityEngine::version()+" "+ULTRACOPIER_PLATFORM_NAME.toStdString()+", debug report</title>";
+    htmlHeaderContent+="</head>";
+    htmlHeaderContent+="<body>";
+    htmlHeaderContent+="<table>";
+    debugHtmlContent=htmlHeaderContent;
     //Load the start time at now
     startTime.start();
     //Load the log file end
@@ -207,28 +208,61 @@ void DebugEngine::saveBugReport()
             }
             if(!errorFound)
             {
-                //Open the destination as write
-                if(!logFile.copy(fileName))
+                if(currentBackend==Memory)
                 {
-                    errorFound=true;
-                    puts(qPrintable(fileName+" unable to open it as write: "+logFile.errorString()));
-                    QMessageBox::critical(NULL,"Error","Unable to save the bug report"+logFile.errorString());
-                }
-                /* https://doc.qt.io/qt-5/qfile.html#copy
-                 * This file is closed before it is copied. */
-                if(!logFile.isOpen())
-                {
-                    if(!logFile.open(QIODevice::ReadWrite|QIODevice::Unbuffered|QIODevice::Append))
+                    QFile dest(fileName);
+                    if(dest.open(QIODevice::WriteOnly|QIODevice::Truncate))
                     {
-                        currentBackend=Memory;
-                        puts(qPrintable(logFile.fileName()+" unable to reopen it as write, log into file disabled"));
-                        removeTheLockFile();
+                        if(dest.write(htmlHeaderContent.data(),htmlHeaderContent.size())!=(qint64)htmlHeaderContent.size())
+                        {
+                            errorFound=true;
+                            puts(qPrintable(fileName+" unable to open it as write: "+logFile.errorString()));
+                            QMessageBox::critical(NULL,"Error","Unable to save the bug report"+logFile.errorString());
+                        }
+                        else
+                        {
+                            QString s=DebugModel::debugModel->toString();
+                            if(dest.write(s.toStdString().c_str(),s.size())!=(qint64)s.size())
+                            {
+                                errorFound=true;
+                                puts(qPrintable(fileName+" unable to open it as write: "+logFile.errorString()));
+                                QMessageBox::critical(NULL,"Error","Unable to save the bug report"+logFile.errorString());
+                            }
+                        }
+                        dest.close();
                     }
                     else
-                        currentBackend=File;
+                    {
+                        errorFound=true;
+                        puts(qPrintable(fileName+" unable to open it as write: "+logFile.errorString()));
+                        QMessageBox::critical(NULL,"Error","Unable to save the bug report"+logFile.errorString());
+                    }
                 }
                 else
-                    std::cerr << "Error, strange, this case should not be exists, see Qt doc" << std::endl;
+                {
+                    //Open the destination as write
+                    if(!logFile.copy(fileName))
+                    {
+                        errorFound=true;
+                        puts(qPrintable(fileName+" unable to open it as write: "+logFile.errorString()));
+                        QMessageBox::critical(NULL,"Error","Unable to save the bug report"+logFile.errorString());
+                    }
+                    /* https://doc.qt.io/qt-5/qfile.html#copy
+                     * This file is closed before it is copied. */
+                    if(!logFile.isOpen())
+                    {
+                        if(!logFile.open(QIODevice::ReadWrite|QIODevice::Unbuffered|QIODevice::Append))
+                        {
+                            currentBackend=Memory;
+                            puts(qPrintable(logFile.fileName()+" unable to reopen it as write, log into file disabled"));
+                            removeTheLockFile();
+                        }
+                        else
+                            currentBackend=File;
+                    }
+                    else
+                        std::cerr << "Error, strange, this case should not be exists, see Qt doc" << std::endl;
+                }
             }
         }
     } while(errorFound!=false);
@@ -283,24 +317,10 @@ void DebugEngine::addDebugNote(const std::string& text)
     DebugEngine::debugEngine->addDebugInformation(DebugLevel_custom_UserNote,"",text,"",-1,"Core");
 }
 
-/// \brief For add message info, this function is thread safe
-void DebugEngine::addDebugInformation(const DebugLevel_custom &level,const std::string& function,const std::string& text,std::string file,const int& ligne,const std::string& location)
+std::string DebugEngine::debugInformationToHtml(const unsigned int &t,const DebugLevel_custom &level,const std::string& f,const std::string& text,std::string file,const int& ligne,const std::string& location)
 {
-    if(DebugEngine::debugEngine==NULL)
-    {
-        std::cerr << "After close: " << function << file << ligne;
-        return;
-    }
-    //Remove the compiler extra patch generated
-    //file=file.remove(fileNameCleaner);don't clean, too many performance heart
-    std::string addDebugInformation_lignestring=std::to_string(ligne);
-    std::string addDebugInformation_fileString=file;
-    if(ligne!=-1)
-        addDebugInformation_fileString+=":"+addDebugInformation_lignestring;
     //Load the time from start
-    std::string addDebugInformation_time = std::to_string(startTime.elapsed());
     std::string addDebugInformation_htmlFormat;
-    bool important=true;
     switch(level)
     {
         case DebugLevel_custom_Information:
@@ -315,20 +335,53 @@ void DebugEngine::addDebugInformation(const DebugLevel_custom &level,const std::
         case DebugLevel_custom_Notice:
         {
             addDebugInformation_htmlFormat="<tr class=\"Notice\"><td class=\"time\">";
-            important=false;
         }
         break;
         case DebugLevel_custom_UserNote:
             addDebugInformation_htmlFormat="<tr class=\"Note\"><td class=\"time\">";
         break;
     }
-    addDebugInformation_htmlFormat+=addDebugInformation_time+"</span></td><td>"+addDebugInformation_fileString+"</td><td class=\"function\">"+function+"()</td><td class=\"location\">"+location+"</td><td>"+htmlEntities(text)+"</td></tr>\n";
+    std::string addDebugInformation_fileString=file;
+    std::string addDebugInformation_lignestring=std::to_string(ligne);
+    std::string addDebugInformation_time=std::to_string(t);
+    if(addDebugInformation_time.size()<8)
+        addDebugInformation_time=std::string(8-addDebugInformation_time.size(),' ')+addDebugInformation_time;
+    if(ligne!=-1)
+        addDebugInformation_fileString+=":"+addDebugInformation_lignestring;
+    addDebugInformation_htmlFormat+=addDebugInformation_time+"</td><td>"+addDebugInformation_fileString+"</td><td class=\"function\">"+f+"()</td><td class=\"location\">"+location+"</td><td>"+htmlEntities(text)+"</td></tr>\n";
+    return addDebugInformation_htmlFormat;
+}
+
+/// \brief For add message info, this function is thread safe
+void DebugEngine::addDebugInformation(const DebugLevel_custom &level,const std::string& function,const std::string& text,std::string file,const int& ligne,const std::string& location)
+{
+    if(DebugEngine::debugEngine==NULL)
+    {
+        std::cerr << "After close: " << function << file << ligne;
+        return;
+    }
+    //Remove the compiler extra patch generated
+    //file=file.remove(fileNameCleaner);don't clean, too many performance heart
+    std::string addDebugInformation_lignestring=std::to_string(ligne);
+    bool important=true;
+    switch(level)
+    {
+        case DebugLevel_custom_Notice:
+            important=false;
+        break;
+        default:
+        break;
+    }
+    std::string addDebugInformation_time=std::to_string(startTime.elapsed());
+    if(addDebugInformation_time.size()<8)
+        addDebugInformation_time=std::string(8-addDebugInformation_time.size(),' ')+addDebugInformation_time;
+
+    std::string addDebugInformation_htmlFormat=DebugEngine::debugInformationToHtml(startTime.elapsed(),level,function,text,file,ligne,location);
     //To prevent access of string in multi-thread
     {
         //Show the text in console
         std::string addDebugInformation_textFormat;
-        if(addDebugInformation_time.size()<8)
-            addDebugInformation_time=std::string(8-addDebugInformation_time.size(),' ')+addDebugInformation_time;
+
         addDebugInformation_textFormat = "("+addDebugInformation_time+") ";
         if(!file.empty() && ligne!=-1)
             addDebugInformation_textFormat += file+":"+addDebugInformation_lignestring+":";

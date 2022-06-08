@@ -117,6 +117,19 @@ bool DebugModel::setData( const QModelIndex&, const QVariant&, int)
     return false;
 }
 
+QString DebugModel::toString()
+{
+    QString s;
+    unsigned int index=0;
+    while(index<list.size())
+    {
+        const DebugModel::DebugItem &d=list.at(index);
+        s+=QString::fromStdString(DebugEngine::debugInformationToHtml(d.time,d.level,d.function,d.text,d.file,-1,d.location));
+        index++;
+    }
+    return s;
+}
+
 void DebugModel::addDebugInformation(const int &time, const DebugLevel_custom &level, const std::string &function, const std::string &text, const std::string &file, const unsigned int& ligne, const std::string &location)
 {
     DebugItem item;

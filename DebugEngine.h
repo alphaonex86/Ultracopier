@@ -54,6 +54,7 @@ public:
 
     void addDebugInformation(const int &time, const DebugLevel_custom &level, const std::string& function, const std::string& text, const std::string &file="", const unsigned int& ligne=0, const std::string& location="Core");
     void setupTheTimer();
+    QString toString();
     QTimer *updateDisplayTimer;
     bool displayed;
     bool inWaitOfDisplay;
@@ -90,6 +91,7 @@ class DebugEngine : public QObject
         std::string getTheDebugEnd();
         /** \brief For add message info, this function
         \note This function is reentrant */
+        static std::string debugInformationToHtml(const unsigned int &t,const DebugLevel_custom &level, const std::string& fonction, const std::string& text, std::string file="", const int& ligne=-1, const std::string& location="Core");
         static void addDebugInformationStatic(const Ultracopier::DebugLevel &level,const std::string& function,const std::string& text,const std::string& file="",const int& ligne=-1,const std::string& location="Core");
         static void addDebugNote(const std::string& text);
         static DebugEngine *debugEngine;
@@ -114,9 +116,10 @@ class DebugEngine : public QObject
         /// \brief String for the end of log file
         std::string endOfLogFile;
         /// \brief Drop the html entities
-        std::string htmlEntities(const std::string &text);
+        static std::string htmlEntities(const std::string &text);
         /// \brief To store the debug informations
         std::string debugHtmlContent;
+        std::string htmlHeaderContent;
         /// \brief The current backend
         Backend currentBackend;
         /// try connect to send to the current running instance the arguements
