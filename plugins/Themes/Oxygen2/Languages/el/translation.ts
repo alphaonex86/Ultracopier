@@ -8,19 +8,25 @@
         <source>%1 files</source>
         <translation type="unfinished"></translation>
     </message>
-    <message>
+    <message numerus="yes">
         <location filename="../../radialMap/map.cpp" line="204"/>
-        <source>%1 file, with an average size of %2</source>
-        <translation type="unfinished"></translation>
+        <source>%n file(s), with an average size of %1</source>
+        <comment>file</comment>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+        </translation>
     </message>
 </context>
 <context>
     <name>RadialMap::Widget</name>
-    <message>
+    <message numerus="yes">
         <location filename="../../radialMap/widgetEvents.cpp" line="194"/>
         <location filename="../../radialMap/widgetEvents.cpp" line="196"/>
-        <source> into %1 files</source>
-        <translation type="unfinished"></translation>
+        <source> into %n file(s)</source>
+        <comment>file</comment>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+        </translation>
     </message>
 </context>
 <context>
@@ -351,7 +357,7 @@
     </message>
     <message>
         <location filename="../../themesOptions.ui" line="239"/>
-        <source>Informations</source>
+        <source>Information</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

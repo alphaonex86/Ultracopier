@@ -8,19 +8,27 @@
         <source>%1 files</source>
         <translation>%1 fichiers</translation>
     </message>
-    <message>
+    <message numerus="yes">
         <location line="+96"/>
-        <source>%1 file, with an average size of %2</source>
-        <translation>%1 fichiers, avec une taille moyenne de %2</translation>
+        <source>%n file(s), with an average size of %1</source>
+        <comment>file</comment>
+        <translation>
+            <numerusform>%n fichier, avec une taille moyenne de %1</numerusform>
+            <numerusform>%n fichiers, avec une taille moyenne de %1</numerusform>
+        </translation>
     </message>
 </context>
 <context>
     <name>RadialMap::Widget</name>
-    <message>
+    <message numerus="yes">
         <location filename="../../radialMap/widgetEvents.cpp" line="+194"/>
         <location line="+2"/>
-        <source> into %1 files</source>
-        <translation> dans %1 fichiers</translation>
+        <source> into %n file(s)</source>
+        <comment>file</comment>
+        <translation>
+            <numerusform> dans %n fichier</numerusform>
+            <numerusform> dans %n fichiers</numerusform>
+        </translation>
     </message>
 </context>
 <context>
@@ -35,7 +43,7 @@
         <location line="-21"/>
         <location line="+21"/>
         <source>Register your key</source>
-        <translation type="unfinished"></translation>
+        <translation>Enregistrez votre clé</translation>
     </message>
     <message>
         <location line="+211"/>
@@ -322,10 +330,15 @@
     <message>
         <location line="+27"/>
         <source>Position at start</source>
-        <translation type="unfinished"></translation>
+        <translation>Position au départ</translation>
     </message>
     <message>
-        <location line="+188"/>
+        <location line="+95"/>
+        <source>Information</source>
+        <translation>Informations</translation>
+    </message>
+    <message>
+        <location line="+93"/>
         <source>Click to edit the color</source>
         <translation>Cliquer pour éditer la couleur</translation>
     </message>
@@ -342,25 +355,20 @@
     <message>
         <location line="+8"/>
         <source>Default</source>
-        <translation type="unfinished"></translation>
+        <translation>Défaut</translation>
     </message>
     <message>
         <location line="+5"/>
         <source>Save as previous</source>
-        <translation type="unfinished"></translation>
+        <translation>Enregistrer comme précédent</translation>
     </message>
     <message>
         <location line="+5"/>
         <source>At Center</source>
-        <translation type="unfinished"></translation>
+        <translation>Au centre</translation>
     </message>
     <message>
-        <location line="+17"/>
-        <source>Informations</source>
-        <translation>Informations</translation>
-    </message>
-    <message>
-        <location line="+38"/>
+        <location line="+55"/>
         <source>Display</source>
         <translation>Affichage</translation>
     </message>

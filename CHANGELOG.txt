@@ -30,4 +30,5 @@
 2.2.4.14: Fix for display modification date on Windows
 2.2.5.0: Minor fix on modification time
 2.2.5.1: Update the compilation platform and then Qt version to 5.15. fix native copy progression, Update NSIS/installer system for windows.
-2.2.5.2: Fix for debug repport save
+2.2.6.0: Fix for debug repport save, big change into error management (should fix retry after error during the transfert), more comment to explain what is made, fix translate, fix for gcc 12
+2.2.6.1: Fix Windows packaging, fix download url, now only in English due to web site only in English

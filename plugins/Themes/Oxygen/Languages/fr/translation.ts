@@ -11,7 +11,7 @@
     <message>
         <location line="+0"/>
         <source>Register your key</source>
-        <translation type="unfinished"></translation>
+        <translation>Enregistrez votre clé</translation>
     </message>
     <message>
         <location line="+99"/>
@@ -291,7 +291,12 @@
         <translation>Démarrer minimisé</translation>
     </message>
     <message>
-        <location line="+216"/>
+        <location line="+160"/>
+        <source>Information</source>
+        <translation>Informations</translation>
+    </message>
+    <message>
+        <location line="+56"/>
         <source>Click to edit the color</source>
         <translation>Cliquer pour éditer la couleur</translation>
     </message>
@@ -306,12 +311,7 @@
         <translation>Sauvegarder la position</translation>
     </message>
     <message>
-        <location line="+23"/>
-        <source>Informations</source>
-        <translation>Informations</translation>
-    </message>
-    <message>
-        <location line="+38"/>
+        <location line="+61"/>
         <source>Display</source>
         <translation>Affichage</translation>
     </message>
@@ -333,12 +333,12 @@
     <message>
         <location line="+7"/>
         <source>General margin</source>
-        <translation type="unfinished"></translation>
+        <translation>Marge générale</translation>
     </message>
     <message>
         <location line="+30"/>
         <source>General spacing</source>
-        <translation type="unfinished"></translation>
+        <translation>Espacement général</translation>
     </message>
     <message>
         <location line="-242"/>

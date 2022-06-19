@@ -1144,12 +1144,14 @@ void ListThread::mkPathFirstFolderFinish()
 /// \note Can be call without queue because all call will be serialized
 void ListThread::fileAlreadyExists(const INTERNALTYPEPATH &source,const INTERNALTYPEPATH &destination,const bool &isSame)
 {
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,TransferThread::internalStringTostring(source)+" to "+TransferThread::internalStringTostring(destination));
     emit send_fileAlreadyExists(source,destination,isSame,qobject_cast<TransferThreadAsync *>(sender()));
 }
 
 /// \note Can be call without queue because all call will be serialized
 void ListThread::errorOnFile(const INTERNALTYPEPATH &fileInfo, const std::string &errorString, const ErrorType &errorType)
 {
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,TransferThread::internalStringTostring(fileInfo)+" error: "+errorString);
     TransferThreadAsync * transferThread=qobject_cast<TransferThreadAsync *>(sender());
     if(transferThread==NULL)
     {
@@ -1171,6 +1173,7 @@ void ListThread::errorOnFile(const INTERNALTYPEPATH &fileInfo, const std::string
 /// \note Can be call without queue because all call will be serialized
 void ListThread::folderAlreadyExists(const INTERNALTYPEPATH &source,const INTERNALTYPEPATH &destination,const bool &isSame)
 {
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,TransferThread::internalStringTostring(source)+" to "+TransferThread::internalStringTostring(destination));
     emit send_folderAlreadyExists(source,destination,isSame,qobject_cast<ScanFileOrFolder *>(sender()));
 }
 
@@ -1178,6 +1181,7 @@ void ListThread::folderAlreadyExists(const INTERNALTYPEPATH &source,const INTERN
 /// \todo all this part
 void ListThread::errorOnFolder(const INTERNALTYPEPATH &fileInfo,const std::string &errorString,const ErrorType &errorType)
 {
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,TransferThread::internalStringTostring(fileInfo)+" error: "+errorString);
     emit send_errorOnFolder(fileInfo,errorString,qobject_cast<ScanFileOrFolder *>(sender()),errorType);
 }
 

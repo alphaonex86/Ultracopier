@@ -6,6 +6,7 @@
 #include <stdlib.h>
 #include <iostream>
 #include <chrono>
+#include <cstring>
 
 /// \todo, check number validity by http://en.cppreference.com/w/c/string/byte/strtol
 /* to check: bool my_strtol(const std::string &str, long &v) {

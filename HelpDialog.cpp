@@ -112,7 +112,7 @@ std::string HelpDialog::getWebSite()
 
 std::string HelpDialog::getUpdateUrl()
 {
-    return tr("http://ultracopier.first-world.info/download.html").toStdString();
+    return tr("http://ultracopier.first-world.info/#download").toStdString();
 }
 
 #ifdef ULTRACOPIER_DEBUG

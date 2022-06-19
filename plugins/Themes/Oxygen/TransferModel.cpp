@@ -502,15 +502,15 @@ TransferModel::currentTransfertItem TransferModel::getCurrentTransfertItem() con
                 returnItem.progressBar_write=0;
             }
             break;
-            //should never pass here
+            //should never pass here -> why?
             case Ultracopier::PostOperation:
-                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("wrong action type for file %1: actionType: %2").arg(itemTransfer.generalData.id).arg(itemTransfer.actionType).toStdString());
+                //ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("wrong action type for file %1: actionType: PostOperation").arg(itemTransfer.generalData.id).arg(itemTransfer.actionType).toStdString());
                 returnItem.progressBar_read=65535;
                 returnItem.progressBar_write=65535;
             break;
-            //should never pass here
+            //should never pass here -> why?
             case Ultracopier::PreOperation:
-                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("wrong action type for file %1: actionType: %2").arg(itemTransfer.generalData.id).arg(itemTransfer.actionType).toStdString());
+                //ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("wrong action type for file %1: actionType: PreOperation").arg(itemTransfer.generalData.id).arg(itemTransfer.actionType).toStdString());
                 returnItem.progressBar_read=0;
                 returnItem.progressBar_write=0;
             break;

@@ -112,15 +112,9 @@ TransferThreadAsync::TransferThreadAsync() :
     if(!connect(&writeThread,&WriteThread::opened,                  this,					&TransferThreadAsync::write_opened,         Qt::QueuedConnection))
         abort();
 
-    //error management
-/*    if(!connect(&readThread,&ReadThread::isSeekToZeroAndWait,       this,					&TransferThreadAsync::readThreadIsSeekToZeroAndWait,	Qt::QueuedConnection))
-        abort();
-    if(!connect(&readThread,&ReadThread::resumeAfterErrorByRestartAtTheLastPosition,this,	&TransferThreadAsync::readThreadResumeAfterError,	Qt::QueuedConnection))
-        abort();
+    //error management, just try restart from 0
     if(!connect(&readThread,&ReadThread::resumeAfterErrorByRestartAll,&writeThread,         &WriteThread::flushAndSeekToZero,               Qt::QueuedConnection))
         abort();
-    if(!connect(&writeThread,&WriteThread::flushedAndSeekedToZero,  this,                   &TransferThread::readThreadResumeAfterError,	Qt::QueuedConnection))
-        abort();*/
 
     #ifdef ULTRACOPIER_PLUGIN_DEBUG
     if(!connect(&readThread,&ReadThread::debugInformation,          this,                   &TransferThreadAsync::debugInformation,  Qt::QueuedConnection))
@@ -196,7 +190,7 @@ void TransferThreadAsync::internalStartTheTransfer()
     if(QThread::currentThread()!=this)
         abort();
     #endif
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+("] start")+", transfert id: "+std::to_string(transferId));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+("] start")+", transfert id: "+std::to_string(transferId)+" readError: "+std::to_string(writeError)+" writeError: "+std::to_string(writeError)+" canStartTransfer: "+std::to_string(canStartTransfer));
     if(transfer_stat==TransferStat_Idle)
     {
         if(mode!=Ultracopier::Move)
@@ -213,9 +207,9 @@ void TransferThreadAsync::internalStartTheTransfer()
         return;
     }
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+("] start")+", transfert id: "+std::to_string(transferId));
-    if(transfer_stat==TransferStat_Transfer)
+    if(transfer_stat==TransferStat_Transfer && !readError && !writeError)
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"["+std::to_string(id)+("] can't start transfert at Transfer"));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"["+std::to_string(id)+("] can't start transfert at Transfer due to transfer_stat==TransferStat_Transfer (double start?)"));
         return;
     }
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+("] start")+", transfert id: "+std::to_string(transferId));
@@ -300,6 +294,11 @@ void TransferThreadAsync::preOperation()
                                  TransferThread::internalStringTostring(source)+" than "+TransferThread::internalStringTostring(destination));
         return;
     }
+
+    //this case is used only on retry after error
+    readThread.stop();
+    writeThread.stop();
+
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] after is same");
     /*Why this code?
     if(readError)
@@ -339,6 +338,7 @@ void TransferThreadAsync::preOperation()
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] unable to read the source time: "+TransferThread::internalStringTostring(source));
             if(keepDate)
             {
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"!doTheDateTransfer && keepDate");
                 emit errorOnFile(source,tr("Wrong modification date or unable to get it, you can disable time transfer to do it").toStdString());
                 return;
             }
@@ -676,6 +676,7 @@ void TransferThreadAsync::ifCanStartTransfer()
             #ifdef Q_OS_WIN32
             if(native_copy)
             {
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,internalStringTostring(source)+" to "+internalStringTostring(destination)+": native_copy enabled");
                 successFull=CopyFileExW(TransferThread::toFinalPath(source).c_str(),TransferThread::toFinalPath(destination).c_str(),
                     (LPPROGRESS_ROUTINE)progressRoutine,this,&stopItWin,COPY_FILE_ALLOW_DECRYPTED_DESTINATION | 0x00000800);//0x00000800 is COPY_FILE_COPY_SYMLINK
                 if(successFull==FALSE)
@@ -726,12 +727,19 @@ void TransferThreadAsync::ifCanStartTransfer()
         #ifdef Q_OS_WIN32
         readError=true;
         writeError=true;
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"!successFull");
         emit errorOnFile(destination,strError);
         #else
         if(readError)
+        {
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"!successFull on read");
             emit errorOnFile(source,strError);
+        }
         else
+        {
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"!successFull on write");
             emit errorOnFile(destination,strError);
+        }
         #endif
         return;
     }
@@ -770,7 +778,7 @@ void TransferThreadAsync::checkIfAllIsClosedAndDoOperations()
         if(exists(destination))
             if(!unlink(source))
                 ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] move and unable to remove: "+
-                                         TransferThread::internalStringTostring(source)+
+                                         TransferThread::internalStringTostring(source)+std::string(" ")+
                          #ifdef Q_OS_WIN32
                                          GetLastErrorStdStr()
                          #else
@@ -822,52 +830,6 @@ void TransferThreadAsync::stop()
     }
     readThread.stop();
     writeThread.stop();
-}
-
-//retry after error
-void TransferThreadAsync::retryAfterError()
-{
-    /// \warning skip the resetExtraVariable(); to be more exact and resolv some bug
-    if(transfer_stat==TransferStat_Idle)
-    {
-        if(transferId==0)
-        {
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"["+std::to_string(id)+
-                                     ("] seam have bug, source: ")+TransferThread::internalStringTostring(source)+", destination: "+TransferThread::internalStringTostring(destination));
-            return;
-        }
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+
-                                 "] restart all, source: "+TransferThread::internalStringTostring(source)+", destination: "+TransferThread::internalStringTostring(destination));
-        readError=false;
-        //writeError=false;
-        emit internalStartPreOperation();
-        return;
-    }
-    //opening error
-    if(transfer_stat==TransferStat_PreOperation)
-    {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+
-                                 "] is not idle, source: "+TransferThread::internalStringTostring(source)+", destination: "+TransferThread::internalStringTostring(destination)+
-                                 ", stat: "+std::to_string(transfer_stat));
-        readError=false;
-        //writeError=false;
-        emit internalStartPreOperation();
-        //tryOpen();-> recheck all, because can be an error into isSame(), rename(), ...
-        return;
-    }
-    //data streaming error
-    if(transfer_stat!=TransferStat_PostOperation && transfer_stat!=TransferStat_Transfer && transfer_stat!=TransferStat_PostTransfer)
-    {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"["+std::to_string(id)+("] is not in right stat, source: ")+
-                                 TransferThread::internalStringTostring(source)+", destination: "+TransferThread::internalStringTostring(destination)+", stat: "+std::to_string(transfer_stat));
-        return;
-    }
-    if(transfer_stat==TransferStat_PostOperation)
-    {
-        emit internalStartPostOperation();
-        return;
-    }
-    emit internalTryStartTheTransfer();
 }
 
 //skip the copy
@@ -1294,7 +1256,12 @@ void TransferThreadAsync::read_error()
     readError		= true;
     //writeIsReadyVariable	= false;//wrong because write can be ready here
     if(!writeError)//already display error for the write
+    {
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"read error && !writeError");
         emit errorOnFile(source,readThread.errorString());
+    }
+    else
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"read error && writeError");
 }
 
 void TransferThreadAsync::read_readIsStopped()
@@ -1491,4 +1458,71 @@ void TransferThreadAsync::setOsSpecFlags(bool os_spec_flags)
 void TransferThreadAsync::setNativeCopy(bool native_copy)
 {
     this->native_copy=native_copy;
+}
+
+//////////////////////////////////////////////////////////////////
+/////////////////////// Error management /////////////////////////
+//////////////////////////////////////////////////////////////////
+
+void TransferThreadAsync::retryAfterError()
+{
+    /// \warning skip the resetExtraVariable(); to be more exact and resolv some bug
+    if(transfer_stat==TransferStat_Idle)
+    {
+        if(transferId==0)
+        {
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"["+std::to_string(id)+
+                                     ("] seam have bug, source: ")+TransferThread::internalStringTostring(source)+", destination: "+TransferThread::internalStringTostring(destination));
+            return;
+        }
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+
+                                 "] restart all, source: "+TransferThread::internalStringTostring(source)+", destination: "+TransferThread::internalStringTostring(destination));
+        readError=false;
+        //writeError=false;
+        emit internalStartPreOperation();
+        return;
+    }
+    //opening error
+    if(transfer_stat==TransferStat_PreOperation)
+    {
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+
+                                 "] is not idle, source: "+TransferThread::internalStringTostring(source)+", destination: "+TransferThread::internalStringTostring(destination)+
+                                 ", stat: "+std::to_string(transfer_stat));
+        readError=false;
+        writeError=false;//why was commented?
+        emit internalStartPreOperation();
+        //tryOpen();-> recheck all, because can be an error into isSame(), rename(), ...
+        return;
+    }
+    //data streaming error
+    if(transfer_stat!=TransferStat_PostOperation && transfer_stat!=TransferStat_Transfer && transfer_stat!=TransferStat_PostTransfer)
+    {
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"["+std::to_string(id)+("] is not in right stat, source: ")+
+                                 TransferThread::internalStringTostring(source)+", destination: "+TransferThread::internalStringTostring(destination)+", stat: "+std::to_string(transfer_stat));
+        return;
+    }
+    if(transfer_stat==TransferStat_PostOperation)
+    {
+        emit internalStartPostOperation();
+        return;
+    }
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+
+                             "] retryAfterError, source: "+TransferThread::internalStringTostring(source)+", destination: "+TransferThread::internalStringTostring(destination));
+
+    /*try restart from 0
+    * This is simplest way
+    * Simple mean less bug
+    * Allow restart with native copy
+    * More data check
+    * Yes it's less efficient, on failed on source, if after close/reopen the size is same, can be resumed where it stop
+    * */
+    //emit internalTryStartTheTransfer(); -> wrong in version 2
+    resetExtraVariable();
+    /*included into resetExtraVariable()
+    writeIsOpenVariable=false;
+    readError=false;
+    writeError=false;*/
+    transfer_stat=TransferStat_PreOperation;
+    writeThread.flushBuffer();
+    emit internalStartPreOperation();
 }

@@ -121,8 +121,6 @@ public slots:
     void stop();
     /// \brief skip the copy
     void skip();
-    /// \brief retry after error
-    void retryAfterError();
     /// \brief return info about the copied size
     int64_t copiedSize();
     /// \brief put the current file at bottom
@@ -134,6 +132,10 @@ public slots:
     #ifdef Q_OS_WIN32
     void setProgression(const uint64_t &pos,const uint64_t &size);
     #endif
+
+    //eror management
+    /// \brief retry after error
+    void retryAfterError();
 private:
     void setFileExistsActionInternal(const FileExistsAction &action);
     //ready = open + ready to operation (no error to resolv)

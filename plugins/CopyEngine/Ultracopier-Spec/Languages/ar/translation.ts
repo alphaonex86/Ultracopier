@@ -534,12 +534,12 @@
         <translation>خطا داخلي ، يرجى الإبلاغ عن ذلك!</translation>
     </message>
     <message>
-        <location filename="../../async/ReadThread.cpp" line="541"/>
+        <location filename="../../async/ReadThread.cpp" line="543"/>
         <source>Unable to read the source file: </source>
         <translation>غير قادر على قراءه الملف المصدر:</translation>
     </message>
     <message>
-        <location filename="../../async/ReadThread.cpp" line="595"/>
+        <location filename="../../async/ReadThread.cpp" line="599"/>
         <source>File truncated during the read, possible data change</source>
         <translation>تم اقتطاع الملف اثناء القراءة ، وتغيير البيانات المحتملة</translation>
     </message>
@@ -634,24 +634,24 @@
 <context>
     <name>TransferThread</name>
     <message>
-        <location filename="../../TransferThread.cpp" line="627"/>
+        <location filename="../../TransferThread.cpp" line="628"/>
         <source>%name% - copy%suffix%</source>
         <translation>% اسم%-نسخ% لاحقه%</translation>
     </message>
     <message>
-        <location filename="../../TransferThread.cpp" line="634"/>
+        <location filename="../../TransferThread.cpp" line="635"/>
         <source>%name% - copy (%number%)%suffix%</source>
         <translation>(% الاسم%-النسخ (% العدد%% اللاحق +ه%</translation>
     </message>
     <message>
-        <location filename="../../TransferThread.cpp" line="662"/>
-        <location filename="../../TransferThread.cpp" line="903"/>
+        <location filename="../../TransferThread.cpp" line="663"/>
+        <location filename="../../TransferThread.cpp" line="904"/>
         <source>File not found</source>
         <translation>الملف غير موجود</translation>
     </message>
     <message>
-        <location filename="../../TransferThread.cpp" line="903"/>
-        <location filename="../../TransferThread.cpp" line="939"/>
+        <location filename="../../TransferThread.cpp" line="904"/>
+        <location filename="../../TransferThread.cpp" line="940"/>
         <source>Unable to change the date</source>
         <translation>غير قادر على تغيير التاريخ</translation>
     </message>
@@ -684,24 +684,24 @@
 <context>
     <name>WriteThread</name>
     <message>
-        <location filename="../../async/WriteThread.cpp" line="137"/>
+        <location filename="../../async/WriteThread.cpp" line="138"/>
         <source>Path resolution error (Empty path)</source>
         <translation>(خطأ في دقة المسار (مسار فارغ</translation>
     </message>
     <message>
-        <location filename="../../async/WriteThread.cpp" line="166"/>
-        <location filename="../../async/WriteThread.cpp" line="199"/>
+        <location filename="../../async/WriteThread.cpp" line="167"/>
+        <location filename="../../async/WriteThread.cpp" line="200"/>
         <source>Unable to create the destination folder: </source>
         <translation>غير قادر على إنشاء مجلد الوجهة:</translation>
     </message>
     <message>
-        <location filename="../../async/WriteThread.cpp" line="177"/>
-        <location filename="../../async/WriteThread.cpp" line="201"/>
+        <location filename="../../async/WriteThread.cpp" line="178"/>
+        <location filename="../../async/WriteThread.cpp" line="202"/>
         <source>Unable to create the destination folder, errno: %1</source>
         <translation>errno: %1 غير قادر علي إنشاء المجلد الوجهة</translation>
     </message>
     <message>
-        <location filename="../../async/WriteThread.cpp" line="463"/>
+        <location filename="../../async/WriteThread.cpp" line="464"/>
         <source>Internal error, please report it!</source>
         <translation>خطا داخلي ، يرجى الإبلاغ عن ذلك!</translation>
     </message>

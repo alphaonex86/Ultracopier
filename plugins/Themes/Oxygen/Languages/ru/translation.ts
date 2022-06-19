@@ -291,6 +291,11 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../../themesOptions.ui" line="213"/>
+        <source>Information</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../../themesOptions.ui" line="269"/>
         <source>Click to edit the color</source>
         <translation type="unfinished"></translation>
@@ -303,11 +308,6 @@
     <message>
         <location filename="../../themesOptions.ui" line="190"/>
         <source>Save position</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../themesOptions.ui" line="213"/>
-        <source>Informations</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

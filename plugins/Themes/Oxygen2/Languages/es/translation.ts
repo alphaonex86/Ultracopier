@@ -6,21 +6,29 @@
     <message>
         <location filename="../../radialMap/map.cpp" line="108"/>
         <source>%1 files</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 archivos</translation>
     </message>
-    <message>
+    <message numerus="yes">
         <location filename="../../radialMap/map.cpp" line="204"/>
-        <source>%1 file, with an average size of %2</source>
-        <translation type="unfinished"></translation>
+        <source>%n file(s), with an average size of %1</source>
+        <comment>file</comment>
+        <translation>
+            <numerusform>%n archivo, con un tamaño promedio de %1</numerusform>
+            <numerusform>%n archivos, con un tamaño promedio de %1</numerusform>
+        </translation>
     </message>
 </context>
 <context>
     <name>RadialMap::Widget</name>
-    <message>
+    <message numerus="yes">
         <location filename="../../radialMap/widgetEvents.cpp" line="194"/>
         <location filename="../../radialMap/widgetEvents.cpp" line="196"/>
-        <source> into %1 files</source>
-        <translation type="unfinished"></translation>
+        <source> into %n file(s)</source>
+        <comment>file</comment>
+        <translation>
+            <numerusform> en %n archivo</numerusform>
+            <numerusform> en %n archivos</numerusform>
+        </translation>
     </message>
 </context>
 <context>
@@ -35,12 +43,12 @@
         <location filename="../../interface.cpp" line="293"/>
         <location filename="../../interface.cpp" line="314"/>
         <source>Register your key</source>
-        <translation type="unfinished"></translation>
+        <translation>Registra tu clave</translation>
     </message>
     <message>
         <location filename="../../interface.cpp" line="525"/>
         <source>File %1/%2, size: %3/%4</source>
-        <translation>El archivo %1/%2, el tamaño: %3/%4</translation>
+        <translation>Archivo %1/%2, el tamaño: %3/%4</translation>
     </message>
     <message>
         <location filename="../../interface.cpp" line="832"/>
@@ -84,7 +92,7 @@
         <location filename="../../interface.cpp" line="1672"/>
         <location filename="../../interface.cpp" line="1681"/>
         <source>%1 %2% of %3 into %4 files</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 %2% de %3 en %4 archivos</translation>
     </message>
 </context>
 <context>
@@ -147,12 +155,12 @@
     <message>
         <location filename="../../interface.ui" line="232"/>
         <source>0</source>
-        <translation type="unfinished"></translation>
+        <translation>0</translation>
     </message>
     <message>
         <location filename="../../interface.ui" line="252"/>
         <source>100MB+</source>
-        <translation type="unfinished"></translation>
+        <translation>100MB+</translation>
     </message>
     <message>
         <location filename="../../interface.ui" line="527"/>
@@ -317,12 +325,17 @@
     <message>
         <location filename="../../themesOptions.ui" line="117"/>
         <source>Start minimized</source>
-        <translation type="unfinished"></translation>
+        <translation>Iniciar minimizado</translation>
     </message>
     <message>
         <location filename="../../themesOptions.ui" line="144"/>
         <source>Position at start</source>
-        <translation type="unfinished"></translation>
+        <translation>Posición al inicio</translation>
+    </message>
+    <message>
+        <location filename="../../themesOptions.ui" line="239"/>
+        <source>Information</source>
+        <translation>Informacións</translation>
     </message>
     <message>
         <location filename="../../themesOptions.ui" line="332"/>
@@ -337,27 +350,22 @@
     <message>
         <location filename="../../themesOptions.ui" line="204"/>
         <source>Dark UI</source>
-        <translation type="unfinished"></translation>
+        <translation>Interfaz de usuario oscura</translation>
     </message>
     <message>
         <location filename="../../themesOptions.ui" line="212"/>
         <source>Default</source>
-        <translation type="unfinished"></translation>
+        <translation>Defecto</translation>
     </message>
     <message>
         <location filename="../../themesOptions.ui" line="217"/>
         <source>Save as previous</source>
-        <translation type="unfinished"></translation>
+        <translation>Guardar como anterior</translation>
     </message>
     <message>
         <location filename="../../themesOptions.ui" line="222"/>
         <source>At Center</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../themesOptions.ui" line="239"/>
-        <source>Informations</source>
-        <translation>Informations</translation>
+        <translation>En el centro</translation>
     </message>
     <message>
         <location filename="../../themesOptions.ui" line="277"/>

@@ -42,7 +42,8 @@ enum TransferStat
     TransferStat_WaitForTheTransfer=2,
     TransferStat_Transfer=3,
     TransferStat_PostTransfer=5,
-    TransferStat_PostOperation=6
+    TransferStat_PostOperation=6,
+    TransferStat_Checksum=7
 };
 
 /// \brief Define overwrite mode

@@ -311,6 +311,7 @@ bool TransferThread::isSame()
         }
         if(checkAlwaysRename())
             return false;
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,internalStringTostring(source)+" to "+internalStringTostring(destination));
         emit fileAlreadyExists(source,destination,true);
         return true;
     }
@@ -785,7 +786,7 @@ bool TransferThread::mkpath(const INTERNALTYPEPATH &path)
             return false;
         #endif
 
-    pathCedit.resize(lastpos);
+        pathCedit.resize(lastpos);
         previouspos=lastpos;
 
         errno=0;

@@ -291,7 +291,12 @@
         <translation type="unfinished">최소화된 시작</translation>
     </message>
     <message>
-        <location line="+216"/>
+        <location line="+160"/>
+        <source>Information</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+56"/>
         <source>Click to edit the color</source>
         <translation type="unfinished">색상 편집 클릭</translation>
     </message>
@@ -306,12 +311,7 @@
         <translation type="unfinished">위치 저장</translation>
     </message>
     <message>
-        <location line="+23"/>
-        <source>Informations</source>
-        <translation type="unfinished">정보</translation>
-    </message>
-    <message>
-        <location line="+38"/>
+        <location line="+61"/>
         <source>Display</source>
         <translation type="unfinished">표시</translation>
     </message>

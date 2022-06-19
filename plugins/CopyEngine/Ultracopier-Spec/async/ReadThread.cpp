@@ -59,8 +59,8 @@ void ReadThread::run()
 {
     if(!connect(this,&ReadThread::internalStartOpen,		this,&ReadThread::internalOpenSlot,     Qt::QueuedConnection))
         abort();
-    if(!connect(this,&ReadThread::internalStartReopen,		this,&ReadThread::internalReopen,       Qt::QueuedConnection))
-        abort();
+    /*if(!connect(this,&ReadThread::internalStartReopen,		this,&ReadThread::internalReopen,       Qt::QueuedConnection))
+        abort();*/
     if(!connect(this,&ReadThread::internalStartRead,		this,&ReadThread::internalRead,         Qt::QueuedConnection))
         abort();
     if(!connect(this,&ReadThread::internalStartClose,		this,&ReadThread::internalCloseSlot,	Qt::QueuedConnection))
@@ -510,6 +510,8 @@ void ReadThread::internalRead()
                                      );
             isInReadLoop=false;
             emit error();
+            /// in version 2, full close and retry from open(), see comment into TransferThreadAsync::retryAfterError()
+            internalClose();
             return;
         }
         #ifdef Q_OS_WIN32
@@ -546,6 +548,8 @@ void ReadThread::internalRead()
             #endif
             isInReadLoop=false;
             emit error();
+            /// in version 2, full close and retry from open(), see comment into TransferThreadAsync::retryAfterError()
+            internalClose();
             return;
         }
         if(sizeReaden>0)
@@ -597,6 +601,8 @@ void ReadThread::internalRead()
                                  "Source truncated during the read");
         isInReadLoop=false;
         emit error();
+        /// in version 2, full close and retry from open(), see comment into TransferThreadAsync::retryAfterError()
+        internalClose();
         return;
     }
     isInReadLoop=false;
@@ -742,8 +748,7 @@ int64_t ReadThread::getLastGoodPosition() const
     return lastGoodPosition;
 }
 
-//reopen after an error
-void ReadThread::reopen()
+/*void ReadThread::reopen()
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] start");
     if(isInReadLoop)
@@ -753,9 +758,10 @@ void ReadThread::reopen()
     }
     stopIt=true;
     emit internalStartReopen();
-}
+}*/
 
-bool ReadThread::internalReopen()
+/// disabled into version 2, see comment into TransferThreadAsync::retryAfterError()
+/* bool ReadThread::internalReopen()
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] start");
     stopIt=false;
@@ -826,7 +832,7 @@ bool ReadThread::internalReopen()
             return false;
     }
     return false;
-}
+}*/
 
 //set the write thread
 void ReadThread::setWriteThread(WriteThread * writeThread)

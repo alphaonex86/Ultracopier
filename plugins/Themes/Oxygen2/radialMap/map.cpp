@@ -201,8 +201,7 @@ bool RadialMap::Map::build(const Folder * const dir, const uint depth, uint a_st
 
     if (depth == 0 && hiddenSize >= m_limits[depth] && hiddenFileCount > 0) {
         //append a segment for unrepresented space - a "fake" segment
-        const QString s = QObject::tr("%1 file, with an average size of %2")
-                .arg(hiddenFileCount)
+        const QString s = QObject::tr("%n file(s), with an average size of %1","file",hiddenFileCount)
                 .arg(QString::fromStdString(File::facilityEngine->sizeToString(hiddenSize/hiddenFileCount)));
 
 

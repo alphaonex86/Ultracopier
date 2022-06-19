@@ -8,19 +8,35 @@
         <source>%1 files</source>
         <translation>ملفات %1</translation>
     </message>
-    <message>
+    <message numerus="yes">
         <location filename="../../radialMap/map.cpp" line="204"/>
-        <source>%1 file, with an average size of %2</source>
-        <translation>%1 ملف ، بمتوسط حجم %2</translation>
+        <source>%n file(s), with an average size of %1</source>
+        <comment>file</comment>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
     </message>
 </context>
 <context>
     <name>RadialMap::Widget</name>
-    <message>
+    <message numerus="yes">
         <location filename="../../radialMap/widgetEvents.cpp" line="194"/>
         <location filename="../../radialMap/widgetEvents.cpp" line="196"/>
-        <source> into %1 files</source>
-        <translation>إلى ملفات %1</translation>
+        <source> into %n file(s)</source>
+        <comment>file</comment>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
     </message>
 </context>
 <context>
@@ -351,8 +367,8 @@
     </message>
     <message>
         <location filename="../../themesOptions.ui" line="239"/>
-        <source>Informations</source>
-        <translation>المعلومات</translation>
+        <source>Information</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../themesOptions.ui" line="277"/>

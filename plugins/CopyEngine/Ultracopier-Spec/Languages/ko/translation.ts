@@ -534,12 +534,12 @@
         <translation type="unfinished">내부 오류. 이 문제를 보고해 주세요!</translation>
     </message>
     <message>
-        <location filename="../../async/ReadThread.cpp" line="541"/>
+        <location filename="../../async/ReadThread.cpp" line="543"/>
         <source>Unable to read the source file: </source>
         <translation type="unfinished">원본 파일을 읽을 수 없습니다: </translation>
     </message>
     <message>
-        <location filename="../../async/ReadThread.cpp" line="595"/>
+        <location filename="../../async/ReadThread.cpp" line="599"/>
         <source>File truncated during the read, possible data change</source>
         <translation>읽기 중 파일이 잘림. 데이터가 변경되었을 수 있습니다. </translation>
     </message>
@@ -634,24 +634,24 @@
 <context>
     <name>TransferThread</name>
     <message>
-        <location filename="../../TransferThread.cpp" line="627"/>
+        <location filename="../../TransferThread.cpp" line="628"/>
         <source>%name% - copy%suffix%</source>
         <translation type="unfinished">%name% - 복사%suffix%</translation>
     </message>
     <message>
-        <location filename="../../TransferThread.cpp" line="634"/>
+        <location filename="../../TransferThread.cpp" line="635"/>
         <source>%name% - copy (%number%)%suffix%</source>
         <translation type="unfinished">%name% - 복사 (%number%)%suffix%</translation>
     </message>
     <message>
-        <location filename="../../TransferThread.cpp" line="662"/>
-        <location filename="../../TransferThread.cpp" line="903"/>
+        <location filename="../../TransferThread.cpp" line="663"/>
+        <location filename="../../TransferThread.cpp" line="904"/>
         <source>File not found</source>
         <translation>파일을 찾을 수 없습니다.</translation>
     </message>
     <message>
-        <location filename="../../TransferThread.cpp" line="903"/>
-        <location filename="../../TransferThread.cpp" line="939"/>
+        <location filename="../../TransferThread.cpp" line="904"/>
+        <location filename="../../TransferThread.cpp" line="940"/>
         <source>Unable to change the date</source>
         <translation>날짜를 변경할 수 없습니다.</translation>
     </message>
@@ -684,24 +684,24 @@
 <context>
     <name>WriteThread</name>
     <message>
-        <location filename="../../async/WriteThread.cpp" line="137"/>
+        <location filename="../../async/WriteThread.cpp" line="138"/>
         <source>Path resolution error (Empty path)</source>
         <translation type="unfinished">경로 확인 오류 (빈 경로)</translation>
     </message>
     <message>
-        <location filename="../../async/WriteThread.cpp" line="166"/>
-        <location filename="../../async/WriteThread.cpp" line="199"/>
+        <location filename="../../async/WriteThread.cpp" line="167"/>
+        <location filename="../../async/WriteThread.cpp" line="200"/>
         <source>Unable to create the destination folder: </source>
         <translation type="unfinished">대상 폴더를 만들 수 없음:</translation>
     </message>
     <message>
-        <location filename="../../async/WriteThread.cpp" line="177"/>
-        <location filename="../../async/WriteThread.cpp" line="201"/>
+        <location filename="../../async/WriteThread.cpp" line="178"/>
+        <location filename="../../async/WriteThread.cpp" line="202"/>
         <source>Unable to create the destination folder, errno: %1</source>
         <translation type="unfinished">대상 폴더를 만들 수 없음. Errno: %1</translation>
     </message>
     <message>
-        <location filename="../../async/WriteThread.cpp" line="463"/>
+        <location filename="../../async/WriteThread.cpp" line="464"/>
         <source>Internal error, please report it!</source>
         <translation type="unfinished">내부 오류. 문제를 보고해 주세요!</translation>
     </message>

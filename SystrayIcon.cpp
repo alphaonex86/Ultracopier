@@ -389,7 +389,7 @@ void SystrayIcon::CatchAction(QSystemTrayIcon::ActivationReason reason)
         }
     }
     else if(reason==QSystemTrayIcon::Context)//do nothing on right click to show as auto the menu
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"The action on the systray icon is unknown: "+std::to_string((int)reason));
+    {}//ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"The action on the systray icon is unknown: "+std::to_string((int)reason));
     else
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"The action on the systray icon is unknown: "+std::to_string((int)reason));

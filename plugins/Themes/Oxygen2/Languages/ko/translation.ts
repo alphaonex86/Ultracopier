@@ -8,19 +8,25 @@
         <source>%1 files</source>
         <translation type="unfinished">%1 파일</translation>
     </message>
-    <message>
+    <message numerus="yes">
         <location line="+96"/>
-        <source>%1 file, with an average size of %2</source>
-        <translation type="unfinished">%1 파일, %2의 파일, 평균 크기</translation>
+        <source>%n file(s), with an average size of %1</source>
+        <comment>file</comment>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+        </translation>
     </message>
 </context>
 <context>
     <name>RadialMap::Widget</name>
-    <message>
+    <message numerus="yes">
         <location filename="../../radialMap/widgetEvents.cpp" line="+194"/>
         <location line="+2"/>
-        <source> into %1 files</source>
-        <translation type="unfinished"> %1 파일</translation>
+        <source> into %n file(s)</source>
+        <comment>file</comment>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+        </translation>
     </message>
 </context>
 <context>
@@ -326,7 +332,12 @@
         <translation type="unfinished">시작 시 위치</translation>
     </message>
     <message>
-        <location line="+188"/>
+        <location line="+95"/>
+        <source>Information</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+93"/>
         <source>Click to edit the color</source>
         <translation type="unfinished">색상 편집 클릭</translation>
     </message>
@@ -356,12 +367,7 @@
         <translation type="unfinished">가운데</translation>
     </message>
     <message>
-        <location line="+17"/>
-        <source>Informations</source>
-        <translation type="unfinished">정보</translation>
-    </message>
-    <message>
-        <location line="+38"/>
+        <location line="+55"/>
         <source>Display</source>
         <translation type="unfinished">표시</translation>
     </message>

@@ -534,12 +534,12 @@
         <translation>¡Error interno, por favor repórtelo!</translation>
     </message>
     <message>
-        <location filename="../../async/ReadThread.cpp" line="541"/>
+        <location filename="../../async/ReadThread.cpp" line="543"/>
         <source>Unable to read the source file: </source>
         <translation>No se puede leer el archivo fuente: </translation>
     </message>
     <message>
-        <location filename="../../async/ReadThread.cpp" line="595"/>
+        <location filename="../../async/ReadThread.cpp" line="599"/>
         <source>File truncated during the read, possible data change</source>
         <translation>Archivo truncado durante la lectura, posible cambio de datos</translation>
     </message>
@@ -634,24 +634,24 @@
 <context>
     <name>TransferThread</name>
     <message>
-        <location filename="../../TransferThread.cpp" line="627"/>
+        <location filename="../../TransferThread.cpp" line="628"/>
         <source>%name% - copy%suffix%</source>
         <translation>%name% - copia%suffix%</translation>
     </message>
     <message>
-        <location filename="../../TransferThread.cpp" line="634"/>
+        <location filename="../../TransferThread.cpp" line="635"/>
         <source>%name% - copy (%number%)%suffix%</source>
         <translation>%name% - copia (%number%)%suffix%</translation>
     </message>
     <message>
-        <location filename="../../TransferThread.cpp" line="662"/>
-        <location filename="../../TransferThread.cpp" line="903"/>
+        <location filename="../../TransferThread.cpp" line="663"/>
+        <location filename="../../TransferThread.cpp" line="904"/>
         <source>File not found</source>
         <translation>Archivo no encontrado</translation>
     </message>
     <message>
-        <location filename="../../TransferThread.cpp" line="903"/>
-        <location filename="../../TransferThread.cpp" line="939"/>
+        <location filename="../../TransferThread.cpp" line="904"/>
+        <location filename="../../TransferThread.cpp" line="940"/>
         <source>Unable to change the date</source>
         <translation>No se puede cambiar la fecha</translation>
     </message>
@@ -684,24 +684,24 @@
 <context>
     <name>WriteThread</name>
     <message>
-        <location filename="../../async/WriteThread.cpp" line="137"/>
+        <location filename="../../async/WriteThread.cpp" line="138"/>
         <source>Path resolution error (Empty path)</source>
         <translation>Error de resolución de ruta (ruta vacía)</translation>
     </message>
     <message>
-        <location filename="../../async/WriteThread.cpp" line="166"/>
-        <location filename="../../async/WriteThread.cpp" line="199"/>
+        <location filename="../../async/WriteThread.cpp" line="167"/>
+        <location filename="../../async/WriteThread.cpp" line="200"/>
         <source>Unable to create the destination folder: </source>
         <translation>No se puede crear la carpeta de destino: </translation>
     </message>
     <message>
-        <location filename="../../async/WriteThread.cpp" line="177"/>
-        <location filename="../../async/WriteThread.cpp" line="201"/>
+        <location filename="../../async/WriteThread.cpp" line="178"/>
+        <location filename="../../async/WriteThread.cpp" line="202"/>
         <source>Unable to create the destination folder, errno: %1</source>
         <translation>No se puede crear la carpeta de destino, errno: %1</translation>
     </message>
     <message>
-        <location filename="../../async/WriteThread.cpp" line="463"/>
+        <location filename="../../async/WriteThread.cpp" line="464"/>
         <source>Internal error, please report it!</source>
         <translation>¡Error interno, por favor repórtelo!</translation>
     </message>

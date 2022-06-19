@@ -291,6 +291,11 @@
         <translation>Minimiert starten</translation>
     </message>
     <message>
+        <location filename="../../themesOptions.ui" line="213"/>
+        <source>Information</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../../themesOptions.ui" line="269"/>
         <source>Click to edit the color</source>
         <translation>Zum Bearbeiten der Farbe klicken</translation>
@@ -304,11 +309,6 @@
         <location filename="../../themesOptions.ui" line="190"/>
         <source>Save position</source>
         <translation>Speichere Fensterposition</translation>
-    </message>
-    <message>
-        <location filename="../../themesOptions.ui" line="213"/>
-        <source>Informations</source>
-        <translation>Informationen</translation>
     </message>
     <message>
         <location filename="../../themesOptions.ui" line="251"/>

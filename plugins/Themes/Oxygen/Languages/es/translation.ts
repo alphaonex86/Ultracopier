@@ -11,7 +11,7 @@
     <message>
         <location filename="../../interface.cpp" line="341"/>
         <source>Register your key</source>
-        <translation type="unfinished"></translation>
+        <translation>Registra tu clave</translation>
     </message>
     <message>
         <location filename="../../interface.cpp" line="440"/>
@@ -60,7 +60,7 @@
         <location filename="../../interface.cpp" line="1498"/>
         <location filename="../../interface.cpp" line="1500"/>
         <source>%1 %2% of %3</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 %2% de %3</translation>
     </message>
 </context>
 <context>
@@ -288,7 +288,12 @@
     <message>
         <location filename="../../themesOptions.ui" line="53"/>
         <source>Start minimized</source>
-        <translation type="unfinished"></translation>
+        <translation>Iniciar minimizado</translation>
+    </message>
+    <message>
+        <location filename="../../themesOptions.ui" line="213"/>
+        <source>Information</source>
+        <translation>Informacións</translation>
     </message>
     <message>
         <location filename="../../themesOptions.ui" line="269"/>
@@ -303,12 +308,7 @@
     <message>
         <location filename="../../themesOptions.ui" line="190"/>
         <source>Save position</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../themesOptions.ui" line="213"/>
-        <source>Informations</source>
-        <translation>Informations</translation>
+        <translation>Guardar posicion</translation>
     </message>
     <message>
         <location filename="../../themesOptions.ui" line="251"/>
@@ -333,12 +333,12 @@
     <message>
         <location filename="../../themesOptions.ui" line="395"/>
         <source>General margin</source>
-        <translation type="unfinished"></translation>
+        <translation>Margen general</translation>
     </message>
     <message>
         <location filename="../../themesOptions.ui" line="425"/>
         <source>General spacing</source>
-        <translation type="unfinished"></translation>
+        <translation>Espaciado general</translation>
     </message>
     <message>
         <location filename="../../themesOptions.ui" line="183"/>

@@ -63,8 +63,9 @@ void WriteThread::run()
 {
     if(!connect(this,&WriteThread::internalStartOpen,               this,&WriteThread::internalOpen,		Qt::QueuedConnection))
         abort();
-    if(!connect(this,&WriteThread::internalStartReopen,             this,&WriteThread::internalReopen,		Qt::QueuedConnection))
-        abort();
+    /// in version 2, full close and retry from open(), see comment into TransferThreadAsync::retryAfterError()
+    /*if(!connect(this,&WriteThread::internalStartReopen,             this,&WriteThread::internalReopen,		Qt::QueuedConnection))
+        abort();*/
     if(!connect(this,&WriteThread::internalStartWrite,              this,&WriteThread::internalWrite,		Qt::QueuedConnection))
         abort();
     if(!connect(this,&WriteThread::internalStartClose,              this,&WriteThread::internalCloseSlot,		Qt::QueuedConnection))
@@ -806,7 +807,8 @@ void WriteThread::internalClose(bool emitSignal)
         isOpen.release();
 }
 
-void WriteThread::internalReopen()
+/// in version 2, full close and retry from open(), see comment into TransferThreadAsync::retryAfterError()
+/*void WriteThread::internalReopen()
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] start");
     INTERNALTYPEPATH tempFile=file;
@@ -817,15 +819,16 @@ void WriteThread::internalReopen()
     file=tempFile;
     if(internalOpen())
         emit reopened();
-}
+}*/
 
-void WriteThread::reopen()
+/// in version 2, full close and retry from open(), see comment into TransferThreadAsync::retryAfterError()
+/*void WriteThread::reopen()
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] start");
     stopIt=true;
     endDetected=false;
     emit internalStartReopen();
-}
+}*/
 
 #ifdef ULTRACOPIER_PLUGIN_DEBUG
 //to set the id
@@ -1133,14 +1136,26 @@ void WriteThread::internalWrite()
             #endif
             stopIt=true;
             emit error();
+            /// in version 2, full close and retry from open(), see comment into TransferThreadAsync::retryAfterError()
+            internalClose(false);
+            flushBuffer();
             return;
         }
         if(bytesWriten!=blockArray.size)
         {
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] "+QStringLiteral("Error in writing, bytesWriten: %1, blockArray.size(): %2").arg(bytesWriten).arg(blockArray.size).toStdString());
-            errorString_internal=QStringLiteral("Error in writing, bytesWriten: %1, blockArray.size(): %2").arg(bytesWriten).arg(blockArray.size).toStdString();
+            #ifdef Q_OS_WIN32
+            std::string eStr=TransferThread::GetLastErrorStdStr();
+            #else
+            int t=errno;
+            std::string eStr=strerror(t);
+            #endif
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] "+QStringLiteral("Error in writing, bytesWriten: %1, blockArray.size(): %2").arg(bytesWriten).arg(blockArray.size).toStdString()+", "+eStr);
+            errorString_internal=QStringLiteral("Error in writing, bytesWriten: %1, blockArray.size(): %2").arg(bytesWriten).arg(blockArray.size).toStdString()+", "+eStr;
             stopIt=true;
             emit error();
+            /// in version 2, full close and retry from open(), see comment into TransferThreadAsync::retryAfterError()
+            internalClose(false);
+            flushBuffer();
             return;
         }
         lastGoodPosition+=bytesWriten;

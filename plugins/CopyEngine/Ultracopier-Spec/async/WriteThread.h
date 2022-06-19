@@ -101,7 +101,7 @@ public slots:
     /// \brief set the end is detected
     void endIsDetected();
     /// \brief reopen the file
-    void reopen();
+    //void reopen();
     /// \brief flush and seek to zero
     void flushAndSeekToZero();
     void setDeletePartiallyTransferredFiles(const bool &deletePartiallyTransferredFiles);
@@ -119,7 +119,7 @@ signals:
     void closed() const;
     //internal signals
     void internalStartOpen() const;
-    void internalStartReopen() const;
+    //void internalStartReopen() const;
     void internalStartWrite() const;
     void internalStartClose() const;
     void internalStartEndOfFile() const;
@@ -174,7 +174,7 @@ private slots:
     void internalWrite();
     void internalCloseSlot();
     void internalClose(bool emitSignal=true);
-    void internalReopen();
+    //void internalReopen();
     void internalEndOfFile();
     void internalFlushAndSeekToZero();
     void openWriteInternal(const INTERNALTYPEPATH &file,const uint64_t &startSize);

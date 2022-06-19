@@ -61,8 +61,8 @@ public:
     #endif
     /// \brief set block size in KB mostly for speed
     bool setBlockSize(const int blockSize);
-    /// \brief reopen after an error
-    void reopen();
+
+    void reopen();//-> not valid in version 2, beacause it restart from open in case of error
     /// \brief set the write thread
     void setWriteThread(WriteThread * writeThread);
     #ifdef ULTRACOPIER_PLUGIN_DEBUG
@@ -108,7 +108,7 @@ signals:
     void resumeAfterErrorByRestartAtTheLastPosition() const;
     // internal signals
     void internalStartOpen() const;
-    void internalStartReopen() const;
+    //void internalStartReopen() const;-> not valid in version 2, beacause it restart from open in case of error
     void internalStartRead() const;
     void internalStartClose() const;
     /// \brief To debug source
@@ -153,7 +153,7 @@ private:
 private slots:
     bool internalOpen(bool resetLastGoodPosition=true);
     bool internalOpenSlot();
-    bool internalReopen();
+    //bool internalReopen();
     void internalRead();
     void internalClose(bool callByTheDestructor=false);
     void internalCloseSlot();

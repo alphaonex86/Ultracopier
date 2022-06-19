@@ -301,11 +301,6 @@
         <translation>حفظ الموضع</translation>
     </message>
     <message>
-        <location filename="../../themesOptions.ui" line="213"/>
-        <source>Informations</source>
-        <translation>المعلومات</translation>
-    </message>
-    <message>
         <location filename="../../themesOptions.ui" line="251"/>
         <source>Display</source>
         <translation>عرض</translation>
@@ -334,6 +329,11 @@
         <location filename="../../themesOptions.ui" line="269"/>
         <source>Click to edit the color</source>
         <translation>انقر لتحرير اللون</translation>
+    </message>
+    <message>
+        <location filename="../../themesOptions.ui" line="213"/>
+        <source>Information</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../themesOptions.ui" line="388"/>

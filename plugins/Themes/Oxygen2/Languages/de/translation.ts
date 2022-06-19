@@ -8,19 +8,27 @@
         <source>%1 files</source>
         <translation>%1 Dateien</translation>
     </message>
-    <message>
+    <message numerus="yes">
         <location filename="../../radialMap/map.cpp" line="204"/>
-        <source>%1 file, with an average size of %2</source>
-        <translation>%1 Datei, mit einer ungefähren Größe von %2</translation>
+        <source>%n file(s), with an average size of %1</source>
+        <comment>file</comment>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
     </message>
 </context>
 <context>
     <name>RadialMap::Widget</name>
-    <message>
+    <message numerus="yes">
         <location filename="../../radialMap/widgetEvents.cpp" line="194"/>
         <location filename="../../radialMap/widgetEvents.cpp" line="196"/>
-        <source> into %1 files</source>
-        <translation> in%1 Dateien</translation>
+        <source> into %n file(s)</source>
+        <comment>file</comment>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
     </message>
 </context>
 <context>
@@ -325,6 +333,11 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../../themesOptions.ui" line="239"/>
+        <source>Information</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../../themesOptions.ui" line="332"/>
         <source>Click to edit the color</source>
         <translation>Zum Bearbeiten der Farbe klicken</translation>
@@ -353,11 +366,6 @@
         <location filename="../../themesOptions.ui" line="222"/>
         <source>At Center</source>
         <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../themesOptions.ui" line="239"/>
-        <source>Informations</source>
-        <translation>Informationen</translation>
     </message>
     <message>
         <location filename="../../themesOptions.ui" line="277"/>
