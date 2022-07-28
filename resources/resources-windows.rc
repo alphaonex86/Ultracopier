@@ -11,7 +11,7 @@ FILETYPE VFT_APP
 	{
 		BLOCK "040904E4"
 		{
-			VALUE "CompanyName", "ultracopier.first-world.info"
+			VALUE "CompanyName", "ultracopier.herman-brule.com"
 			VALUE "FileVersion", ULTRACOPIER_VERSION
 			VALUE "FileDescription", "Ultracopier under GPL3"
 			VALUE "InternalName", "ultracopier.exe"

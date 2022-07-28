@@ -57,7 +57,7 @@ bool ProductKey::isUltimate() const
 void ProductKey::on_buttonBox_accepted()
 {
     if(!ProductKey::parseKey(ui->productkey->text()))
-        QMessageBox::critical(this,tr("Error"),"<br />"+tr("Your product key was rejected.<br />If you buy key, unmark check your spam and unmark the mail as spam<br />If you have not buy your key, go to <a href=\"https://shop.first-world.info/\">https://shop.first-world.info/</a>"));
+        QMessageBox::critical(this,tr("Error"),"<br />"+tr("Your product key was rejected.<br />If you buy key, unmark check your spam and unmark the mail as spam<br />If you have not buy your key, go to <a href=\"https://ultracopier.herman-brule.com/#ultimate\">https://ultracopier.herman-brule.com/#ultimate</a>"));
     else
     {
         changeToUltimate();

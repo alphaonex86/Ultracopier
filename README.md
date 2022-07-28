@@ -1,6 +1,6 @@
 # About
 
-[Ultracopier](https://ultracopier.first-world.info/) is free and open
+[Ultracopier](https://ultracopier.herman-brule.com/) is free and open
 source software licensed under GPLv3 that acts as a replacement for
 files copy dialogs.
 

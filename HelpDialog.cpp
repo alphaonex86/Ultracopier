@@ -106,13 +106,13 @@ void HelpDialog::reloadTextValue()
 
 std::string HelpDialog::getWebSite()
 {
-    return tr("http://ultracopier.first-world.info/").toStdString();
+    return tr("https://ultracopier.herman-brule.com/").toStdString();
 }
 
 
 std::string HelpDialog::getUpdateUrl()
 {
-    return tr("http://ultracopier.first-world.info/#download").toStdString();
+    return tr("https://ultracopier.herman-brule.com/#download").toStdString();
 }
 
 #ifdef ULTRACOPIER_DEBUG

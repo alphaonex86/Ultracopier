@@ -242,7 +242,7 @@ std::string FacilityEngine::ultimateUrl() const
     else
     {
         #if ! defined(Q_OS_LINUX)
-        return "https://shop.first-world.info/";
+        return "https://ultracopier.herman-brule.com/#ultimate";
         #else
         return std::string();
         #endif
