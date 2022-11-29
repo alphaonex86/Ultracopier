@@ -82,6 +82,9 @@ CopyEngineFactory::CopyEngineFactory() :
     connect(ui->defaultDestinationFolderBrowse,&QPushButton::clicked,           this,&CopyEngineFactory::defaultDestinationFolderBrowse);
     connect(ui->defaultDestinationFolder,&QLineEdit::editingFinished,           this,&CopyEngineFactory::defaultDestinationFolder);
 
+    connect(ui->bufferSameDevice,          static_cast<void(QSpinBox::*)(int)>(&QSpinBox::valueChanged),		this,&CopyEngineFactory::on_bufferSameDevice_editingFinished);
+    connect(ui->bufferOtherDevice,      static_cast<void(QSpinBox::*)(int)>(&QSpinBox::valueChanged),		this,&CopyEngineFactory::on_bufferOtherDevice_editingFinished);
+
     connect(filters,&Filters::sendNewFilters,this,&CopyEngineFactory::sendNewFilters);
     connect(ui->filters,&QPushButton::clicked,this,&CopyEngineFactory::showFilterDialog);
     connect(renamingRules,&RenamingRules::sendNewRenamingRules,this,&CopyEngineFactory::sendNewRenamingRules);
@@ -233,6 +236,8 @@ void CopyEngineFactory::setResources(OptionInterface * options,const std::string
         KeysList.push_back(std::pair<std::string, std::string>("checkDiskSpace","true"));
         KeysList.push_back(std::pair<std::string, std::string>("defaultDestinationFolder",""));
         KeysList.push_back(std::pair<std::string, std::string>("inodeThreads",std::to_string(16)));
+        KeysList.push_back(std::pair<std::string, std::string>("bufferSameDevice",std::to_string(300)));
+        KeysList.push_back(std::pair<std::string, std::string>("bufferOtherDevice",std::to_string(50)));
         #ifdef Q_OS_WIN32
         //un Windows, without buffer the write seam should be aligned and full block, Ultracopier not support this
         KeysList.push_back(std::pair<std::string, std::string>("osBuffer","true"));
@@ -330,6 +335,8 @@ void CopyEngineFactory::resetOptions()
     ui->checkDiskSpace->setChecked(stringtobool(options->getOptionValue("checkDiskSpace")));
     ui->defaultDestinationFolder->setText(QString::fromStdString(options->getOptionValue("defaultDestinationFolder")));
     ui->buffer->setChecked(stringtobool(options->getOptionValue("buffer")));
+    ui->bufferOtherDevice->setValue(stringtouint32(options->getOptionValue("bufferOtherDevice")));
+    ui->bufferSameDevice->setValue(stringtouint32(options->getOptionValue("bufferSameDevice")));
 
     //ui->autoStart->setChecked(options->getOptionValue("autoStart").toBool());//moved from options(), wrong previous place
     std::string s;
@@ -615,6 +622,20 @@ void CopyEngineFactory::on_inodeThreads_editingFinished()
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"the spinbox have changed");
     if(optionsEngine!=NULL)
         optionsEngine->setOptionValue("inodeThreads",std::to_string(ui->inodeThreads->value()));
+}
+
+void CopyEngineFactory::on_bufferOtherDevice_editingFinished()
+{
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"the spinbox have changed");
+    if(optionsEngine!=NULL)
+        optionsEngine->setOptionValue("bufferOtherDevice",std::to_string(ui->bufferOtherDevice->value()));
+}
+
+void CopyEngineFactory::on_bufferSameDevice_editingFinished()
+{
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"the spinbox have changed");
+    if(optionsEngine!=NULL)
+        optionsEngine->setOptionValue("bufferSameDevice",std::to_string(ui->bufferSameDevice->value()));
 }
 
 #ifdef Q_OS_WIN32

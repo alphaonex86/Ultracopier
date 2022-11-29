@@ -992,12 +992,12 @@ Diese Version wurde kompiliert als Version: %1.</translation>
     </message>
     <message>
         <location filename="../../../HelpDialog.cpp" line="109"/>
-        <source>http://ultracopier.first-world.info/</source>
-        <translation>http://ultracopier-de.first-world.info/</translation>
+        <source>https://ultracopier.herman-brule.com/</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../../HelpDialog.cpp" line="115"/>
-        <source>http://ultracopier.first-world.info/#download</source>
+        <source>https://ultracopier.herman-brule.com/#download</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1810,8 +1810,8 @@ Error:%2</source>
     </message>
     <message>
         <location filename="../../../ProductKey.cpp" line="60"/>
-        <source>Your product key was rejected.&lt;br /&gt;If you buy key, unmark check your spam and unmark the mail as spam&lt;br /&gt;If you have not buy your key, go to &lt;a href=&quot;https://shop.first-world.info/&quot;&gt;https://shop.first-world.info/&lt;/a&gt;</source>
-        <translation>Ihr Produktschlüssel wurde verweigert. &lt;br /&gt; Wenn Sie einen Schlüssel gekauft haben, überprüfen Sie auch Ihren Spam-Ordner. &lt;br /&gt;Wenn Sie noch keinen Schlüssel erworben haben gehen Sie bitte auf &lt;a href=&quot;https://shop.first-world.info/&quot;&gt;https://shop.first-world.info/&lt;/a&gt;</translation>
+        <source>Your product key was rejected.&lt;br /&gt;If you buy key, unmark check your spam and unmark the mail as spam&lt;br /&gt;If you have not buy your key, go to &lt;a href=&quot;https://ultracopier.herman-brule.com/#ultimate&quot;&gt;https://ultracopier.herman-brule.com/#ultimate&lt;/a&gt;</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

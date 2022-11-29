@@ -1,0 +1,183 @@
+diff -Naur pcmanfm-qt/CMakeLists.txt pcmanfm-qt-ultracopier/CMakeLists.txt
+--- pcmanfm-qt/CMakeLists.txt	2022-11-06 21:08:10.828027485 -0400
++++ pcmanfm-qt-ultracopier/CMakeLists.txt	2022-11-06 18:53:52.117466012 -0400
+@@ -24,6 +24,7 @@
+ find_package(Qt5LinguistTools ${QT_MINIMUM_VERSION} REQUIRED)
+ find_package(Qt5Widgets ${QT_MINIMUM_VERSION} REQUIRED)
+ find_package(Qt5X11Extras ${QT_MINIMUM_VERSION} REQUIRED)
++find_package(Qt5Network "${QT_MINIMUM_VERSION}" REQUIRED)
+ find_package(fm-qt ${LIBFMQT_MINIMUM_VERSION} REQUIRED)
+ find_package(lxqt-build-tools ${LXQTBT_MINIMUM_VERSION} REQUIRED)
+ 
+diff -Naur pcmanfm-qt/pcmanfm/CMakeLists.txt pcmanfm-qt-ultracopier/pcmanfm/CMakeLists.txt
+--- pcmanfm-qt/pcmanfm/CMakeLists.txt	2022-11-06 21:08:10.832027550 -0400
++++ pcmanfm-qt-ultracopier/pcmanfm/CMakeLists.txt	2022-11-06 18:53:52.117466012 -0400
+@@ -91,6 +91,7 @@
+     Qt5::X11Extras
+     Qt5::Widgets
+     Qt5::DBus
++    Qt5::Network
+     fm-qt
+ )
+ 
+diff -Naur pcmanfm-qt/pcmanfm/desktopwindow.cpp pcmanfm-qt-ultracopier/pcmanfm/desktopwindow.cpp
+--- pcmanfm-qt/pcmanfm/desktopwindow.cpp	2022-11-06 21:08:10.836027614 -0400
++++ pcmanfm-qt-ultracopier/pcmanfm/desktopwindow.cpp	2022-11-06 18:55:21.307132083 -0400
+@@ -25,6 +25,7 @@
+ #include <QFile>
+ #include <QPixmap>
+ #include <QPalette>
++#include <QtNetwork/QlocalSocket>
+ 
+ #include <QLayout>
+ #include <QDebug>
+@@ -1591,11 +1592,73 @@
+     }
+ }
+ 
++void sendRawOrderList(const QStringList & order, QLocalSocket &socket, int idNextOrder)
++{
++    QByteArray block;
++    QDataStream out(&block, QIODevice::WriteOnly);
++    out.setVersion(QDataStream::Qt_4_4);
++    out << int(0);
++    out << idNextOrder;
++    out << order;
++    out.device()->seek(0);
++    out << block.size();
++    do //cut string list and send it as block of 32KB
++    {
++        QByteArray blockToSend;
++        int byteWriten;
++        blockToSend=block.left(32*1024);//32KB
++        block.remove(0,blockToSend.size());
++        byteWriten = socket.write(blockToSend);
++    }
++    while(block.size());
++}
++
+ void DesktopWindow::onPasteActivated() {
+     if(desktopHideItems_) {
+         return;
+     }
+-    Fm::pasteFilesFromClipboard(path());
++    QClipboard* clipboard = QApplication::clipboard();
++    const QMimeData* data = clipboard->mimeData();
++    Fm::FilePathList paths;
++    bool isCut = false;
++
++    std::tie(paths, isCut) = Fm::parseClipboardData(*data);
++
++    if(!paths.empty()) {
++        QLocalSocket socket;
++        socket.connectToServer(QString::fromStdString("advanced-copier-"+std::to_string(getuid())));
++        socket.waitForConnected();
++        if(socket.state()==QLocalSocket::ConnectedState)
++        {
++            sendRawOrderList(QStringList() << "protocol" << "0002", socket, 1);
++            socket.waitForReadyRead();
++            socket.readAll();
++            QStringList l;
++            if(isCut) {
++                l << "mv";
++                clipboard->clear(QClipboard::Clipboard);
++            }
++            else {
++                l << "cp";
++            }
++            for(const Fm::FilePath &n : paths)
++                l << n.toString().get();
++            l << path().toString().get();
++            sendRawOrderList(l, socket, 2);
++            socket.waitForBytesWritten();
++            socket.close();
++        }
++        else
++        {
++            if(isCut) {
++                Fm::FileOperation::moveFiles(paths, path(), nullptr);
++                clipboard->clear(QClipboard::Clipboard);
++            }
++            else {
++                Fm::FileOperation::copyFiles(paths, path(), nullptr);
++            }
++        }
++    }
+ }
+ 
+ void DesktopWindow::onDeleteActivated() {
+diff -Naur pcmanfm-qt/pcmanfm/mainwindow.cpp pcmanfm-qt-ultracopier/pcmanfm/mainwindow.cpp
+--- pcmanfm-qt/pcmanfm/mainwindow.cpp	2022-11-06 21:08:10.836027614 -0400
++++ pcmanfm-qt-ultracopier/pcmanfm/mainwindow.cpp	2022-11-06 20:46:37.962207513 -0400
+@@ -35,6 +35,7 @@
+ #include <QStandardPaths>
+ #include <QClipboard>
+ #include <QDebug>
++#include <QtNetwork/QLocalSocket>
+ 
+ #include "tabpage.h"
+ #include "launcher.h"
+@@ -1813,8 +1814,62 @@
+     cutFilesToClipboard(paths);
+ }
+ 
++void sendRawOrderListA(const QStringList & order, QLocalSocket &socket, int idNextOrder)
++{
++    QByteArray block;
++    QDataStream out(&block, QIODevice::WriteOnly);
++    out.setVersion(QDataStream::Qt_4_4);
++    out << int(0);
++    out << idNextOrder;
++    out << order;
++    out.device()->seek(0);
++    out << block.size();
++    do //cut string list and send it as block of 32KB
++    {
++        QByteArray blockToSend;
++        int byteWriten;
++        blockToSend=block.left(32*1024);//32KB
++        block.remove(0,blockToSend.size());
++        byteWriten = socket.write(blockToSend);
++    }
++    while(block.size());
++}
++
+ void MainWindow::on_actionPaste_triggered() {
+-    pasteFilesFromClipboard(currentPage()->path());
++    QClipboard* clipboard = QApplication::clipboard();
++    const QMimeData* data = clipboard->mimeData();
++    Fm::FilePathList paths;
++    bool isCut = false;
++
++    std::tie(paths, isCut) = parseClipboardData(*data);
++
++    if(!paths.empty()) {
++        QLocalSocket socket;
++        socket.connectToServer(QString::fromStdString("advanced-copier-"+std::to_string(getuid())));
++        socket.waitForConnected();
++        if(socket.state()==QLocalSocket::ConnectedState)
++        {
++            sendRawOrderListA(QStringList() << "protocol" << "0002", socket, 1);
++            socket.waitForReadyRead();
++            socket.readAll();
++            QStringList l;
++            if(isCut) {
++                l << "mv";
++                clipboard->clear(QClipboard::Clipboard);
++            }
++            else {
++                l << "cp";
++            }
++            for(const Fm::FilePath &n : paths)
++                l << n.toString().get();
++            l << currentPage()->path().toString().get();
++            sendRawOrderListA(l, socket, 2);
++            socket.waitForBytesWritten();
++            socket.close();
++        }
++        else
++            pasteFilesFromClipboard(currentPage()->path(), this);
++    }
+ }
+ 
+ void MainWindow::on_actionDelete_triggered() {

@@ -115,6 +115,8 @@ private slots:
     void followTheStrictOrder(bool checked);
     void moveTheWholeFolder(bool checked);
     void on_inodeThreads_editingFinished();
+    void on_bufferOtherDevice_editingFinished();
+    void on_bufferSameDevice_editingFinished();
     void setBuffer(bool checked);
     void setAutoStart(bool autoStart);
 public slots:

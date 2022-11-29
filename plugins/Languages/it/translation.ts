@@ -980,13 +980,12 @@ Versione compilata come: %1.</translation>
     </message>
     <message>
         <location filename="../../../HelpDialog.cpp" line="109"/>
-        <source>http://ultracopier.first-world.info/</source>
-        <translatorcomment>Questo dovrebbe essere il sito ufficiale di Ultracopier</translatorcomment>
-        <translation>http://ultracopier-it.first-world.info</translation>
+        <source>https://ultracopier.herman-brule.com/</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../../HelpDialog.cpp" line="115"/>
-        <source>http://ultracopier.first-world.info/#download</source>
+        <source>https://ultracopier.herman-brule.com/#download</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1800,8 +1799,8 @@ Errore: %2</translation>
     </message>
     <message>
         <location filename="../../../ProductKey.cpp" line="60"/>
-        <source>Your product key was rejected.&lt;br /&gt;If you buy key, unmark check your spam and unmark the mail as spam&lt;br /&gt;If you have not buy your key, go to &lt;a href=&quot;https://shop.first-world.info/&quot;&gt;https://shop.first-world.info/&lt;/a&gt;</source>
-        <translation>La vostra chiave del prodotto è stata rigettata.&lt;br /&gt;Se avete comprato la chiave controllare la cartella spam della vostra casella e-mail.&lt;br /&gt;Se non avete comprato la chiave, andate su &lt;a href=&quot;https://shop.first-world.info/&quot;&gt;https://shop.first-world.info/&lt;/a&gt;</translation>
+        <source>Your product key was rejected.&lt;br /&gt;If you buy key, unmark check your spam and unmark the mail as spam&lt;br /&gt;If you have not buy your key, go to &lt;a href=&quot;https://ultracopier.herman-brule.com/#ultimate&quot;&gt;https://ultracopier.herman-brule.com/#ultimate&lt;/a&gt;</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

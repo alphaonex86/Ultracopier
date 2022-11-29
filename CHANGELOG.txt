@@ -33,3 +33,5 @@
 2.2.6.0: Fix for debug repport save, big change into error management (should fix retry after error during the transfert), more comment to explain what is made, fix translate, fix for gcc 12
 2.2.6.1: Fix Windows packaging, fix download url, now only in English due to web site only in English
 2.2.6.2: Fix url for the new version
+2.2.6.3: Minor fix
+2.2.6.4: Fix buffer option
