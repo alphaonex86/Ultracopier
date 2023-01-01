@@ -66,7 +66,7 @@
 <context>
     <name>ThemesFactory</name>
     <message>
-        <location filename="../../ThemesFactory.cpp" line="+294"/>
+        <location filename="../../ThemesFactory.cpp" line="+295"/>
         <source>Don&apos;t close if errors are found</source>
         <translation type="unfinished">오류가 발견된 경우 닫지 않음</translation>
     </message>
