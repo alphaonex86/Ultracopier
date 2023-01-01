@@ -53,7 +53,8 @@ PluginInterface_Themes * ThemesFactory::getInstance()
         abort();
     if(!connect(newInterface,&Themes::destroyed,this,&ThemesFactory::savePositionBeforeClose))
         abort();
-    newInterface->move(
+    if(ui->savePosition->isChecked())
+        newInterface->move(
                 stringtouint32(optionsEngine->getOptionValue("savePositionX")),
                 stringtouint32(optionsEngine->getOptionValue("savePositionY"))
                 );
