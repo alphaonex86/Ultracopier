@@ -49,16 +49,16 @@
         <translation>اسم الملف ، 0KB</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="1395"/>
-        <location filename="../../interface.cpp" line="1407"/>
-        <location filename="../../interface.cpp" line="1419"/>
+        <location filename="../../interface.cpp" line="1396"/>
+        <location filename="../../interface.cpp" line="1408"/>
+        <location filename="../../interface.cpp" line="1420"/>
         <source>Select a color</source>
         <translation>تحديد لون</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="1494"/>
-        <location filename="../../interface.cpp" line="1498"/>
-        <location filename="../../interface.cpp" line="1500"/>
+        <location filename="../../interface.cpp" line="1495"/>
+        <location filename="../../interface.cpp" line="1499"/>
+        <location filename="../../interface.cpp" line="1501"/>
         <source>%1 %2% of %3</source>
         <translation>%1 %2% من %3</translation>
     </message>

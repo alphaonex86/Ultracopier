@@ -1481,7 +1481,8 @@ void Themes::dropEvent(QDropEvent *event)
         unsigned int index=0;
         foreach (QUrl url, mimeData->urls())
         {
-            const std::string &urlString=url.toString().toStdString();
+            //const std::string &urlString=url.path(QUrl::FullyDecoded).toStdString();->genera crash in windows 32Bits after successfull copy
+            const std::string &urlString=QUrl::fromPercentEncoding(url.toString().toUtf8()).toStdString();
             if(index<99)
                 ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,urlString);
             urls.push_back(urlString);

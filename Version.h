@@ -2,8 +2,8 @@
 #define VERSIONUC_H
 
 /// \brief the version
-#define ULTRACOPIER_VERSION		"2.2.6.5"
+#define ULTRACOPIER_VERSION		"2.2.6.6"
 /// \brief the windows version
-#define ULTRACOPIER_WINDOWS_VERSION	2,2,6,5
+#define ULTRACOPIER_WINDOWS_VERSION	2,2,6,6
 
 #endif // VARIABLE_H
