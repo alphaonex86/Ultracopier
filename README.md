@@ -15,7 +15,6 @@ Main features include:
 # Dependency
 - make
 - gcc
-- qt5-default
 - qtmultimedia5-dev
 - libogg-dev 
 - libopus-dev
@@ -24,7 +23,7 @@ Main features include:
 For example on Debian based distros:
 
 ```bash
-sudo apt install make gcc qt5-default qtmultimedia5-dev libogg-dev libopus-dev libgl1-mesa-dev
+sudo apt install make gcc qtmultimedia5-dev libogg-dev libopus-dev libgl1-mesa-dev
 ```
 
 # Building

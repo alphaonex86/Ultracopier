@@ -81,16 +81,16 @@
         <translation>Dateiname, 0KB</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="1549"/>
-        <location filename="../../interface.cpp" line="1561"/>
-        <location filename="../../interface.cpp" line="1573"/>
+        <location filename="../../interface.cpp" line="1550"/>
+        <location filename="../../interface.cpp" line="1562"/>
+        <location filename="../../interface.cpp" line="1574"/>
         <source>Select a color</source>
         <translation>Farbe auswählen</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="1661"/>
-        <location filename="../../interface.cpp" line="1672"/>
-        <location filename="../../interface.cpp" line="1681"/>
+        <location filename="../../interface.cpp" line="1662"/>
+        <location filename="../../interface.cpp" line="1673"/>
+        <location filename="../../interface.cpp" line="1682"/>
         <source>%1 %2% of %3 into %4 files</source>
         <translation>%1 %2 von %3 in %4 Dateien</translation>
     </message>

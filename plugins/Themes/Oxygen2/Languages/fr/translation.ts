@@ -81,7 +81,7 @@
         <translation>Nom de fichier, 0Ko</translation>
     </message>
     <message>
-        <location line="+210"/>
+        <location line="+211"/>
         <location line="+12"/>
         <location line="+12"/>
         <source>Select a color</source>
