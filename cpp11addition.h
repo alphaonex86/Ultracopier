@@ -7,6 +7,7 @@
 #include <regex>
 #include <unordered_map>
 #include <unordered_set>
+#include <cstdint>
 
 #if ! defined(Q_LIKELY)
     #if defined(__GNUC__)
