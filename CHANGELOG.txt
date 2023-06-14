@@ -37,3 +37,4 @@
 2.2.6.4: Fix buffer option
 2.2.6.5: Fix window start at 0,0
 2.2.6.6: Fix drag and drop url
+2.2.6.7: Fix for gcc 13
