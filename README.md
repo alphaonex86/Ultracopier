@@ -23,7 +23,7 @@ Main features include:
 For example on Debian based distros:
 
 ```bash
-sudo apt install make gcc qtmultimedia5-dev libogg-dev libopus-dev libgl1-mesa-dev
+sudo apt install make gcc qtmultimedia5-dev libogg-dev libopus-dev libgl1-mesa-dev build-essential libssl-dev qtbase5-dev qtchooser qt5-qmake qtbase5-dev-tools gcc-multilib qttools5-dev-tools
 ```
 
 # Building

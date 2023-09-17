@@ -312,6 +312,7 @@ HEADERS += $$PWD/../ResourcesManager.h \
     $$PWD/../interface/PluginInterface_CopyEngine.h \
     $$PWD/../interface/OptionInterface.h \
     $$PWD/../Version.h \
+    $$PWD/../Variable.h \
     $$PWD/../PluginLoaderCore.h \
     $$PWD/../interface/PluginInterface_PluginLoader.h \
     $$PWD/../OptionDialog.h \
@@ -373,4 +374,3 @@ win32: {
 DEFINES += WIDESTRING
 QT += winextras
 }
-DEFINES += WIDESTRING

@@ -133,7 +133,7 @@ void CopyEngine::connectTheSignalsSlots()
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to connect syncReady()");
     if(!connect(listThread,&ListThread::canBeDeleted,						this,&CopyEngine::canBeDeleted,					Qt::QueuedConnection))
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to connect canBeDeleted()");
-    #ifdef ULTRACOPIER_PLUGIN_DEBUG_WINDOW
+    #ifdef ULTRACOPIER_PLUGIN_DEBUG
     if(!connect(listThread,&ListThread::debugInformation,			this,&CopyEngine::debugInformation,		Qt::QueuedConnection))
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to connect debugInformation()");
     #endif
