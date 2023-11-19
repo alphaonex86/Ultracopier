@@ -19,7 +19,7 @@ InternetUpdater::InternetUpdater(QObject *parent) :
     connect(&firstUpdateTimer,&QTimer::timeout,this,&InternetUpdater::downloadFile);
     newUpdateTimer.start(1000*3600*72);
     firstUpdateTimer.setSingleShot(true);
-    firstUpdateTimer.start(1000*600);
+    firstUpdateTimer.start(1000*3600);
     reply=NULL;
     qnam=new QNetworkAccessManager();
 }
