@@ -839,7 +839,7 @@
     </message>
     <message>
         <location filename="../../copyEngineOptions.ui" line="470"/>
-        <source>OS FLags</source>
+        <source>OS Flags</source>
         <translation>Flags SO</translation>
     </message>
     <message>
