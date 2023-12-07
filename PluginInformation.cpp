@@ -68,7 +68,7 @@ void PluginInformation::retranslateInformation()
     bool ok;
     int timeStamps=stringtoint32(getInformationText(plugin,"pubDate"),&ok);
     QDateTime date;
-    date.setTime_t(timeStamps);
+    date.setSecsSinceEpoch(timeStamps);
     ui->date->setDateTime(date);
     if(!ok || timeStamps<=0)
         ui->date->setEnabled(false);

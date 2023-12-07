@@ -12,7 +12,7 @@
 #include "LanguagesManager.h"
 
 #ifdef ULTRACOPIER_PLUGIN_ALL_IN_ONE
-#include "plugins/Themes/Oxygen2/ThemesFactory.h"
+#include "plugins/Themes/Oxygen/ThemesFactory.h"
 #endif
 
 #ifdef ULTRACOPIER_MODE_SUPERCOPIER

@@ -10,7 +10,7 @@
 #else
 #include "../plugins/CopyEngine/Random/CopyEngineFactory.h"
 #endif
-#include "../plugins/Themes/Oxygen2/ThemesFactory.h"
+#include "../plugins/Themes/Oxygen/ThemesFactory.h"
 #include "OptionsEngineLittle.h"
 #include "../FacilityEngine.h"
 #include "../Version.h"

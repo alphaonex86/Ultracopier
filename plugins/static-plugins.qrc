@@ -2,6 +2,6 @@
     <qresource prefix="/">
         <file>CopyEngine/Ultracopier-Spec/informations.xml</file>
         <file>Listener/catchcopy-v0002/informations.xml</file>
-        <file>Themes/Oxygen2/informations.xml</file>
+        <file>Themes/Oxygen/informations.xml</file>
     </qresource>
 </RCC>

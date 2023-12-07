@@ -1882,7 +1882,9 @@ void Themes::resizeEvent(QResizeEvent*)
     }
     else
     {
+        #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
         ui->horizontalLayoutS->setMargin(6);
+        #endif
         ui->horizontalLayoutS->setSpacing(6);
     }
 }

@@ -17,6 +17,7 @@
 #include "opusfile/opusfile.h"
 #include <QAudioOutput>
 #include <QCoreApplication>
+#include <QAudioFormat>
 #endif
 
 FacilityEngine FacilityEngine::facilityEngine;
@@ -282,6 +283,7 @@ void *FacilityEngine::prepareOpusAudio(const std::string &file,QBuffer &buffer) 
     QAudioFormat format;
     format.setSampleRate(48000);
     format.setChannelCount(2);
+    #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     format.setSampleSize(16);
     format.setCodec("audio/pcm");
     format.setByteOrder(QAudioFormat::LittleEndian);
@@ -292,6 +294,7 @@ void *FacilityEngine::prepareOpusAudio(const std::string &file,QBuffer &buffer) 
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"raw audio format not supported by backend, cannot play audio.");
         return nullptr;
     }
+    #endif
     audio = new QAudioOutput(format);
     buffer.open(QBuffer::ReadWrite);
 

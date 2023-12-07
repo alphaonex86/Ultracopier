@@ -85,6 +85,7 @@ void DarkButton::paintEvent(QPaintEvent * event)
     QPushButton::paintEvent(event);
 }
 
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 void DarkButton::enterEvent(QEvent *e)
 {
     over=true;
@@ -97,3 +98,4 @@ void DarkButton::leaveEvent(QEvent *e)
     QWidget::leaveEvent(e);
     update();
 }
+#endif

@@ -232,6 +232,7 @@ void RadialMap::Widget::mouseMoveEvent(QMouseEvent *e)
     }
 }
 
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 void RadialMap::Widget::enterEvent(QEvent *)
 {
     if (!m_focus) return;
@@ -245,6 +246,7 @@ void RadialMap::Widget::leaveEvent(QEvent *)
 {
     m_tooltip.hide();
 }
+#endif
 
 void RadialMap::Widget::changeEvent(QEvent *e)
 {

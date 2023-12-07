@@ -83,9 +83,10 @@ protected:
     void mouseMoveEvent(QMouseEvent*) override;
     void paintEvent(QPaintEvent*) override;
     void resizeEvent(QResizeEvent*) override;
+    #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     void enterEvent(QEvent*) override;
     void leaveEvent(QEvent*) override;
-
+    #endif
 protected:
     const Segment *segmentAt(QPoint&) const; //FIXME const reference for a library others can use
     const Segment *rootSegment() const {

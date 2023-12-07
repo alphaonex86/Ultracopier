@@ -43,7 +43,9 @@ void ChartArea::Widget::paintEvent(QPaintEvent*)
     painter.drawRect(0,0,width()-1,height()-1);
     painter.setRenderHint(QPainter::Antialiasing,true);
     painter.setRenderHint(QPainter::SmoothPixmapTransform,true);
+    #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     painter.setRenderHint(QPainter::HighQualityAntialiasing,true);
+    #endif
 
     while(m_values.size()<64)
         m_values.insert(m_values.begin(),0);

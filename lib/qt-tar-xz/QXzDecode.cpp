@@ -123,8 +123,13 @@ bool QXzDecode::decode()
     if(data.size() < 32) // check the minimal size
         error=tr("The input data is too short");
     QByteArray outputData;
+    #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     QDataStream stream_xz_decode_in(&data,QIODevice::ReadOnly);
     QDataStream stream_xz_decode_out(&outputData,QIODevice::WriteOnly);
+    #else
+    QDataStream stream_xz_decode_in(&data,QDataStream::ReadOnly);
+    QDataStream stream_xz_decode_out(&outputData,QDataStream::WriteOnly);
+    #endif
     int returnVal=decodeStream(&stream_xz_decode_in,&stream_xz_decode_out);
     data=outputData;
     return returnVal;

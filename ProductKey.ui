@@ -14,8 +14,8 @@
    <string>Product key</string>
   </property>
   <property name="windowIcon">
-   <iconset resource="plugins/Themes/Oxygen2/interfaceResources_unix.qrc">
-    <normaloff>:/Themes/Oxygen2/resources/SystemTrayIcon/systray_Caught_Unix.png</normaloff>:/Themes/Oxygen2/resources/SystemTrayIcon/systray_Caught_Unix.png</iconset>
+   <iconset resource="plugins/Themes/Oxygen/interfaceResources_unix.qrc">
+    <normaloff>:/Themes/Oxygen/resources/SystemTrayIcon/systray_Caught_Unix.png</normaloff>:/Themes/Oxygen/resources/SystemTrayIcon/systray_Caught_Unix.png</iconset>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
@@ -35,7 +35,7 @@
   </layout>
  </widget>
  <resources>
-  <include location="plugins/Themes/Oxygen2/interfaceResources_unix.qrc"/>
+  <include location="plugins/Themes/Oxygen/interfaceResources_unix.qrc"/>
  </resources>
  <connections/>
 </ui>

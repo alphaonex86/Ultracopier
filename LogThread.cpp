@@ -194,9 +194,11 @@ void LogThread::error(const std::string &path,const uint64_t &size,const uint64_
     //Variable is %path%, %size%, %mtime%, %error%
     stringreplaceAll(text,LogThread::text_var_path,path);
     stringreplaceAll(text,LogThread::text_var_size,std::to_string(size));
-    stringreplaceAll(text,LogThread::text_var_mtime,QDateTime::fromTime_t(static_cast<unsigned int>(mtime)).toString(Qt::ISODate).toStdString());
+    QDateTime t;
+    t.setSecsSinceEpoch(static_cast<unsigned int>(mtime));
+    stringreplaceAll(text,LogThread::text_var_mtime,t.toString(Qt::ISODate).toStdString());
     stringreplaceAll(text,LogThread::text_var_error,error);
-    stringreplaceAll(text,LogThread::text_var_time,QDateTime::fromTime_t(static_cast<unsigned int>(mtime)).toString(QString::fromStdString(LogThread::text_var_timestring)).toStdString());
+    stringreplaceAll(text,LogThread::text_var_time,t.toString(QString::fromStdString(LogThread::text_var_timestring)).toStdString());
     emit newData(text);
 }
 

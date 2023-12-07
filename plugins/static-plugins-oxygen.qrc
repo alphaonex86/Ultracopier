@@ -1,5 +1,5 @@
 <RCC>
     <qresource prefix="/">
-        <file>Themes/Oxygen2/informations.xml</file>
+        <file>Themes/Oxygen/informations.xml</file>
     </qresource>
 </RCC>
