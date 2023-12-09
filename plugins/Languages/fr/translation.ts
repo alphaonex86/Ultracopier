@@ -2349,7 +2349,7 @@ Erreur:%2</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/copyEngineOptions.ui" line="470"/>
-        <source>OS FLags</source>
+        <source>OS Flags</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

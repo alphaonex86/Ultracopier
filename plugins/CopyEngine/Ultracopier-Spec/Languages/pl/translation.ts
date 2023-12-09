@@ -836,7 +836,7 @@
     </message>
     <message>
         <location filename="../../copyEngineOptions.ui" line="470"/>
-        <source>OS FLags</source>
+        <source>OS Flags</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
