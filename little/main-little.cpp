@@ -15,13 +15,14 @@
 #include "../FacilityEngine.h"
 #include "../Version.h"
 #include <iostream>
+#include <QElapsedTimer>
 
 Themes * interface=NULL;
 CopyEngine * engine=NULL;
 uint64_t lastProgression=0;
 uint64_t currentProgression=0;
 uint64_t totalProgression=0;//store the file byte transfered, used into the remaining time
-QTime lastProgressionTime;
+QElapsedTimer lastProgressionTime;
 QTimer forUpateInformation;///< used to call \see periodicSynchronization()
 
 /** for RemainingTimeAlgo_Traditional **/
@@ -186,7 +187,7 @@ void periodicSynchronization()
             interface->remainingTime(transferAddedTime*((double)totalProgression/(double)currentProgression-1)/1000);*/
 
         //do the speed calculation
-        if(lastProgressionTime.isNull())
+        if(!lastProgressionTime.isValid())
             lastProgressionTime.start();
         else
         {

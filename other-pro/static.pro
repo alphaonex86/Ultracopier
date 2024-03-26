@@ -3,7 +3,7 @@ DEFINES += ULTRACOPIER_PLUGIN_ALL_IN_ONE
 include(ultracopier-core.pro)
 
 RESOURCES += $$PWD/../plugins/static-plugins.qrc \
-    $$PWD/../plugins/CopyEngine/Ultracopier/copyEngineResources.qrc
+    $$PWD/../plugins/CopyEngine/Ultracopier-Spec/copyEngineResources.qrc
 
 win32:RESOURCES += $$PWD/../plugins/static-plugins-windows.qrc
 

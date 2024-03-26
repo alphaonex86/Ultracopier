@@ -1,6 +1,7 @@
+CONFIG += c++17
 wasm: DEFINES += NOAUDIO
 android: DEFINES += NOAUDIO
-#DEFINES += NOAUDIO
+DEFINES += NOAUDIO
 !contains(DEFINES, NOAUDIO) {
 QT += multimedia
 SOURCES += \
