@@ -60,6 +60,7 @@ private:
     bool                    os_spec_flags;
     bool                    native_copy;
     bool                    followTheStrictOrder;
+    bool                    ignoreBlackList;
     bool                    deletePartiallyTransferredFiles;
     int                     inodeThreads;
     bool                    renameTheOriginalDestination;
@@ -283,6 +284,7 @@ public slots:
 
     void setMoveTheWholeFolder(const bool &moveTheWholeFolder);
     void setFollowTheStrictOrder(const bool &followTheStrictOrder);
+    void setignoreBlackList(const bool &ignoreBlackList);
     void setDeletePartiallyTransferredFiles(const bool &deletePartiallyTransferredFiles);
     void setInodeThreads(const int &inodeThreads);
     void setRenameTheOriginalDestination(const bool &renameTheOriginalDestination);
@@ -347,6 +349,7 @@ signals:
     void send_setFilters(const std::vector<Filters_rules> &include,const std::vector<Filters_rules> &exclude) const;
     void send_sendNewRenamingRules(std::string firstRenamingRule,std::string otherRenamingRule) const;
     void send_followTheStrictOrder(const bool &followTheStrictOrder) const;
+    void send_ignoreBlackList(const bool &ignoreBlackList) const;
     void send_deletePartiallyTransferredFiles(const bool &deletePartiallyTransferredFiles) const;
     void send_setInodeThreads(const int &inodeThreads) const;
     void send_moveTheWholeFolder(const bool &moveTheWholeFolder) const;

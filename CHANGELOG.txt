@@ -40,4 +40,4 @@
 2.2.6.7: Fix for gcc 13
 2.2.6.8: Disable WIDESTRING for non Windows, fix debug code mesage event (don't work without debug window)
 2.2.6.9: Change first update detection from 10min to 1h
-2.2.7.0: Compatible with c++17, start porting to Qt6
+2.2.7.0: Compatible with c++17, start porting to Qt6, option to disable blacklist

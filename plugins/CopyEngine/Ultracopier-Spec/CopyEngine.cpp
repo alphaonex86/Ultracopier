@@ -33,6 +33,7 @@ CopyEngine::CopyEngine(FacilityInterface * facilityEngine) :
     doRightTransfer(false),
     keepDate(false),
     followTheStrictOrder(false),
+    ignoreBlackList(false),
     deletePartiallyTransferredFiles(false),
     inodeThreads(0),
     renameTheOriginalDestination(false),
@@ -75,6 +76,7 @@ CopyEngine::CopyEngine(FacilityInterface * facilityEngine) :
     putAtBottom                     = 0;
     forcedMode                      = false;
     followTheStrictOrder            = false;
+    ignoreBlackList                 = false;
     deletePartiallyTransferredFiles = true;
     inodeThreads                    = 16;
     moveTheWholeFolder              = true;
@@ -207,6 +209,8 @@ void CopyEngine::connectTheSignalsSlots()
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to connect setInodeThreads()");
     if(!connect(this,&CopyEngine::send_followTheStrictOrder,					listThread,&ListThread::setFollowTheStrictOrder,		Qt::QueuedConnection))
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to connect followTheStrictOrder()");
+    if(!connect(this,&CopyEngine::send_ignoreBlackList,					listThread,&ListThread::setignoreBlackList,		Qt::QueuedConnection))
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to connect ignoreBlackList()");
     if(!connect(this,&CopyEngine::send_setFilters,listThread,&ListThread::set_setFilters,		Qt::QueuedConnection))
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to connect send_setFilters()");
     if(!connect(this,&CopyEngine::send_sendNewRenamingRules,listThread,&ListThread::set_sendNewRenamingRules,		Qt::QueuedConnection))
@@ -262,6 +266,7 @@ bool CopyEngine::getOptionsEngine(QWidget * tempWidget)
     setOsSpecFlags(os_spec_flags);
     setNativeCopy(native_copy);
     setFollowTheStrictOrder(followTheStrictOrder);
+    setignoreBlackList(ignoreBlackList);
     setDeletePartiallyTransferredFiles(deletePartiallyTransferredFiles);
     setInodeThreads(inodeThreads);
     setRenameTheOriginalDestination(renameTheOriginalDestination);
@@ -373,6 +378,7 @@ void CopyEngine::setInterfacePointer(QWidget * uiinterface)
         connect(ui->moveTheWholeFolder,                 &QCheckBox::toggled,		this,&CopyEngine::setMoveTheWholeFolder);
         connect(ui->deletePartiallyTransferredFiles,    &QCheckBox::toggled,		this,&CopyEngine::setDeletePartiallyTransferredFiles);
         connect(ui->followTheStrictOrder,               &QCheckBox::toggled,        this,&CopyEngine::setFollowTheStrictOrder);
+        connect(ui->ignoreBlackList,                    &QCheckBox::toggled,        this,&CopyEngine::setignoreBlackList);
         connect(ui->checkBoxDestinationFolderExists,	&QCheckBox::toggled,        this,&CopyEngine::setCheckDestinationFolderExists);
         connect(ui->mkpath,                             &QCheckBox::toggled,        this,&CopyEngine::setMkFullPath);
         connect(ui->checksum,                           &QCheckBox::toggled,        this,&CopyEngine::setChecksum);
@@ -904,6 +910,15 @@ void CopyEngine::setFollowTheStrictOrder(const bool &followTheStrictOrder)
         ui->followTheStrictOrder->setChecked(followTheStrictOrder);
     listThread->setFollowTheStrictOrder(followTheStrictOrder);
     emit send_followTheStrictOrder(followTheStrictOrder);
+}
+
+void CopyEngine::setignoreBlackList(const bool &ignoreBlackList)
+{
+    this->ignoreBlackList=ignoreBlackList;
+    if(uiIsInstalled)
+        ui->ignoreBlackList->setChecked(ignoreBlackList);
+    listThread->setignoreBlackList(ignoreBlackList);
+    emit send_ignoreBlackList(ignoreBlackList);
 }
 
 void CopyEngine::setDeletePartiallyTransferredFiles(const bool &deletePartiallyTransferredFiles)

@@ -294,3 +294,10 @@ void ListThread::setFollowTheStrictOrder(const bool &order)
         scanFileOrFolderThreadsPool.at(i)->setFollowTheStrictOrder(this->followTheStrictOrder);
 }
 
+void ListThread::setignoreBlackList(const bool &ignoreBlackList)
+{
+    this->ignoreBlackList=ignoreBlackList;
+    for(unsigned int i=0;i<scanFileOrFolderThreadsPool.size();i++)
+        scanFileOrFolderThreadsPool.at(i)->setignoreBlackList(ignoreBlackList);
+}
+

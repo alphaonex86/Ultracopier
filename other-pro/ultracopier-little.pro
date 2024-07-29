@@ -298,7 +298,6 @@ HEADERS += \
     ../plugins/CopyEngine/Ultracopier-Spec/async/ReadThread.h \
     ../plugins/CopyEngine/Ultracopier-Spec/async/WriteThread.h
 
-ANDROID_PACKAGE_SOURCE_DIR = $$PWD/../android-sources
+#ANDROID_PACKAGE_SOURCE_DIR = $$PWD/../android-sources
 
-DISTFILES += \
-    ../android-sources/AndroidManifest.xml
+#DISTFILES += ../android-sources/AndroidManifest.xml

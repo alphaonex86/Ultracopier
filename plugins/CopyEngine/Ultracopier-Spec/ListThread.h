@@ -201,6 +201,7 @@ public slots:
 
     void setMoveTheWholeFolder(const bool &moveTheWholeFolder);
     void setFollowTheStrictOrder(const bool &followTheStrictOrder);
+    void setignoreBlackList(const bool &ignoreBlackList);
     void setDeletePartiallyTransferredFiles(const bool &deletePartiallyTransferredFiles);
     void setInodeThreads(const int &inodeThreads);
     void setRenameTheOriginalDestination(const bool &renameTheOriginalDestination);
@@ -245,6 +246,7 @@ private:
     bool                checkDiskSpace;
     bool                buffer;
     bool                followTheStrictOrder;
+    bool                ignoreBlackList;
     std::unordered_set<TransferThreadAsync *> putAtBottomAfterError;
     std::unordered_map<std::string,uint64_t> requiredSpace;
     std::vector<std::pair<uint64_t,uint32_t> > timeToTransfer;

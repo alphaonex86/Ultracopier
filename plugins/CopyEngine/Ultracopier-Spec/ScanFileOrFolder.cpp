@@ -34,7 +34,8 @@ ScanFileOrFolder::ScanFileOrFolder(const Ultracopier::CopyMode &mode) :
     #endif
     mode(Ultracopier::CopyMode::Copy),
     reloadTheNewFilters(false),
-    haveFilters(false)
+    haveFilters(false),
+    ignoreBlackList(false)
 {
     #ifdef ULTRACOPIER_PLUGIN_RSYNC
     rsync               = false;
@@ -384,6 +385,8 @@ INTERNALTYPEPATH ScanFileOrFolder::resolvDestination(const INTERNALTYPEPATH &des
 
 bool ScanFileOrFolder::isBlackListed(const INTERNALTYPEPATH &path)
 {
+    if(ignoreBlackList)
+        return false;
     int index=0;
     int size=blackList.size();
     INTERNALTYPEPATH path2=path;
@@ -964,6 +967,11 @@ void ScanFileOrFolder::setMoveTheWholeFolder(const bool &moveTheWholeFolder)
 void ScanFileOrFolder::setFollowTheStrictOrder(const bool &order)
 {
     this->copyListOrder=order;
+}
+
+void ScanFileOrFolder::setignoreBlackList(const bool &ignoreBlackList)
+{
+    this->ignoreBlackList=ignoreBlackList;
 }
 
 #ifdef ULTRACOPIER_PLUGIN_RSYNC

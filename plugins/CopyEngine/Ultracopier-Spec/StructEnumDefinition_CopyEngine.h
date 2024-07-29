@@ -5,6 +5,7 @@
 
 #include <string>
 #include <regex>
+#include <cstdint>
 
 #ifndef STRUCTDEF_COPYENGINE_H
 #define STRUCTDEF_COPYENGINE_H

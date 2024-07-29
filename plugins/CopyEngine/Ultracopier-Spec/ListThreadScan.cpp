@@ -55,6 +55,7 @@ ScanFileOrFolder * ListThread::newScanThread(Ultracopier::CopyMode mode)
         updateTheStatus();
     scanFileOrFolderThreads->setRenamingRules(firstRenamingRule,otherRenamingRule);
     scanFileOrFolderThreads->setFollowTheStrictOrder(followTheStrictOrder);
+    scanFileOrFolderThreads->setignoreBlackList(ignoreBlackList);
     return scanFileOrFolderThreads;
 }
 

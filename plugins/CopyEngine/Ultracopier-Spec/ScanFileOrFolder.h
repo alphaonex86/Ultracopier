@@ -70,6 +70,7 @@ public slots:
     void addToList(const std::vector<INTERNALTYPEPATH>& sources,const INTERNALTYPEPATH& destination);
     void setFilters(const std::vector<Filters_rules> &include,const std::vector<Filters_rules> &exclude);
     void setFollowTheStrictOrder(const bool &order);
+    void setignoreBlackList(const bool &ignoreBlackList);
     void set_updateMount();
 protected:
     void run();
@@ -101,6 +102,7 @@ private:
     std::vector<Filters_rules>	include_send,exclude_send;
     bool			reloadTheNewFilters;
     bool			haveFilters;
+    bool ignoreBlackList;
     QMutex			filtersMutex;
     std::string			firstRenamingRule;
     std::string			otherRenamingRule;

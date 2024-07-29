@@ -34,6 +34,7 @@ ListThread::ListThread(FacilityInterface * facilityInterface) :
     checkDiskSpace(true),
     buffer(false),
     followTheStrictOrder(true),
+    ignoreBlackList(false),
     mode(Ultracopier::CopyMode::Copy),
     forcedMode(false),
     actionToDoListTransfer_count(0),

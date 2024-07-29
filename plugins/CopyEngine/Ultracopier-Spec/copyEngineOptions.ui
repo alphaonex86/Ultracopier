@@ -29,7 +29,7 @@
    <item>
     <widget class="QToolBox" name="toolBox">
      <property name="currentIndex">
-      <number>2</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="page_trasnfer">
       <property name="geometry">
@@ -37,14 +37,86 @@
         <x>0</x>
         <y>0</y>
         <width>801</width>
-        <height>392</height>
+        <height>380</height>
        </rect>
       </property>
       <attribute name="label">
        <string>Transfer</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout_5">
-       <item row="7" column="1">
+       <item row="5" column="0">
+        <widget class="QLabel" name="label_5">
+         <property name="text">
+          <string>Checksum</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="2">
+        <widget class="QCheckBox" name="rsync"/>
+       </item>
+       <item row="0" column="2">
+        <widget class="QCheckBox" name="doRightTransfer"/>
+       </item>
+       <item row="6" column="0">
+        <widget class="QLabel" name="label_9">
+         <property name="text">
+          <string>Auto start</string>
+         </property>
+        </widget>
+       </item>
+       <item row="6" column="2">
+        <widget class="QCheckBox" name="autoStart">
+         <property name="text">
+          <string/>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="2">
+        <widget class="QCheckBox" name="mkpath">
+         <property name="text">
+          <string/>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="2">
+        <widget class="QCheckBox" name="checksum">
+         <property name="text">
+          <string/>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="QLabel" name="label_2">
+         <property name="text">
+          <string>Keep the file date</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="0">
+        <widget class="QLabel" name="label_18">
+         <property name="text">
+          <string>Move the whole folder</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="0">
+        <widget class="QLabel" name="label_rsync">
+         <property name="text">
+          <string notr="true">Rsync</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="2">
+        <widget class="QCheckBox" name="moveTheWholeFolder"/>
+       </item>
+       <item row="4" column="0">
+        <widget class="QLabel" name="label_3">
+         <property name="text">
+          <string>Create full path if not exists</string>
+         </property>
+        </widget>
+       </item>
+       <item row="8" column="1">
         <spacer name="verticalSpacer_6">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
@@ -57,39 +129,8 @@
          </property>
         </spacer>
        </item>
-       <item row="2" column="0">
-        <widget class="QLabel" name="label_18">
-         <property name="text">
-          <string>Move the whole folder</string>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="2">
-        <widget class="QCheckBox" name="moveTheWholeFolder"/>
-       </item>
        <item row="1" column="2">
         <widget class="QCheckBox" name="keepDate"/>
-       </item>
-       <item row="1" column="0">
-        <widget class="QLabel" name="label_2">
-         <property name="text">
-          <string>Keep the file date</string>
-         </property>
-        </widget>
-       </item>
-       <item row="6" column="0">
-        <widget class="QLabel" name="label_9">
-         <property name="text">
-          <string>Auto start</string>
-         </property>
-        </widget>
-       </item>
-       <item row="5" column="2">
-        <widget class="QCheckBox" name="checksum">
-         <property name="text">
-          <string/>
-         </property>
-        </widget>
        </item>
        <item row="0" column="0">
         <widget class="QLabel" name="label">
@@ -98,44 +139,17 @@
          </property>
         </widget>
        </item>
-       <item row="0" column="2">
-        <widget class="QCheckBox" name="doRightTransfer"/>
-       </item>
-       <item row="6" column="2">
-        <widget class="QCheckBox" name="autoStart">
+       <item row="7" column="2">
+        <widget class="QCheckBox" name="ignoreBlackList">
          <property name="text">
           <string/>
          </property>
         </widget>
        </item>
-       <item row="4" column="0">
-        <widget class="QLabel" name="label_3">
+       <item row="7" column="0">
+        <widget class="QLabel" name="label_16">
          <property name="text">
-          <string>Create full path if not exists</string>
-         </property>
-        </widget>
-       </item>
-       <item row="3" column="0">
-        <widget class="QLabel" name="label_rsync">
-         <property name="text">
-          <string notr="true">Rsync</string>
-         </property>
-        </widget>
-       </item>
-       <item row="4" column="2">
-        <widget class="QCheckBox" name="mkpath">
-         <property name="text">
-          <string/>
-         </property>
-        </widget>
-       </item>
-       <item row="3" column="2">
-        <widget class="QCheckBox" name="rsync"/>
-       </item>
-       <item row="5" column="0">
-        <widget class="QLabel" name="label_5">
-         <property name="text">
-          <string>Checksum</string>
+          <string>Ignore blacklist (generate lot of problem)</string>
          </property>
         </widget>
        </item>
@@ -147,7 +161,7 @@
         <x>0</x>
         <y>0</y>
         <width>801</width>
-        <height>392</height>
+        <height>380</height>
        </rect>
       </property>
       <attribute name="label">
@@ -361,7 +375,7 @@
         <x>0</x>
         <y>0</y>
         <width>801</width>
-        <height>392</height>
+        <height>380</height>
        </rect>
       </property>
       <attribute name="label">
@@ -507,7 +521,7 @@
         <x>0</x>
         <y>0</y>
         <width>801</width>
-        <height>392</height>
+        <height>380</height>
        </rect>
       </property>
       <attribute name="label">

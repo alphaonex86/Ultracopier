@@ -75,6 +75,7 @@ CopyEngineFactory::CopyEngineFactory() :
     connect(ui->inodeThreads,               &QSpinBox::editingFinished,         this,&CopyEngineFactory::on_inodeThreads_editingFinished);
     connect(ui->moveTheWholeFolder,         &QCheckBox::toggled,                this,&CopyEngineFactory::moveTheWholeFolder);
     connect(ui->followTheStrictOrder,       &QCheckBox::toggled,                this,&CopyEngineFactory::followTheStrictOrder);
+    connect(ui->ignoreBlackList,       &QCheckBox::toggled,                     this,&CopyEngineFactory::ignoreBlackList);
     connect(ui->deletePartiallyTransferredFiles,&QCheckBox::toggled,            this,&CopyEngineFactory::deletePartiallyTransferredFiles);
     connect(ui->renameTheOriginalDestination,&QCheckBox::toggled,               this,&CopyEngineFactory::renameTheOriginalDestination);
     connect(ui->checkDiskSpace,             &QCheckBox::toggled,                this,&CopyEngineFactory::checkDiskSpace);
@@ -135,6 +136,7 @@ PluginInterface_CopyEngine * CopyEngineFactory::getInstance()
     realObject->setRenamingRules(firstRenamingRule,otherRenamingRule);
     realObject->setMoveTheWholeFolder(ui->moveTheWholeFolder->isChecked());
     realObject->setFollowTheStrictOrder(ui->followTheStrictOrder->isChecked());
+    realObject->setignoreBlackList(ui->ignoreBlackList->isChecked());
     realObject->setDeletePartiallyTransferredFiles(ui->deletePartiallyTransferredFiles->isChecked());
     realObject->setInodeThreads(ui->inodeThreads->value());
     realObject->setRenameTheOriginalDestination(ui->renameTheOriginalDestination->isChecked());
@@ -232,6 +234,7 @@ void CopyEngineFactory::setResources(OptionInterface * options,const std::string
         KeysList.push_back(std::pair<std::string, std::string>("deletePartiallyTransferredFiles","true"));
         KeysList.push_back(std::pair<std::string, std::string>("moveTheWholeFolder","true"));
         KeysList.push_back(std::pair<std::string, std::string>("followTheStrictOrder","true"));
+        KeysList.push_back(std::pair<std::string, std::string>("ignoreBlackList","false"));
         KeysList.push_back(std::pair<std::string, std::string>("renameTheOriginalDestination","false"));
         KeysList.push_back(std::pair<std::string, std::string>("checkDiskSpace","true"));
         KeysList.push_back(std::pair<std::string, std::string>("defaultDestinationFolder",""));
@@ -330,6 +333,7 @@ void CopyEngineFactory::resetOptions()
     ui->deletePartiallyTransferredFiles->setChecked(stringtobool(options->getOptionValue("deletePartiallyTransferredFiles")));
     ui->moveTheWholeFolder->setChecked(stringtobool(options->getOptionValue("moveTheWholeFolder")));
     ui->followTheStrictOrder->setChecked(stringtobool(options->getOptionValue("followTheStrictOrder")));
+    ui->ignoreBlackList->setChecked(stringtobool(options->getOptionValue("ignoreBlackList")));
     ui->inodeThreads->setValue(stringtouint32(options->getOptionValue("inodeThreads")));
     ui->renameTheOriginalDestination->setChecked(stringtobool(options->getOptionValue("renameTheOriginalDestination")));
     ui->checkDiskSpace->setChecked(stringtobool(options->getOptionValue("checkDiskSpace")));
@@ -608,6 +612,13 @@ void CopyEngineFactory::followTheStrictOrder(bool checked)
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"the value have changed");
     if(optionsEngine!=NULL)
         optionsEngine->setOptionValue("followTheStrictOrder",booltostring(checked));
+}
+
+void CopyEngineFactory::ignoreBlackList(bool checked)
+{
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"the value have changed");
+    if(optionsEngine!=NULL)
+        optionsEngine->setOptionValue("ignoreBlackList",booltostring(checked));
 }
 
 void CopyEngineFactory::moveTheWholeFolder(bool checked)

@@ -113,6 +113,7 @@ private slots:
     void defaultDestinationFolderBrowse();
     void defaultDestinationFolder();
     void followTheStrictOrder(bool checked);
+    void ignoreBlackList(bool checked);
     void moveTheWholeFolder(bool checked);
     void on_inodeThreads_editingFinished();
     void on_bufferOtherDevice_editingFinished();
