@@ -41,3 +41,4 @@
 2.2.6.8: Disable WIDESTRING for non Windows, fix debug code mesage event (don't work without debug window)
 2.2.6.9: Change first update detection from 10min to 1h
 2.2.7.0: Due to Qt 6.7 need c++17, start using Qt6, option to disable blacklist, stop provide MAC OS X binary (too complex), minimal requierement for binary Windows 10 (1809 or later) 64Bits (you should be able to compile your self on MAC OS X and Windows XP/7)
+2.2.7.1: Drop old not used sound option

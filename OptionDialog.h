@@ -85,9 +85,11 @@ private slots:
     void oSSpecificClosed();
     void on_remainingTimeAlgorithm_currentIndexChanged(int index);
     void on_portable_toggled(bool);
+    #ifndef NOAUDIO
     void on_soundFile_editingFinished();
     void on_soundWhenFinish_toggled(bool checked);
     void on_playSound_clicked();
+    #endif
 private:
     bool quit;
     Ui::OptionDialog *ui;

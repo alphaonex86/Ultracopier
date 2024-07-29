@@ -79,6 +79,12 @@ OptionDialog::OptionDialog() :
     ui->label_checkTheUpdate->hide();
     ui->checkTheUpdate->hide();
     #endif
+    #ifdef NOAUDIO
+    ui->soundFile->setVisible(false);
+    ui->label_13->setVisible(false);
+    ui->playSound->setVisible(false);
+    ui->soundWhenFinish->setVisible(false);
+    #endif
 }
 
 OptionDialog::~OptionDialog()
@@ -609,10 +615,12 @@ void OptionDialog::newOptionValue(const std::string &group,const std::string &na
             ui->DisplayOSWarning->setChecked(stringtobool(value));
         else if(name=="checkTheUpdate")
             ui->checkTheUpdate->setChecked(stringtobool(value));
+        #ifndef NOAUDIO
         else if(name=="soundFile")
             ui->soundFile->setText(QString::fromStdString(value));
         else if(name=="soundWhenFinish")
             ui->soundWhenFinish->setChecked(stringtobool(value));
+        #endif
         else if(name=="remainingTimeAlgorithm")
         {
             bool ok;
@@ -1061,6 +1069,7 @@ void OptionDialog::on_portable_toggled(bool)
         QFile::remove(settingsFilePath+"/Ultracopier.conf");
 }
 
+#ifndef NOAUDIO
 void OptionDialog::on_soundFile_editingFinished()
 {
     if(allPluginsIsLoaded)
@@ -1081,7 +1090,6 @@ void OptionDialog::on_soundWhenFinish_toggled(bool checked)
 
 void OptionDialog::on_playSound_clicked()
 {
-    #ifndef NOAUDIO
     const std::string newSoundFile=ui->soundFile->text().toStdString();
     buffer.seek(0);
     data.clear();
@@ -1095,5 +1103,5 @@ void OptionDialog::on_playSound_clicked()
     }
     else
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"unable to open sound file: "+newSoundFile);
-    #endif
 }
+#endif
