@@ -12,9 +12,6 @@
 #include <cmath>
 #include <chrono>
 #include <ctime>
-#ifdef Q_OS_WIN32
-#include <windows.h>
-#endif
 #include <QDesktopServices>
 
 #define ULTRACOPIERO2_MAXREMAININGTIMECOL 10
@@ -71,9 +68,6 @@ Themes::Themes(const bool &alwaysOnTop,
     mode(Ultracopier::CopyMode::Copy),
     haveStarted(false),
     haveError(false)
-    #ifdef Q_OS_WIN32
-    ,winTaskbarProgress(this)
-    #endif
 {
     darkUi=dark;
     this->facilityEngine=facilityEngine;
@@ -276,10 +270,6 @@ Themes::Themes(const bool &alwaysOnTop,
 
     updateSpeed();
     alwaysOnTop_clicked(false);
-    /*#ifdef Q_OS_WIN32
-    uiOptions->labelAlwaysOnTop->hide();
-    uiOptions->alwaysOnTop->hide();
-    #endif*/
     QString ultimateUrl;
     if(facilityEngine->isUltimate())
         ui->ad_ultimate->hide();
@@ -297,9 +287,6 @@ Themes::Themes(const bool &alwaysOnTop,
 
     sysTrayIcon = new QSystemTrayIcon(this);
     connect(sysTrayIcon,&QSystemTrayIcon::activated,this,&Themes::catchAction);
-    #ifdef Q_OS_WIN32
-    winTaskbarProgress.show();
-    #endif
 
     verticalLabel=new VerticalLabel();
     verticalLabel->setText(QString::fromStdString(facilityEngine->speedToString(50*1000*1000)));
@@ -548,10 +535,6 @@ void Themes::actionInProgess(const Ultracopier::EngineActionInProgress &action)
                 ui->progressBar_all->setMaximum(65535);
                 ui->progressBar_all->setMinimum(0);
             }
-            #ifdef Q_OS_WIN32
-            winTaskbarProgress.setMaximum(65535);
-            winTaskbarProgress.setMinimum(0);
-            #endif
         break;
         case Ultracopier::Listing:
             if(darkUi)
@@ -564,16 +547,8 @@ void Themes::actionInProgess(const Ultracopier::EngineActionInProgress &action)
                 ui->progressBar_all->setMaximum(0);
                 ui->progressBar_all->setMinimum(0);
             }
-            #ifdef Q_OS_WIN32
-            winTaskbarProgress.setMaximum(0);
-            winTaskbarProgress.setMinimum(0);
-            #endif
         break;
         case Ultracopier::Idle:
-            #ifdef Q_OS_WIN32
-            winTaskbarProgress.setMaximum(65535);
-            winTaskbarProgress.setMinimum(0);
-            #endif
             if(darkUi)
             {
                 progressBar_all->setMaximum(65535);
@@ -749,9 +724,6 @@ void Themes::setGeneralProgression(const uint64_t &current,const uint64_t &total
             progressBar_all->setValue(newIndicator);
         else
             ui->progressBar_all->setValue(newIndicator);
-        #ifdef Q_OS_WIN32
-        winTaskbarProgress.setValue(newIndicator);
-        #endif
     }
     else
     {
@@ -759,9 +731,6 @@ void Themes::setGeneralProgression(const uint64_t &current,const uint64_t &total
             progressBar_all->setValue(0);
         else
             ui->progressBar_all->setValue(0);
-        #ifdef Q_OS_WIN32
-        winTaskbarProgress.setValue(0);
-        #endif
     }
     if(current>0)
         stat = status_started;
@@ -801,9 +770,6 @@ void Themes::getActionOnList(const std::vector<Ultracopier::ReturnActionOnCopyLi
             ui->progressBar_all->setValue(65535);
             ui->progressBar_file->setValue(65535);
         }
-        #ifdef Q_OS_WIN32
-        winTaskbarProgress.setValue(65535);
-        #endif
         currentSize=totalSize;
         if(isHidden())
             updateSysTrayIcon();
