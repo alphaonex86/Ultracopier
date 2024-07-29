@@ -4,96 +4,96 @@
 <context>
     <name>CopyEngine</name>
     <message>
-        <location filename="../../CopyEngine.cpp" line="442"/>
-        <location filename="../../CopyEngine.cpp" line="465"/>
+        <location filename="../../CopyEngine.cpp" line="448"/>
+        <location filename="../../CopyEngine.cpp" line="471"/>
         <source>The engine is forced to move, you can&apos;t copy with it</source>
         <translation>엔진이 강제로 이동합니다. 사용자가 복사할 수 없습니다.</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="519"/>
-        <location filename="../../CopyEngine.cpp" line="542"/>
+        <location filename="../../CopyEngine.cpp" line="525"/>
+        <location filename="../../CopyEngine.cpp" line="548"/>
         <source>The engine is forced to copy, you can&apos;t move with it</source>
         <translation>엔진이 강제로 복사합니다. 사용자가 이동할 수 없습니다.</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="566"/>
+        <location filename="../../CopyEngine.cpp" line="572"/>
         <source>Destination</source>
         <translation type="unfinished">대상</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="566"/>
+        <location filename="../../CopyEngine.cpp" line="572"/>
         <source>Use the actual destination &quot;%1&quot;?</source>
         <translation type="unfinished">실제 대상 &quot;%1&quot;를(을) 사용하시겠습니까?</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="731"/>
+        <location filename="../../CopyEngine.cpp" line="737"/>
         <source>The mode has been forced previously. This is an internal error, please report it</source>
         <translation>모드가 이전에 강제되었습니다. 내부 오류입니다. 문제를 보고해 주세요.</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="886"/>
+        <location filename="../../CopyEngine.cpp" line="892"/>
         <source>Supported only on Windows</source>
         <translation type="unfinished">Windows에서만 지원</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="1035"/>
-        <location filename="../../CopyEngine.cpp" line="1038"/>
-        <location filename="../../CopyEngine.cpp" line="1043"/>
-        <location filename="../../CopyEngine.cpp" line="1047"/>
+        <location filename="../../CopyEngine.cpp" line="1050"/>
+        <location filename="../../CopyEngine.cpp" line="1053"/>
+        <location filename="../../CopyEngine.cpp" line="1058"/>
+        <location filename="../../CopyEngine.cpp" line="1062"/>
         <source>Ask</source>
         <translation type="unfinished">확인</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="1036"/>
-        <location filename="../../CopyEngine.cpp" line="1040"/>
-        <location filename="../../CopyEngine.cpp" line="1044"/>
-        <location filename="../../CopyEngine.cpp" line="1048"/>
+        <location filename="../../CopyEngine.cpp" line="1051"/>
+        <location filename="../../CopyEngine.cpp" line="1055"/>
+        <location filename="../../CopyEngine.cpp" line="1059"/>
+        <location filename="../../CopyEngine.cpp" line="1063"/>
         <source>Skip</source>
         <translation type="unfinished">건너뛰기</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="1039"/>
+        <location filename="../../CopyEngine.cpp" line="1054"/>
         <source>Merge</source>
         <translation type="unfinished">합치기</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="1041"/>
-        <location filename="../../CopyEngine.cpp" line="1053"/>
+        <location filename="../../CopyEngine.cpp" line="1056"/>
+        <location filename="../../CopyEngine.cpp" line="1068"/>
         <source>Rename</source>
         <translation type="unfinished">이름 바꾸기</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="1045"/>
+        <location filename="../../CopyEngine.cpp" line="1060"/>
         <source>Put at the end</source>
         <translation type="unfinished">끝에 놓기</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="1049"/>
+        <location filename="../../CopyEngine.cpp" line="1064"/>
         <source>Overwrite</source>
         <translation type="unfinished">덮어쓰기</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="1050"/>
+        <location filename="../../CopyEngine.cpp" line="1065"/>
         <source>Overwrite if different</source>
         <translation type="unfinished">다르면 덮어쓰기</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="1051"/>
+        <location filename="../../CopyEngine.cpp" line="1066"/>
         <source>Overwrite if newer</source>
         <translation type="unfinished">더 최신이면 덮어쓰기</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="1052"/>
+        <location filename="../../CopyEngine.cpp" line="1067"/>
         <source>Overwrite if older</source>
         <translation type="unfinished">더 이전이면 덮어쓰기</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="1123"/>
+        <location filename="../../CopyEngine.cpp" line="1138"/>
         <source>Options error</source>
         <translation type="unfinished">옵션 오류</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="1123"/>
+        <location filename="../../CopyEngine.cpp" line="1138"/>
         <source>Options engine is not loaded. Unable to access the filters</source>
         <translation>옵션 엔진이 호출되지 않았습니다. 필터에 액세스할 수 없습니다. </translation>
     </message>
@@ -102,75 +102,75 @@
     <name>CopyEngineFactory</name>
     <message>
         <location filename="../../CopyEngineFactory.cpp" line="60"/>
-        <location filename="../../CopyEngineFactory.cpp" line="314"/>
+        <location filename="../../CopyEngineFactory.cpp" line="317"/>
         <source>Supported only on Windows</source>
         <translation type="unfinished">Windows에서만 지원</translation>
     </message>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="443"/>
-        <location filename="../../CopyEngineFactory.cpp" line="446"/>
-        <location filename="../../CopyEngineFactory.cpp" line="451"/>
+        <location filename="../../CopyEngineFactory.cpp" line="447"/>
+        <location filename="../../CopyEngineFactory.cpp" line="450"/>
         <location filename="../../CopyEngineFactory.cpp" line="455"/>
+        <location filename="../../CopyEngineFactory.cpp" line="459"/>
         <source>Ask</source>
         <translation type="unfinished">확인</translation>
     </message>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="444"/>
         <location filename="../../CopyEngineFactory.cpp" line="448"/>
         <location filename="../../CopyEngineFactory.cpp" line="452"/>
         <location filename="../../CopyEngineFactory.cpp" line="456"/>
+        <location filename="../../CopyEngineFactory.cpp" line="460"/>
         <source>Skip</source>
         <translation type="unfinished">건너뛰기</translation>
     </message>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="447"/>
+        <location filename="../../CopyEngineFactory.cpp" line="451"/>
         <source>Merge</source>
         <translation type="unfinished">합치기</translation>
     </message>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="449"/>
-        <location filename="../../CopyEngineFactory.cpp" line="461"/>
+        <location filename="../../CopyEngineFactory.cpp" line="453"/>
+        <location filename="../../CopyEngineFactory.cpp" line="465"/>
         <source>Rename</source>
         <translation type="unfinished">이름 바꾸기</translation>
     </message>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="453"/>
+        <location filename="../../CopyEngineFactory.cpp" line="457"/>
         <source>Put at the end</source>
         <translation type="unfinished">끝에 놓기</translation>
     </message>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="457"/>
+        <location filename="../../CopyEngineFactory.cpp" line="461"/>
         <source>Overwrite</source>
         <translation type="unfinished">덮어쓰기</translation>
     </message>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="458"/>
+        <location filename="../../CopyEngineFactory.cpp" line="462"/>
         <source>Overwrite if different</source>
         <translation type="unfinished">다르면 덮어쓰기</translation>
     </message>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="459"/>
+        <location filename="../../CopyEngineFactory.cpp" line="463"/>
         <source>Overwrite if newer</source>
         <translation type="unfinished">더 최신이면 덮어씌우기</translation>
     </message>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="460"/>
+        <location filename="../../CopyEngineFactory.cpp" line="464"/>
         <source>Overwrite if older</source>
         <translation type="unfinished">더 이전이면 덮어쓰기</translation>
     </message>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="476"/>
-        <location filename="../../CopyEngineFactory.cpp" line="515"/>
+        <location filename="../../CopyEngineFactory.cpp" line="480"/>
+        <location filename="../../CopyEngineFactory.cpp" line="519"/>
         <source>Options error</source>
         <translation type="unfinished">옵션 오류</translation>
     </message>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="476"/>
+        <location filename="../../CopyEngineFactory.cpp" line="480"/>
         <source>Options engine is not loaded. Unable to access the filters</source>
         <translation>옵션 엔진이 호출되지 않았습니다. 필터에 액세스할 수 없습니다.</translation>
     </message>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="515"/>
+        <location filename="../../CopyEngineFactory.cpp" line="519"/>
         <source>Options engine is not loaded, can&apos;t access to the filters</source>
         <translation>옵션 엔진이 호출되지 않았습니다. 필터에 액세스할 수 없습니다.</translation>
     </message>
@@ -430,56 +430,6 @@
     </message>
 </context>
 <context>
-    <name>ListThread</name>
-    <message>
-        <location filename="../../ListThreadListChange.cpp" line="242"/>
-        <location filename="../../ListThreadListChange.cpp" line="413"/>
-        <source>Unable do to move or copy item into wrong forced mode: %1</source>
-        <translation type="unfinished">잘못된 강제 모드로 항목을 이동하거나 복사할 수 없음: %1</translation>
-    </message>
-    <message>
-        <location filename="../../ListThreadListChange.cpp" line="249"/>
-        <location filename="../../ListThreadListChange.cpp" line="420"/>
-        <source>Unable to save the transfer list: %1</source>
-        <translation type="unfinished">전송 목록을 저장할 수 없음: %1</translation>
-    </message>
-    <message>
-        <location filename="../../ListThreadListChange.cpp" line="270"/>
-        <source>Problem reading file, or file-size is 0</source>
-        <translation>파일 읽기 문제 또는 파일 크기가 0입니다.</translation>
-    </message>
-    <message>
-        <location filename="../../ListThreadListChange.cpp" line="277"/>
-        <source>Wrong header: &quot;%1&quot;</source>
-        <translation type="unfinished">잘못된 헤더: &quot;%1&quot; </translation>
-    </message>
-    <message>
-        <location filename="../../ListThreadListChange.cpp" line="286"/>
-        <source>The transfer list is in mixed mode, but this instance is not in this mode</source>
-        <translation>전송 목록이 혼합 모드에 있지만 이 인스턴스가 혼합 모드에 있지 않습니다.</translation>
-    </message>
-    <message>
-        <location filename="../../ListThreadListChange.cpp" line="295"/>
-        <source>The transfer list is in copy mode, but this instance is not in this mode</source>
-        <translation>전송 목록이 복사 모드에 있지만 이 인스턴스가 복사 모드에 있지 않습니다.</translation>
-    </message>
-    <message>
-        <location filename="../../ListThreadListChange.cpp" line="301"/>
-        <source>The transfer list is in move mode, but this instance is not in this mode</source>
-        <translation>전송 목록이 이동 모드에 있지만 이 인스턴스가 이동 모드에 있지 않습니다.</translation>
-    </message>
-    <message>
-        <location filename="../../ListThreadListChange.cpp" line="365"/>
-        <source>Some errors have been found during the line parsing</source>
-        <translation>라인 구문 분석 중 어떤 오류가 발견되었습니다.</translation>
-    </message>
-    <message>
-        <location filename="../../ListThreadListChange.cpp" line="373"/>
-        <source>Unable to open the transfer list: %1</source>
-        <translation type="unfinished">전송 목록을 열 수 없음: %1</translation>
-    </message>
-</context>
-<context>
     <name>MkPath</name>
     <message>
         <location filename="../../MkPath.cpp" line="187"/>
@@ -524,24 +474,6 @@
         <location filename="../../MkPath.cpp" line="464"/>
         <source>Unable to remove</source>
         <translation>제거할 수 없습니다.</translation>
-    </message>
-</context>
-<context>
-    <name>ReadThread</name>
-    <message>
-        <location filename="../../async/ReadThread.cpp" line="78"/>
-        <source>Internal error, please report it!</source>
-        <translation type="unfinished">내부 오류. 이 문제를 보고해 주세요!</translation>
-    </message>
-    <message>
-        <location filename="../../async/ReadThread.cpp" line="543"/>
-        <source>Unable to read the source file: </source>
-        <translation type="unfinished">원본 파일을 읽을 수 없습니다: </translation>
-    </message>
-    <message>
-        <location filename="../../async/ReadThread.cpp" line="599"/>
-        <source>File truncated during the read, possible data change</source>
-        <translation>읽기 중 파일이 잘림. 데이터가 변경되었을 수 있습니다. </translation>
     </message>
 </context>
 <context>
@@ -595,38 +527,38 @@
 <context>
     <name>ScanFileOrFolder</name>
     <message>
-        <location filename="../../ScanFileOrFolder.cpp" line="331"/>
-        <location filename="../../ScanFileOrFolder.cpp" line="681"/>
+        <location filename="../../ScanFileOrFolder.cpp" line="332"/>
+        <location filename="../../ScanFileOrFolder.cpp" line="684"/>
         <source>Blacklisted folder</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ScanFileOrFolder.cpp" line="463"/>
-        <location filename="../../ScanFileOrFolder.cpp" line="465"/>
+        <location filename="../../ScanFileOrFolder.cpp" line="466"/>
+        <location filename="../../ScanFileOrFolder.cpp" line="468"/>
         <source>%1 - copy</source>
         <translation type="unfinished">%1 - 복사</translation>
     </message>
     <message>
-        <location filename="../../ScanFileOrFolder.cpp" line="474"/>
-        <location filename="../../ScanFileOrFolder.cpp" line="476"/>
+        <location filename="../../ScanFileOrFolder.cpp" line="477"/>
+        <location filename="../../ScanFileOrFolder.cpp" line="479"/>
         <source>%1 - copy (%2)</source>
         <translation type="unfinished">%1 - 복사 (%2)</translation>
     </message>
     <message>
-        <location filename="../../ScanFileOrFolder.cpp" line="587"/>
-        <location filename="../../ScanFileOrFolder.cpp" line="589"/>
+        <location filename="../../ScanFileOrFolder.cpp" line="590"/>
+        <location filename="../../ScanFileOrFolder.cpp" line="592"/>
         <source>%name% - copy</source>
         <translation type="unfinished">%name% - 복사</translation>
     </message>
     <message>
-        <location filename="../../ScanFileOrFolder.cpp" line="598"/>
-        <location filename="../../ScanFileOrFolder.cpp" line="600"/>
+        <location filename="../../ScanFileOrFolder.cpp" line="601"/>
+        <location filename="../../ScanFileOrFolder.cpp" line="603"/>
         <source>%name% - copy (%number%)</source>
         <translation type="unfinished">%name% - 복사 (%number%)</translation>
     </message>
     <message>
-        <location filename="../../ScanFileOrFolder.cpp" line="691"/>
-        <location filename="../../ScanFileOrFolder.cpp" line="695"/>
+        <location filename="../../ScanFileOrFolder.cpp" line="694"/>
+        <location filename="../../ScanFileOrFolder.cpp" line="698"/>
         <source>Problem with folder read</source>
         <translation type="unfinished">폴더 읽기 문제</translation>
     </message>
@@ -684,26 +616,12 @@
 <context>
     <name>WriteThread</name>
     <message>
-        <location filename="../../async/WriteThread.cpp" line="138"/>
-        <source>Path resolution error (Empty path)</source>
-        <translation type="unfinished">경로 확인 오류 (빈 경로)</translation>
-    </message>
-    <message>
-        <location filename="../../async/WriteThread.cpp" line="167"/>
-        <location filename="../../async/WriteThread.cpp" line="200"/>
         <source>Unable to create the destination folder: </source>
-        <translation type="unfinished">대상 폴더를 만들 수 없음:</translation>
+        <translation type="obsolete">대상 폴더를 만들 수 없음:</translation>
     </message>
     <message>
-        <location filename="../../async/WriteThread.cpp" line="178"/>
-        <location filename="../../async/WriteThread.cpp" line="202"/>
         <source>Unable to create the destination folder, errno: %1</source>
-        <translation type="unfinished">대상 폴더를 만들 수 없음. Errno: %1</translation>
-    </message>
-    <message>
-        <location filename="../../async/WriteThread.cpp" line="464"/>
-        <source>Internal error, please report it!</source>
-        <translation type="unfinished">내부 오류. 문제를 보고해 주세요!</translation>
+        <translation type="obsolete">대상 폴더를 만들 수 없음. Errno: %1</translation>
     </message>
 </context>
 <context>
@@ -714,163 +632,168 @@
         <translation type="unfinished">보내기</translation>
     </message>
     <message>
-        <location filename="../../copyEngineOptions.ui" line="63"/>
+        <location filename="../../copyEngineOptions.ui" line="98"/>
         <source>Move the whole folder</source>
         <translation type="unfinished">전체 폴더 이동</translation>
     </message>
     <message>
-        <location filename="../../copyEngineOptions.ui" line="97"/>
+        <location filename="../../copyEngineOptions.ui" line="138"/>
         <source>Transfer the file rights</source>
         <translation type="unfinished">파일 권한 전송</translation>
     </message>
     <message>
-        <location filename="../../copyEngineOptions.ui" line="76"/>
+        <location filename="../../copyEngineOptions.ui" line="91"/>
         <source>Keep the file date</source>
         <translation type="unfinished">파일 날짜 유지</translation>
     </message>
     <message>
-        <location filename="../../copyEngineOptions.ui" line="114"/>
+        <location filename="../../copyEngineOptions.ui" line="115"/>
         <source>Create full path if not exists</source>
         <translation type="unfinished">존재하지 않으면 전체 경로 만들기</translation>
     </message>
     <message>
-        <location filename="../../copyEngineOptions.ui" line="138"/>
+        <location filename="../../copyEngineOptions.ui" line="50"/>
         <source>Checksum</source>
         <translation type="unfinished">체크섬</translation>
     </message>
     <message>
-        <location filename="../../copyEngineOptions.ui" line="83"/>
+        <location filename="../../copyEngineOptions.ui" line="63"/>
         <source>Auto start</source>
         <translation type="unfinished">자동 시작</translation>
     </message>
     <message>
-        <location filename="../../copyEngineOptions.ui" line="154"/>
+        <location filename="../../copyEngineOptions.ui" line="152"/>
+        <source>Ignore blacklist (generate lot of problem)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../copyEngineOptions.ui" line="168"/>
         <source>Error and collision</source>
         <translation type="unfinished">오류 및 충돌 </translation>
     </message>
     <message>
-        <location filename="../../copyEngineOptions.ui" line="160"/>
+        <location filename="../../copyEngineOptions.ui" line="174"/>
         <source>When folder error</source>
         <translation type="unfinished">폴더 오류 시</translation>
     </message>
     <message>
-        <location filename="../../copyEngineOptions.ui" line="170"/>
+        <location filename="../../copyEngineOptions.ui" line="184"/>
         <source>When file error</source>
         <translation type="unfinished">파일 오류 시</translation>
     </message>
     <message>
-        <location filename="../../copyEngineOptions.ui" line="196"/>
+        <location filename="../../copyEngineOptions.ui" line="210"/>
         <source>When file collision</source>
         <translation type="unfinished">파일 충돌 시</translation>
     </message>
     <message>
-        <location filename="../../copyEngineOptions.ui" line="239"/>
+        <location filename="../../copyEngineOptions.ui" line="253"/>
         <source>Overwrite if not same size</source>
         <translation type="unfinished">크기가 다르면 덮어쓰기</translation>
     </message>
     <message>
-        <location filename="../../copyEngineOptions.ui" line="244"/>
+        <location filename="../../copyEngineOptions.ui" line="258"/>
         <source>Overwrite if modification date differs</source>
         <translation type="unfinished">수정한 날짜가 다르면 덮어쓰기</translation>
     </message>
     <message>
-        <location filename="../../copyEngineOptions.ui" line="266"/>
+        <location filename="../../copyEngineOptions.ui" line="280"/>
         <source>When folder collision</source>
         <translation type="unfinished">폴더 충돌 시</translation>
     </message>
     <message>
-        <location filename="../../copyEngineOptions.ui" line="297"/>
+        <location filename="../../copyEngineOptions.ui" line="311"/>
         <source>Check if destination folder exists</source>
         <translation type="unfinished">대상 폴더가 있는지 확인</translation>
     </message>
     <message>
-        <location filename="../../copyEngineOptions.ui" line="304"/>
+        <location filename="../../copyEngineOptions.ui" line="318"/>
         <source>Renaming rules</source>
         <translation type="unfinished">이름 바꾸기 규칙</translation>
     </message>
     <message>
-        <location filename="../../copyEngineOptions.ui" line="324"/>
+        <location filename="../../copyEngineOptions.ui" line="338"/>
         <source>Delete partially transferred files</source>
         <translation type="unfinished">부분적으로 전송된 파일 삭제</translation>
     </message>
     <message>
-        <location filename="../../copyEngineOptions.ui" line="337"/>
+        <location filename="../../copyEngineOptions.ui" line="351"/>
         <source>Rename the original destination</source>
         <translation type="unfinished">원래 대상 이름 바꾸기</translation>
     </message>
     <message>
-        <location filename="../../copyEngineOptions.ui" line="368"/>
+        <location filename="../../copyEngineOptions.ui" line="382"/>
         <source>Performance</source>
         <translation type="unfinished">성능</translation>
     </message>
     <message>
-        <location filename="../../copyEngineOptions.ui" line="387"/>
+        <location filename="../../copyEngineOptions.ui" line="401"/>
         <source>Inode threads</source>
         <translation type="unfinished">아이노드(Inode) 스레드</translation>
     </message>
     <message>
-        <location filename="../../copyEngineOptions.ui" line="397"/>
-        <location filename="../../copyEngineOptions.ui" line="413"/>
+        <location filename="../../copyEngineOptions.ui" line="411"/>
+        <location filename="../../copyEngineOptions.ui" line="427"/>
         <source>MB</source>
         <translation type="unfinished">MB</translation>
     </message>
     <message>
-        <location filename="../../copyEngineOptions.ui" line="429"/>
+        <location filename="../../copyEngineOptions.ui" line="443"/>
         <source>Uncheck this under Windows create problem</source>
         <translation>Windows에 문제가 있을 경우 이것을 체크 해제하세요.</translation>
     </message>
     <message>
-        <location filename="../../copyEngineOptions.ui" line="436"/>
+        <location filename="../../copyEngineOptions.ui" line="450"/>
         <source>OS Buffer</source>
         <translation type="unfinished">OS 버퍼</translation>
     </message>
     <message>
-        <location filename="../../copyEngineOptions.ui" line="456"/>
+        <location filename="../../copyEngineOptions.ui" line="470"/>
         <source>Disable parallel transfer when are different devices</source>
         <translation type="unfinished">다른 장치 일 때 병렬 전송 비활성화</translation>
     </message>
     <message>
-        <location filename="../../copyEngineOptions.ui" line="463"/>
+        <location filename="../../copyEngineOptions.ui" line="477"/>
         <source>Buffer for different device</source>
         <translation type="unfinished">다른 장치에 대한 버퍼</translation>
     </message>
     <message>
-        <location filename="../../copyEngineOptions.ui" line="470"/>
+        <location filename="../../copyEngineOptions.ui" line="484"/>
         <source>OS FLags</source>
         <translation type="unfinished">OS FLags</translation>
     </message>
     <message>
-        <location filename="../../copyEngineOptions.ui" line="477"/>
+        <location filename="../../copyEngineOptions.ui" line="491"/>
         <source>Buffer for same device</source>
         <translation type="unfinished">같은 장치에 대한 버퍼</translation>
     </message>
     <message>
-        <location filename="../../copyEngineOptions.ui" line="484"/>
+        <location filename="../../copyEngineOptions.ui" line="498"/>
         <source>OS native copy (disable speed limitation)</source>
         <translation type="unfinished">OS 기본 복사 (속도 제한 사용 안 함)</translation>
     </message>
     <message>
-        <location filename="../../copyEngineOptions.ui" line="514"/>
+        <location filename="../../copyEngineOptions.ui" line="528"/>
         <source>Misc</source>
         <translation type="unfinished">기타</translation>
     </message>
     <message>
-        <location filename="../../copyEngineOptions.ui" line="520"/>
+        <location filename="../../copyEngineOptions.ui" line="534"/>
         <source>Check the disk space</source>
         <translation type="unfinished">디스크 공간 확인</translation>
     </message>
     <message>
-        <location filename="../../copyEngineOptions.ui" line="530"/>
+        <location filename="../../copyEngineOptions.ui" line="544"/>
         <source>Use this folder when destination is not set</source>
         <translation type="unfinished">대상이 설정되지 않은 경우 이 폴더 사용</translation>
     </message>
     <message>
-        <location filename="../../copyEngineOptions.ui" line="542"/>
+        <location filename="../../copyEngineOptions.ui" line="556"/>
         <source>Browse</source>
         <translation type="unfinished">찾아보기</translation>
     </message>
     <message>
-        <location filename="../../copyEngineOptions.ui" line="564"/>
+        <location filename="../../copyEngineOptions.ui" line="578"/>
         <source>Filters</source>
         <translation type="unfinished">필터</translation>
     </message>

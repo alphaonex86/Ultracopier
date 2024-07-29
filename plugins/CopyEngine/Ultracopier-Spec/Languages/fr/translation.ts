@@ -4,96 +4,96 @@
 <context>
     <name>CopyEngine</name>
     <message>
-        <location filename="../../CopyEngine.cpp" line="442"/>
-        <location filename="../../CopyEngine.cpp" line="465"/>
+        <location filename="../../CopyEngine.cpp" line="448"/>
+        <location filename="../../CopyEngine.cpp" line="471"/>
         <source>The engine is forced to move, you can&apos;t copy with it</source>
         <translation>Le moteur est forcé en déplacement, vous ne pouvez pas copier avec</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="519"/>
-        <location filename="../../CopyEngine.cpp" line="542"/>
+        <location filename="../../CopyEngine.cpp" line="525"/>
+        <location filename="../../CopyEngine.cpp" line="548"/>
         <source>The engine is forced to copy, you can&apos;t move with it</source>
         <translation>Le moteur est forcé en copie, vous ne pouvez pas déplacer avec</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="566"/>
+        <location filename="../../CopyEngine.cpp" line="572"/>
         <source>Destination</source>
         <translation>Destination</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="566"/>
+        <location filename="../../CopyEngine.cpp" line="572"/>
         <source>Use the actual destination &quot;%1&quot;?</source>
         <translation>Utiliser la destination actuelle &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="731"/>
+        <location filename="../../CopyEngine.cpp" line="737"/>
         <source>The mode has been forced previously. This is an internal error, please report it</source>
         <translation>Le mode a été forcé. C&apos;est une erreur interne, merci de la repporter</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="886"/>
+        <location filename="../../CopyEngine.cpp" line="892"/>
         <source>Supported only on Windows</source>
         <translation>Pris en charge uniquement sous Windows</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="1035"/>
-        <location filename="../../CopyEngine.cpp" line="1038"/>
-        <location filename="../../CopyEngine.cpp" line="1043"/>
-        <location filename="../../CopyEngine.cpp" line="1047"/>
+        <location filename="../../CopyEngine.cpp" line="1050"/>
+        <location filename="../../CopyEngine.cpp" line="1053"/>
+        <location filename="../../CopyEngine.cpp" line="1058"/>
+        <location filename="../../CopyEngine.cpp" line="1062"/>
         <source>Ask</source>
         <translation>Demander</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="1036"/>
-        <location filename="../../CopyEngine.cpp" line="1040"/>
-        <location filename="../../CopyEngine.cpp" line="1044"/>
-        <location filename="../../CopyEngine.cpp" line="1048"/>
+        <location filename="../../CopyEngine.cpp" line="1051"/>
+        <location filename="../../CopyEngine.cpp" line="1055"/>
+        <location filename="../../CopyEngine.cpp" line="1059"/>
+        <location filename="../../CopyEngine.cpp" line="1063"/>
         <source>Skip</source>
         <translation>Passer</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="1039"/>
+        <location filename="../../CopyEngine.cpp" line="1054"/>
         <source>Merge</source>
         <translation>Fusionner</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="1041"/>
-        <location filename="../../CopyEngine.cpp" line="1053"/>
+        <location filename="../../CopyEngine.cpp" line="1056"/>
+        <location filename="../../CopyEngine.cpp" line="1068"/>
         <source>Rename</source>
         <translation>Renommer</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="1045"/>
+        <location filename="../../CopyEngine.cpp" line="1060"/>
         <source>Put at the end</source>
         <translation>Mettre à la fin</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="1049"/>
+        <location filename="../../CopyEngine.cpp" line="1064"/>
         <source>Overwrite</source>
         <translation>Écraser</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="1050"/>
+        <location filename="../../CopyEngine.cpp" line="1065"/>
         <source>Overwrite if different</source>
         <translation>Écraser si différent</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="1051"/>
+        <location filename="../../CopyEngine.cpp" line="1066"/>
         <source>Overwrite if newer</source>
         <translation>Écraser si plus récent</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="1052"/>
+        <location filename="../../CopyEngine.cpp" line="1067"/>
         <source>Overwrite if older</source>
         <translation>Écraser si plus vieux</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="1123"/>
+        <location filename="../../CopyEngine.cpp" line="1138"/>
         <source>Options error</source>
         <translation>Erreur d&apos;options</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="1123"/>
+        <location filename="../../CopyEngine.cpp" line="1138"/>
         <source>Options engine is not loaded. Unable to access the filters</source>
         <translation>Le moteur d&apos;options n&apos;est pas chargé. Impossible d&apos;accédé aux filtres</translation>
     </message>
@@ -102,75 +102,75 @@
     <name>CopyEngineFactory</name>
     <message>
         <location filename="../../CopyEngineFactory.cpp" line="60"/>
-        <location filename="../../CopyEngineFactory.cpp" line="314"/>
+        <location filename="../../CopyEngineFactory.cpp" line="317"/>
         <source>Supported only on Windows</source>
         <translation>Pris en charge uniquement sous Windows</translation>
     </message>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="443"/>
-        <location filename="../../CopyEngineFactory.cpp" line="446"/>
-        <location filename="../../CopyEngineFactory.cpp" line="451"/>
+        <location filename="../../CopyEngineFactory.cpp" line="447"/>
+        <location filename="../../CopyEngineFactory.cpp" line="450"/>
         <location filename="../../CopyEngineFactory.cpp" line="455"/>
+        <location filename="../../CopyEngineFactory.cpp" line="459"/>
         <source>Ask</source>
         <translation>Demander</translation>
     </message>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="444"/>
         <location filename="../../CopyEngineFactory.cpp" line="448"/>
         <location filename="../../CopyEngineFactory.cpp" line="452"/>
         <location filename="../../CopyEngineFactory.cpp" line="456"/>
+        <location filename="../../CopyEngineFactory.cpp" line="460"/>
         <source>Skip</source>
         <translation>Passer</translation>
     </message>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="447"/>
+        <location filename="../../CopyEngineFactory.cpp" line="451"/>
         <source>Merge</source>
         <translation>Fusionner</translation>
     </message>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="449"/>
-        <location filename="../../CopyEngineFactory.cpp" line="461"/>
+        <location filename="../../CopyEngineFactory.cpp" line="453"/>
+        <location filename="../../CopyEngineFactory.cpp" line="465"/>
         <source>Rename</source>
         <translation>Renommer</translation>
     </message>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="453"/>
+        <location filename="../../CopyEngineFactory.cpp" line="457"/>
         <source>Put at the end</source>
         <translation>Mettre à la fin</translation>
     </message>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="457"/>
+        <location filename="../../CopyEngineFactory.cpp" line="461"/>
         <source>Overwrite</source>
         <translation>Écraser</translation>
     </message>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="458"/>
+        <location filename="../../CopyEngineFactory.cpp" line="462"/>
         <source>Overwrite if different</source>
         <translation>Écraser si différent</translation>
     </message>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="459"/>
+        <location filename="../../CopyEngineFactory.cpp" line="463"/>
         <source>Overwrite if newer</source>
         <translation>Écraser si plus récent</translation>
     </message>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="460"/>
+        <location filename="../../CopyEngineFactory.cpp" line="464"/>
         <source>Overwrite if older</source>
         <translation>Écraser si plus vieux</translation>
     </message>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="476"/>
-        <location filename="../../CopyEngineFactory.cpp" line="515"/>
+        <location filename="../../CopyEngineFactory.cpp" line="480"/>
+        <location filename="../../CopyEngineFactory.cpp" line="519"/>
         <source>Options error</source>
         <translation>Erreur d&apos;options</translation>
     </message>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="476"/>
+        <location filename="../../CopyEngineFactory.cpp" line="480"/>
         <source>Options engine is not loaded. Unable to access the filters</source>
         <translation>Le moteur d&apos;options n&apos;est pas chargé. Impossible d&apos;accédé aux filtres</translation>
     </message>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="515"/>
+        <location filename="../../CopyEngineFactory.cpp" line="519"/>
         <source>Options engine is not loaded, can&apos;t access to the filters</source>
         <translation>Moteur d&apos;options non chargé, impossible d&apos;accéder aux filtres</translation>
     </message>
@@ -430,56 +430,6 @@
     </message>
 </context>
 <context>
-    <name>ListThread</name>
-    <message>
-        <location filename="../../ListThreadListChange.cpp" line="242"/>
-        <location filename="../../ListThreadListChange.cpp" line="413"/>
-        <source>Unable do to move or copy item into wrong forced mode: %1</source>
-        <translation>Impossible de faire un déplacement ou une copie dans le mauvais mode forcé: %1</translation>
-    </message>
-    <message>
-        <location filename="../../ListThreadListChange.cpp" line="249"/>
-        <location filename="../../ListThreadListChange.cpp" line="420"/>
-        <source>Unable to save the transfer list: %1</source>
-        <translation>Impossible de sauvegarder la liste de transfert: %1</translation>
-    </message>
-    <message>
-        <location filename="../../ListThreadListChange.cpp" line="270"/>
-        <source>Problem reading file, or file-size is 0</source>
-        <translation>Problem durant la lecture, ou taille de fichier est 0</translation>
-    </message>
-    <message>
-        <location filename="../../ListThreadListChange.cpp" line="277"/>
-        <source>Wrong header: &quot;%1&quot;</source>
-        <translation>Mauvais en-tête: &quot;%1&quot;</translation>
-    </message>
-    <message>
-        <location filename="../../ListThreadListChange.cpp" line="286"/>
-        <source>The transfer list is in mixed mode, but this instance is not in this mode</source>
-        <translation>La liste de transfert est en mode mixte, mais l&apos;instance n&apos;est pas dans ce mode</translation>
-    </message>
-    <message>
-        <location filename="../../ListThreadListChange.cpp" line="295"/>
-        <source>The transfer list is in copy mode, but this instance is not in this mode</source>
-        <translation>La liste de transfert est en mode copie, mais l&apos;instance n&apos;est pas dans ce mode</translation>
-    </message>
-    <message>
-        <location filename="../../ListThreadListChange.cpp" line="301"/>
-        <source>The transfer list is in move mode, but this instance is not in this mode</source>
-        <translation>La liste de transfert est en mode déplacement, mais l&apos;instance n&apos;est pas dans ce mode</translation>
-    </message>
-    <message>
-        <location filename="../../ListThreadListChange.cpp" line="365"/>
-        <source>Some errors have been found during the line parsing</source>
-        <translation>Certaine erreur ont été trouvé durant l&apos;analise de la line</translation>
-    </message>
-    <message>
-        <location filename="../../ListThreadListChange.cpp" line="373"/>
-        <source>Unable to open the transfer list: %1</source>
-        <translation>Impossible d&apos;ouvrir la list de transfert: %1</translation>
-    </message>
-</context>
-<context>
     <name>MkPath</name>
     <message>
         <location filename="../../MkPath.cpp" line="187"/>
@@ -524,24 +474,6 @@
         <location filename="../../MkPath.cpp" line="464"/>
         <source>Unable to remove</source>
         <translation>Impossible de supprimer</translation>
-    </message>
-</context>
-<context>
-    <name>ReadThread</name>
-    <message>
-        <location filename="../../async/ReadThread.cpp" line="78"/>
-        <source>Internal error, please report it!</source>
-        <translation>Erreur interne, veuillez la signaler!</translation>
-    </message>
-    <message>
-        <location filename="../../async/ReadThread.cpp" line="543"/>
-        <source>Unable to read the source file: </source>
-        <translation>Impossible de lire le fichier source: </translation>
-    </message>
-    <message>
-        <location filename="../../async/ReadThread.cpp" line="599"/>
-        <source>File truncated during the read, possible data change</source>
-        <translation>Fichier tronqué lors de la lecture, modification possible des données</translation>
     </message>
 </context>
 <context>
@@ -595,38 +527,38 @@
 <context>
     <name>ScanFileOrFolder</name>
     <message>
-        <location filename="../../ScanFileOrFolder.cpp" line="331"/>
-        <location filename="../../ScanFileOrFolder.cpp" line="681"/>
+        <location filename="../../ScanFileOrFolder.cpp" line="332"/>
+        <location filename="../../ScanFileOrFolder.cpp" line="684"/>
         <source>Blacklisted folder</source>
         <translation>Dossier sur liste noire</translation>
     </message>
     <message>
-        <location filename="../../ScanFileOrFolder.cpp" line="463"/>
-        <location filename="../../ScanFileOrFolder.cpp" line="465"/>
+        <location filename="../../ScanFileOrFolder.cpp" line="466"/>
+        <location filename="../../ScanFileOrFolder.cpp" line="468"/>
         <source>%1 - copy</source>
         <translation>%1 - copie</translation>
     </message>
     <message>
-        <location filename="../../ScanFileOrFolder.cpp" line="474"/>
-        <location filename="../../ScanFileOrFolder.cpp" line="476"/>
+        <location filename="../../ScanFileOrFolder.cpp" line="477"/>
+        <location filename="../../ScanFileOrFolder.cpp" line="479"/>
         <source>%1 - copy (%2)</source>
         <translation>%1 - copie (%2)</translation>
     </message>
     <message>
-        <location filename="../../ScanFileOrFolder.cpp" line="587"/>
-        <location filename="../../ScanFileOrFolder.cpp" line="589"/>
+        <location filename="../../ScanFileOrFolder.cpp" line="590"/>
+        <location filename="../../ScanFileOrFolder.cpp" line="592"/>
         <source>%name% - copy</source>
         <translation>%name% - copie</translation>
     </message>
     <message>
-        <location filename="../../ScanFileOrFolder.cpp" line="598"/>
-        <location filename="../../ScanFileOrFolder.cpp" line="600"/>
+        <location filename="../../ScanFileOrFolder.cpp" line="601"/>
+        <location filename="../../ScanFileOrFolder.cpp" line="603"/>
         <source>%name% - copy (%number%)</source>
         <translation>%name% - copie (%number%)</translation>
     </message>
     <message>
-        <location filename="../../ScanFileOrFolder.cpp" line="691"/>
-        <location filename="../../ScanFileOrFolder.cpp" line="695"/>
+        <location filename="../../ScanFileOrFolder.cpp" line="694"/>
+        <location filename="../../ScanFileOrFolder.cpp" line="698"/>
         <source>Problem with folder read</source>
         <translation>Probléme avec la lecture du dossier</translation>
     </message>
@@ -684,26 +616,12 @@
 <context>
     <name>WriteThread</name>
     <message>
-        <location filename="../../async/WriteThread.cpp" line="138"/>
-        <source>Path resolution error (Empty path)</source>
-        <translation>Erreur de résolution de chemin (chemin vide)</translation>
-    </message>
-    <message>
-        <location filename="../../async/WriteThread.cpp" line="167"/>
-        <location filename="../../async/WriteThread.cpp" line="200"/>
         <source>Unable to create the destination folder: </source>
-        <translation>Impossible de créer le dossier de destination: </translation>
+        <translation type="obsolete">Impossible de créer le dossier de destination: </translation>
     </message>
     <message>
-        <location filename="../../async/WriteThread.cpp" line="178"/>
-        <location filename="../../async/WriteThread.cpp" line="202"/>
         <source>Unable to create the destination folder, errno: %1</source>
-        <translation>Impossible de créer le dossier de destination, errno: %1</translation>
-    </message>
-    <message>
-        <location filename="../../async/WriteThread.cpp" line="464"/>
-        <source>Internal error, please report it!</source>
-        <translation>Erreur interne, veuillez la signaler!</translation>
+        <translation type="obsolete">Impossible de créer le dossier de destination, errno: %1</translation>
     </message>
 </context>
 <context>
@@ -714,163 +632,168 @@
         <translation>Transfert</translation>
     </message>
     <message>
-        <location filename="../../copyEngineOptions.ui" line="63"/>
+        <location filename="../../copyEngineOptions.ui" line="98"/>
         <source>Move the whole folder</source>
         <translation>Déplacer le dossier complet</translation>
     </message>
     <message>
-        <location filename="../../copyEngineOptions.ui" line="97"/>
+        <location filename="../../copyEngineOptions.ui" line="138"/>
         <source>Transfer the file rights</source>
         <translation>Transférer les droits des fichiers</translation>
     </message>
     <message>
-        <location filename="../../copyEngineOptions.ui" line="76"/>
+        <location filename="../../copyEngineOptions.ui" line="91"/>
         <source>Keep the file date</source>
         <translation>Garder la date du fichier</translation>
     </message>
     <message>
-        <location filename="../../copyEngineOptions.ui" line="114"/>
+        <location filename="../../copyEngineOptions.ui" line="115"/>
         <source>Create full path if not exists</source>
         <translation>Créer le dossier complet si il n&apos;existe pas</translation>
     </message>
     <message>
-        <location filename="../../copyEngineOptions.ui" line="138"/>
+        <location filename="../../copyEngineOptions.ui" line="50"/>
         <source>Checksum</source>
         <translation>Somme de contrôle</translation>
     </message>
     <message>
-        <location filename="../../copyEngineOptions.ui" line="83"/>
+        <location filename="../../copyEngineOptions.ui" line="63"/>
         <source>Auto start</source>
         <translation>Démarrage automatique</translation>
     </message>
     <message>
-        <location filename="../../copyEngineOptions.ui" line="154"/>
+        <location filename="../../copyEngineOptions.ui" line="152"/>
+        <source>Ignore blacklist (generate lot of problem)</source>
+        <translation>Ignorer liste noire (génére des problémes)</translation>
+    </message>
+    <message>
+        <location filename="../../copyEngineOptions.ui" line="168"/>
         <source>Error and collision</source>
         <translation>Erreur et collision</translation>
     </message>
     <message>
-        <location filename="../../copyEngineOptions.ui" line="160"/>
+        <location filename="../../copyEngineOptions.ui" line="174"/>
         <source>When folder error</source>
         <translation>En cas d&apos;erreur de répertoire</translation>
     </message>
     <message>
-        <location filename="../../copyEngineOptions.ui" line="170"/>
+        <location filename="../../copyEngineOptions.ui" line="184"/>
         <source>When file error</source>
         <translation>En cas d&apos;erreur de fichier</translation>
     </message>
     <message>
-        <location filename="../../copyEngineOptions.ui" line="196"/>
+        <location filename="../../copyEngineOptions.ui" line="210"/>
         <source>When file collision</source>
         <translation>En cas de collision de fichier</translation>
     </message>
     <message>
-        <location filename="../../copyEngineOptions.ui" line="239"/>
+        <location filename="../../copyEngineOptions.ui" line="253"/>
         <source>Overwrite if not same size</source>
         <translation>Écraser si pas la même taille</translation>
     </message>
     <message>
-        <location filename="../../copyEngineOptions.ui" line="244"/>
+        <location filename="../../copyEngineOptions.ui" line="258"/>
         <source>Overwrite if modification date differs</source>
         <translation>Écraser si les dates différes</translation>
     </message>
     <message>
-        <location filename="../../copyEngineOptions.ui" line="266"/>
+        <location filename="../../copyEngineOptions.ui" line="280"/>
         <source>When folder collision</source>
         <translation>Lors d&apos;une collision de dossier</translation>
     </message>
     <message>
-        <location filename="../../copyEngineOptions.ui" line="297"/>
+        <location filename="../../copyEngineOptions.ui" line="311"/>
         <source>Check if destination folder exists</source>
         <translation>Vérifier si le répertoire de destination existe</translation>
     </message>
     <message>
-        <location filename="../../copyEngineOptions.ui" line="304"/>
+        <location filename="../../copyEngineOptions.ui" line="318"/>
         <source>Renaming rules</source>
         <translation>Règles de renommage</translation>
     </message>
     <message>
-        <location filename="../../copyEngineOptions.ui" line="324"/>
+        <location filename="../../copyEngineOptions.ui" line="338"/>
         <source>Delete partially transferred files</source>
         <translation>Supprimer les transferts partiels</translation>
     </message>
     <message>
-        <location filename="../../copyEngineOptions.ui" line="337"/>
+        <location filename="../../copyEngineOptions.ui" line="351"/>
         <source>Rename the original destination</source>
         <translation>Renommer la destination originale</translation>
     </message>
     <message>
-        <location filename="../../copyEngineOptions.ui" line="368"/>
+        <location filename="../../copyEngineOptions.ui" line="382"/>
         <source>Performance</source>
         <translation>Performance</translation>
     </message>
     <message>
-        <location filename="../../copyEngineOptions.ui" line="387"/>
+        <location filename="../../copyEngineOptions.ui" line="401"/>
         <source>Inode threads</source>
         <translation>Threads d&apos;inodes</translation>
     </message>
     <message>
-        <location filename="../../copyEngineOptions.ui" line="397"/>
-        <location filename="../../copyEngineOptions.ui" line="413"/>
+        <location filename="../../copyEngineOptions.ui" line="411"/>
+        <location filename="../../copyEngineOptions.ui" line="427"/>
         <source>MB</source>
         <translation>Mo</translation>
     </message>
     <message>
-        <location filename="../../copyEngineOptions.ui" line="429"/>
+        <location filename="../../copyEngineOptions.ui" line="443"/>
         <source>Uncheck this under Windows create problem</source>
         <translation>Décochez ceci sous Windows créer un problème</translation>
     </message>
     <message>
-        <location filename="../../copyEngineOptions.ui" line="436"/>
+        <location filename="../../copyEngineOptions.ui" line="450"/>
         <source>OS Buffer</source>
         <translation>Tampon du système d&apos;exploitation</translation>
     </message>
     <message>
-        <location filename="../../copyEngineOptions.ui" line="456"/>
+        <location filename="../../copyEngineOptions.ui" line="470"/>
         <source>Disable parallel transfer when are different devices</source>
         <translation>Désactiver le transfert parallèle lorsque différents appareils</translation>
     </message>
     <message>
-        <location filename="../../copyEngineOptions.ui" line="463"/>
+        <location filename="../../copyEngineOptions.ui" line="477"/>
         <source>Buffer for different device</source>
         <translation>Tampon pour différents appareils</translation>
     </message>
     <message>
-        <location filename="../../copyEngineOptions.ui" line="470"/>
+        <location filename="../../copyEngineOptions.ui" line="484"/>
         <source>OS FLags</source>
         <translation>Drapeaux du système d&apos;exploitation</translation>
     </message>
     <message>
-        <location filename="../../copyEngineOptions.ui" line="477"/>
+        <location filename="../../copyEngineOptions.ui" line="491"/>
         <source>Buffer for same device</source>
         <translation>Tampon pour le même appareil</translation>
     </message>
     <message>
-        <location filename="../../copyEngineOptions.ui" line="484"/>
+        <location filename="../../copyEngineOptions.ui" line="498"/>
         <source>OS native copy (disable speed limitation)</source>
         <translation>Copie native du système d&apos;exploitation (désactiver la limitation de vitesse)</translation>
     </message>
     <message>
-        <location filename="../../copyEngineOptions.ui" line="514"/>
+        <location filename="../../copyEngineOptions.ui" line="528"/>
         <source>Misc</source>
         <translation>Divers</translation>
     </message>
     <message>
-        <location filename="../../copyEngineOptions.ui" line="520"/>
+        <location filename="../../copyEngineOptions.ui" line="534"/>
         <source>Check the disk space</source>
         <translation>Vérifier l&apos;espace disque</translation>
     </message>
     <message>
-        <location filename="../../copyEngineOptions.ui" line="530"/>
+        <location filename="../../copyEngineOptions.ui" line="544"/>
         <source>Use this folder when destination is not set</source>
         <translation>Utiliser ce dossier quand la destination n&apos;est pas défini</translation>
     </message>
     <message>
-        <location filename="../../copyEngineOptions.ui" line="542"/>
+        <location filename="../../copyEngineOptions.ui" line="556"/>
         <source>Browse</source>
         <translation>Parcourir</translation>
     </message>
     <message>
-        <location filename="../../copyEngineOptions.ui" line="564"/>
+        <location filename="../../copyEngineOptions.ui" line="578"/>
         <source>Filters</source>
         <translation>Filtres</translation>
     </message>

@@ -15,15 +15,12 @@ Main features include:
 # Dependency
 - make
 - gcc
-- qtmultimedia5-dev
-- libogg-dev 
-- libopus-dev
-- libgl1-mesa-dev
+- C++17 complier (due to Qt6.7)
 
 For example on Debian based distros:
 
 ```bash
-sudo apt install make gcc qtmultimedia5-dev libogg-dev libopus-dev libgl1-mesa-dev build-essential libssl-dev qtbase5-dev qtchooser qt5-qmake qtbase5-dev-tools gcc-multilib qttools5-dev-tools
+sudo apt install make gcc build-essential libssl-dev qtbase6-dev qtchooser qt6-qmake qtbase6-dev-tools qttools6-dev-tools
 ```
 
 # Building
@@ -44,7 +41,7 @@ make -j$(nproc)
 
 # Translations
 
-Translations are provided via [Qt Linguist](http://doc.qt.io/qt-5/qtlinguist-index.html).
+Translations are provided via [Qt Linguist](http://doc.qt.io/qt-6/qtlinguist-index.html).
 
 1. Run `lupdate ultracopier.pro` to update the translation files
 2. Put your translation in `(plugins|resources)/Languages/XX/translation.ts`

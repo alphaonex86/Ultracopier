@@ -98,24 +98,24 @@
 <context>
     <name>ThemesFactory</name>
     <message>
-        <location filename="../../ThemesFactory.cpp" line="320"/>
+        <location filename="../../ThemesFactory.cpp" line="322"/>
         <source>Don&apos;t close if errors are found</source>
         <translation>Nicht schließen, wenn Fehler aufgetreten sind</translation>
     </message>
     <message>
-        <location filename="../../ThemesFactory.cpp" line="321"/>
+        <location filename="../../ThemesFactory.cpp" line="323"/>
         <source>Never close</source>
         <translation>Niemals schließen</translation>
     </message>
     <message>
-        <location filename="../../ThemesFactory.cpp" line="322"/>
+        <location filename="../../ThemesFactory.cpp" line="324"/>
         <source>Always close</source>
         <translation>Immer schließen</translation>
     </message>
     <message>
-        <location filename="../../ThemesFactory.cpp" line="518"/>
-        <location filename="../../ThemesFactory.cpp" line="533"/>
-        <location filename="../../ThemesFactory.cpp" line="548"/>
+        <location filename="../../ThemesFactory.cpp" line="520"/>
+        <location filename="../../ThemesFactory.cpp" line="535"/>
+        <location filename="../../ThemesFactory.cpp" line="550"/>
         <source>Select a color</source>
         <translation>Wählen Sie eine Farbe</translation>
     </message>

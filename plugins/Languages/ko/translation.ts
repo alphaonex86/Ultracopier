@@ -93,96 +93,96 @@
 <context>
     <name>CopyEngine</name>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngine.cpp" line="442"/>
-        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngine.cpp" line="465"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngine.cpp" line="448"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngine.cpp" line="471"/>
         <source>The engine is forced to move, you can&apos;t copy with it</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngine.cpp" line="519"/>
-        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngine.cpp" line="542"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngine.cpp" line="525"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngine.cpp" line="548"/>
         <source>The engine is forced to copy, you can&apos;t move with it</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngine.cpp" line="566"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngine.cpp" line="572"/>
         <source>Destination</source>
         <translation type="unfinished">대상</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngine.cpp" line="566"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngine.cpp" line="572"/>
         <source>Use the actual destination &quot;%1&quot;?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngine.cpp" line="731"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngine.cpp" line="737"/>
         <source>The mode has been forced previously. This is an internal error, please report it</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngine.cpp" line="886"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngine.cpp" line="892"/>
         <source>Supported only on Windows</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngine.cpp" line="1035"/>
-        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngine.cpp" line="1038"/>
-        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngine.cpp" line="1043"/>
-        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngine.cpp" line="1047"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngine.cpp" line="1050"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngine.cpp" line="1053"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngine.cpp" line="1058"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngine.cpp" line="1062"/>
         <source>Ask</source>
         <translation type="unfinished">확인</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngine.cpp" line="1036"/>
-        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngine.cpp" line="1040"/>
-        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngine.cpp" line="1044"/>
-        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngine.cpp" line="1048"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngine.cpp" line="1051"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngine.cpp" line="1055"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngine.cpp" line="1059"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngine.cpp" line="1063"/>
         <source>Skip</source>
         <translation type="unfinished">건너뛰기</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngine.cpp" line="1039"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngine.cpp" line="1054"/>
         <source>Merge</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngine.cpp" line="1041"/>
-        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngine.cpp" line="1053"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngine.cpp" line="1056"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngine.cpp" line="1068"/>
         <source>Rename</source>
         <translation type="unfinished">이름 바꾸기</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngine.cpp" line="1045"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngine.cpp" line="1060"/>
         <source>Put at the end</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngine.cpp" line="1049"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngine.cpp" line="1064"/>
         <source>Overwrite</source>
         <translation type="unfinished">덮어쓰기</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngine.cpp" line="1050"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngine.cpp" line="1065"/>
         <source>Overwrite if different</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngine.cpp" line="1051"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngine.cpp" line="1066"/>
         <source>Overwrite if newer</source>
         <translation type="unfinished">더 최신이면 덮어쓰기</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngine.cpp" line="1052"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngine.cpp" line="1067"/>
         <source>Overwrite if older</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngine.cpp" line="1123"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngine.cpp" line="1138"/>
         <source>Options error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngine.cpp" line="1123"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngine.cpp" line="1138"/>
         <source>Options engine is not loaded. Unable to access the filters</source>
         <translation type="unfinished"></translation>
     </message>
@@ -191,75 +191,75 @@
     <name>CopyEngineFactory</name>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="60"/>
-        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="314"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="317"/>
         <source>Supported only on Windows</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="443"/>
-        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="446"/>
-        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="451"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="447"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="450"/>
         <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="455"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="459"/>
         <source>Ask</source>
         <translation type="unfinished">확인</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="444"/>
         <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="448"/>
         <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="452"/>
         <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="456"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="460"/>
         <source>Skip</source>
         <translation type="unfinished">건너뛰기</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="447"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="451"/>
         <source>Merge</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="449"/>
-        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="461"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="453"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="465"/>
         <source>Rename</source>
         <translation type="unfinished">이름 바꾸기</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="453"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="457"/>
         <source>Put at the end</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="457"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="461"/>
         <source>Overwrite</source>
         <translation type="unfinished">덮어쓰기</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="458"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="462"/>
         <source>Overwrite if different</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="459"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="463"/>
         <source>Overwrite if newer</source>
         <translation type="unfinished">더 최신이면 덮어쓰기</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="460"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="464"/>
         <source>Overwrite if older</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="476"/>
-        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="515"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="480"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="519"/>
         <source>Options error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="476"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="480"/>
         <source>Options engine is not loaded. Unable to access the filters</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="515"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="519"/>
         <source>Options engine is not loaded, can&apos;t access to the filters</source>
         <translation type="unfinished"></translation>
     </message>
@@ -414,262 +414,262 @@
 <context>
     <name>FacilityEngine</name>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="59"/>
+        <location filename="../../../FacilityEngine.cpp" line="60"/>
         <source>Copy engine</source>
         <translation>복사 엔진</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="61"/>
+        <location filename="../../../FacilityEngine.cpp" line="62"/>
         <source>Copy</source>
         <extracomment>a copy</extracomment>
         <translation>복사</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="65"/>
+        <location filename="../../../FacilityEngine.cpp" line="66"/>
         <source>Move</source>
         <extracomment>a move</extracomment>
         <translation>이동</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="67"/>
+        <location filename="../../../FacilityEngine.cpp" line="68"/>
         <source>Pause</source>
         <translation>일시 중지</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="68"/>
+        <location filename="../../../FacilityEngine.cpp" line="69"/>
         <source>Resume</source>
         <translation>다시 시작</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="69"/>
-        <location filename="../../../FacilityEngine.cpp" line="84"/>
+        <location filename="../../../FacilityEngine.cpp" line="70"/>
+        <location filename="../../../FacilityEngine.cpp" line="85"/>
         <source>Skip</source>
         <translation>건너뛰기</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="70"/>
+        <location filename="../../../FacilityEngine.cpp" line="71"/>
         <source>Unlimited</source>
         <translation>무제한</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="43"/>
+        <location filename="../../../FacilityEngine.cpp" line="44"/>
         <source>s</source>
         <translation>초</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="44"/>
+        <location filename="../../../FacilityEngine.cpp" line="45"/>
         <source>Too big</source>
         <translation>너무 큽니다.</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="45"/>
+        <location filename="../../../FacilityEngine.cpp" line="46"/>
         <source>B</source>
         <translation>B</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="46"/>
+        <location filename="../../../FacilityEngine.cpp" line="47"/>
         <source>KB</source>
         <translation>KB</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="47"/>
+        <location filename="../../../FacilityEngine.cpp" line="48"/>
         <source>MB</source>
         <translation>MB</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="48"/>
+        <location filename="../../../FacilityEngine.cpp" line="49"/>
         <source>GB</source>
         <translation>GB</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="49"/>
+        <location filename="../../../FacilityEngine.cpp" line="50"/>
         <source>TB</source>
         <translation>TB</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="50"/>
+        <location filename="../../../FacilityEngine.cpp" line="51"/>
         <source>PB</source>
         <translation>PB</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="51"/>
+        <location filename="../../../FacilityEngine.cpp" line="52"/>
         <source>EB</source>
         <translation>EB</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="52"/>
+        <location filename="../../../FacilityEngine.cpp" line="53"/>
         <source>ZB</source>
         <translation>ZB</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="53"/>
+        <location filename="../../../FacilityEngine.cpp" line="54"/>
         <source>YB</source>
         <translation>YB</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="54"/>
+        <location filename="../../../FacilityEngine.cpp" line="55"/>
         <source>Less than %10 seconds</source>
         <translation type="unfinished">%10 초 미만</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="55"/>
+        <location filename="../../../FacilityEngine.cpp" line="56"/>
         <source>About %10 seconds remaining</source>
         <translation type="unfinished">약 %10 초 남음</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="56"/>
+        <location filename="../../../FacilityEngine.cpp" line="57"/>
         <source>About %1 minutes remaining</source>
         <translation type="unfinished">약 %1 분 남음</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="57"/>
+        <location filename="../../../FacilityEngine.cpp" line="58"/>
         <source>About %1 hours remaining</source>
         <translation type="unfinished">약 %1 시간 남음</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="63"/>
+        <location filename="../../../FacilityEngine.cpp" line="64"/>
         <source>Transfer</source>
         <extracomment>a transfer</extracomment>
         <translation type="unfinished">전송</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="66"/>
+        <location filename="../../../FacilityEngine.cpp" line="67"/>
         <source>Start</source>
         <translation type="unfinished">시작</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="71"/>
+        <location filename="../../../FacilityEngine.cpp" line="72"/>
         <source>Source</source>
         <translation type="unfinished">원본</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="72"/>
+        <location filename="../../../FacilityEngine.cpp" line="73"/>
         <source>Size</source>
         <translation type="unfinished">크기</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="73"/>
+        <location filename="../../../FacilityEngine.cpp" line="74"/>
         <source>Destination</source>
         <translation type="unfinished">대상</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="74"/>
+        <location filename="../../../FacilityEngine.cpp" line="75"/>
         <source>Quit</source>
         <translation type="unfinished">종료</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="75"/>
+        <location filename="../../../FacilityEngine.cpp" line="76"/>
         <source>Target</source>
         <translation type="unfinished">대상</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="76"/>
-        <location filename="../../../FacilityEngine.cpp" line="80"/>
+        <location filename="../../../FacilityEngine.cpp" line="77"/>
+        <location filename="../../../FacilityEngine.cpp" line="81"/>
         <source>Time remaining:</source>
         <translation type="unfinished">남은 시간:</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="77"/>
+        <location filename="../../../FacilityEngine.cpp" line="78"/>
         <source>Listing</source>
         <translation type="unfinished">나열 중</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="78"/>
+        <location filename="../../../FacilityEngine.cpp" line="79"/>
         <source>Copying</source>
         <translation type="unfinished">복사 중</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="79"/>
+        <location filename="../../../FacilityEngine.cpp" line="80"/>
         <source>Listing and copying</source>
         <translation type="unfinished">나열 및 복사 중</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="81"/>
+        <location filename="../../../FacilityEngine.cpp" line="82"/>
         <source>Remaining:</source>
         <translation type="unfinished">이름 변경 중:</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="83"/>
+        <location filename="../../../FacilityEngine.cpp" line="84"/>
         <source>Ask</source>
         <translation type="unfinished">확인</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="85"/>
+        <location filename="../../../FacilityEngine.cpp" line="86"/>
         <source>Overwrite</source>
         <translation type="unfinished">덮어쓰기</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="86"/>
+        <location filename="../../../FacilityEngine.cpp" line="87"/>
         <source>Overwrite if newer</source>
         <translation type="unfinished">더 최신이면 덮어쓰기</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="87"/>
+        <location filename="../../../FacilityEngine.cpp" line="88"/>
         <source>Overwrite if the last modification dates are different</source>
         <translation type="unfinished">마지막 수정한 날짜가 다르면 덮어쓰기</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="88"/>
+        <location filename="../../../FacilityEngine.cpp" line="89"/>
         <source>Rename</source>
         <translation type="unfinished">이름 바꾸기</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="89"/>
+        <location filename="../../../FacilityEngine.cpp" line="90"/>
         <source>Put to the end of the list</source>
         <translation type="unfinished">목록의 끝에 놓기</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="90"/>
+        <location filename="../../../FacilityEngine.cpp" line="91"/>
         <source>Select source directory</source>
         <translation type="unfinished">원본 디렉터리 선택</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="91"/>
+        <location filename="../../../FacilityEngine.cpp" line="92"/>
         <source>Select destination directory</source>
         <translation type="unfinished">대상 디렉터리 선택</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="92"/>
+        <location filename="../../../FacilityEngine.cpp" line="93"/>
         <source>Internal error</source>
         <translation type="unfinished">내부 오류</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="93"/>
+        <location filename="../../../FacilityEngine.cpp" line="94"/>
         <source>Select one or more files to open</source>
         <translation>열려는 파일을 하나 이상 선택하세요.</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="94"/>
+        <location filename="../../../FacilityEngine.cpp" line="95"/>
         <source>All files</source>
         <translation type="unfinished">모든 파일</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="95"/>
+        <location filename="../../../FacilityEngine.cpp" line="96"/>
         <source>Save transfer list</source>
         <translation type="unfinished">전송 목록 저장</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="96"/>
+        <location filename="../../../FacilityEngine.cpp" line="97"/>
         <source>Open transfer list</source>
         <translation type="unfinished">전송 목록 열기</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="97"/>
+        <location filename="../../../FacilityEngine.cpp" line="98"/>
         <source>Transfer list</source>
         <translation type="unfinished">전송 목록</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="98"/>
+        <location filename="../../../FacilityEngine.cpp" line="99"/>
         <source>Error</source>
         <translation type="unfinished">오류</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="99"/>
+        <location filename="../../../FacilityEngine.cpp" line="100"/>
         <source>Not supported on this platform</source>
         <translation>이 플랫폼에서는 지원하지 않습니다.</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="100"/>
+        <location filename="../../../FacilityEngine.cpp" line="101"/>
         <source>Completed in %1</source>
         <translation type="unfinished">%1 후 완료됨</translation>
     </message>
@@ -1913,38 +1913,38 @@ Error:%2</source>
 <context>
     <name>ScanFileOrFolder</name>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/ScanFileOrFolder.cpp" line="331"/>
-        <location filename="../../CopyEngine/Ultracopier-Spec/ScanFileOrFolder.cpp" line="681"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/ScanFileOrFolder.cpp" line="332"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/ScanFileOrFolder.cpp" line="684"/>
         <source>Blacklisted folder</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/ScanFileOrFolder.cpp" line="463"/>
-        <location filename="../../CopyEngine/Ultracopier-Spec/ScanFileOrFolder.cpp" line="465"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/ScanFileOrFolder.cpp" line="466"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/ScanFileOrFolder.cpp" line="468"/>
         <source>%1 - copy</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/ScanFileOrFolder.cpp" line="474"/>
-        <location filename="../../CopyEngine/Ultracopier-Spec/ScanFileOrFolder.cpp" line="476"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/ScanFileOrFolder.cpp" line="477"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/ScanFileOrFolder.cpp" line="479"/>
         <source>%1 - copy (%2)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/ScanFileOrFolder.cpp" line="587"/>
-        <location filename="../../CopyEngine/Ultracopier-Spec/ScanFileOrFolder.cpp" line="589"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/ScanFileOrFolder.cpp" line="590"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/ScanFileOrFolder.cpp" line="592"/>
         <source>%name% - copy</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/ScanFileOrFolder.cpp" line="598"/>
-        <location filename="../../CopyEngine/Ultracopier-Spec/ScanFileOrFolder.cpp" line="600"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/ScanFileOrFolder.cpp" line="601"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/ScanFileOrFolder.cpp" line="603"/>
         <source>%name% - copy (%number%)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/ScanFileOrFolder.cpp" line="691"/>
-        <location filename="../../CopyEngine/Ultracopier-Spec/ScanFileOrFolder.cpp" line="695"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/ScanFileOrFolder.cpp" line="694"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/ScanFileOrFolder.cpp" line="698"/>
         <source>Problem with folder read</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2222,163 +2222,168 @@ Error:%2</source>
         <translation type="unfinished">전송</translation>
     </message>
     <message>
+        <location filename="../../CopyEngine/Ultracopier-Spec/copyEngineOptions.ui" line="50"/>
+        <source>Checksum</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/copyEngineOptions.ui" line="63"/>
-        <source>Move the whole folder</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/copyEngineOptions.ui" line="76"/>
-        <source>Keep the file date</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/copyEngineOptions.ui" line="83"/>
         <source>Auto start</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/copyEngineOptions.ui" line="97"/>
-        <source>Transfer the file rights</source>
+        <location filename="../../CopyEngine/Ultracopier-Spec/copyEngineOptions.ui" line="91"/>
+        <source>Keep the file date</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/copyEngineOptions.ui" line="114"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/copyEngineOptions.ui" line="98"/>
+        <source>Move the whole folder</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../CopyEngine/Ultracopier-Spec/copyEngineOptions.ui" line="115"/>
         <source>Create full path if not exists</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/copyEngineOptions.ui" line="138"/>
-        <source>Checksum</source>
+        <source>Transfer the file rights</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/copyEngineOptions.ui" line="154"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/copyEngineOptions.ui" line="152"/>
+        <source>Ignore blacklist (generate lot of problem)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../CopyEngine/Ultracopier-Spec/copyEngineOptions.ui" line="168"/>
         <source>Error and collision</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/copyEngineOptions.ui" line="160"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/copyEngineOptions.ui" line="174"/>
         <source>When folder error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/copyEngineOptions.ui" line="170"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/copyEngineOptions.ui" line="184"/>
         <source>When file error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/copyEngineOptions.ui" line="196"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/copyEngineOptions.ui" line="210"/>
         <source>When file collision</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/copyEngineOptions.ui" line="239"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/copyEngineOptions.ui" line="253"/>
         <source>Overwrite if not same size</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/copyEngineOptions.ui" line="244"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/copyEngineOptions.ui" line="258"/>
         <source>Overwrite if modification date differs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/copyEngineOptions.ui" line="266"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/copyEngineOptions.ui" line="280"/>
         <source>When folder collision</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/copyEngineOptions.ui" line="297"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/copyEngineOptions.ui" line="311"/>
         <source>Check if destination folder exists</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/copyEngineOptions.ui" line="304"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/copyEngineOptions.ui" line="318"/>
         <source>Renaming rules</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/copyEngineOptions.ui" line="324"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/copyEngineOptions.ui" line="338"/>
         <source>Delete partially transferred files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/copyEngineOptions.ui" line="337"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/copyEngineOptions.ui" line="351"/>
         <source>Rename the original destination</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/copyEngineOptions.ui" line="368"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/copyEngineOptions.ui" line="382"/>
         <source>Performance</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/copyEngineOptions.ui" line="387"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/copyEngineOptions.ui" line="401"/>
         <source>Inode threads</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/copyEngineOptions.ui" line="397"/>
-        <location filename="../../CopyEngine/Ultracopier-Spec/copyEngineOptions.ui" line="413"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/copyEngineOptions.ui" line="411"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/copyEngineOptions.ui" line="427"/>
         <source>MB</source>
         <translation type="unfinished">MB</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/copyEngineOptions.ui" line="429"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/copyEngineOptions.ui" line="443"/>
         <source>Uncheck this under Windows create problem</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/copyEngineOptions.ui" line="436"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/copyEngineOptions.ui" line="450"/>
         <source>OS Buffer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/copyEngineOptions.ui" line="456"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/copyEngineOptions.ui" line="470"/>
         <source>Disable parallel transfer when are different devices</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/copyEngineOptions.ui" line="463"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/copyEngineOptions.ui" line="477"/>
         <source>Buffer for different device</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/copyEngineOptions.ui" line="470"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/copyEngineOptions.ui" line="484"/>
         <source>OS FLags</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/copyEngineOptions.ui" line="477"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/copyEngineOptions.ui" line="491"/>
         <source>Buffer for same device</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/copyEngineOptions.ui" line="484"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/copyEngineOptions.ui" line="498"/>
         <source>OS native copy (disable speed limitation)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/copyEngineOptions.ui" line="514"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/copyEngineOptions.ui" line="528"/>
         <source>Misc</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/copyEngineOptions.ui" line="520"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/copyEngineOptions.ui" line="534"/>
         <source>Check the disk space</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/copyEngineOptions.ui" line="530"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/copyEngineOptions.ui" line="544"/>
         <source>Use this folder when destination is not set</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/copyEngineOptions.ui" line="542"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/copyEngineOptions.ui" line="556"/>
         <source>Browse</source>
         <translation type="unfinished">찾아보기</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/copyEngineOptions.ui" line="564"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/copyEngineOptions.ui" line="578"/>
         <source>Filters</source>
         <translation type="unfinished"></translation>
     </message>
