@@ -30,7 +30,5 @@
         <file>resources/darkButton.png</file>
         <file>resources/darkButtonPushed.png</file>
         <file>resources/darkButtonOver.png</file>
-        <file>resources/click.opus</file>
-        <file>resources/over.opus</file>
     </qresource>
 </RCC>

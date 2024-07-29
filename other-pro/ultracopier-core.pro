@@ -372,5 +372,4 @@ OTHER_FILES += $$PWD/../resources/resources-windows.rc
 
 win32: {
 DEFINES += WIDESTRING
-QT += winextras
 }

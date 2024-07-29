@@ -140,7 +140,6 @@ win32 {
         $$PWD/plugins/PluginLoader/catchcopy-v0002/OptionsWidget.cpp
     FORMS += $$PWD/plugins/PluginLoader/catchcopy-v0002/OptionsWidget.ui
     LIBS += -lole32 -lshell32
-    QT += winextras
 }
 
 #temp

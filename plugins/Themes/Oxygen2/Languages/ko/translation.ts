@@ -32,14 +32,14 @@
 <context>
     <name>Themes</name>
     <message>
-        <location filename="../../interface.cpp" line="+293"/>
-        <location line="+21"/>
+        <location filename="../../interface.cpp" line="+286"/>
+        <location line="+18"/>
         <source>Buy the Ultimate version to fund development</source>
         <translation type="unfinished">개발 지원을 위해 Ultimate 버전 구입</translation>
     </message>
     <message>
-        <location line="-21"/>
-        <location line="+21"/>
+        <location line="-18"/>
+        <location line="+18"/>
         <source>Register your key</source>
         <translation type="unfinished"></translation>
     </message>
@@ -49,7 +49,7 @@
         <translation type="unfinished">%1/%2 파일, 크기: %3/%4</translation>
     </message>
     <message>
-        <location line="+307"/>
+        <location line="+286"/>
         <source>Copy list</source>
         <translation type="unfinished">복사 목록</translation>
     </message>

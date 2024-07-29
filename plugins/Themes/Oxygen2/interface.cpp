@@ -13,6 +13,9 @@
 #include <chrono>
 #include <ctime>
 #include <QDesktopServices>
+#ifdef Q_OS_WIN32
+#include <windows.h>
+#endif
 
 #define ULTRACOPIERO2_MAXREMAININGTIMECOL 10
 #define ULTRACOPIERO2_MAXVALUESPEEDSTORED 5
