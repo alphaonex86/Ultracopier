@@ -224,7 +224,7 @@ bool EventDispatcher::shouldBeClosed()
 void EventDispatcher::quit()
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"Will quit ultracopier");
-    //disconnect(QCoreApplication::instance(),SIGNAL(aboutToQuit()),this,SLOT(quit()));
+    disconnect(QCoreApplication::instance(),SIGNAL(aboutToQuit()),this,SLOT(quit()));
     QCoreApplication::exit();
 }
 
@@ -396,12 +396,6 @@ void EventDispatcher::initFunction()
 
         connect(&cliParser,     &CliParser::showSystrayMessage,                    backgroundIcon,&SystrayIcon::showSystrayMessage,Qt::QueuedConnection);
     }
-    //conntect the last chance signal before quit
-    if(!connect(QCoreApplication::instance(),&QCoreApplication::aboutToQuit,this,&EventDispatcher::quit,Qt::DirectConnection))
-    {
-        std::cerr << "connect error at " << __FILE__ << ":" << std::to_string(__LINE__) << std::endl;
-        abort();
-    }
     //connect the slot for the help dialog
     if(!connect(backgroundIcon,&SystrayIcon::showHelp,&theHelp,&HelpDialog::show))
     {
@@ -433,7 +427,23 @@ std::string EventDispatcher::GetOSDisplayString()
 
    if(VER_PLATFORM_WIN32_NT==osvi.dwPlatformId && osvi.dwMajorVersion>4)
    {
-      if(osvi.dwMajorVersion==6)
+        if(osvi.dwMajorVersion==10)
+        {
+            switch(osvi.dwMinorVersion)
+            {
+            case 0:
+                if(osvi.wProductType==VER_NT_WORKSTATION)
+                    Os+=QStringLiteral("Windows 10/11 ");
+                else Os+=QStringLiteral("Windows Server 2016 ");
+                break;
+            default:
+                if(osvi.wProductType==VER_NT_WORKSTATION)
+                    Os+=QStringLiteral("Windows (dwMajorVersion: %1, dwMinorVersion: %2)").arg(osvi.dwMinorVersion).arg(osvi.dwMinorVersion);
+                else Os+=QStringLiteral("Windows Server (dwMajorVersion: %1, dwMinorVersion: %2)").arg(osvi.dwMinorVersion).arg(osvi.dwMinorVersion);
+                break;
+            }
+        }
+      else if(osvi.dwMajorVersion==6)
       {
           switch(osvi.dwMinorVersion)
           {
@@ -451,6 +461,11 @@ std::string EventDispatcher::GetOSDisplayString()
                 if(osvi.wProductType==VER_NT_WORKSTATION)
                     Os+=QStringLiteral("Windows 8 ");
                 else Os+=QStringLiteral("Windows Server 2012 ");
+            break;
+            case 3:
+                if(osvi.wProductType==VER_NT_WORKSTATION)
+                    Os+=QStringLiteral("Windows 9.1 ");
+                else Os+=QStringLiteral("Windows Server 2012 R2 ");
             break;
             default:
                  if(osvi.wProductType==VER_NT_WORKSTATION)
