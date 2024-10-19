@@ -48,6 +48,7 @@ ThemesManager::ThemesManager()
     //do the options
     std::vector<std::pair<std::string, std::string> > KeysList;
     KeysList.push_back(std::pair<std::string, std::string>("Ultracopier_current_theme",ULTRACOPIER_DEFAULT_STYLE));
+    KeysList.push_back(std::pair<std::string, std::string>("Style_force",""));
     OptionEngine::optionEngine->addOptionGroup("Themes",KeysList);
 
     //load the default and current themes path

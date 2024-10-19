@@ -27,6 +27,8 @@ class ServerCatchcopy : public QObject
         bool listen();
         /// \brief try close the server
         void close();
+        /// \brief where is the socket/named pipe
+        const std::string fullServerName() const;
         /// \brief get the error string on the QLocalServer
         const std::string errorStringServer() const;
         /// \brief get the general error string

@@ -1223,14 +1223,14 @@ Versione compilata come: %1.</translation>
     </message>
     <message>
         <location filename="../../../OptionDialog.ui" line="75"/>
-        <location filename="../../../OptionDialog.ui" line="366"/>
-        <location filename="../../../OptionDialog.cpp" line="297"/>
+        <location filename="../../../OptionDialog.ui" line="376"/>
+        <location filename="../../../OptionDialog.cpp" line="308"/>
         <source>Copy engine</source>
         <translation>Motore di copia</translation>
     </message>
     <message>
         <location filename="../../../OptionDialog.ui" line="101"/>
-        <location filename="../../../OptionDialog.ui" line="394"/>
+        <location filename="../../../OptionDialog.ui" line="404"/>
         <source>Themes</source>
         <translation>Temi</translation>
     </message>
@@ -1240,7 +1240,7 @@ Versione compilata come: %1.</translation>
         <translation>Registro</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.ui" line="251"/>
+        <location filename="../../../OptionDialog.ui" line="258"/>
         <source>Check for updates</source>
         <translation>Controlla aggiornamenti</translation>
     </message>
@@ -1250,38 +1250,38 @@ Versione compilata come: %1.</translation>
         <translation>Portatile (necessita riavvio)</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.ui" line="356"/>
+        <location filename="../../../OptionDialog.ui" line="366"/>
         <source>Name</source>
         <translation>Nome</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.ui" line="361"/>
+        <location filename="../../../OptionDialog.ui" line="371"/>
         <source>Version</source>
         <translation>Versione</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.ui" line="371"/>
+        <location filename="../../../OptionDialog.ui" line="381"/>
         <source>Language</source>
         <translation>Lingua</translation>
     </message>
     <message>
         <location filename="../../../OptionDialog.ui" line="80"/>
-        <location filename="../../../OptionDialog.ui" line="379"/>
-        <location filename="../../../OptionDialog.cpp" line="298"/>
+        <location filename="../../../OptionDialog.ui" line="389"/>
+        <location filename="../../../OptionDialog.cpp" line="309"/>
         <source>Listener</source>
         <translation>Rilevatore</translation>
     </message>
     <message>
         <location filename="../../../OptionDialog.ui" line="85"/>
-        <location filename="../../../OptionDialog.ui" line="384"/>
-        <location filename="../../../OptionDialog.cpp" line="299"/>
+        <location filename="../../../OptionDialog.ui" line="394"/>
+        <location filename="../../../OptionDialog.cpp" line="310"/>
         <source>Plugin loader</source>
         <translation>Caricatore di plug-ins</translation>
     </message>
     <message>
         <location filename="../../../OptionDialog.ui" line="93"/>
-        <location filename="../../../OptionDialog.ui" line="389"/>
-        <location filename="../../../OptionDialog.cpp" line="300"/>
+        <location filename="../../../OptionDialog.ui" line="399"/>
+        <location filename="../../../OptionDialog.cpp" line="311"/>
         <source>Session loader</source>
         <translation>Caricatore di sessioni</translation>
     </message>
@@ -1292,233 +1292,238 @@ Versione compilata come: %1.</translation>
     </message>
     <message>
         <location filename="../../../OptionDialog.ui" line="136"/>
+        <source>Force style</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../OptionDialog.ui" line="143"/>
         <source>Replace the default copy and move system</source>
         <translation>Rimpiazza il sistema di copia e spostamento predefinito</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.ui" line="150"/>
+        <location filename="../../../OptionDialog.ui" line="157"/>
         <source>Load at the session loading</source>
         <translation>Carica al caricamento della sessione</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.ui" line="164"/>
+        <location filename="../../../OptionDialog.ui" line="171"/>
         <source>When manual open</source>
         <translation>Quando l&apos;avvio è manuale</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.ui" line="190"/>
+        <location filename="../../../OptionDialog.ui" line="197"/>
         <source>Group the windows when</source>
         <translation>Raggruppa finestre quando</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.ui" line="231"/>
+        <location filename="../../../OptionDialog.ui" line="238"/>
         <source>Confirm to group the windows</source>
         <translation>Conferma per raggruppare le finestre</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.ui" line="241"/>
+        <location filename="../../../OptionDialog.ui" line="248"/>
         <source>Display the OS warning</source>
         <translation>Visualizza avviso del Sistema Operativo</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.ui" line="261"/>
+        <location filename="../../../OptionDialog.ui" line="268"/>
         <source>Remaining time algorithm</source>
         <translation>Algoritmo tempo rimanente</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.ui" line="269"/>
+        <location filename="../../../OptionDialog.ui" line="276"/>
         <source>Traditional</source>
         <translation>Tradizionale</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.ui" line="274"/>
+        <location filename="../../../OptionDialog.ui" line="281"/>
         <source>Logarithmic</source>
         <translation>Logaritmico</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.ui" line="304"/>
+        <location filename="../../../OptionDialog.ui" line="318"/>
         <source>default: finish.opus</source>
         <translation>predefinito: finish.opus</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.ui" line="311"/>
+        <location filename="../../../OptionDialog.ui" line="325"/>
         <source>Play</source>
         <translation>Riproduci</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.ui" line="320"/>
+        <location filename="../../../OptionDialog.ui" line="303"/>
         <source>Sound when finish</source>
         <translation>Suono al completamento</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.ui" line="402"/>
+        <location filename="../../../OptionDialog.ui" line="412"/>
         <source>Plugin</source>
         <translation>Plug-ins</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.ui" line="421"/>
+        <location filename="../../../OptionDialog.ui" line="431"/>
         <source>Add</source>
         <translation>Aggiungi</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.ui" line="434"/>
+        <location filename="../../../OptionDialog.ui" line="444"/>
         <source>Remove</source>
         <translation>Rimuovi</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.ui" line="444"/>
+        <location filename="../../../OptionDialog.ui" line="454"/>
         <source>Information</source>
         <translation>Informazioni</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.ui" line="471"/>
+        <location filename="../../../OptionDialog.ui" line="481"/>
         <source>Copy engine by order of preference:</source>
         <translation>Motori di copia in ordine di preferenza:</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.ui" line="542"/>
+        <location filename="../../../OptionDialog.ui" line="552"/>
         <source>Client connected</source>
         <translation>Client connesso</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.ui" line="598"/>
+        <location filename="../../../OptionDialog.ui" line="608"/>
         <source>Themes:</source>
         <translation>Temi:</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.ui" line="660"/>
+        <location filename="../../../OptionDialog.ui" line="669"/>
         <source>Unable to load the themes plugin</source>
         <translation>Impossibile caricare il plug-in dei temi</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.ui" line="710"/>
+        <location filename="../../../OptionDialog.ui" line="719"/>
         <source>No option for this plugin</source>
         <translation>Nessuna opzione per questo plug-in</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.ui" line="760"/>
+        <location filename="../../../OptionDialog.ui" line="769"/>
         <source>Browse</source>
         <translation>Sfoglia</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.ui" line="785"/>
+        <location filename="../../../OptionDialog.ui" line="794"/>
         <source>Write the transfers</source>
         <translation>Scrivi i trasferimenti</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.ui" line="845"/>
+        <location filename="../../../OptionDialog.ui" line="854"/>
         <source>Write the folder operations</source>
         <translation>Scrivi le operazioni cartella</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.ui" line="792"/>
+        <location filename="../../../OptionDialog.ui" line="801"/>
         <source>The variables are %time%, %source%, %size%, %destination%</source>
         <extracomment>%time%, %source%, %size%, %destination% should not be translated</extracomment>
         <translatorcomment>%time%, %source%, %size%, %destination% non dovranno essere tradotti</translatorcomment>
         <translation>Le variabili sono: %time%, %source%, %size%, %destination%</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.ui" line="815"/>
+        <location filename="../../../OptionDialog.ui" line="824"/>
         <source>Write the errors</source>
         <translation>Scrivi gli errori</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.ui" line="822"/>
+        <location filename="../../../OptionDialog.ui" line="831"/>
         <source>The variables are %time%, %path%, %size%, %mtime%, %error%</source>
         <extracomment>%time%, %path%, %size%, %mtime%, %error% should not be translated</extracomment>
         <translatorcomment>%time%, %path%, %size%, %mtime%, %error% non dovranno essere tradotti</translatorcomment>
         <translation>Le variabili sono: %time%, %path%, %size%, %mtime%, %error%</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.ui" line="741"/>
+        <location filename="../../../OptionDialog.ui" line="750"/>
         <source>Write the log file into:</source>
         <translation>Scrivi il file di registro in:</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.ui" line="772"/>
+        <location filename="../../../OptionDialog.ui" line="781"/>
         <source>Write directly to the file when it receive a new entry (can produce 50% of lost of performance)</source>
         <translation>Scrivere direttamente nel file quando riceve una nuova voce (può causare il 50% di perdita di prestazioni)</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.cpp" line="204"/>
-        <location filename="../../../OptionDialog.cpp" line="218"/>
+        <location filename="../../../OptionDialog.cpp" line="215"/>
+        <location filename="../../../OptionDialog.cpp" line="229"/>
         <source>Load</source>
         <translation>Carica</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.cpp" line="204"/>
+        <location filename="../../../OptionDialog.cpp" line="215"/>
         <source>Load the theme?</source>
         <translation>Caricare il tema?</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.cpp" line="218"/>
+        <location filename="../../../OptionDialog.cpp" line="229"/>
         <source>Load the language?</source>
         <translation>Caricare la lingua?</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.cpp" line="305"/>
+        <location filename="../../../OptionDialog.cpp" line="316"/>
         <source>Do nothing</source>
         <translation>Non fare nulla</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.cpp" line="306"/>
+        <location filename="../../../OptionDialog.cpp" line="317"/>
         <source>Ask source as folder</source>
         <translation>Chiedi origine come cartella</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.cpp" line="307"/>
+        <location filename="../../../OptionDialog.cpp" line="318"/>
         <source>Ask sources as files</source>
         <translation>Chiedi origini come file</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.cpp" line="308"/>
+        <location filename="../../../OptionDialog.cpp" line="319"/>
         <source>Never</source>
         <translation>Mai</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.cpp" line="309"/>
+        <location filename="../../../OptionDialog.cpp" line="320"/>
         <source>When source is same</source>
         <translation>Quando l&apos;origine è identica</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.cpp" line="310"/>
+        <location filename="../../../OptionDialog.cpp" line="321"/>
         <source>When destination is same</source>
         <translation>Quando la destinazione è identica</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.cpp" line="311"/>
+        <location filename="../../../OptionDialog.cpp" line="322"/>
         <source>When source and destination are same</source>
         <translation>Quando origine e destinazione sono identiche</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.cpp" line="312"/>
+        <location filename="../../../OptionDialog.cpp" line="323"/>
         <source>When source or destination are same</source>
         <translation>Quando origine o destinazione sono identiche</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.cpp" line="313"/>
+        <location filename="../../../OptionDialog.cpp" line="324"/>
         <source>Always</source>
         <translation>Sempre</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.cpp" line="327"/>
-        <location filename="../../../OptionDialog.cpp" line="328"/>
-        <location filename="../../../OptionDialog.cpp" line="329"/>
+        <location filename="../../../OptionDialog.cpp" line="338"/>
+        <location filename="../../../OptionDialog.cpp" line="339"/>
+        <location filename="../../../OptionDialog.cpp" line="340"/>
         <source>The variables are %1</source>
         <translation>Le variabili sono: %1</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.cpp" line="969"/>
+        <location filename="../../../OptionDialog.cpp" line="1025"/>
         <source>Save logs as: </source>
         <translation>Salva i registri come: </translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.ui" line="775"/>
+        <location filename="../../../OptionDialog.ui" line="784"/>
         <source>Synchronized log</source>
         <translation>Registro sincronizzato</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.ui" line="855"/>
+        <location filename="../../../OptionDialog.ui" line="864"/>
         <source>The variables are %path%, %operation%</source>
         <extracomment>%path%, %operation% should not be translated</extracomment>
         <translatorcomment>%path% e %operation%, non dovranno essere tradotti</translatorcomment>
@@ -1793,12 +1798,12 @@ Errore: %2</translation>
         <translation>Chiave del prodotto</translation>
     </message>
     <message>
-        <location filename="../../../ProductKey.cpp" line="60"/>
+        <location filename="../../../ProductKey.cpp" line="62"/>
         <source>Error</source>
         <translation>Errore</translation>
     </message>
     <message>
-        <location filename="../../../ProductKey.cpp" line="60"/>
+        <location filename="../../../ProductKey.cpp" line="62"/>
         <source>Your product key was rejected.&lt;br /&gt;If you buy key, unmark check your spam and unmark the mail as spam&lt;br /&gt;If you have not buy your key, go to &lt;a href=&quot;https://ultracopier.herman-brule.com/#ultimate&quot;&gt;https://ultracopier.herman-brule.com/#ultimate&lt;/a&gt;</source>
         <translation type="unfinished"></translation>
     </message>

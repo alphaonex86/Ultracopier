@@ -46,6 +46,7 @@ if (SetSecurityInfo(hPipe, SE_KERNEL_OBJECT, DACL_SECURITY_INFORMATION,
 }*/
         //socketDescriptor()
         #endif
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"now listening on: "+server.fullServerName());
         emit newState(Ultracopier::FullListening);
     }
     else

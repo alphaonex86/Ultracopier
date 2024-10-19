@@ -13,6 +13,8 @@
 #include <QDomElement>
 #include <QFileDialog>
 #include <QMessageBox>
+#include <QStyleFactory>
+#include <QString>
 #ifndef NOAUDIO
 #include <QAudioOutput>
 #endif
@@ -85,6 +87,9 @@ OptionDialog::OptionDialog() :
     ui->playSound->setVisible(false);
     ui->soundWhenFinish->setVisible(false);
     #endif
+    const QStringList & styles = QStyleFactory::keys();
+    for(const QString & s : styles)
+        ui->Style->addItem(s);
 }
 
 OptionDialog::~OptionDialog()
@@ -419,6 +424,7 @@ void OptionDialog::loadOption()
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
     newOptionValue("Themes",	"Ultracopier_current_theme",	OptionEngine::optionEngine->getOptionValue("Themes","Ultracopier_current_theme"));
+    newOptionValue("Themes",	"Style_force",                  OptionEngine::optionEngine->getOptionValue("Themes","Style_force"));
     newOptionValue("Ultracopier",	"ActionOnManualOpen",		OptionEngine::optionEngine->getOptionValue("Ultracopier","ActionOnManualOpen"));
     newOptionValue("Ultracopier",	"GroupWindowWhen",          OptionEngine::optionEngine->getOptionValue("Ultracopier","GroupWindowWhen"));
     newOptionValue("Ultracopier",	"confirmToGroupWindows",    OptionEngine::optionEngine->getOptionValue("Ultracopier","confirmToGroupWindows"));
@@ -515,6 +521,30 @@ void OptionDialog::newOptionValue(const std::string &group,const std::string &na
                 }
                 else
                     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"No themes: "+value);
+            }
+        }
+        else if(name=="Style_force")
+        {
+            ui->Style->setEnabled(ui->Style_force->isChecked() && ui->Style->count());
+            if(value.empty())
+            {
+                ui->Style_force->setChecked(false);
+                QApplication::setStyle(QStyleFactory::create(""));
+            }
+            else
+            {
+                const int index=ui->Style->findText(QString::fromStdString(value));
+                if(index>=0)
+                {
+                    ui->Style_force->setChecked(true);
+                    ui->Style->setCurrentIndex(index);
+                    QApplication::setStyle(QStyleFactory::create(ui->Style->currentText()));
+                }
+                else
+                {
+                    ui->Style_force->setChecked(false);
+                    QApplication::setStyle(QStyleFactory::create(""));
+                }
             }
         }
     }
@@ -679,6 +709,24 @@ void OptionDialog::on_Language_force_toggled(const bool &checked)
         OptionEngine::optionEngine->setOptionValue("Language","Language_force",booltostring(checked));
         ui->Language->setEnabled(ui->Language_force->isChecked() && ui->Language->count());
     }
+}
+
+void OptionDialog::on_Style_force_toggled(const bool &checked)
+{
+    if(allPluginsIsLoaded)
+    {
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
+        if(ui->Style_force->isChecked())
+            OptionEngine::optionEngine->setOptionValue("Themes","Style_force",ui->Style->currentText().toStdString());
+        else
+            OptionEngine::optionEngine->setOptionValue("Themes","Style_force","");
+        ui->Style->setEnabled(ui->Style_force->isChecked());
+    }
+}
+
+void OptionDialog::on_Style_currentIndexChanged(int index)
+{
+    OptionDialog::on_Style_force_toggled(ui->Style_force->isChecked());
 }
 
 void OptionDialog::on_CatchCopyAsDefault_toggled(const bool &checked)

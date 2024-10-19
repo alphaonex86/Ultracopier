@@ -119,6 +119,12 @@ void ServerCatchcopy::close()
     }
 }
 
+/// \brief where is the socket/named pipe
+const std::string ServerCatchcopy::fullServerName() const
+{
+    return server.fullServerName().toStdString();
+}
+
 const std::string ServerCatchcopy::errorStringServer() const
 {
     return server.errorString().toStdString();

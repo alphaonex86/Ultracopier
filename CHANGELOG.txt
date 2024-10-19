@@ -42,3 +42,4 @@
 2.2.6.9: Change first update detection from 10min to 1h
 2.2.7.0: Due to Qt 6.7 need c++17, start using Qt6, option to disable blacklist, stop provide MAC OS X binary (too complex), minimal requierement for binary Windows 10 (1809 or later) 64Bits (you should be able to compile your self on MAC OS X and Windows XP/7)
 2.2.7.1: Drop old not used sound option, fix crash on quit, improve windows 10/11 support
+3.0.0.0: start new major version, add theme options

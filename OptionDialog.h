@@ -55,6 +55,7 @@ private slots:
     void on_Ultracopier_current_theme_currentIndexChanged(const int &index);
     void on_Language_currentIndexChanged(const int &index);
     void on_Language_force_toggled(const bool &checked);
+    void on_Style_force_toggled(const bool &checked);
     void on_CatchCopyAsDefault_toggled(const bool &checked);
     #ifndef ULTRACOPIER_VERSION_PORTABLE
     void on_LoadAtSessionStarting_toggled(const bool &checked);
@@ -90,6 +91,8 @@ private slots:
     void on_soundWhenFinish_toggled(bool checked);
     void on_playSound_clicked();
     #endif
+    void on_Style_currentIndexChanged(int index);
+
 private:
     bool quit;
     Ui::OptionDialog *ui;

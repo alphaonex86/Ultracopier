@@ -27,11 +27,13 @@ bool ProductKey::parseKey(QString orgkey)
         key=QString::fromStdString(OptionEngine::optionEngine->getOptionValue("Ultracopier","key"));
     if(!key.isEmpty())
     {
-        QCryptographicHash hash(QCryptographicHash::Sha224);
-        hash.addData(QStringLiteral("mQcLvEg1HW8JuRXY3BawjSpe").toUtf8());//a salt
+        QCryptographicHash hash(QCryptographicHash::Sha256);
+        hash.addData(QStringLiteral("TxUd5cp4dwAqHAHZUhH84FuT").toUtf8());//a salt
         hash.addData(key.toUtf8());
         const QByteArray &result=hash.result();
-        if(!result.isEmpty() && result.at(0)==0x00 && result.at(1)==0x00)
+        if(!result.isEmpty() &&
+            result.at(0)==0x00 && result.at(1)==0x00 && result.at(2)==0x21 && (result.at(3)&0x0f)==0x00
+            )
         {
             if(!orgkey.isEmpty())
             OptionEngine::optionEngine->setOptionValue("Ultracopier","key",key.toStdString());
