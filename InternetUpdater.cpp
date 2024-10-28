@@ -91,6 +91,7 @@ void InternetUpdater::httpFinished()
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"get the new update failed: not finished");
         reply->deleteLater();
         reply=NULL;
+        errorUpdate(tr("Reply should not be finished").toStdString());
         return;
     }
     else if (reply->error())
@@ -100,11 +101,13 @@ void InternetUpdater::httpFinished()
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"get the new update failed: "+reply->errorString().toStdString());
         reply->deleteLater();
         reply=NULL;
+        errorUpdate(tr("Reply error: %1").arg((int)reply->error()).toStdString());
         return;
     } else if (!redirectionTarget.isNull()) {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"redirection denied to: "+redirectionTarget.toUrl().toString().toStdString());
         reply->deleteLater();
         reply=NULL;
+        errorUpdate(tr("Reply can't be redirect").toStdString());
         return;
     }
     QString newVersion=QString::fromUtf8(reply->readAll());
@@ -113,6 +116,7 @@ void InternetUpdater::httpFinished()
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"version string is empty");
         reply->deleteLater();
         reply=NULL;
+        errorUpdate(tr("New version can't be empty").toStdString());
         return;
     }
     newVersion.remove("\n");
@@ -121,6 +125,7 @@ void InternetUpdater::httpFinished()
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"version string don't match: "+newVersion.toStdString());
         reply->deleteLater();
         reply=NULL;
+        errorUpdate(tr("Version is not into correct format").toStdString());
         return;
     }
     if(newVersion.toStdString()==FacilityEngine::version())

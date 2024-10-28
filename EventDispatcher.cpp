@@ -390,6 +390,11 @@ void EventDispatcher::initFunction()
             std::cerr << "connect error at " << __FILE__ << ":" << std::to_string(__LINE__) << std::endl;
             abort();
         }
+        if(!connect(&internetUpdater,&InternetUpdater::errorUpdate,                 &theHelp,&HelpDialog::errorUpdate))
+        {
+            std::cerr << "connect error at " << __FILE__ << ":" << std::to_string(__LINE__) << std::endl;
+            abort();
+        }
         #endif
         copyEngineList->setIsConnected();
         copyServer->resendState();

@@ -148,6 +148,11 @@ void HelpDialog::newUpdate(const std::string &version) const
     ui->status->setText(tr("Update: %1").arg(QString::fromStdString(version)));
 }
 
+void HelpDialog::errorUpdate(const std::string &errorString) const
+{
+    ui->status->setText(tr("Update: %1").arg(QString::fromStdString(errorString)));
+}
+
 void HelpDialog::noNewUpdate() const
 {
     if(!ui->status->text().isEmpty())

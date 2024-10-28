@@ -32,6 +32,7 @@ class HelpDialog : public QDialog {
 
         #ifdef ULTRACOPIER_INTERNET_SUPPORT
         void newUpdate(const std::string &version) const;
+        void errorUpdate(const std::string &errorString) const;
         void noNewUpdate() const;
         #endif
     protected:
