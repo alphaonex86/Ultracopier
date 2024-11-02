@@ -999,12 +999,41 @@ Ez a verzió a következő verzióként került lefordításra: %1.</translation
     </message>
     <message>
         <location filename="../../../HelpDialog.cpp" line="148"/>
+        <location filename="../../../HelpDialog.cpp" line="153"/>
         <source>Update: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../HelpDialog.cpp" line="154"/>
+        <location filename="../../../HelpDialog.cpp" line="159"/>
         <source>No update</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>InternetUpdater</name>
+    <message>
+        <location filename="../../../InternetUpdater.cpp" line="94"/>
+        <source>Reply should not be finished</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../InternetUpdater.cpp" line="104"/>
+        <source>Reply error: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../InternetUpdater.cpp" line="110"/>
+        <source>Reply can&apos;t be redirect</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../InternetUpdater.cpp" line="119"/>
+        <source>New version can&apos;t be empty</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../InternetUpdater.cpp" line="128"/>
+        <source>Version is not into correct format</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

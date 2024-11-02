@@ -994,11 +994,12 @@ Esta versión está compilada en versión:%1.</translation>
     </message>
     <message>
         <location filename="../../../HelpDialog.cpp" line="148"/>
+        <location filename="../../../HelpDialog.cpp" line="153"/>
         <source>Update: %1</source>
         <translation>Actualización: %1</translation>
     </message>
     <message>
-        <location filename="../../../HelpDialog.cpp" line="154"/>
+        <location filename="../../../HelpDialog.cpp" line="159"/>
         <source>No update</source>
         <translation>Ninguna actualización</translation>
     </message>
@@ -1007,6 +1008,34 @@ Esta versión está compilada en versión:%1.</translation>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;For more information see the website &lt;a href=&quot;%1&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0057ae;&quot;&gt;%1&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <extracomment>%1 will be remplaced by the website into the corresponding languages</extracomment>
         <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Para obtener más información, consulte el sitio web &lt;a href=&quot;%1&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0057ae;&quot;&gt;%1&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+    </message>
+</context>
+<context>
+    <name>InternetUpdater</name>
+    <message>
+        <location filename="../../../InternetUpdater.cpp" line="94"/>
+        <source>Reply should not be finished</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../InternetUpdater.cpp" line="104"/>
+        <source>Reply error: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../InternetUpdater.cpp" line="110"/>
+        <source>Reply can&apos;t be redirect</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../InternetUpdater.cpp" line="119"/>
+        <source>New version can&apos;t be empty</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../InternetUpdater.cpp" line="128"/>
+        <source>Version is not into correct format</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

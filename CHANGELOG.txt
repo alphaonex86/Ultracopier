@@ -44,3 +44,4 @@
 2.2.7.1: Drop old not used sound option, fix crash on quit, improve windows 10/11 support
 3.0.0.0: start new major version, add theme options
 3.0.0.1: Better error handling for update, fix update on windows
+3.0.0.2: Somes fixes into the UI

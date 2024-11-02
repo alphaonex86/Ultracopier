@@ -108,7 +108,12 @@ Themes::Themes(const bool &alwaysOnTop,
     uiOptions->showProgressionInTheTitle->setChecked(showProgressionInTheTitle);
     uiOptions->speedWithProgressBar->setChecked(speedWithProgressBar);
     uiOptions->showDualProgression->setChecked(showDualProgression);
-    uiOptions->startMinimized->setEnabled(false);
+    //only apply at start, then non sense enable it
+    {
+        uiOptions->startMinimized->setEnabled(false);
+        uiOptions->startMinimized->setVisible(false);
+        uiOptions->label_startMinimized->setVisible(false);
+    }
     uiOptions->alwaysOnTop->setChecked(alwaysOnTop);
     uiOptions->generalMargin->setValue(generalMargin);
     uiOptions->generalSpacing->setValue(generalSpacing);
