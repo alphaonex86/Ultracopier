@@ -35,12 +35,15 @@ WindowsExplorerLoader::WindowsExplorerLoader()
     needBeRegistred=false;
     changeOfArchDetected=false;
     is64Bits=false;
+    atstartup=false;
     notunload=false;
     dllChecked=false;
     optionsWidget=new OptionsWidget();
     connect(optionsWidget,&OptionsWidget::sendAllDllIsImportant,this,&WindowsExplorerLoader::setAllDllIsImportant);
     connect(optionsWidget,&OptionsWidget::sendAllUserIsImportant,this,&WindowsExplorerLoader::setAllUserIsImportant);
     connect(optionsWidget,&OptionsWidget::sendDebug,this,&WindowsExplorerLoader::setDebug);
+    connect(optionsWidget,&OptionsWidget::sendAtStartup,this,&WindowsExplorerLoader::setAtStartup);
+    connect(optionsWidget,&OptionsWidget::sendNotUnload,this,&WindowsExplorerLoader::setNotUnload);
 
 #if defined(_M_X64)//64Bits
     is64Bits=true;
@@ -359,53 +362,50 @@ bool WindowsExplorerLoader::RegisterShellExtDll(std::string dllPath, const bool 
     // register
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start, bRegister: "+std::to_string(bRegister));
     //set value into the variable
-    if(bRegister)
+    if(bRegister && atstartup)
     {
         #ifdef Q_OS_WIN32
-        if(loadAtStartup)
+        const QString p=QString::fromStdString(dllPath);
+        QFileInfo info(p);
+        QString filename=info.fileName();
+        QString runStringApp = "regsvr32 /s \""+QString::fromStdString(dllPath)+"\"";
+        runStringApp.replace( "/", "\\" );
+        wchar_t windowsString[255];
+        runStringApp.toWCharArray(windowsString);
+        wchar_t windowsStringKey[255];
+        filename.toWCharArray(windowsStringKey);
+        HKEY ultracopier_regkey;
+        if(RegCreateKeyEx(HKEY_CURRENT_USER, TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\Run"), 0, 0, REG_OPTION_NON_VOLATILE,KEY_ALL_ACCESS, 0, &ultracopier_regkey, 0)==ERROR_SUCCESS)
         {
-            const QString p=QString::fromStdString(dllPath);
-            QFileInfo info(p);
-            QString filename=info.fileName();
-            QString runStringApp = "regsvr32 /s \""+QString::fromStdString(dllPath)+"\"";
-            runStringApp.replace( "/", "\\" );
-            wchar_t windowsString[255];
-            runStringApp.toWCharArray(windowsString);
-            wchar_t windowsStringKey[255];
-            filename.toWCharArray(windowsStringKey);
-            HKEY ultracopier_regkey;
-            if(RegCreateKeyEx(HKEY_CURRENT_USER, TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\Run"), 0, 0, REG_OPTION_NON_VOLATILE,KEY_ALL_ACCESS, 0, &ultracopier_regkey, 0)==ERROR_SUCCESS)
+            DWORD kSize=254;
+            if(RegQueryValueEx(ultracopier_regkey,windowsStringKey,NULL,NULL,(LPBYTE)0,&kSize)!=ERROR_SUCCESS)
             {
-                DWORD kSize=254;
-                if(RegQueryValueEx(ultracopier_regkey,windowsStringKey,NULL,NULL,(LPBYTE)0,&kSize)!=ERROR_SUCCESS)
-                {
 
-                    if(RegSetValueEx(ultracopier_regkey, windowsStringKey, 0, REG_SZ, (BYTE*)windowsString, runStringApp.length()*2)!=ERROR_SUCCESS)
-                        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"bRegister: "+std::to_string(bRegister)+" failed");
-                }
-                else
-                {
-                    RegCloseKey(ultracopier_regkey);
-                    return true;
-                }
-                RegCloseKey(ultracopier_regkey);
+                if(RegSetValueEx(ultracopier_regkey, windowsStringKey, 0, REG_SZ, (BYTE*)windowsString, runStringApp.length()*2)!=ERROR_SUCCESS)
+                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"bRegister: "+std::to_string(bRegister)+" failed");
             }
-            HKEY    ultracopier_regkey;
-            if(RegCreateKeyEx(HKEY_LOCAL_MACHINE, TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\Run"), 0, 0, REG_OPTION_NON_VOLATILE,KEY_ALL_ACCESS, 0, &ultracopier_regkey, 0)==ERROR_SUCCESS)
+            else
             {
-                DWORD kSize=254;
-                if(RegQueryValueEx(ultracopier_regkey,windowsStringKey,NULL,NULL,(LPBYTE)0,&kSize)!=ERROR_SUCCESS)
-                {
-                    if(RegSetValueEx(ultracopier_regkey,windowsStringKey,0,REG_SZ,(BYTE*)windowsString, runStringApp.length()*2)!=ERROR_SUCCESS)
-                        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"bRegister: "+std::to_string(bRegister)+" failed");
-                }
-                else
-                {
-                    RegCloseKey(ultracopier_regkey);
-                    return true;
-                }
                 RegCloseKey(ultracopier_regkey);
+                return true;
             }
+            RegCloseKey(ultracopier_regkey);
+        }
+        HKEY    ultracopier_regkey;
+        if(RegCreateKeyEx(HKEY_LOCAL_MACHINE, TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\Run"), 0, 0, REG_OPTION_NON_VOLATILE,KEY_ALL_ACCESS, 0, &ultracopier_regkey, 0)==ERROR_SUCCESS)
+        {
+            DWORD kSize=254;
+            if(RegQueryValueEx(ultracopier_regkey,windowsStringKey,NULL,NULL,(LPBYTE)0,&kSize)!=ERROR_SUCCESS)
+            {
+                if(RegSetValueEx(ultracopier_regkey,windowsStringKey,0,REG_SZ,(BYTE*)windowsString, runStringApp.length()*2)!=ERROR_SUCCESS)
+                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"bRegister: "+std::to_string(bRegister)+" failed");
+            }
+            else
+            {
+                RegCloseKey(ultracopier_regkey);
+                return true;
+            }
+            RegCloseKey(ultracopier_regkey);
         }
         #endif
     }

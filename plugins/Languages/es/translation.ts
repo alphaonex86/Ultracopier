@@ -1582,6 +1582,16 @@ Esta versión está compilada en versión:%1.</translation>
         <source>Register for all users</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <location filename="../../PluginLoader/catchcopy-v0002/OptionsWidget.ui" line="41"/>
+        <source>at startup</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../PluginLoader/catchcopy-v0002/OptionsWidget.ui" line="48"/>
+        <source>not unload</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>PluginInformation</name>

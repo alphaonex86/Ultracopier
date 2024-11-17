@@ -18,5 +18,15 @@
         <source>Register for all users</source>
         <translation>Registra per tutti gli utenti</translation>
     </message>
+    <message>
+        <location filename="../../OptionsWidget.ui" line="41"/>
+        <source>at startup</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../OptionsWidget.ui" line="48"/>
+        <source>not unload</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 </TS>

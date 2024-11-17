@@ -18,5 +18,15 @@
         <source>Register for all users</source>
         <translation type="unfinished">모든 사용자에 대해 등록</translation>
     </message>
+    <message>
+        <location line="+7"/>
+        <source>at startup</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>not unload</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 </TS>
