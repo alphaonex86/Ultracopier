@@ -6,6 +6,13 @@
 #include "CliParser.h"
 #include "cpp11addition.h"
 #include "Core.h"
+#ifdef Q_OS_WIN32
+#include <windows.h>
+#endif
+//this is just to support clipboard
+#include <QClipboard>
+#include <QGuiApplication>
+#include <QRegularExpression>
 
 #include <QDebug>
 
@@ -47,6 +54,22 @@ void CliParser::cli(const std::vector<std::string> &ultracopierArguments,const b
         {
             if(onlyCheck)
                 return;
+            QCoreApplication::exit();
+            return;
+        }
+        else if(ultracopierArguments.back()=="uninstall")
+        {
+            if(onlyCheck)
+                return;
+            #ifdef Q_OS_WIN32
+            HKEY    ultracopier_regkey;
+            if(RegCreateKeyEx(HKEY_CURRENT_USER, TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\Run"), 0, 0, REG_OPTION_NON_VOLATILE,KEY_ALL_ACCESS, 0, &ultracopier_regkey, 0)==ERROR_SUCCESS)
+            {
+                RegDeleteValue(ultracopier_regkey, TEXT("ultracopier"));
+                RegDeleteValue(ultracopier_regkey, TEXT("catchcopy"));
+                RegCloseKey(ultracopier_regkey);
+            }
+            #endif
             QCoreApplication::exit();
             return;
         }
@@ -115,6 +138,48 @@ void CliParser::cli(const std::vector<std::string> &ultracopierArguments,const b
         showHelp();
         return;
     }
+    else if(ultracopierArguments.at(1)=="CBmv" || ultracopierArguments.at(1)=="CBcp")
+    {
+        if(ultracopierArguments.size()==3)
+        {
+            QClipboard *clipboard = QGuiApplication::clipboard();
+            const QStringList &l=clipboard->text().split(QRegularExpression("[\n\r]+"),Qt::SkipEmptyParts);
+            /*linux:
+            file:///path/test/master.zip
+            file:///path/test/New text file
+            Windows:
+            file://Z:/X
+            */
+            std::vector<std::string> sourceList;
+            int index=0;
+            while(index<l.size())
+            {
+                sourceList.push_back(l.at(index).toStdString());
+                index++;
+            }
+            if(ultracopierArguments.back()=="?")
+            {
+                if(ultracopierArguments.at(1)=="CBmv")
+                    emit newMoveWithoutDestination(sourceList);
+                else
+                    emit newCopyWithoutDestination(sourceList);
+            }
+            else
+            {
+                if(ultracopierArguments.at(1)=="CBmv")
+                    emit newMove(sourceList,ultracopierArguments.back());
+                else
+                    emit newCopy(sourceList,ultracopierArguments.back());
+            }
+            return;
+        }
+        else
+        {
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Command line not understand");
+            showHelp();
+            return;
+        }
+    }
     else if(ultracopierArguments.size()>3)
     {
         if(ultracopierArguments.at(1)=="Copy" || ultracopierArguments.at(1)=="cp")
@@ -122,8 +187,8 @@ void CliParser::cli(const std::vector<std::string> &ultracopierArguments,const b
             if(onlyCheck)
                 return;
             std::vector<std::string> transferList=ultracopierArguments;
-            transferList.erase(transferList.cbegin());
-            transferList.erase(transferList.cbegin());
+            transferList.erase(transferList.cbegin());//app path
+            transferList.erase(transferList.cbegin());//command
             if(transferList.back()=="?")
             {
                 transferList.erase(transferList.cend());
@@ -137,13 +202,13 @@ void CliParser::cli(const std::vector<std::string> &ultracopierArguments,const b
             }
             return;
         }
-        else if(ultracopierArguments.at(1)=="Move" || ultracopierArguments.at(1)=="mv")
+        else if(ultracopierArguments.at(1)=="Move" || ultracopierArguments.at(1)=="mv" || ultracopierArguments.at(1)=="CBmv")
         {
             if(onlyCheck)
                 return;
             std::vector<std::string> transferList=ultracopierArguments;
-            transferList.erase(transferList.cbegin());
-            transferList.erase(transferList.cbegin());
+            transferList.erase(transferList.cbegin());//app path
+            transferList.erase(transferList.cbegin());//command
             if(transferList.back()=="?")
             {
                 transferList.erase(transferList.cend());

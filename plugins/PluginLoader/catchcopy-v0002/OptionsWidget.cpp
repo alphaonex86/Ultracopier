@@ -47,3 +47,13 @@ void OptionsWidget::on_Debug_toggled(bool checked)
 {
     emit sendDebug(checked);
 }
+
+void OptionsWidget::on_atstartup_toggled(bool checked)
+{
+    emit sendAtStartup(checked);
+}
+
+void OptionsWidget::on_notunload_toggled(bool checked)
+{
+    emit sendNotUnload(checked);
+}

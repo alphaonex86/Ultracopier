@@ -6,6 +6,9 @@
 #include "PlatformMacro.h"
 #include "../../../cpp11addition.h"
 
+#ifdef Q_OS_WIN32
+#include <windows.h>
+#endif
 #include <QFile>
 #include <QDir>
 #ifdef ULTRACOPIER_PLUGIN_ALL_IN_ONE
@@ -32,6 +35,8 @@ WindowsExplorerLoader::WindowsExplorerLoader()
     needBeRegistred=false;
     changeOfArchDetected=false;
     is64Bits=false;
+    notunload=false;
+    dllChecked=false;
     optionsWidget=new OptionsWidget();
     connect(optionsWidget,&OptionsWidget::sendAllDllIsImportant,this,&WindowsExplorerLoader::setAllDllIsImportant);
     connect(optionsWidget,&OptionsWidget::sendAllUserIsImportant,this,&WindowsExplorerLoader::setAllUserIsImportant);
@@ -314,10 +319,14 @@ void WindowsExplorerLoader::setResources(OptionInterface * options, const std::s
         KeysList.push_back(std::pair<std::string, std::string>("allDllIsImportant","false"));
         KeysList.push_back(std::pair<std::string, std::string>("allUserIsImportant","false"));
         KeysList.push_back(std::pair<std::string, std::string>("Debug","false"));
+        KeysList.push_back(std::pair<std::string, std::string>("atstartup","false"));
+        KeysList.push_back(std::pair<std::string, std::string>("notunload","false"));
         optionsEngine->addOptionGroup(KeysList);
         allDllIsImportant=stringtobool(optionsEngine->getOptionValue("allDllIsImportant"));
         allUserIsImportant=stringtobool(optionsEngine->getOptionValue("allUserIsImportant"));
         Debug=stringtobool(optionsEngine->getOptionValue("Debug"));
+        atstartup=stringtobool(optionsEngine->getOptionValue("atstartup"));
+        notunload=stringtobool(optionsEngine->getOptionValue("notunload="));
         optionsWidget->setAllDllIsImportant(allDllIsImportant);
         optionsWidget->setDebug(Debug);
     }
@@ -325,6 +334,8 @@ void WindowsExplorerLoader::setResources(OptionInterface * options, const std::s
 
 bool WindowsExplorerLoader::RegisterShellExtDll(std::string dllPath, const bool &bRegister, const bool &quiet)
 {
+    if(!bRegister && notunload)
+        return true;
     if(allUserIsImportant)
         stringreplaceOne(dllPath,".dll","all.dll");
     if(Debug)
@@ -344,6 +355,59 @@ bool WindowsExplorerLoader::RegisterShellExtDll(std::string dllPath, const bool 
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Try dual load: "+dllPath);
         return false;
+    }
+    // register
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start, bRegister: "+std::to_string(bRegister));
+    //set value into the variable
+    if(bRegister)
+    {
+        #ifdef Q_OS_WIN32
+        if(loadAtStartup)
+        {
+            const QString p=QString::fromStdString(dllPath);
+            QFileInfo info(p);
+            QString filename=info.fileName();
+            QString runStringApp = "regsvr32 /s \""+QString::fromStdString(dllPath)+"\"";
+            runStringApp.replace( "/", "\\" );
+            wchar_t windowsString[255];
+            runStringApp.toWCharArray(windowsString);
+            wchar_t windowsStringKey[255];
+            filename.toWCharArray(windowsStringKey);
+            HKEY ultracopier_regkey;
+            if(RegCreateKeyEx(HKEY_CURRENT_USER, TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\Run"), 0, 0, REG_OPTION_NON_VOLATILE,KEY_ALL_ACCESS, 0, &ultracopier_regkey, 0)==ERROR_SUCCESS)
+            {
+                DWORD kSize=254;
+                if(RegQueryValueEx(ultracopier_regkey,windowsStringKey,NULL,NULL,(LPBYTE)0,&kSize)!=ERROR_SUCCESS)
+                {
+
+                    if(RegSetValueEx(ultracopier_regkey, windowsStringKey, 0, REG_SZ, (BYTE*)windowsString, runStringApp.length()*2)!=ERROR_SUCCESS)
+                        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"bRegister: "+std::to_string(bRegister)+" failed");
+                }
+                else
+                {
+                    RegCloseKey(ultracopier_regkey);
+                    return true;
+                }
+                RegCloseKey(ultracopier_regkey);
+            }
+            HKEY    ultracopier_regkey;
+            if(RegCreateKeyEx(HKEY_LOCAL_MACHINE, TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\Run"), 0, 0, REG_OPTION_NON_VOLATILE,KEY_ALL_ACCESS, 0, &ultracopier_regkey, 0)==ERROR_SUCCESS)
+            {
+                DWORD kSize=254;
+                if(RegQueryValueEx(ultracopier_regkey,windowsStringKey,NULL,NULL,(LPBYTE)0,&kSize)!=ERROR_SUCCESS)
+                {
+                    if(RegSetValueEx(ultracopier_regkey,windowsStringKey,0,REG_SZ,(BYTE*)windowsString, runStringApp.length()*2)!=ERROR_SUCCESS)
+                        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"bRegister: "+std::to_string(bRegister)+" failed");
+                }
+                else
+                {
+                    RegCloseKey(ultracopier_regkey);
+                    return true;
+                }
+                RegCloseKey(ultracopier_regkey);
+            }
+        }
+        #endif
     }
     ////////////////////////////// First way to load //////////////////////////////
     QStringList arguments;
@@ -459,4 +523,16 @@ void WindowsExplorerLoader::setDebug(bool Debug)
 {
     this->Debug=Debug;
     optionsEngine->setOptionValue("Debug",std::to_string(Debug));
+}
+
+void WindowsExplorerLoader::setAtStartup(bool val)
+{
+    this->atstartup=val;
+    optionsEngine->setOptionValue("atstartup",std::to_string(val));
+}
+
+void WindowsExplorerLoader::setNotUnload(bool val)
+{
+    this->notunload=val;
+    optionsEngine->setOptionValue("notunload",std::to_string(val));
 }

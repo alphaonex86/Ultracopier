@@ -52,6 +52,8 @@ private:
     std::unordered_set<std::string> correctlyLoaded;
     bool RegisterShellExtDll(std::string dllPath, const bool &bRegister, const bool &quiet);
     bool checkExistsDll();
+    bool atstartup;
+    bool notunload;
     bool dllChecked;
     bool needBeRegistred;
     OptionInterface * optionsEngine;
@@ -62,6 +64,8 @@ private slots:
     void setAllDllIsImportant(bool allDllIsImportant);
     void setAllUserIsImportant(bool allDllIsImportant);
     void setDebug(bool Debug);
+    void setAtStartup(bool val);
+    void setNotUnload(bool val);
 };
 
 #endif // PLUGIN_LOADER_TEST_H

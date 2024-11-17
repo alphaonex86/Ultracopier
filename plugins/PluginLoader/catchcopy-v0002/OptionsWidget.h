@@ -24,10 +24,16 @@ signals:
     void sendAllDllIsImportant(bool allDllIsImportant);
     void sendAllUserIsImportant(bool allDllIsImportant);
     void sendDebug(bool Debug);
+    void sendPermanentRegister(bool enable);
+    void sendForceLoad(bool enable);
+    void sendAtStartup(bool Debug);
+    void sendNotUnload(bool Debug);
 private slots:
     void on_allDllIsImportant_toggled(bool checked);
     void on_allUserIsImportant_toggled(bool checked);
     void on_Debug_toggled(bool checked);
+    void on_atstartup_toggled(bool checked);
+    void on_notunload_toggled(bool checked);
 };
 
 #endif // OptionsWidget_H

@@ -4,88 +4,88 @@
 <context>
     <name>CliParser</name>
     <message>
-        <location filename="../../../CliParser.cpp" line="37"/>
-        <location filename="../../../CliParser.cpp" line="86"/>
-        <location filename="../../../CliParser.cpp" line="99"/>
+        <location filename="../../../CliParser.cpp" line="44"/>
         <location filename="../../../CliParser.cpp" line="109"/>
-        <location filename="../../../CliParser.cpp" line="194"/>
+        <location filename="../../../CliParser.cpp" line="122"/>
+        <location filename="../../../CliParser.cpp" line="132"/>
+        <location filename="../../../CliParser.cpp" line="259"/>
         <source>Warning</source>
         <translation>Figyelmeztetés</translation>
     </message>
     <message>
-        <location filename="../../../CliParser.cpp" line="86"/>
+        <location filename="../../../CliParser.cpp" line="109"/>
         <source>Problem reading file, or file size is 0</source>
         <translation>Probléma a fájl olvasásánál vagy a fájlméret 0</translation>
     </message>
     <message>
-        <location filename="../../../CliParser.cpp" line="174"/>
-        <location filename="../../../CliParser.cpp" line="185"/>
+        <location filename="../../../CliParser.cpp" line="239"/>
+        <location filename="../../../CliParser.cpp" line="250"/>
         <source>The arguments possible are:</source>
         <translation>A lehetséges argumentumok:</translation>
     </message>
     <message>
-        <location filename="../../../CliParser.cpp" line="176"/>
-        <location filename="../../../CliParser.cpp" line="187"/>
+        <location filename="../../../CliParser.cpp" line="241"/>
+        <location filename="../../../CliParser.cpp" line="252"/>
         <source>To display the options</source>
         <translation>A beállítások megjelenítéséhez</translation>
     </message>
     <message>
-        <location filename="../../../CliParser.cpp" line="177"/>
-        <location filename="../../../CliParser.cpp" line="188"/>
+        <location filename="../../../CliParser.cpp" line="242"/>
+        <location filename="../../../CliParser.cpp" line="253"/>
         <source>To quit the other instances (if running)</source>
         <translation>Kilépés a többi példányból (ha fut)</translation>
     </message>
     <message>
-        <location filename="../../../CliParser.cpp" line="179"/>
-        <location filename="../../../CliParser.cpp" line="190"/>
+        <location filename="../../../CliParser.cpp" line="244"/>
+        <location filename="../../../CliParser.cpp" line="255"/>
         <source>To copy sources to destination, separated by space. If destination is &quot;?&quot;, ultracopier will ask the user</source>
         <translation>A forrás másolása a célba, szóközzel elválasztva. Ha a cél &quot;?&quot;, az Ultracopier rákérdez a felhasználónál</translation>
     </message>
     <message>
-        <location filename="../../../CliParser.cpp" line="180"/>
-        <location filename="../../../CliParser.cpp" line="191"/>
+        <location filename="../../../CliParser.cpp" line="245"/>
+        <location filename="../../../CliParser.cpp" line="256"/>
         <source>To move sources to destination, separated by space. If destination is &quot;?&quot;, ultracopier will ask the user</source>
         <translation>A forrás mozgatása a célba, szóközzel elválasztva. Ha a cél &quot;?&quot;, az Ultracopier rákérdez a felhasználónál</translation>
     </message>
     <message>
-        <location filename="../../../CliParser.cpp" line="184"/>
+        <location filename="../../../CliParser.cpp" line="249"/>
         <source>Command not valid</source>
         <translation>A parancs nem érvényes</translation>
     </message>
     <message>
-        <location filename="../../../CliParser.cpp" line="99"/>
+        <location filename="../../../CliParser.cpp" line="122"/>
         <source>This file is not supported transfer list</source>
         <translation>Ez a fájl nem támogatott átviteli lista</translation>
     </message>
     <message>
-        <location filename="../../../CliParser.cpp" line="32"/>
+        <location filename="../../../CliParser.cpp" line="39"/>
         <source>Ultracopier is already running, right click on its system tray icon (near the clock) to use it or just copy and paste</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../CliParser.cpp" line="34"/>
+        <location filename="../../../CliParser.cpp" line="41"/>
         <source>Ultracopier is already running, view all notification area icons (near the clock), right click on its system tray icon to use it or just copy and paste</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../CliParser.cpp" line="109"/>
+        <location filename="../../../CliParser.cpp" line="132"/>
         <source>Unable to open the transfer list file</source>
         <translation>Az átviteli listafájl megnyitása nem lehetséges</translation>
     </message>
     <message>
-        <location filename="../../../CliParser.cpp" line="175"/>
-        <location filename="../../../CliParser.cpp" line="186"/>
+        <location filename="../../../CliParser.cpp" line="240"/>
+        <location filename="../../../CliParser.cpp" line="251"/>
         <source>To display this help</source>
         <translation>Ennek a súgónak a megjelenítéséhez</translation>
     </message>
     <message>
-        <location filename="../../../CliParser.cpp" line="178"/>
-        <location filename="../../../CliParser.cpp" line="189"/>
+        <location filename="../../../CliParser.cpp" line="243"/>
+        <location filename="../../../CliParser.cpp" line="254"/>
         <source>Open transfer list</source>
         <translation>Átviteli lista megnyitása</translation>
     </message>
     <message>
-        <location filename="../../../CliParser.cpp" line="196"/>
+        <location filename="../../../CliParser.cpp" line="261"/>
         <source>Help</source>
         <translation>Súgó</translation>
     </message>
@@ -1548,7 +1548,7 @@ Ez a verzió a következő verzióként került lefordításra: %1.</translation
         <translation>A változók: %1</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.cpp" line="1025"/>
+        <location filename="../../../OptionDialog.cpp" line="1027"/>
         <source>Save logs as: </source>
         <translation>Napló mentése mint:</translation>
     </message>

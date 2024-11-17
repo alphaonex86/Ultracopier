@@ -45,3 +45,5 @@
 3.0.0.0: start new major version, add theme options
 3.0.0.1: Better error handling for update, fix update on windows
 3.0.0.2: Somes fixes into the UI
+3.0.0.3: Improvement to override the copy dial into windows, update german translation, improve android support, able to receive from clipboard the sources list
+3.0.0.4: fix for previous version

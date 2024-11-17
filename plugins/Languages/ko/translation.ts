@@ -4,88 +4,88 @@
 <context>
     <name>CliParser</name>
     <message>
-        <location filename="../../../CliParser.cpp" line="37"/>
-        <location filename="../../../CliParser.cpp" line="86"/>
-        <location filename="../../../CliParser.cpp" line="99"/>
+        <location filename="../../../CliParser.cpp" line="44"/>
         <location filename="../../../CliParser.cpp" line="109"/>
-        <location filename="../../../CliParser.cpp" line="194"/>
+        <location filename="../../../CliParser.cpp" line="122"/>
+        <location filename="../../../CliParser.cpp" line="132"/>
+        <location filename="../../../CliParser.cpp" line="259"/>
         <source>Warning</source>
         <translation>알림</translation>
     </message>
     <message>
-        <location filename="../../../CliParser.cpp" line="86"/>
+        <location filename="../../../CliParser.cpp" line="109"/>
         <source>Problem reading file, or file size is 0</source>
         <translation>파일 읽기 문제이거나 파일 크기가 0입니다.</translation>
     </message>
     <message>
-        <location filename="../../../CliParser.cpp" line="174"/>
-        <location filename="../../../CliParser.cpp" line="185"/>
+        <location filename="../../../CliParser.cpp" line="239"/>
+        <location filename="../../../CliParser.cpp" line="250"/>
         <source>The arguments possible are:</source>
         <translation type="unfinished">가능한 인수:</translation>
     </message>
     <message>
-        <location filename="../../../CliParser.cpp" line="176"/>
-        <location filename="../../../CliParser.cpp" line="187"/>
+        <location filename="../../../CliParser.cpp" line="241"/>
+        <location filename="../../../CliParser.cpp" line="252"/>
         <source>To display the options</source>
         <translation type="unfinished">옵션 표시</translation>
     </message>
     <message>
-        <location filename="../../../CliParser.cpp" line="177"/>
-        <location filename="../../../CliParser.cpp" line="188"/>
+        <location filename="../../../CliParser.cpp" line="242"/>
+        <location filename="../../../CliParser.cpp" line="253"/>
         <source>To quit the other instances (if running)</source>
         <translation type="unfinished">다른 인스턴스 종료 (실행 중일 경우)</translation>
     </message>
     <message>
-        <location filename="../../../CliParser.cpp" line="179"/>
-        <location filename="../../../CliParser.cpp" line="190"/>
+        <location filename="../../../CliParser.cpp" line="244"/>
+        <location filename="../../../CliParser.cpp" line="255"/>
         <source>To copy sources to destination, separated by space. If destination is &quot;?&quot;, ultracopier will ask the user</source>
         <translation>원본을 대상에 복사, 공백으로 구분. 대상이 &quot;?&quot;일 경우 프로그램이 사용자에게 확인합니다.</translation>
     </message>
     <message>
-        <location filename="../../../CliParser.cpp" line="180"/>
-        <location filename="../../../CliParser.cpp" line="191"/>
+        <location filename="../../../CliParser.cpp" line="245"/>
+        <location filename="../../../CliParser.cpp" line="256"/>
         <source>To move sources to destination, separated by space. If destination is &quot;?&quot;, ultracopier will ask the user</source>
         <translation>원본을 대상에 이동, 공백으로 구분. 대상이 &quot;?&quot;일 경우 프로그램이 사용자에게 확인합니다. </translation>
     </message>
     <message>
-        <location filename="../../../CliParser.cpp" line="184"/>
+        <location filename="../../../CliParser.cpp" line="249"/>
         <source>Command not valid</source>
         <translation>명령이 유효하지 않습니다.</translation>
     </message>
     <message>
-        <location filename="../../../CliParser.cpp" line="99"/>
+        <location filename="../../../CliParser.cpp" line="122"/>
         <source>This file is not supported transfer list</source>
         <translation>이 파일은 지원되지 않는 전송 목록 파일 형식입니다.</translation>
     </message>
     <message>
-        <location filename="../../../CliParser.cpp" line="32"/>
+        <location filename="../../../CliParser.cpp" line="39"/>
         <source>Ultracopier is already running, right click on its system tray icon (near the clock) to use it or just copy and paste</source>
         <translation>Ultracopier가 이미 실행 중입니다. 트레이에 있는 아이콘에서 우-클릭하여 사용하거나 그냥 복사하여 붙여넣기 하세요.</translation>
     </message>
     <message>
-        <location filename="../../../CliParser.cpp" line="34"/>
+        <location filename="../../../CliParser.cpp" line="41"/>
         <source>Ultracopier is already running, view all notification area icons (near the clock), right click on its system tray icon to use it or just copy and paste</source>
         <translation>Ultracopier가 이미 실행 중입니다. 트레이에 있는 아이콘에서 우-클릭하여 사용하거나 그냥 복사하여 붙여넣기 하세요. </translation>
     </message>
     <message>
-        <location filename="../../../CliParser.cpp" line="109"/>
+        <location filename="../../../CliParser.cpp" line="132"/>
         <source>Unable to open the transfer list file</source>
         <translation>전송 목록 파일을 열 수 없습니다.</translation>
     </message>
     <message>
-        <location filename="../../../CliParser.cpp" line="175"/>
-        <location filename="../../../CliParser.cpp" line="186"/>
+        <location filename="../../../CliParser.cpp" line="240"/>
+        <location filename="../../../CliParser.cpp" line="251"/>
         <source>To display this help</source>
         <translation type="unfinished">도움말 표시</translation>
     </message>
     <message>
-        <location filename="../../../CliParser.cpp" line="178"/>
-        <location filename="../../../CliParser.cpp" line="189"/>
+        <location filename="../../../CliParser.cpp" line="243"/>
+        <location filename="../../../CliParser.cpp" line="254"/>
         <source>Open transfer list</source>
         <translation type="unfinished">전송 목록 열기</translation>
     </message>
     <message>
-        <location filename="../../../CliParser.cpp" line="196"/>
+        <location filename="../../../CliParser.cpp" line="261"/>
         <source>Help</source>
         <translation type="unfinished">도움말</translation>
     </message>
@@ -1543,7 +1543,7 @@ This version is compiled as version: %1.</source>
         <translation>변수는 %1입니다.</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.cpp" line="1025"/>
+        <location filename="../../../OptionDialog.cpp" line="1027"/>
         <source>Save logs as: </source>
         <translation>로그 따로 저장:</translation>
     </message>

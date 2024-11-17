@@ -713,6 +713,7 @@ void OptionDialog::on_Language_force_toggled(const bool &checked)
 
 void OptionDialog::on_Style_force_toggled(const bool &checked)
 {
+    (void)checked;
     if(allPluginsIsLoaded)
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
@@ -726,6 +727,7 @@ void OptionDialog::on_Style_force_toggled(const bool &checked)
 
 void OptionDialog::on_Style_currentIndexChanged(int index)
 {
+    (void)index;
     OptionDialog::on_Style_force_toggled(ui->Style_force->isChecked());
 }
 

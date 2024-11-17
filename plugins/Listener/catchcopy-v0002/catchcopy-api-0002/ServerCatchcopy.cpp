@@ -11,6 +11,10 @@
 #include <queue>
 #include <vector>
 #include <string>
+//this is just to support clipboard
+#include <QClipboard>
+#include <QGuiApplication>
+#include <QRegularExpression>
 
 std::string stringimplode2(const std::vector<std::string>& elems, const std::string &delim)
 {
@@ -480,6 +484,28 @@ ServerCatchcopy::inputReturnType ServerCatchcopy::parseInputCurrentProtocol(cons
         emitNewCopy(client,orderId,sourceList,returnList.back());
         return Ok;
     }
+    else if(firstArgument=="CBcp")
+    {
+        if(returnList.size()<2)
+            return WrongArgumentListSize;
+        QClipboard *clipboard = QGuiApplication::clipboard();
+        const QStringList &l=clipboard->text().split(QRegularExpression("[\n\r]+"),Qt::SkipEmptyParts);
+        /*linux:
+        file:///path/test/master.zip
+        file:///path/test/New text file
+        Windows:
+        file://Z:/X
+        */
+        std::vector<std::string> sourceList;
+        int index=0;
+        while(index<l.size())
+        {
+            sourceList.push_back(l.at(index).toStdString());
+            index++;
+        }
+        emitNewCopy(client,orderId,sourceList,returnList.back());
+        return Ok;
+    }
     else if(firstArgument=="cp-?")
     {
         if(returnList.size()<2)
@@ -496,6 +522,28 @@ ServerCatchcopy::inputReturnType ServerCatchcopy::parseInputCurrentProtocol(cons
         std::vector<std::string> sourceList=returnList;
         sourceList.erase(sourceList.cbegin());
         sourceList.pop_back();
+        emitNewMove(client,orderId,sourceList,returnList.back());
+        return Ok;
+    }
+    else if(firstArgument=="CBmv")
+    {
+        if(returnList.size()<2)
+            return WrongArgumentListSize;
+        QClipboard *clipboard = QGuiApplication::clipboard();
+        const QStringList &l=clipboard->text().split(QRegularExpression("[\n\r]+"),Qt::SkipEmptyParts);
+        /*linux:
+        file:///path/test/master.zip
+        file:///path/test/New text file
+        Windows:
+        file://Z:/X
+        */
+        std::vector<std::string> sourceList;
+        int index=0;
+        while(index<l.size())
+        {
+            sourceList.push_back(l.at(index).toStdString());
+            index++;
+        }
         emitNewMove(client,orderId,sourceList,returnList.back());
         return Ok;
     }

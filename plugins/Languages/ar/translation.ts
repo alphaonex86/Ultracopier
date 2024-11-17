@@ -4,88 +4,88 @@
 <context>
     <name>CliParser</name>
     <message>
-        <location filename="../../../CliParser.cpp" line="37"/>
-        <location filename="../../../CliParser.cpp" line="86"/>
-        <location filename="../../../CliParser.cpp" line="99"/>
+        <location filename="../../../CliParser.cpp" line="44"/>
         <location filename="../../../CliParser.cpp" line="109"/>
-        <location filename="../../../CliParser.cpp" line="194"/>
+        <location filename="../../../CliParser.cpp" line="122"/>
+        <location filename="../../../CliParser.cpp" line="132"/>
+        <location filename="../../../CliParser.cpp" line="259"/>
         <source>Warning</source>
         <translation>التحذير</translation>
     </message>
     <message>
-        <location filename="../../../CliParser.cpp" line="86"/>
+        <location filename="../../../CliParser.cpp" line="109"/>
         <source>Problem reading file, or file size is 0</source>
         <translation>مشكلة في قراءة الملف ، أو حجم الملف هو 0</translation>
     </message>
     <message>
-        <location filename="../../../CliParser.cpp" line="174"/>
-        <location filename="../../../CliParser.cpp" line="185"/>
+        <location filename="../../../CliParser.cpp" line="239"/>
+        <location filename="../../../CliParser.cpp" line="250"/>
         <source>The arguments possible are:</source>
         <translation>الحجج الممكنة هي:</translation>
     </message>
     <message>
-        <location filename="../../../CliParser.cpp" line="176"/>
-        <location filename="../../../CliParser.cpp" line="187"/>
+        <location filename="../../../CliParser.cpp" line="241"/>
+        <location filename="../../../CliParser.cpp" line="252"/>
         <source>To display the options</source>
         <translation>لعرض الخيارات</translation>
     </message>
     <message>
-        <location filename="../../../CliParser.cpp" line="177"/>
-        <location filename="../../../CliParser.cpp" line="188"/>
+        <location filename="../../../CliParser.cpp" line="242"/>
+        <location filename="../../../CliParser.cpp" line="253"/>
         <source>To quit the other instances (if running)</source>
         <translation>(لإنهاء المثيلات الأخرى (في حالة التشغيل</translation>
     </message>
     <message>
-        <location filename="../../../CliParser.cpp" line="179"/>
-        <location filename="../../../CliParser.cpp" line="190"/>
+        <location filename="../../../CliParser.cpp" line="244"/>
+        <location filename="../../../CliParser.cpp" line="255"/>
         <source>To copy sources to destination, separated by space. If destination is &quot;?&quot;, ultracopier will ask the user</source>
         <translation>سوف يسأل المستخدم ultracopier لنسخ المصادر إلى الوجهة ، مفصولة بمسافة. إذا كانت الوجهة &quot;؟&quot; ،</translation>
     </message>
     <message>
-        <location filename="../../../CliParser.cpp" line="180"/>
-        <location filename="../../../CliParser.cpp" line="191"/>
+        <location filename="../../../CliParser.cpp" line="245"/>
+        <location filename="../../../CliParser.cpp" line="256"/>
         <source>To move sources to destination, separated by space. If destination is &quot;?&quot;, ultracopier will ask the user</source>
         <translation>سوف يسأل المستخدم ultracopier لنقل المصادر إلى الوجهة ، مفصولة بمسافة. إذا كانت الوجهة &quot;؟&quot; ،</translation>
     </message>
     <message>
-        <location filename="../../../CliParser.cpp" line="184"/>
+        <location filename="../../../CliParser.cpp" line="249"/>
         <source>Command not valid</source>
         <translation>الامر غير صالح</translation>
     </message>
     <message>
-        <location filename="../../../CliParser.cpp" line="99"/>
+        <location filename="../../../CliParser.cpp" line="122"/>
         <source>This file is not supported transfer list</source>
         <translation>هذا الملف غير معتمد قائمة النقل</translation>
     </message>
     <message>
-        <location filename="../../../CliParser.cpp" line="32"/>
+        <location filename="../../../CliParser.cpp" line="39"/>
         <source>Ultracopier is already running, right click on its system tray icon (near the clock) to use it or just copy and paste</source>
         <translation>Ultracopier تستخدمها أو مجرد نسخ ولصق قيد التشغيل بالفعل ، انقر فوق الزر الأيمن على أيقونة صينية النظام (بالقرب من الساعة)</translation>
     </message>
     <message>
-        <location filename="../../../CliParser.cpp" line="34"/>
+        <location filename="../../../CliParser.cpp" line="41"/>
         <source>Ultracopier is already running, view all notification area icons (near the clock), right click on its system tray icon to use it or just copy and paste</source>
         <translation>قيد التشغيل بالفعل، عرض كل الايقونات في منطقه الاعلام (بالقرب من الساعة) ، انقر بزر الماوس الأيمن على ايقونة علبه نظامك لاستخدامه أو مجرد نسخ ولصق Ultracopier</translation>
     </message>
     <message>
-        <location filename="../../../CliParser.cpp" line="109"/>
+        <location filename="../../../CliParser.cpp" line="132"/>
         <source>Unable to open the transfer list file</source>
         <translation>غير قادر على فتح ملف قائمه النقل</translation>
     </message>
     <message>
-        <location filename="../../../CliParser.cpp" line="175"/>
-        <location filename="../../../CliParser.cpp" line="186"/>
+        <location filename="../../../CliParser.cpp" line="240"/>
+        <location filename="../../../CliParser.cpp" line="251"/>
         <source>To display this help</source>
         <translation>لعرض هذه التعليمات</translation>
     </message>
     <message>
-        <location filename="../../../CliParser.cpp" line="178"/>
-        <location filename="../../../CliParser.cpp" line="189"/>
+        <location filename="../../../CliParser.cpp" line="243"/>
+        <location filename="../../../CliParser.cpp" line="254"/>
         <source>Open transfer list</source>
         <translation>فتح قائمه النقل</translation>
     </message>
     <message>
-        <location filename="../../../CliParser.cpp" line="196"/>
+        <location filename="../../../CliParser.cpp" line="261"/>
         <source>Help</source>
         <translation>التعليمات</translation>
     </message>
@@ -1533,7 +1533,7 @@ This version is compiled as version: %1.</source>
         <translation>%1 المتغيرات هي</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.cpp" line="1025"/>
+        <location filename="../../../OptionDialog.cpp" line="1027"/>
         <source>Save logs as: </source>
         <translation>حفظ السجلات باسم:</translation>
     </message>
