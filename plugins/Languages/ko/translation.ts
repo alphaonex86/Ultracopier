@@ -5,55 +5,55 @@
     <name>CliParser</name>
     <message>
         <location filename="../../../CliParser.cpp" line="44"/>
-        <location filename="../../../CliParser.cpp" line="109"/>
-        <location filename="../../../CliParser.cpp" line="122"/>
-        <location filename="../../../CliParser.cpp" line="132"/>
-        <location filename="../../../CliParser.cpp" line="259"/>
+        <location filename="../../../CliParser.cpp" line="117"/>
+        <location filename="../../../CliParser.cpp" line="130"/>
+        <location filename="../../../CliParser.cpp" line="140"/>
+        <location filename="../../../CliParser.cpp" line="267"/>
         <source>Warning</source>
         <translation>알림</translation>
     </message>
     <message>
-        <location filename="../../../CliParser.cpp" line="109"/>
+        <location filename="../../../CliParser.cpp" line="117"/>
         <source>Problem reading file, or file size is 0</source>
         <translation>파일 읽기 문제이거나 파일 크기가 0입니다.</translation>
     </message>
     <message>
-        <location filename="../../../CliParser.cpp" line="239"/>
-        <location filename="../../../CliParser.cpp" line="250"/>
+        <location filename="../../../CliParser.cpp" line="247"/>
+        <location filename="../../../CliParser.cpp" line="258"/>
         <source>The arguments possible are:</source>
         <translation type="unfinished">가능한 인수:</translation>
     </message>
     <message>
-        <location filename="../../../CliParser.cpp" line="241"/>
-        <location filename="../../../CliParser.cpp" line="252"/>
+        <location filename="../../../CliParser.cpp" line="249"/>
+        <location filename="../../../CliParser.cpp" line="260"/>
         <source>To display the options</source>
         <translation type="unfinished">옵션 표시</translation>
     </message>
     <message>
-        <location filename="../../../CliParser.cpp" line="242"/>
-        <location filename="../../../CliParser.cpp" line="253"/>
+        <location filename="../../../CliParser.cpp" line="250"/>
+        <location filename="../../../CliParser.cpp" line="261"/>
         <source>To quit the other instances (if running)</source>
         <translation type="unfinished">다른 인스턴스 종료 (실행 중일 경우)</translation>
     </message>
     <message>
-        <location filename="../../../CliParser.cpp" line="244"/>
-        <location filename="../../../CliParser.cpp" line="255"/>
+        <location filename="../../../CliParser.cpp" line="252"/>
+        <location filename="../../../CliParser.cpp" line="263"/>
         <source>To copy sources to destination, separated by space. If destination is &quot;?&quot;, ultracopier will ask the user</source>
         <translation>원본을 대상에 복사, 공백으로 구분. 대상이 &quot;?&quot;일 경우 프로그램이 사용자에게 확인합니다.</translation>
     </message>
     <message>
-        <location filename="../../../CliParser.cpp" line="245"/>
-        <location filename="../../../CliParser.cpp" line="256"/>
+        <location filename="../../../CliParser.cpp" line="253"/>
+        <location filename="../../../CliParser.cpp" line="264"/>
         <source>To move sources to destination, separated by space. If destination is &quot;?&quot;, ultracopier will ask the user</source>
         <translation>원본을 대상에 이동, 공백으로 구분. 대상이 &quot;?&quot;일 경우 프로그램이 사용자에게 확인합니다. </translation>
     </message>
     <message>
-        <location filename="../../../CliParser.cpp" line="249"/>
+        <location filename="../../../CliParser.cpp" line="257"/>
         <source>Command not valid</source>
         <translation>명령이 유효하지 않습니다.</translation>
     </message>
     <message>
-        <location filename="../../../CliParser.cpp" line="122"/>
+        <location filename="../../../CliParser.cpp" line="130"/>
         <source>This file is not supported transfer list</source>
         <translation>이 파일은 지원되지 않는 전송 목록 파일 형식입니다.</translation>
     </message>
@@ -68,24 +68,24 @@
         <translation>Ultracopier가 이미 실행 중입니다. 트레이에 있는 아이콘에서 우-클릭하여 사용하거나 그냥 복사하여 붙여넣기 하세요. </translation>
     </message>
     <message>
-        <location filename="../../../CliParser.cpp" line="132"/>
+        <location filename="../../../CliParser.cpp" line="140"/>
         <source>Unable to open the transfer list file</source>
         <translation>전송 목록 파일을 열 수 없습니다.</translation>
     </message>
     <message>
-        <location filename="../../../CliParser.cpp" line="240"/>
-        <location filename="../../../CliParser.cpp" line="251"/>
+        <location filename="../../../CliParser.cpp" line="248"/>
+        <location filename="../../../CliParser.cpp" line="259"/>
         <source>To display this help</source>
         <translation type="unfinished">도움말 표시</translation>
     </message>
     <message>
-        <location filename="../../../CliParser.cpp" line="243"/>
-        <location filename="../../../CliParser.cpp" line="254"/>
+        <location filename="../../../CliParser.cpp" line="251"/>
+        <location filename="../../../CliParser.cpp" line="262"/>
         <source>Open transfer list</source>
         <translation type="unfinished">전송 목록 열기</translation>
     </message>
     <message>
-        <location filename="../../../CliParser.cpp" line="261"/>
+        <location filename="../../../CliParser.cpp" line="269"/>
         <source>Help</source>
         <translation type="unfinished">도움말</translation>
     </message>
@@ -1833,13 +1833,13 @@ Error:%2</source>
         <translation type="unfinished">제품 키</translation>
     </message>
     <message>
-        <location filename="../../../ProductKey.cpp" line="62"/>
+        <location filename="../../../ProductKey.cpp" line="63"/>
         <source>Error</source>
         <translation type="unfinished">오류</translation>
     </message>
     <message>
-        <location filename="../../../ProductKey.cpp" line="62"/>
-        <source>Your product key was rejected.&lt;br /&gt;If you buy key, unmark check your spam and unmark the mail as spam&lt;br /&gt;If you have not buy your key, go to &lt;a href=&quot;https://ultracopier.herman-brule.com/#ultimate&quot;&gt;https://ultracopier.herman-brule.com/#ultimate&lt;/a&gt;</source>
+        <location filename="../../../ProductKey.cpp" line="63"/>
+        <source>Your product key was rejected for this version %1.&lt;br /&gt;&lt;b&gt;If you have just buy the key, try download the last version.&lt;/b&gt;&lt;br /&gt;If you buy key, unmark check your spam and unmark the mail as spam&lt;br /&gt;If you have not buy your key, go to &lt;a href=&quot;https://ultracopier.herman-brule.com/#ultimate&quot;&gt;https://ultracopier.herman-brule.com/#ultimate&lt;/a&gt;</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

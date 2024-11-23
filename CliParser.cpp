@@ -67,6 +67,14 @@ void CliParser::cli(const std::vector<std::string> &ultracopierArguments,const b
             {
                 RegDeleteValue(ultracopier_regkey, TEXT("ultracopier"));
                 RegDeleteValue(ultracopier_regkey, TEXT("catchcopy"));
+                RegDeleteValue(ultracopier_regkey, TEXT("catchcopy32.dll"));
+                RegDeleteValue(ultracopier_regkey, TEXT("catchcopy32d.dll"));
+                RegDeleteValue(ultracopier_regkey, TEXT("catchcopy64.dll"));
+                RegDeleteValue(ultracopier_regkey, TEXT("catchcopy64d.dll"));
+                RegDeleteValue(ultracopier_regkey, TEXT("catchcopy32all.dll"));
+                RegDeleteValue(ultracopier_regkey, TEXT("catchcopy32alld.dll"));
+                RegDeleteValue(ultracopier_regkey, TEXT("catchcopy64all.dll"));
+                RegDeleteValue(ultracopier_regkey, TEXT("catchcopy64alld.dll"));
                 RegCloseKey(ultracopier_regkey);
             }
             #endif

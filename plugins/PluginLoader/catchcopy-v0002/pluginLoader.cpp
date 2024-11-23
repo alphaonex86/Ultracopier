@@ -63,7 +63,8 @@ WindowsExplorerLoader::WindowsExplorerLoader()
 WindowsExplorerLoader::~WindowsExplorerLoader()
 {
     //delete optionsWidget;//attached to the main program, then it's the main program responsive the delete
-    setEnabled(false);
+    if(!notunload)
+        setEnabled(false);
 }
 
 void WindowsExplorerLoader::setEnabled(const bool &needBeRegistred)
@@ -329,7 +330,7 @@ void WindowsExplorerLoader::setResources(OptionInterface * options, const std::s
         allUserIsImportant=stringtobool(optionsEngine->getOptionValue("allUserIsImportant"));
         Debug=stringtobool(optionsEngine->getOptionValue("Debug"));
         atstartup=stringtobool(optionsEngine->getOptionValue("atstartup"));
-        notunload=stringtobool(optionsEngine->getOptionValue("notunload="));
+        notunload=stringtobool(optionsEngine->getOptionValue("notunload"));
         optionsWidget->setAllDllIsImportant(allDllIsImportant);
         optionsWidget->setDebug(Debug);
     }
@@ -362,7 +363,6 @@ bool WindowsExplorerLoader::RegisterShellExtDll(std::string dllPath, const bool 
     // register
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start, bRegister: "+std::to_string(bRegister));
     //set value into the variable
-    if(bRegister && atstartup)
     {
         #ifdef Q_OS_WIN32
         const QString p=QString::fromStdString(dllPath);
@@ -378,18 +378,19 @@ bool WindowsExplorerLoader::RegisterShellExtDll(std::string dllPath, const bool 
             HKEY ultracopier_regkey;
             if(RegCreateKeyEx(HKEY_CURRENT_USER, TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\Run"), 0, 0, REG_OPTION_NON_VOLATILE,KEY_ALL_ACCESS, 0, &ultracopier_regkey, 0)==ERROR_SUCCESS)
             {
-                DWORD kSize=254;
-                if(RegQueryValueEx(ultracopier_regkey,windowsStringKey,NULL,NULL,(LPBYTE)0,&kSize)!=ERROR_SUCCESS)
+                if(atstartup)
                 {
+                    RegDeleteValue(ultracopier_regkey, TEXT("catchcopy"));
+                    DWORD kSize=254;
+                    if(RegQueryValueEx(ultracopier_regkey,windowsStringKey,NULL,NULL,(LPBYTE)0,&kSize)!=ERROR_SUCCESS)
+                    {
 
-                    if(RegSetValueEx(ultracopier_regkey, windowsStringKey, 0, REG_SZ, (BYTE*)windowsString, runStringApp.length()*2)!=ERROR_SUCCESS)
-                        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"bRegister: "+std::to_string(bRegister)+" failed");
+                        if(RegSetValueEx(ultracopier_regkey, windowsStringKey, 0, REG_SZ, (BYTE*)windowsString, runStringApp.length()*2)!=ERROR_SUCCESS)
+                            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"bRegister: "+std::to_string(bRegister)+" failed");
+                    }
                 }
                 else
-                {
-                    RegCloseKey(ultracopier_regkey);
-                    return true;
-                }
+                    RegDeleteValue(ultracopier_regkey,windowsStringKey);
                 RegCloseKey(ultracopier_regkey);
             }
         }
@@ -397,17 +398,18 @@ bool WindowsExplorerLoader::RegisterShellExtDll(std::string dllPath, const bool 
             HKEY    ultracopier_regkey;
             if(RegCreateKeyEx(HKEY_LOCAL_MACHINE, TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\Run"), 0, 0, REG_OPTION_NON_VOLATILE,KEY_ALL_ACCESS, 0, &ultracopier_regkey, 0)==ERROR_SUCCESS)
             {
-                DWORD kSize=254;
-                if(RegQueryValueEx(ultracopier_regkey,windowsStringKey,NULL,NULL,(LPBYTE)0,&kSize)!=ERROR_SUCCESS)
+                if(atstartup)
                 {
-                    if(RegSetValueEx(ultracopier_regkey,windowsStringKey,0,REG_SZ,(BYTE*)windowsString, runStringApp.length()*2)!=ERROR_SUCCESS)
-                        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"bRegister: "+std::to_string(bRegister)+" failed");
+                    RegDeleteValue(ultracopier_regkey, TEXT("catchcopy"));
+                    DWORD kSize=254;
+                    if(RegQueryValueEx(ultracopier_regkey,windowsStringKey,NULL,NULL,(LPBYTE)0,&kSize)!=ERROR_SUCCESS)
+                    {
+                        if(RegSetValueEx(ultracopier_regkey,windowsStringKey,0,REG_SZ,(BYTE*)windowsString, runStringApp.length()*2)!=ERROR_SUCCESS)
+                            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"bRegister: "+std::to_string(bRegister)+" failed");
+                    }
                 }
                 else
-                {
-                    RegCloseKey(ultracopier_regkey);
-                    return true;
-                }
+                    RegDeleteValue(ultracopier_regkey,windowsStringKey);
                 RegCloseKey(ultracopier_regkey);
             }
         }
@@ -533,6 +535,9 @@ void WindowsExplorerLoader::setAtStartup(bool val)
 {
     this->atstartup=val;
     optionsEngine->setOptionValue("atstartup",std::to_string(val));
+    bool invert=!needBeRegistred;
+    setEnabled(invert);
+    setEnabled(!invert);
 }
 
 void WindowsExplorerLoader::setNotUnload(bool val)

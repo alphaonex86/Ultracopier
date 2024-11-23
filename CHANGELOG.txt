@@ -47,3 +47,6 @@
 3.0.0.2: Somes fixes into the UI
 3.0.0.3: Improvement to override the copy dial into windows, update german translation, improve android support, able to receive from clipboard the sources list
 3.0.0.4: fix for previous version
+3.0.0.5: fix again the previous fix
+3.0.0.6: more improvement on Windows
+3.0.0.7: Improve key reject message, enable again build for android and macos

@@ -5,49 +5,49 @@
     <name>CliParser</name>
     <message>
         <location filename="../../../CliParser.cpp" line="44"/>
-        <location filename="../../../CliParser.cpp" line="109"/>
-        <location filename="../../../CliParser.cpp" line="122"/>
-        <location filename="../../../CliParser.cpp" line="132"/>
-        <location filename="../../../CliParser.cpp" line="259"/>
+        <location filename="../../../CliParser.cpp" line="117"/>
+        <location filename="../../../CliParser.cpp" line="130"/>
+        <location filename="../../../CliParser.cpp" line="140"/>
+        <location filename="../../../CliParser.cpp" line="267"/>
         <source>Warning</source>
         <translation>Avertissement</translation>
     </message>
     <message>
-        <location filename="../../../CliParser.cpp" line="109"/>
+        <location filename="../../../CliParser.cpp" line="117"/>
         <source>Problem reading file, or file size is 0</source>
         <translation>Problème à la lecture, ou taille de fichier nulle</translation>
     </message>
     <message>
-        <location filename="../../../CliParser.cpp" line="239"/>
-        <location filename="../../../CliParser.cpp" line="250"/>
+        <location filename="../../../CliParser.cpp" line="247"/>
+        <location filename="../../../CliParser.cpp" line="258"/>
         <source>The arguments possible are:</source>
         <translation>Les arguments possible sont:</translation>
     </message>
     <message>
-        <location filename="../../../CliParser.cpp" line="241"/>
-        <location filename="../../../CliParser.cpp" line="252"/>
+        <location filename="../../../CliParser.cpp" line="249"/>
+        <location filename="../../../CliParser.cpp" line="260"/>
         <source>To display the options</source>
         <translation>Afficher les options</translation>
     </message>
     <message>
-        <location filename="../../../CliParser.cpp" line="244"/>
-        <location filename="../../../CliParser.cpp" line="255"/>
+        <location filename="../../../CliParser.cpp" line="252"/>
+        <location filename="../../../CliParser.cpp" line="263"/>
         <source>To copy sources to destination, separated by space. If destination is &quot;?&quot;, ultracopier will ask the user</source>
         <translation>Pour copier les sources vers la destination, séparées par des espaces. Si la destination est &quot;?&quot;, Ultracopier demandera à l&apos;utilisateur</translation>
     </message>
     <message>
-        <location filename="../../../CliParser.cpp" line="245"/>
-        <location filename="../../../CliParser.cpp" line="256"/>
+        <location filename="../../../CliParser.cpp" line="253"/>
+        <location filename="../../../CliParser.cpp" line="264"/>
         <source>To move sources to destination, separated by space. If destination is &quot;?&quot;, ultracopier will ask the user</source>
         <translation>Pour copier les sources vers la destination, séparées par des espaces. Si la destination est &quot;?&quot;, Ultracopier demandera à l&apos;utilisateur</translation>
     </message>
     <message>
-        <location filename="../../../CliParser.cpp" line="249"/>
+        <location filename="../../../CliParser.cpp" line="257"/>
         <source>Command not valid</source>
         <translation>Ligne de commande invalide</translation>
     </message>
     <message>
-        <location filename="../../../CliParser.cpp" line="122"/>
+        <location filename="../../../CliParser.cpp" line="130"/>
         <source>This file is not supported transfer list</source>
         <translation>Ce fichier n&apos;est pas une list de transfert supporté</translation>
     </message>
@@ -62,30 +62,30 @@
         <translation>Ultracopier est déjà en cours d&apos;exécution, affichez toutes les icônes de la zone de notification (près de l&apos;horloge), cliquez avec le bouton droit de la souris sur l&apos;icône de la barre d&apos;état système pour l&apos;utiliser ou copiez et collez simplement</translation>
     </message>
     <message>
-        <location filename="../../../CliParser.cpp" line="132"/>
+        <location filename="../../../CliParser.cpp" line="140"/>
         <source>Unable to open the transfer list file</source>
         <translation>Impossible d&apos;ouvrir le fichier de liste de transfert</translation>
     </message>
     <message>
-        <location filename="../../../CliParser.cpp" line="240"/>
-        <location filename="../../../CliParser.cpp" line="251"/>
+        <location filename="../../../CliParser.cpp" line="248"/>
+        <location filename="../../../CliParser.cpp" line="259"/>
         <source>To display this help</source>
         <translation>Pour afficher cette aide</translation>
     </message>
     <message>
-        <location filename="../../../CliParser.cpp" line="242"/>
-        <location filename="../../../CliParser.cpp" line="253"/>
+        <location filename="../../../CliParser.cpp" line="250"/>
+        <location filename="../../../CliParser.cpp" line="261"/>
         <source>To quit the other instances (if running)</source>
         <translation>Pour quiter l&apos;autre instance en cour</translation>
     </message>
     <message>
-        <location filename="../../../CliParser.cpp" line="243"/>
-        <location filename="../../../CliParser.cpp" line="254"/>
+        <location filename="../../../CliParser.cpp" line="251"/>
+        <location filename="../../../CliParser.cpp" line="262"/>
         <source>Open transfer list</source>
         <translation>Ouvrir la liste de transfert</translation>
     </message>
     <message>
-        <location filename="../../../CliParser.cpp" line="261"/>
+        <location filename="../../../CliParser.cpp" line="269"/>
         <source>Help</source>
         <translation>Aide</translation>
     </message>
@@ -1838,13 +1838,13 @@ Erreur:%2</translation>
         <translation>Clef de produit</translation>
     </message>
     <message>
-        <location filename="../../../ProductKey.cpp" line="62"/>
+        <location filename="../../../ProductKey.cpp" line="63"/>
         <source>Error</source>
         <translation>Erreur</translation>
     </message>
     <message>
-        <location filename="../../../ProductKey.cpp" line="62"/>
-        <source>Your product key was rejected.&lt;br /&gt;If you buy key, unmark check your spam and unmark the mail as spam&lt;br /&gt;If you have not buy your key, go to &lt;a href=&quot;https://ultracopier.herman-brule.com/#ultimate&quot;&gt;https://ultracopier.herman-brule.com/#ultimate&lt;/a&gt;</source>
+        <location filename="../../../ProductKey.cpp" line="63"/>
+        <source>Your product key was rejected for this version %1.&lt;br /&gt;&lt;b&gt;If you have just buy the key, try download the last version.&lt;/b&gt;&lt;br /&gt;If you buy key, unmark check your spam and unmark the mail as spam&lt;br /&gt;If you have not buy your key, go to &lt;a href=&quot;https://ultracopier.herman-brule.com/#ultimate&quot;&gt;https://ultracopier.herman-brule.com/#ultimate&lt;/a&gt;</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

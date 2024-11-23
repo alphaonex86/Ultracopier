@@ -3,6 +3,7 @@
 #include "DebugEngine.h"
 #include "OptionEngine.h"
 #include "SystrayIcon.h"
+#include "FacilityEngine.h"
 #include <QMessageBox>
 #include <QCryptographicHash>
 
@@ -59,7 +60,7 @@ bool ProductKey::isUltimate() const
 void ProductKey::on_buttonBox_accepted()
 {
     if(!ProductKey::parseKey(ui->productkey->text()))
-        QMessageBox::critical(this,tr("Error"),"<br />"+tr("Your product key was rejected.<br />If you buy key, unmark check your spam and unmark the mail as spam<br />If you have not buy your key, go to <a href=\"https://ultracopier.herman-brule.com/#ultimate\">https://ultracopier.herman-brule.com/#ultimate</a>"));
+        QMessageBox::critical(this,tr("Error"),"<br />"+tr("Your product key was rejected for this version %1.<br /><b>If you have just buy the key, try download the last version.</b><br />If you buy key, unmark check your spam and unmark the mail as spam<br />If you have not buy your key, go to <a href=\"https://ultracopier.herman-brule.com/#ultimate\">https://ultracopier.herman-brule.com/#ultimate</a>").arg(QString::fromStdString(FacilityEngine::version())));
     else
     {
         changeToUltimate();
