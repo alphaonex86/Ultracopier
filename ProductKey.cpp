@@ -65,6 +65,12 @@ void ProductKey::on_buttonBox_accepted()
     {
         changeToUltimate();
         hide();
+        QString extra
+            #ifdef Q_OS_WIN32
+            =tr("<br />Restart to enable the option high performance into option -> Copy Engine -> Ultracopier Spec -> Performance -> OS native copy")
+            #endif
+            ;
+        QMessageBox::information(this,tr("Informations"),"<br />"+tr("You have correctly enabled your key.")+extra);
     }
 }
 

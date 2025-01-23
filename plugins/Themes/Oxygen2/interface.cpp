@@ -283,12 +283,27 @@ Themes::Themes(const bool &alwaysOnTop,
         ui->ad_ultimate->hide();
     else
     {
+        QString text;
+        switch(rand()%2)
+        {
+            default:
+            case 0:
+                text=tr("Buy the Ultimate version to fund development");
+                break;
+            case 1:
+                #ifdef Q_OS_WINDOWS
+                text=tr("Ultimate version have more performance via OS native copy");
+                #else
+                text=tr("Buy the Ultimate version to fund development");
+                #endif
+                break;
+        }
         ultimateUrl=QString::fromStdString(facilityEngine->ultimateUrl());
         if(ultimateUrl.isEmpty())
             ui->ad_ultimate->hide();
         else
             ui->ad_ultimate->setText(
-                    QStringLiteral("<a href=\"%1\">%2</a> - <a href=\"register\">%3</a>").arg(ultimateUrl).arg(tr("Buy the Ultimate version to fund development")).arg(tr("Register your key"))+", "
+                    QStringLiteral("<a href=\"%1\">%2</a> - <a href=\"register\">%3</a>").arg(ultimateUrl).arg(text).arg(tr("Register your key"))+", "
                         +QStringLiteral("Follow us: ")+QStringLiteral("<a href=\"%1\"><img src=\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAABnRSTlMAAAAAAABupgeRAAAAe0lEQVR4AWOAAPesxQQRUBlCNZEIu+qIjSfPvvn45c/f//////17vLxrJrIsugan3i3HoUq/fPj46c27gwWts/FpsF1x5O2/f////z5+th0uiFNDyb3n/1HBx0+LAwsWUaIB00krj7wHqfx94HgbXJBUDaMaSE58JCdvAAioiiB5mraWAAAAAElFTkSuQmCC\"/></a>").arg("https://www.facebook.com/Ultracopier/")
                         );
     }
@@ -302,11 +317,26 @@ Themes::Themes(const bool &alwaysOnTop,
 
     if(darkUi)
     {
+        QString text;
+        switch(rand()%2)
+        {
+            default:
+            case 0:
+                text=tr("Buy the Ultimate version to fund development");
+                break;
+            case 1:
+                #ifdef Q_OS_WINDOWS
+                text=tr("Ultimate version have more performance via OS native copy");
+                #else
+                text=tr("Buy the Ultimate version to fund development");
+                #endif
+                break;
+        }
         if(ultimateUrl.isEmpty())
             ui->ad_ultimate->hide();
         else
             ui->ad_ultimate->setText(
-                QStringLiteral("<a href=\"%1\"><span style=\"color:#cdf;\">%2</span></a> - <a href=\"register\">%3</a>").arg(ultimateUrl).arg(tr("Buy the Ultimate version to fund development")).arg(tr("Register your key"))+", "
+                QStringLiteral("<a href=\"%1\"><span style=\"color:#cdf;\">%2</span></a> - <a href=\"register\">%3</a>").arg(ultimateUrl).arg(text).arg(tr("Register your key"))+", "
                     +QStringLiteral("<span style=\"color:#fff;\">Follow us:</span> ")+QStringLiteral("<a href=\"%1\"><img src=\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAABnRSTlMAAAAAAABupgeRAAAAe0lEQVR4AWOAAPesxQQRUBlCNZEIu+qIjSfPvvn45c/f//////17vLxrJrIsugan3i3HoUq/fPj46c27gwWts/FpsF1x5O2/f////z5+th0uiFNDyb3n/1HBx0+LAwsWUaIB00krj7wHqfx94HgbXJBUDaMaSE58JCdvAAioiiB5mraWAAAAAElFTkSuQmCC\"/></a>").arg("https://www.facebook.com/Ultracopier/")
                     );
         //ui->frame->setStyleSheet("#frame{background-color: qradialgradient(spread:pad, cx:0.5, cy:0.5, radius:0.5, fx:0.5, fy:0.5, stop:0 rgb(70, 70, 70), stop:1 rgb(40, 40, 40));}");

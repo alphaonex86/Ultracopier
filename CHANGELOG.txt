@@ -50,3 +50,4 @@
 3.0.0.5: fix again the previous fix
 3.0.0.6: more improvement on Windows
 3.0.0.7: Improve key reject message, enable again build for android and macos
+3.0.0.8: Add high performance option for Ultimate version

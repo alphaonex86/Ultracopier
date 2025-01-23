@@ -882,10 +882,18 @@ void CopyEngine::setOsSpecFlags(const bool os_spec_flags)
 
 void CopyEngine::setNativeCopy(const bool native_copy)
 {
+    if(!facilityEngine->isUltimate())
+    {
+        if(uiIsInstalled)
+        {
+            ui->native_copy->setChecked(false);
+            ui->native_copy->setEnabled(false);
+        }
+        return;
+    }
     this->native_copy=native_copy;
     if(uiIsInstalled)
     {
-        ui->native_copy->setChecked(native_copy);
         #ifndef Q_OS_WIN32
         ui->native_copy->setEnabled(false);
         ui->label_native_copy->setEnabled(false);

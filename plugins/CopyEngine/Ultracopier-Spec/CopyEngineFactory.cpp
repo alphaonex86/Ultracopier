@@ -151,6 +151,11 @@ void CopyEngineFactory::setResources(OptionInterface * options,const std::string
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start, writePath: "+writePath+", pluginPath:"+pluginPath);
     this->facilityEngine=facilityInterface;
+    if(!facilityEngine->isUltimate())
+    {
+        ui->native_copy->setChecked(false);
+        ui->native_copy->setEnabled(false);
+    }
     Q_UNUSED(portableVersion);
     #ifndef ULTRACOPIER_PLUGIN_DEBUG
         Q_UNUSED(writePath);

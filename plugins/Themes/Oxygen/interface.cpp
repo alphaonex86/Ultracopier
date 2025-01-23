@@ -342,8 +342,25 @@ Themes::Themes(const bool &alwaysOnTop,
         if(ultimateUrl.isEmpty())
             ui->ad_ultimate->hide();
         else
+        {
+            QString text;
+            switch(rand()%2)
+            {
+                default:
+                case 0:
+                    text=tr("Buy the Ultimate version to fund development");
+                    break;
+                case 1:
+                    #ifdef Q_OS_WINDOWS
+                    text=tr("Ultimate version have more performance via OS native copy");
+                    #else
+                    text=tr("Buy the Ultimate version to fund development");
+                    #endif
+                    break;
+            }
             ui->ad_ultimate->setText(
-                    QStringLiteral("<a href=\"%1\">%2</a> - <a href=\"register\">%3</a>").arg(ultimateUrl).arg(tr("Buy the Ultimate version to fund development")).arg(tr("Register your key")));
+                    QStringLiteral("<a href=\"%1\">%2</a> - <a href=\"register\">%3</a>").arg(ultimateUrl).arg(text).arg(tr("Register your key")));
+        }
     }
     connect(ui->ad_ultimate,&QLabel::linkActivated,this,&Themes::ad_ultimate_clicked);
 
