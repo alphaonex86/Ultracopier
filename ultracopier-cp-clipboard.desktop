@@ -1,0 +1,10 @@
+[Desktop Entry]
+Actions=CopyWithUltracopierClipBoard;
+Type=Service
+ServiceTypes=KonqPopupMenu/Plugin
+MimeType=inode/directory;
+
+[Desktop Action CopyWithUltracopierClipBoard]
+Exec=ultracopier CBcp %U
+Name=Copy here with Ultracopier
+Icon=Ultracopier

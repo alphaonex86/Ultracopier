@@ -489,7 +489,11 @@ ServerCatchcopy::inputReturnType ServerCatchcopy::parseInputCurrentProtocol(cons
         if(returnList.size()<2)
             return WrongArgumentListSize;
         QClipboard *clipboard = QGuiApplication::clipboard();
+        #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+        const QStringList &l=clipboard->text().split(QRegularExpression("[\n\r]+"));
+        #else
         const QStringList &l=clipboard->text().split(QRegularExpression("[\n\r]+"),Qt::SkipEmptyParts);
+        #endif
         /*linux:
         file:///path/test/master.zip
         file:///path/test/New text file
@@ -530,7 +534,11 @@ ServerCatchcopy::inputReturnType ServerCatchcopy::parseInputCurrentProtocol(cons
         if(returnList.size()<2)
             return WrongArgumentListSize;
         QClipboard *clipboard = QGuiApplication::clipboard();
+        #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+        const QStringList &l=clipboard->text().split(QRegularExpression("[\n\r]+"));
+        #else
         const QStringList &l=clipboard->text().split(QRegularExpression("[\n\r]+"),Qt::SkipEmptyParts);
+        #endif
         /*linux:
         file:///path/test/master.zip
         file:///path/test/New text file

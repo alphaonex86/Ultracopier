@@ -151,7 +151,11 @@ void CliParser::cli(const std::vector<std::string> &ultracopierArguments,const b
         if(ultracopierArguments.size()==3)
         {
             QClipboard *clipboard = QGuiApplication::clipboard();
+            #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+            const QStringList &l=clipboard->text().split(QRegularExpression("[\n\r]+"));
+            #else
             const QStringList &l=clipboard->text().split(QRegularExpression("[\n\r]+"),Qt::SkipEmptyParts);
+            #endif
             /*linux:
             file:///path/test/master.zip
             file:///path/test/New text file

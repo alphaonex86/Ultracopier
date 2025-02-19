@@ -43,62 +43,70 @@
     <name>Themes</name>
     <message>
         <location filename="../../interface.cpp" line="291"/>
-        <location filename="../../interface.cpp" line="309"/>
+        <location filename="../../interface.cpp" line="297"/>
+        <location filename="../../interface.cpp" line="325"/>
+        <location filename="../../interface.cpp" line="331"/>
         <source>Buy the Ultimate version to fund development</source>
         <translation>شراء النسخة النهائية لتمويل التنمية</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="291"/>
-        <location filename="../../interface.cpp" line="309"/>
+        <location filename="../../interface.cpp" line="295"/>
+        <location filename="../../interface.cpp" line="329"/>
+        <source>Ultimate version have more performance via OS native copy</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../interface.cpp" line="306"/>
+        <location filename="../../interface.cpp" line="339"/>
         <source>Register your key</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="520"/>
+        <location filename="../../interface.cpp" line="550"/>
         <source>File %1/%2, size: %3/%4</source>
         <translation>الملف %1/%2 ، الحجم: %3/%4</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="806"/>
+        <location filename="../../interface.cpp" line="836"/>
         <source>Copy list</source>
         <translation>قائمة النسخ</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="808"/>
+        <location filename="../../interface.cpp" line="838"/>
         <source>Move list</source>
         <translation>قائمة التحريك</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="1309"/>
+        <location filename="../../interface.cpp" line="1339"/>
         <source>Don&apos;t close if errors are found</source>
         <translation>لا تغلق إذا تم العثور على أخطاء</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="1310"/>
+        <location filename="../../interface.cpp" line="1340"/>
         <source>Never close</source>
         <translation>لا تغلق</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="1311"/>
+        <location filename="../../interface.cpp" line="1341"/>
         <source>Always close</source>
         <translation>إغلاق دائما</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="1313"/>
+        <location filename="../../interface.cpp" line="1343"/>
         <source>File Name, 0KB</source>
         <translation>اسم الملف ، 0KB</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="1524"/>
-        <location filename="../../interface.cpp" line="1536"/>
-        <location filename="../../interface.cpp" line="1548"/>
+        <location filename="../../interface.cpp" line="1554"/>
+        <location filename="../../interface.cpp" line="1566"/>
+        <location filename="../../interface.cpp" line="1578"/>
         <source>Select a color</source>
         <translation>تحديد لون</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="1636"/>
-        <location filename="../../interface.cpp" line="1647"/>
-        <location filename="../../interface.cpp" line="1656"/>
+        <location filename="../../interface.cpp" line="1666"/>
+        <location filename="../../interface.cpp" line="1677"/>
+        <location filename="../../interface.cpp" line="1686"/>
         <source>%1 %2% of %3 into %4 files</source>
         <translation>%1 %2% من %3 إلى ملفات %4</translation>
     </message>

@@ -31,69 +31,69 @@
         <translation>Ezt a módot már korábban kényszerítették. Belső hiba történt, kérlek jelentsd be</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="892"/>
+        <location filename="../../CopyEngine.cpp" line="900"/>
         <source>Supported only on Windows</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="1050"/>
-        <location filename="../../CopyEngine.cpp" line="1053"/>
         <location filename="../../CopyEngine.cpp" line="1058"/>
-        <location filename="../../CopyEngine.cpp" line="1062"/>
+        <location filename="../../CopyEngine.cpp" line="1061"/>
+        <location filename="../../CopyEngine.cpp" line="1066"/>
+        <location filename="../../CopyEngine.cpp" line="1070"/>
         <source>Ask</source>
         <translation>Kérdezzen rá</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="1051"/>
-        <location filename="../../CopyEngine.cpp" line="1055"/>
         <location filename="../../CopyEngine.cpp" line="1059"/>
         <location filename="../../CopyEngine.cpp" line="1063"/>
+        <location filename="../../CopyEngine.cpp" line="1067"/>
+        <location filename="../../CopyEngine.cpp" line="1071"/>
         <source>Skip</source>
         <translation>Kihagy</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="1054"/>
+        <location filename="../../CopyEngine.cpp" line="1062"/>
         <source>Merge</source>
         <translation>Összeolvaszt</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="1056"/>
-        <location filename="../../CopyEngine.cpp" line="1068"/>
+        <location filename="../../CopyEngine.cpp" line="1064"/>
+        <location filename="../../CopyEngine.cpp" line="1076"/>
         <source>Rename</source>
         <translation>Nevezze át</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="1060"/>
+        <location filename="../../CopyEngine.cpp" line="1068"/>
         <source>Put at the end</source>
         <translation>Helyezze a végére</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="1064"/>
+        <location filename="../../CopyEngine.cpp" line="1072"/>
         <source>Overwrite</source>
         <translation>Felülír</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="1065"/>
+        <location filename="../../CopyEngine.cpp" line="1073"/>
         <source>Overwrite if different</source>
         <translation>Felülír, ha különbözik</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="1066"/>
+        <location filename="../../CopyEngine.cpp" line="1074"/>
         <source>Overwrite if newer</source>
         <translation>Felülír, ha újabb</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="1067"/>
+        <location filename="../../CopyEngine.cpp" line="1075"/>
         <source>Overwrite if older</source>
         <translation>Felülír, ha régebbi</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="1138"/>
+        <location filename="../../CopyEngine.cpp" line="1146"/>
         <source>Options error</source>
         <translation>Beállítási hiba</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="1138"/>
+        <location filename="../../CopyEngine.cpp" line="1146"/>
         <source>Options engine is not loaded. Unable to access the filters</source>
         <translation>A beállítási motor nincs betöltve. A szűrők elérése nem lehetséges</translation>
     </message>
@@ -102,75 +102,75 @@
     <name>CopyEngineFactory</name>
     <message>
         <location filename="../../CopyEngineFactory.cpp" line="60"/>
-        <location filename="../../CopyEngineFactory.cpp" line="317"/>
+        <location filename="../../CopyEngineFactory.cpp" line="322"/>
         <source>Supported only on Windows</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="447"/>
-        <location filename="../../CopyEngineFactory.cpp" line="450"/>
+        <location filename="../../CopyEngineFactory.cpp" line="452"/>
         <location filename="../../CopyEngineFactory.cpp" line="455"/>
-        <location filename="../../CopyEngineFactory.cpp" line="459"/>
+        <location filename="../../CopyEngineFactory.cpp" line="460"/>
+        <location filename="../../CopyEngineFactory.cpp" line="464"/>
         <source>Ask</source>
         <translation>Kérdezzen rá</translation>
     </message>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="448"/>
-        <location filename="../../CopyEngineFactory.cpp" line="452"/>
-        <location filename="../../CopyEngineFactory.cpp" line="456"/>
-        <location filename="../../CopyEngineFactory.cpp" line="460"/>
+        <location filename="../../CopyEngineFactory.cpp" line="453"/>
+        <location filename="../../CopyEngineFactory.cpp" line="457"/>
+        <location filename="../../CopyEngineFactory.cpp" line="461"/>
+        <location filename="../../CopyEngineFactory.cpp" line="465"/>
         <source>Skip</source>
         <translation>Kihagy</translation>
     </message>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="451"/>
+        <location filename="../../CopyEngineFactory.cpp" line="456"/>
         <source>Merge</source>
         <translation>Összeolvaszt</translation>
     </message>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="453"/>
-        <location filename="../../CopyEngineFactory.cpp" line="465"/>
+        <location filename="../../CopyEngineFactory.cpp" line="458"/>
+        <location filename="../../CopyEngineFactory.cpp" line="470"/>
         <source>Rename</source>
         <translation>Nevezze át</translation>
     </message>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="457"/>
+        <location filename="../../CopyEngineFactory.cpp" line="462"/>
         <source>Put at the end</source>
         <translation>Helyezze a végére</translation>
     </message>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="461"/>
+        <location filename="../../CopyEngineFactory.cpp" line="466"/>
         <source>Overwrite</source>
         <translation>Felülír</translation>
     </message>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="462"/>
+        <location filename="../../CopyEngineFactory.cpp" line="467"/>
         <source>Overwrite if different</source>
         <translation>Felülír, ha különbözik</translation>
     </message>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="463"/>
+        <location filename="../../CopyEngineFactory.cpp" line="468"/>
         <source>Overwrite if newer</source>
         <translation>Felülír, ha újabb</translation>
     </message>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="464"/>
+        <location filename="../../CopyEngineFactory.cpp" line="469"/>
         <source>Overwrite if older</source>
         <translation>Felülír, ha régebbi</translation>
     </message>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="480"/>
-        <location filename="../../CopyEngineFactory.cpp" line="519"/>
+        <location filename="../../CopyEngineFactory.cpp" line="485"/>
+        <location filename="../../CopyEngineFactory.cpp" line="524"/>
         <source>Options error</source>
         <translation>Beállítási hiba</translation>
     </message>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="480"/>
+        <location filename="../../CopyEngineFactory.cpp" line="485"/>
         <source>Options engine is not loaded. Unable to access the filters</source>
         <translation>A beállítási motor nincs betöltve. A szűrők elérése nem lehetséges</translation>
     </message>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="519"/>
+        <location filename="../../CopyEngineFactory.cpp" line="524"/>
         <source>Options engine is not loaded, can&apos;t access to the filters</source>
         <translation>A beállítási motor nincs betöltve, a szűrők elérése nem lehetséges</translation>
     </message>
@@ -716,33 +716,43 @@
         <translation>Teljesítmény</translation>
     </message>
     <message>
-        <location filename="../../copyEngineOptions.ui" line="401"/>
+        <location filename="../../copyEngineOptions.ui" line="388"/>
         <source>Inode threads</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../copyEngineOptions.ui" line="411"/>
-        <location filename="../../copyEngineOptions.ui" line="427"/>
+        <location filename="../../copyEngineOptions.ui" line="421"/>
+        <location filename="../../copyEngineOptions.ui" line="491"/>
         <source>MB</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../../copyEngineOptions.ui" line="437"/>
+        <source>Ultimate</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../../copyEngineOptions.ui" line="443"/>
+        <source>OS native copy (disable speed limitation/pause)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../copyEngineOptions.ui" line="467"/>
         <source>Uncheck this under Windows create problem</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../copyEngineOptions.ui" line="450"/>
+        <location filename="../../copyEngineOptions.ui" line="477"/>
         <source>OS Buffer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../copyEngineOptions.ui" line="470"/>
+        <location filename="../../copyEngineOptions.ui" line="507"/>
         <source>Disable parallel transfer when are different devices</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../copyEngineOptions.ui" line="477"/>
+        <location filename="../../copyEngineOptions.ui" line="460"/>
         <source>Buffer for different device</source>
         <translation type="unfinished"></translation>
     </message>
@@ -752,37 +762,32 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../copyEngineOptions.ui" line="491"/>
+        <location filename="../../copyEngineOptions.ui" line="514"/>
         <source>Buffer for same device</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../copyEngineOptions.ui" line="498"/>
-        <source>OS native copy (disable speed limitation)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../copyEngineOptions.ui" line="528"/>
+        <location filename="../../copyEngineOptions.ui" line="537"/>
         <source>Misc</source>
         <translation>Egyéb</translation>
     </message>
     <message>
-        <location filename="../../copyEngineOptions.ui" line="534"/>
+        <location filename="../../copyEngineOptions.ui" line="543"/>
         <source>Check the disk space</source>
         <translation>Lemezterület ellenőrzése</translation>
     </message>
     <message>
-        <location filename="../../copyEngineOptions.ui" line="544"/>
+        <location filename="../../copyEngineOptions.ui" line="553"/>
         <source>Use this folder when destination is not set</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../copyEngineOptions.ui" line="556"/>
+        <location filename="../../copyEngineOptions.ui" line="565"/>
         <source>Browse</source>
         <translation>Tallózás</translation>
     </message>
     <message>
-        <location filename="../../copyEngineOptions.ui" line="578"/>
+        <location filename="../../copyEngineOptions.ui" line="587"/>
         <source>Filters</source>
         <translation>Szűrők</translation>
     </message>

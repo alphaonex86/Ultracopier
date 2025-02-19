@@ -4,17 +4,23 @@
 <context>
     <name>Themes</name>
     <message>
-        <location filename="../../interface.cpp" line="+346"/>
+        <location filename="../../interface.cpp" line="+351"/>
+        <location line="+6"/>
         <source>Buy the Ultimate version to fund development</source>
         <translation>Achetez la version Ultimate pour financer le développement</translation>
     </message>
     <message>
-        <location line="+0"/>
+        <location line="-2"/>
+        <source>Ultimate version have more performance via OS native copy</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+7"/>
         <source>Register your key</source>
         <translation>Enregistrez votre clé</translation>
     </message>
     <message>
-        <location line="+99"/>
+        <location line="+100"/>
         <source>File %1/%2, size: %3/%4</source>
         <translation>Fichier %1/%2, taille: %3/%4</translation>
     </message>
