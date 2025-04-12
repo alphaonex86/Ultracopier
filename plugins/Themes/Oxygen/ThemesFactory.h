@@ -71,6 +71,7 @@ private slots:
     void startMinimized(bool checked);
     void savePositionBeforeClose(QObject *obj);
     void savePositionHaveChanged(bool checked);
+    void savefileProgression(int value);
     void uigeneralMargin();
     void uigeneralSpacing();
 public slots:

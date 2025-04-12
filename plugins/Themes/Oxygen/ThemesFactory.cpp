@@ -43,7 +43,8 @@ PluginInterface_Themes * ThemesFactory::getInstance()
                 ui->startMinimized->isChecked(),
                 ui->savePosition->isChecked(),
                 ui->generalMargin->value(),
-                ui->generalSpacing->value()
+                ui->generalSpacing->value(),
+                ui->fileProgression->currentIndex()
                 );
     #ifdef ULTRACOPIER_PLUGIN_DEBUG
     if(!connect(newInterface,&Themes::debugInformation,this,&PluginInterface_ThemesFactory::debugInformation))
@@ -111,6 +112,7 @@ void ThemesFactory::setResources(OptionInterface * optionsEngine,const std::stri
         KeysList.push_back(std::pair<std::string, std::string>("savePositionY","0"));
         KeysList.push_back(std::pair<std::string, std::string>("generalMargin","0"));
         KeysList.push_back(std::pair<std::string, std::string>("generalSpacing","0"));
+        KeysList.push_back(std::pair<std::string, std::string>("fileProgression","0"));
         optionsEngine->addOptionGroup(KeysList);
         connect(optionsEngine,&OptionInterface::resetOptions,this,&ThemesFactory::resetOptions);
         updateSpeed();
@@ -142,6 +144,7 @@ QWidget * ThemesFactory::options()
         ui->savePosition->setChecked(stringtobool(optionsEngine->getOptionValue("savePosition")));
         ui->generalMargin->setValue(stringtoint8(optionsEngine->getOptionValue("generalMargin")));
         ui->generalSpacing->setValue(stringtoint8(optionsEngine->getOptionValue("generalSpacing")));
+        ui->fileProgression->setCurrentIndex(stringtouint8(optionsEngine->getOptionValue("fileProgression")));
 
         progressColorWrite=QVariant(QString::fromStdString(optionsEngine->getOptionValue("progressColorWrite"))).value<QColor>();
         progressColorRead=QVariant(QString::fromStdString(optionsEngine->getOptionValue("progressColorRead"))).value<QColor>();
@@ -192,6 +195,8 @@ QWidget * ThemesFactory::options()
         if(!connect(ui->startMinimized,&QCheckBox::stateChanged,this,&ThemesFactory::startMinimized))
             abort();
         if(!connect(ui->savePosition,&QCheckBox::stateChanged,this,&ThemesFactory::savePositionHaveChanged))
+            abort();
+        if(!connect(ui->fileProgression,static_cast<void(QComboBox::*)(int)>(&QComboBox::currentIndexChanged),this,&ThemesFactory::savefileProgression))
             abort();
         if(!connect(ui->generalSpacing,static_cast<void(QSpinBox::*)(int)>(&QSpinBox::valueChanged),	this,	&ThemesFactory::uigeneralSpacing))
             abort();
@@ -267,6 +272,15 @@ void ThemesFactory::savePositionHaveChanged(bool toggled)
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"the checkbox have changed");
     if(optionsEngine!=NULL)
         optionsEngine->setOptionValue("savePosition",std::to_string(toggled));
+    else
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"internal error, crash prevented");
+}
+
+void ThemesFactory::savefileProgression(int value)
+{
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"the checkbox have changed");
+    if(optionsEngine!=NULL)
+        optionsEngine->setOptionValue("fileProgression",std::to_string(value));
     else
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"internal error, crash prevented");
 }

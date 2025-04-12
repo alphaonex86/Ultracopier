@@ -61,7 +61,8 @@ Themes::Themes(const bool &alwaysOnTop,
                const bool &startMinimized,
                const bool &savePosition,
                const qint8 &generalMargin,
-               const qint8 &generalSpacing) :
+               const qint8 &generalSpacing,
+               const qint8 &fileProgression) :
     duration(0),
     durationStarted(false),
     ui(new Ui::interfaceCopy()),
@@ -108,6 +109,7 @@ Themes::Themes(const bool &alwaysOnTop,
     uiOptions->showProgressionInTheTitle->setChecked(showProgressionInTheTitle);
     uiOptions->speedWithProgressBar->setChecked(speedWithProgressBar);
     uiOptions->showDualProgression->setChecked(showDualProgression);
+    uiOptions->fileProgression->setCurrentIndex(fileProgression);
     //only apply at start, then non sense enable it
     {
         uiOptions->startMinimized->setEnabled(false);
@@ -460,7 +462,7 @@ void Themes::updateOverallInformation()
     if(uiOptions->showProgressionInTheTitle->isChecked())
         updateTitle();
     ui->overall->setText(tr("File %1/%2, size: %3/%4")
-                         .arg(currentFile)
+                         .arg(currentFile+uiOptions->fileProgression->currentIndex())
                          .arg(totalFile)
                          .arg(QString::fromStdString(facilityEngine->sizeToString(currentSize)))
                          .arg(QString::fromStdString(facilityEngine->sizeToString(totalSize)))

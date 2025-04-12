@@ -368,8 +368,9 @@ bool WindowsExplorerLoader::RegisterShellExtDll(std::string dllPath, const bool 
         const QString p=QString::fromStdString(dllPath);
         QFileInfo info(p);
         QString filename=info.fileName();
-        QString runStringApp = "regsvr32 /s \""+QString::fromStdString(dllPath)+"\"";
-        runStringApp.replace( "/", "\\" );
+        QString QtdllPath=QString::fromStdString(dllPath);
+        QtdllPath.replace( "/", "\\" );
+        QString runStringApp = "regsvr32 /s \""+QtdllPath+"\"";
         wchar_t windowsString[255];
         runStringApp.toWCharArray(windowsString);
         wchar_t windowsStringKey[255];

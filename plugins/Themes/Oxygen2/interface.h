@@ -54,7 +54,8 @@ public:
            const bool &minimizeToSystray,
            const bool &startMinimized,
            const quint8 &position,
-           const bool &dark);
+           const bool &dark,
+           const qint8 &fileProgression);
     ~Themes();
     //send information about the copy
     /// \brief to set the action in progress

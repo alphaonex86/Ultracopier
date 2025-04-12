@@ -60,7 +60,15 @@ bool ProductKey::isUltimate() const
 void ProductKey::on_buttonBox_accepted()
 {
     if(!ProductKey::parseKey(ui->productkey->text()))
-        QMessageBox::critical(this,tr("Error"),"<br />"+tr("Your product key was rejected for this version %1.<br /><b>If you have just buy the key, try download the last version.</b><br />If you buy key, unmark check your spam and unmark the mail as spam<br />If you have not buy your key, go to <a href=\"https://ultracopier.herman-brule.com/#ultimate\">https://ultracopier.herman-brule.com/#ultimate</a>").arg(QString::fromStdString(FacilityEngine::version())));
+    {
+        QString extra;
+        if(ui->productkey->text().startsWith("UC2"))
+            extra+=tr("The major update is not free to support the project.<br />For years I had to update the site and software, fight against hacking attempts, provide user support (and correct bugs in less than 2 hours).<br />The version 1.x was free update during more than 5 years and have years old.<br />The version 2.x was free update during more than 7 years and have years old. (and lot of have stole this version)<br />This is the only way to be able to have time for this project that I am the only one to maintain and without help.<br />You can use the old version and disable update detection<br /><a href=\"https://cdn.confiared.com/ultracopier.herman-brule.com/files/2.2.7.1/ultracopier-windows-x86_64-2.2.7.1-setup.exe\">ultracopier-windows-x86_64-2.2.7.1-setup.exe</a>");
+        else
+            extra+=tr("Your product key was rejected for this version %1.<br />If you buy key, unmark check your spam and unmark the mail as spam");
+        extra+=tr("<br />If you have not buy your key, go to <a href=\"https://ultracopier.herman-brule.com/#ultimate\">https://ultracopier.herman-brule.com/#ultimate</a>").arg(QString::fromStdString(FacilityEngine::version()));
+        QMessageBox::critical(this,tr("Error"),"<br />"+extra);
+    }
     else
     {
         changeToUltimate();

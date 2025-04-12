@@ -71,6 +71,7 @@ private slots:
     void startMinimized(bool checked);
     void savePositionBeforeClose(QObject *obj);
     void savePositionHaveChanged(int value);
+    void savefileProgression(int value);
     void setDark(bool toggled);
 public slots:
     void resetOptions() override;

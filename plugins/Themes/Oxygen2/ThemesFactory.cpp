@@ -46,7 +46,8 @@ PluginInterface_Themes * ThemesFactory::getInstance()
                 ui->minimizeToSystray->isChecked(),
                 ui->startMinimized->isChecked(),
                 ui->savePosition->currentIndex(),
-                ui->dark->isChecked()
+                ui->dark->isChecked(),
+                ui->fileProgression->currentIndex()
                 );
     #ifdef ULTRACOPIER_PLUGIN_DEBUG
     if(!connect(newInterface,&Themes::debugInformation,this,&PluginInterface_ThemesFactory::debugInformation))
@@ -135,6 +136,7 @@ void ThemesFactory::setResources(OptionInterface * optionsEngine,const std::stri
         KeysList.push_back(std::pair<std::string, std::string>("savePositionX","0"));
         KeysList.push_back(std::pair<std::string, std::string>("savePositionY","0"));
         KeysList.push_back(std::pair<std::string, std::string>("dark","true"));
+        KeysList.push_back(std::pair<std::string, std::string>("fileProgression","0"));
         optionsEngine->addOptionGroup(KeysList);
         connect(optionsEngine,&OptionInterface::resetOptions,this,&ThemesFactory::resetOptions);
         updateSpeed();
@@ -150,6 +152,7 @@ void ThemesFactory::setResources(OptionInterface * optionsEngine,const std::stri
         ui->startMinimized->setChecked(stringtobool(optionsEngine->getOptionValue("startMinimized")));
         ui->savePosition->setCurrentIndex(stringtouint8(optionsEngine->getOptionValue("savePosition")));
         ui->dark->setChecked(stringtobool(optionsEngine->getOptionValue("dark")));
+        ui->fileProgression->setCurrentIndex(stringtouint8(optionsEngine->getOptionValue("fileProgression")));
     }
     #ifndef __GNUC__
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"__GNUC__ is not set");
@@ -216,6 +219,8 @@ QWidget * ThemesFactory::options()
         if(!connect(ui->startMinimized,&QCheckBox::stateChanged,this,&ThemesFactory::startMinimized))
             abort();
         if(!connect(ui->savePosition,static_cast<void(QComboBox::*)(int)>(&QComboBox::currentIndexChanged),this,&ThemesFactory::savePositionHaveChanged))
+            abort();
+        if(!connect(ui->fileProgression,static_cast<void(QComboBox::*)(int)>(&QComboBox::currentIndexChanged),this,&ThemesFactory::savefileProgression))
             abort();
         if(!connect(ui->dark,&QCheckBox::stateChanged,this,&ThemesFactory::setDark))
             abort();
@@ -285,6 +290,15 @@ void ThemesFactory::savePositionHaveChanged(int value)
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"the checkbox have changed");
     if(optionsEngine!=NULL)
         optionsEngine->setOptionValue("savePosition",std::to_string(value));
+    else
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"internal error, crash prevented");
+}
+
+void ThemesFactory::savefileProgression(int value)
+{
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"the checkbox have changed");
+    if(optionsEngine!=NULL)
+        optionsEngine->setOptionValue("fileProgression",std::to_string(value));
     else
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"internal error, crash prevented");
 }

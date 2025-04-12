@@ -53,7 +53,11 @@ public:
            const bool &moreButtonPushed,
            const bool &minimizeToSystray,
            const bool &startMinimized,
-           const bool &savePosition, const qint8 &generalMargin, const qint8 &generalSpacing);
+           const bool &savePosition,
+           const qint8 &generalMargin,
+           const qint8 &generalSpacing,
+           const qint8 &fileProgression
+           );
     ~Themes();
     //send information about the copy
     /// \brief to set the action in progress
