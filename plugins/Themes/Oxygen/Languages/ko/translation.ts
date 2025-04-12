@@ -4,7 +4,7 @@
 <context>
     <name>Themes</name>
     <message>
-        <location filename="../../interface.cpp" line="+351"/>
+        <location filename="../../interface.cpp" line="+353"/>
         <location line="+6"/>
         <source>Buy the Ultimate version to fund development</source>
         <translation type="unfinished">개발 지원을 위해 Ultimate 버전 구입</translation>
@@ -72,7 +72,7 @@
 <context>
     <name>ThemesFactory</name>
     <message>
-        <location filename="../../ThemesFactory.cpp" line="+295"/>
+        <location filename="../../ThemesFactory.cpp" line="+309"/>
         <source>Don&apos;t close if errors are found</source>
         <translation type="unfinished">오류가 발견된 경우 닫지 않음</translation>
     </message>
@@ -256,17 +256,17 @@
 <context>
     <name>themesOptions</name>
     <message>
-        <location filename="../../themesOptions.ui" line="+402"/>
+        <location filename="../../themesOptions.ui" line="+423"/>
         <source>Show dual progression</source>
         <translation type="unfinished">이중 진행 표시</translation>
     </message>
     <message>
-        <location line="-183"/>
+        <location line="-188"/>
         <source>Show speed as main information</source>
         <translation type="unfinished">주요 정보로 속도 표시</translation>
     </message>
     <message>
-        <location line="-175"/>
+        <location line="-191"/>
         <source>Use</source>
         <translation type="unfinished">사용</translation>
     </message>
@@ -302,12 +302,12 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+56"/>
+        <location line="+77"/>
         <source>Click to edit the color</source>
         <translation type="unfinished">색상 편집 클릭</translation>
     </message>
     <message>
-        <location line="-122"/>
+        <location line="-143"/>
         <source> KB/s</source>
         <translation type="unfinished"> KB/초</translation>
     </message>
@@ -317,7 +317,22 @@
         <translation type="unfinished">위치 저장</translation>
     </message>
     <message>
-        <location line="+61"/>
+        <location line="+53"/>
+        <source>Done files</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <source>In progress files</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+8"/>
+        <source>File progression</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+16"/>
         <source>Display</source>
         <translation type="unfinished">표시</translation>
     </message>
@@ -347,7 +362,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-242"/>
+        <location line="-263"/>
         <source>Always on top</source>
         <translation type="unfinished">항상 위에 놓기</translation>
     </message>

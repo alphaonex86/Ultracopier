@@ -34,71 +34,71 @@
 <context>
     <name>Themes</name>
     <message>
-        <location filename="../../interface.cpp" line="291"/>
-        <location filename="../../interface.cpp" line="297"/>
-        <location filename="../../interface.cpp" line="325"/>
-        <location filename="../../interface.cpp" line="331"/>
+        <location filename="../../interface.cpp" line="293"/>
+        <location filename="../../interface.cpp" line="299"/>
+        <location filename="../../interface.cpp" line="327"/>
+        <location filename="../../interface.cpp" line="333"/>
         <source>Buy the Ultimate version to fund development</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="295"/>
-        <location filename="../../interface.cpp" line="329"/>
+        <location filename="../../interface.cpp" line="297"/>
+        <location filename="../../interface.cpp" line="331"/>
         <source>Ultimate version have more performance via OS native copy</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="306"/>
-        <location filename="../../interface.cpp" line="339"/>
+        <location filename="../../interface.cpp" line="308"/>
+        <location filename="../../interface.cpp" line="341"/>
         <source>Register your key</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="550"/>
+        <location filename="../../interface.cpp" line="552"/>
         <source>File %1/%2, size: %3/%4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="836"/>
+        <location filename="../../interface.cpp" line="838"/>
         <source>Copy list</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="838"/>
+        <location filename="../../interface.cpp" line="840"/>
         <source>Move list</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="1339"/>
+        <location filename="../../interface.cpp" line="1341"/>
         <source>Don&apos;t close if errors are found</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="1340"/>
+        <location filename="../../interface.cpp" line="1342"/>
         <source>Never close</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="1341"/>
+        <location filename="../../interface.cpp" line="1343"/>
         <source>Always close</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="1343"/>
+        <location filename="../../interface.cpp" line="1345"/>
         <source>File Name, 0KB</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="1554"/>
-        <location filename="../../interface.cpp" line="1566"/>
-        <location filename="../../interface.cpp" line="1578"/>
+        <location filename="../../interface.cpp" line="1556"/>
+        <location filename="../../interface.cpp" line="1568"/>
+        <location filename="../../interface.cpp" line="1580"/>
         <source>Select a color</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="1666"/>
-        <location filename="../../interface.cpp" line="1677"/>
-        <location filename="../../interface.cpp" line="1686"/>
+        <location filename="../../interface.cpp" line="1668"/>
+        <location filename="../../interface.cpp" line="1679"/>
+        <location filename="../../interface.cpp" line="1688"/>
         <source>%1 %2% of %3 into %4 files</source>
         <translation type="unfinished"></translation>
     </message>
@@ -106,24 +106,24 @@
 <context>
     <name>ThemesFactory</name>
     <message>
-        <location filename="../../ThemesFactory.cpp" line="322"/>
+        <location filename="../../ThemesFactory.cpp" line="336"/>
         <source>Don&apos;t close if errors are found</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ThemesFactory.cpp" line="323"/>
+        <location filename="../../ThemesFactory.cpp" line="337"/>
         <source>Never close</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ThemesFactory.cpp" line="324"/>
+        <location filename="../../ThemesFactory.cpp" line="338"/>
         <source>Always close</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ThemesFactory.cpp" line="520"/>
-        <location filename="../../ThemesFactory.cpp" line="535"/>
-        <location filename="../../ThemesFactory.cpp" line="550"/>
+        <location filename="../../ThemesFactory.cpp" line="534"/>
+        <location filename="../../ThemesFactory.cpp" line="549"/>
+        <location filename="../../ThemesFactory.cpp" line="564"/>
         <source>Select a color</source>
         <translation type="unfinished"></translation>
     </message>
@@ -295,12 +295,12 @@
 <context>
     <name>themesOptions</name>
     <message>
-        <location filename="../../themesOptions.ui" line="293"/>
+        <location filename="../../themesOptions.ui" line="314"/>
         <source>Show dual progression</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../themesOptions.ui" line="245"/>
+        <location filename="../../themesOptions.ui" line="261"/>
         <source>Show speed as main information</source>
         <translation type="unfinished"></translation>
     </message>
@@ -371,27 +371,42 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../themesOptions.ui" line="277"/>
+        <location filename="../../themesOptions.ui" line="268"/>
+        <source>File progression</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../themesOptions.ui" line="276"/>
+        <source>Done files</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../themesOptions.ui" line="281"/>
+        <source>In progress files</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../themesOptions.ui" line="298"/>
         <source>Display</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../themesOptions.ui" line="283"/>
+        <location filename="../../themesOptions.ui" line="304"/>
         <source>Speed with progress bar</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../themesOptions.ui" line="313"/>
+        <location filename="../../themesOptions.ui" line="334"/>
         <source>Progression color</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../themesOptions.ui" line="332"/>
+        <location filename="../../themesOptions.ui" line="353"/>
         <source>Click to edit the color</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../themesOptions.ui" line="303"/>
+        <location filename="../../themesOptions.ui" line="324"/>
         <source>Show progression in the title</source>
         <translation type="unfinished"></translation>
     </message>

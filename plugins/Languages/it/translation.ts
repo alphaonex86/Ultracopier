@@ -8,7 +8,7 @@
         <location filename="../../../CliParser.cpp" line="117"/>
         <location filename="../../../CliParser.cpp" line="130"/>
         <location filename="../../../CliParser.cpp" line="140"/>
-        <location filename="../../../CliParser.cpp" line="267"/>
+        <location filename="../../../CliParser.cpp" line="271"/>
         <source>Warning</source>
         <translation>Attenzione</translation>
     </message>
@@ -18,31 +18,31 @@
         <translation>Errore durante la lettura del file o dimensione file nulla</translation>
     </message>
     <message>
-        <location filename="../../../CliParser.cpp" line="247"/>
-        <location filename="../../../CliParser.cpp" line="258"/>
+        <location filename="../../../CliParser.cpp" line="251"/>
+        <location filename="../../../CliParser.cpp" line="262"/>
         <source>The arguments possible are:</source>
         <translation>Gli argomenti possibili sono:</translation>
     </message>
     <message>
-        <location filename="../../../CliParser.cpp" line="249"/>
-        <location filename="../../../CliParser.cpp" line="260"/>
+        <location filename="../../../CliParser.cpp" line="253"/>
+        <location filename="../../../CliParser.cpp" line="264"/>
         <source>To display the options</source>
         <translation>Visualizzare opzioni</translation>
     </message>
     <message>
-        <location filename="../../../CliParser.cpp" line="252"/>
-        <location filename="../../../CliParser.cpp" line="263"/>
+        <location filename="../../../CliParser.cpp" line="256"/>
+        <location filename="../../../CliParser.cpp" line="267"/>
         <source>To copy sources to destination, separated by space. If destination is &quot;?&quot;, ultracopier will ask the user</source>
         <translation>Copiare file di origine nella destinazione separato/i da uno spazio. Se la destinazione è &quot;?&quot; Ultracopier chiederà all&apos;utente</translation>
     </message>
     <message>
-        <location filename="../../../CliParser.cpp" line="253"/>
-        <location filename="../../../CliParser.cpp" line="264"/>
+        <location filename="../../../CliParser.cpp" line="257"/>
+        <location filename="../../../CliParser.cpp" line="268"/>
         <source>To move sources to destination, separated by space. If destination is &quot;?&quot;, ultracopier will ask the user</source>
         <translation>Spostare file di origine nella destinazione separato/i da uno spazio. Se la destinazione è &quot;?&quot; Ultracopier chiederà all&apos;utente</translation>
     </message>
     <message>
-        <location filename="../../../CliParser.cpp" line="257"/>
+        <location filename="../../../CliParser.cpp" line="261"/>
         <source>Command not valid</source>
         <translation>Comando non valido</translation>
     </message>
@@ -67,25 +67,25 @@
         <translation>Impossibile aprire il file della lista di trasferimento</translation>
     </message>
     <message>
-        <location filename="../../../CliParser.cpp" line="248"/>
-        <location filename="../../../CliParser.cpp" line="259"/>
+        <location filename="../../../CliParser.cpp" line="252"/>
+        <location filename="../../../CliParser.cpp" line="263"/>
         <source>To display this help</source>
         <translation>Visualizzare questa guida</translation>
     </message>
     <message>
-        <location filename="../../../CliParser.cpp" line="250"/>
-        <location filename="../../../CliParser.cpp" line="261"/>
+        <location filename="../../../CliParser.cpp" line="254"/>
+        <location filename="../../../CliParser.cpp" line="265"/>
         <source>To quit the other instances (if running)</source>
         <translation>Chiudere le altre istanze (se in esecuzione)</translation>
     </message>
     <message>
-        <location filename="../../../CliParser.cpp" line="251"/>
-        <location filename="../../../CliParser.cpp" line="262"/>
+        <location filename="../../../CliParser.cpp" line="255"/>
+        <location filename="../../../CliParser.cpp" line="266"/>
         <source>Open transfer list</source>
         <translation>Aprire lista di trasferimento</translation>
     </message>
     <message>
-        <location filename="../../../CliParser.cpp" line="269"/>
+        <location filename="../../../CliParser.cpp" line="273"/>
         <source>Help</source>
         <translation>Guida</translation>
     </message>
@@ -1837,27 +1837,37 @@ Errore: %2</translation>
         <translation>Chiave del prodotto</translation>
     </message>
     <message>
-        <location filename="../../../ProductKey.cpp" line="63"/>
+        <location filename="../../../ProductKey.cpp" line="70"/>
         <source>Error</source>
         <translation>Errore</translation>
     </message>
     <message>
-        <location filename="../../../ProductKey.cpp" line="63"/>
-        <source>Your product key was rejected for this version %1.&lt;br /&gt;&lt;b&gt;If you have just buy the key, try download the last version.&lt;/b&gt;&lt;br /&gt;If you buy key, unmark check your spam and unmark the mail as spam&lt;br /&gt;If you have not buy your key, go to &lt;a href=&quot;https://ultracopier.herman-brule.com/#ultimate&quot;&gt;https://ultracopier.herman-brule.com/#ultimate&lt;/a&gt;</source>
+        <location filename="../../../ProductKey.cpp" line="66"/>
+        <source>The major update is not free to support the project.&lt;br /&gt;For years I had to update the site and software, fight against hacking attempts, provide user support (and correct bugs in less than 2 hours).&lt;br /&gt;The version 1.x was free update during more than 5 years and have years old.&lt;br /&gt;The version 2.x was free update during more than 7 years and have years old. (and lot of have stole this version)&lt;br /&gt;This is the only way to be able to have time for this project that I am the only one to maintain and without help.&lt;br /&gt;You can use the old version and disable update detection&lt;br /&gt;&lt;a href=&quot;https://cdn.confiared.com/ultracopier.herman-brule.com/files/2.2.7.1/ultracopier-windows-x86_64-2.2.7.1-setup.exe&quot;&gt;ultracopier-windows-x86_64-2.2.7.1-setup.exe&lt;/a&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../ProductKey.cpp" line="70"/>
+        <location filename="../../../ProductKey.cpp" line="68"/>
+        <source>Your product key was rejected for this version %1.&lt;br /&gt;If you buy key, unmark check your spam and unmark the mail as spam</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../ProductKey.cpp" line="69"/>
+        <source>&lt;br /&gt;If you have not buy your key, go to &lt;a href=&quot;https://ultracopier.herman-brule.com/#ultimate&quot;&gt;https://ultracopier.herman-brule.com/#ultimate&lt;/a&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../ProductKey.cpp" line="78"/>
         <source>&lt;br /&gt;Restart to enable the option high performance into option -&gt; Copy Engine -&gt; Ultracopier Spec -&gt; Performance -&gt; OS native copy</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../ProductKey.cpp" line="73"/>
+        <location filename="../../../ProductKey.cpp" line="81"/>
         <source>Informations</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../ProductKey.cpp" line="73"/>
+        <location filename="../../../ProductKey.cpp" line="81"/>
         <source>You have correctly enabled your key.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2118,67 +2128,67 @@ Errore: %2</translation>
 <context>
     <name>Themes</name>
     <message>
-        <location filename="../../Themes/Oxygen/interface.cpp" line="351"/>
-        <location filename="../../Themes/Oxygen/interface.cpp" line="357"/>
+        <location filename="../../Themes/Oxygen/interface.cpp" line="353"/>
+        <location filename="../../Themes/Oxygen/interface.cpp" line="359"/>
         <source>Buy the Ultimate version to fund development</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../Themes/Oxygen/interface.cpp" line="355"/>
+        <location filename="../../Themes/Oxygen/interface.cpp" line="357"/>
         <source>Ultimate version have more performance via OS native copy</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../Themes/Oxygen/interface.cpp" line="362"/>
+        <location filename="../../Themes/Oxygen/interface.cpp" line="364"/>
         <source>Register your key</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../Themes/Oxygen/interface.cpp" line="462"/>
+        <location filename="../../Themes/Oxygen/interface.cpp" line="464"/>
         <source>File %1/%2, size: %3/%4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../Themes/Oxygen/interface.cpp" line="696"/>
+        <location filename="../../Themes/Oxygen/interface.cpp" line="698"/>
         <source>Copy list</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../Themes/Oxygen/interface.cpp" line="698"/>
+        <location filename="../../Themes/Oxygen/interface.cpp" line="700"/>
         <source>Move list</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../Themes/Oxygen/interface.cpp" line="1139"/>
+        <location filename="../../Themes/Oxygen/interface.cpp" line="1141"/>
         <source>Don&apos;t close if errors are found</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../Themes/Oxygen/interface.cpp" line="1140"/>
+        <location filename="../../Themes/Oxygen/interface.cpp" line="1142"/>
         <source>Never close</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../Themes/Oxygen/interface.cpp" line="1141"/>
+        <location filename="../../Themes/Oxygen/interface.cpp" line="1143"/>
         <source>Always close</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../Themes/Oxygen/interface.cpp" line="1143"/>
+        <location filename="../../Themes/Oxygen/interface.cpp" line="1145"/>
         <source>File Name, 0KB</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../Themes/Oxygen/interface.cpp" line="1418"/>
-        <location filename="../../Themes/Oxygen/interface.cpp" line="1430"/>
-        <location filename="../../Themes/Oxygen/interface.cpp" line="1442"/>
+        <location filename="../../Themes/Oxygen/interface.cpp" line="1420"/>
+        <location filename="../../Themes/Oxygen/interface.cpp" line="1432"/>
+        <location filename="../../Themes/Oxygen/interface.cpp" line="1444"/>
         <source>Select a color</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../Themes/Oxygen/interface.cpp" line="1517"/>
-        <location filename="../../Themes/Oxygen/interface.cpp" line="1521"/>
+        <location filename="../../Themes/Oxygen/interface.cpp" line="1519"/>
         <location filename="../../Themes/Oxygen/interface.cpp" line="1523"/>
+        <location filename="../../Themes/Oxygen/interface.cpp" line="1525"/>
         <source>%1 %2% of %3</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2186,24 +2196,24 @@ Errore: %2</translation>
 <context>
     <name>ThemesFactory</name>
     <message>
-        <location filename="../../Themes/Oxygen/ThemesFactory.cpp" line="295"/>
+        <location filename="../../Themes/Oxygen/ThemesFactory.cpp" line="309"/>
         <source>Don&apos;t close if errors are found</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../Themes/Oxygen/ThemesFactory.cpp" line="296"/>
+        <location filename="../../Themes/Oxygen/ThemesFactory.cpp" line="310"/>
         <source>Never close</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../Themes/Oxygen/ThemesFactory.cpp" line="297"/>
+        <location filename="../../Themes/Oxygen/ThemesFactory.cpp" line="311"/>
         <source>Always close</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../Themes/Oxygen/ThemesFactory.cpp" line="511"/>
-        <location filename="../../Themes/Oxygen/ThemesFactory.cpp" line="526"/>
-        <location filename="../../Themes/Oxygen/ThemesFactory.cpp" line="541"/>
+        <location filename="../../Themes/Oxygen/ThemesFactory.cpp" line="525"/>
+        <location filename="../../Themes/Oxygen/ThemesFactory.cpp" line="540"/>
+        <location filename="../../Themes/Oxygen/ThemesFactory.cpp" line="555"/>
         <source>Select a color</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3011,47 +3021,62 @@ Errore: %2</translation>
         <translation type="unfinished">Informazioni</translation>
     </message>
     <message>
-        <location filename="../../Themes/Oxygen/themesOptions.ui" line="219"/>
+        <location filename="../../Themes/Oxygen/themesOptions.ui" line="235"/>
         <source>Show speed as main information</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../Themes/Oxygen/themesOptions.ui" line="251"/>
+        <location filename="../../Themes/Oxygen/themesOptions.ui" line="243"/>
+        <source>Done files</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../Themes/Oxygen/themesOptions.ui" line="248"/>
+        <source>In progress files</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../Themes/Oxygen/themesOptions.ui" line="256"/>
+        <source>File progression</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../Themes/Oxygen/themesOptions.ui" line="272"/>
         <source>Display</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../Themes/Oxygen/themesOptions.ui" line="269"/>
+        <location filename="../../Themes/Oxygen/themesOptions.ui" line="290"/>
         <source>Click to edit the color</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../Themes/Oxygen/themesOptions.ui" line="368"/>
+        <location filename="../../Themes/Oxygen/themesOptions.ui" line="389"/>
         <source>Speed with progress bar</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../Themes/Oxygen/themesOptions.ui" line="378"/>
+        <location filename="../../Themes/Oxygen/themesOptions.ui" line="399"/>
         <source>Progression color</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../Themes/Oxygen/themesOptions.ui" line="388"/>
+        <location filename="../../Themes/Oxygen/themesOptions.ui" line="409"/>
         <source>Show progression in the title</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../Themes/Oxygen/themesOptions.ui" line="395"/>
+        <location filename="../../Themes/Oxygen/themesOptions.ui" line="416"/>
         <source>General margin</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../Themes/Oxygen/themesOptions.ui" line="402"/>
+        <location filename="../../Themes/Oxygen/themesOptions.ui" line="423"/>
         <source>Show dual progression</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../Themes/Oxygen/themesOptions.ui" line="425"/>
+        <location filename="../../Themes/Oxygen/themesOptions.ui" line="446"/>
         <source>General spacing</source>
         <translation type="unfinished"></translation>
     </message>

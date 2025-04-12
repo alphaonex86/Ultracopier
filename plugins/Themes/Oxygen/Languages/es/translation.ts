@@ -4,67 +4,67 @@
 <context>
     <name>Themes</name>
     <message>
-        <location filename="../../interface.cpp" line="351"/>
-        <location filename="../../interface.cpp" line="357"/>
+        <location filename="../../interface.cpp" line="353"/>
+        <location filename="../../interface.cpp" line="359"/>
         <source>Buy the Ultimate version to fund development</source>
         <translation>Comprar la versión Ultimate para financiar el desarrollo</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="355"/>
+        <location filename="../../interface.cpp" line="357"/>
         <source>Ultimate version have more performance via OS native copy</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="362"/>
+        <location filename="../../interface.cpp" line="364"/>
         <source>Register your key</source>
         <translation>Registra tu clave</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="462"/>
+        <location filename="../../interface.cpp" line="464"/>
         <source>File %1/%2, size: %3/%4</source>
         <translation>El archivo %1/%2, el tamaño: %3/%4</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="696"/>
+        <location filename="../../interface.cpp" line="698"/>
         <source>Copy list</source>
         <translation>Lista de copia</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="698"/>
+        <location filename="../../interface.cpp" line="700"/>
         <source>Move list</source>
         <translation>Lista de movimiento</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="1139"/>
+        <location filename="../../interface.cpp" line="1141"/>
         <source>Don&apos;t close if errors are found</source>
         <translation>No cierre si se encuentran errores</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="1140"/>
+        <location filename="../../interface.cpp" line="1142"/>
         <source>Never close</source>
         <translation>Nunca cierre</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="1141"/>
+        <location filename="../../interface.cpp" line="1143"/>
         <source>Always close</source>
         <translation>Siempre cerrar</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="1143"/>
+        <location filename="../../interface.cpp" line="1145"/>
         <source>File Name, 0KB</source>
         <translation>Nombre de archivo, 0KB</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="1418"/>
-        <location filename="../../interface.cpp" line="1430"/>
-        <location filename="../../interface.cpp" line="1442"/>
+        <location filename="../../interface.cpp" line="1420"/>
+        <location filename="../../interface.cpp" line="1432"/>
+        <location filename="../../interface.cpp" line="1444"/>
         <source>Select a color</source>
         <translation>Seleccione un color</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="1517"/>
-        <location filename="../../interface.cpp" line="1521"/>
+        <location filename="../../interface.cpp" line="1519"/>
         <location filename="../../interface.cpp" line="1523"/>
+        <location filename="../../interface.cpp" line="1525"/>
         <source>%1 %2% of %3</source>
         <translation>%1 %2% de %3</translation>
     </message>
@@ -72,24 +72,24 @@
 <context>
     <name>ThemesFactory</name>
     <message>
-        <location filename="../../ThemesFactory.cpp" line="295"/>
+        <location filename="../../ThemesFactory.cpp" line="309"/>
         <source>Don&apos;t close if errors are found</source>
         <translation>No cierre si se encuentran errores</translation>
     </message>
     <message>
-        <location filename="../../ThemesFactory.cpp" line="296"/>
+        <location filename="../../ThemesFactory.cpp" line="310"/>
         <source>Never close</source>
         <translation>Nunca cierre</translation>
     </message>
     <message>
-        <location filename="../../ThemesFactory.cpp" line="297"/>
+        <location filename="../../ThemesFactory.cpp" line="311"/>
         <source>Always close</source>
         <translation>Siempre cerrar</translation>
     </message>
     <message>
-        <location filename="../../ThemesFactory.cpp" line="511"/>
-        <location filename="../../ThemesFactory.cpp" line="526"/>
-        <location filename="../../ThemesFactory.cpp" line="541"/>
+        <location filename="../../ThemesFactory.cpp" line="525"/>
+        <location filename="../../ThemesFactory.cpp" line="540"/>
+        <location filename="../../ThemesFactory.cpp" line="555"/>
         <source>Select a color</source>
         <translation>Seleccione un color</translation>
     </message>
@@ -256,12 +256,12 @@
 <context>
     <name>themesOptions</name>
     <message>
-        <location filename="../../themesOptions.ui" line="402"/>
+        <location filename="../../themesOptions.ui" line="423"/>
         <source>Show dual progression</source>
         <translation>Mostrar progresión dual</translation>
     </message>
     <message>
-        <location filename="../../themesOptions.ui" line="219"/>
+        <location filename="../../themesOptions.ui" line="235"/>
         <source>Show speed as main information</source>
         <translation>Mostrar la velocidad como principales informaciones</translation>
     </message>
@@ -302,7 +302,7 @@
         <translation>Informacións</translation>
     </message>
     <message>
-        <location filename="../../themesOptions.ui" line="269"/>
+        <location filename="../../themesOptions.ui" line="290"/>
         <source>Click to edit the color</source>
         <translation>Haga clic para editar el color</translation>
     </message>
@@ -317,32 +317,47 @@
         <translation>Guardar posicion</translation>
     </message>
     <message>
-        <location filename="../../themesOptions.ui" line="251"/>
+        <location filename="../../themesOptions.ui" line="243"/>
+        <source>Done files</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../themesOptions.ui" line="248"/>
+        <source>In progress files</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../themesOptions.ui" line="256"/>
+        <source>File progression</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../themesOptions.ui" line="272"/>
         <source>Display</source>
         <translation>Visualización</translation>
     </message>
     <message>
-        <location filename="../../themesOptions.ui" line="368"/>
+        <location filename="../../themesOptions.ui" line="389"/>
         <source>Speed with progress bar</source>
         <translation>Velocidad con barra de progreso</translation>
     </message>
     <message>
-        <location filename="../../themesOptions.ui" line="378"/>
+        <location filename="../../themesOptions.ui" line="399"/>
         <source>Progression color</source>
         <translation>Progresión de color</translation>
     </message>
     <message>
-        <location filename="../../themesOptions.ui" line="388"/>
+        <location filename="../../themesOptions.ui" line="409"/>
         <source>Show progression in the title</source>
         <translation>Mostrar progresión en el título</translation>
     </message>
     <message>
-        <location filename="../../themesOptions.ui" line="395"/>
+        <location filename="../../themesOptions.ui" line="416"/>
         <source>General margin</source>
         <translation>Margen general</translation>
     </message>
     <message>
-        <location filename="../../themesOptions.ui" line="425"/>
+        <location filename="../../themesOptions.ui" line="446"/>
         <source>General spacing</source>
         <translation>Espaciado general</translation>
     </message>
