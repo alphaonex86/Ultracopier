@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.1" language="es">
+<TS version="2.1" language="es_ES">
 <context>
     <name>CliParser</name>
     <message>
@@ -1836,39 +1836,52 @@ Error:%2</translation>
         <translation>Clave de producto</translation>
     </message>
     <message>
-        <location filename="../../../ProductKey.cpp" line="70"/>
+        <location filename="../../../ProductKey.cpp" line="84"/>
         <source>Error</source>
         <translation>Error</translation>
     </message>
     <message>
-        <location filename="../../../ProductKey.cpp" line="66"/>
+        <location filename="../../../ProductKey.cpp" line="70"/>
+        <location filename="../../../ProductKey.cpp" line="72"/>
         <source>The major update is not free to support the project.&lt;br /&gt;For years I had to update the site and software, fight against hacking attempts, provide user support (and correct bugs in less than 2 hours).&lt;br /&gt;The version 1.x was free update during more than 5 years and have years old.&lt;br /&gt;The version 2.x was free update during more than 7 years and have years old. (and lot of have stole this version)&lt;br /&gt;This is the only way to be able to have time for this project that I am the only one to maintain and without help.&lt;br /&gt;You can use the old version and disable update detection&lt;br /&gt;&lt;a href=&quot;https://cdn.confiared.com/ultracopier.herman-brule.com/files/2.2.7.1/ultracopier-windows-x86_64-2.2.7.1-setup.exe&quot;&gt;ultracopier-windows-x86_64-2.2.7.1-setup.exe&lt;/a&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>La actualisation mayor no es gratis por supportar el projecto.&lt;br /&gt;Durante años, tuve que actualizar el sitio y el software, luchar contra los intentos de piratería, brindar asistencia al usuario (y corregir errores en menos de 2 horas).&lt;br /&gt;La version 1.x tubo sus actualisation gratis durante mas de 5 años.&lt;br /&gt;La version 2.x tubo sus actualisation gratis durante mas de 7 años. (y mucho piratearon esta version)&lt;br /&gt;Sólo así podré tener tiempo para este proyecto que soy el único a maintenerlo y sin ayuda.&lt;br /&gt;Puedes segir usando la antigua version y désactivar la detection de actualisation&lt;br /&gt;&lt;a href=&quot;https://cdn.confiared.com/ultracopier.herman-brule.com/files/2.2.7.1/ultracopier-windows-x86_64-2.2.7.1-setup.exe&quot;&gt;ultracopier-windows-x86_64-2.2.7.1-setup.exe&lt;/a&gt;</translation>
     </message>
     <message>
-        <location filename="../../../ProductKey.cpp" line="68"/>
-        <source>Your product key was rejected for this version %1.&lt;br /&gt;If you buy key, unmark check your spam and unmark the mail as spam</source>
-        <translation type="unfinished"></translation>
+        <location filename="../../../ProductKey.cpp" line="74"/>
+        <source>This kind of key should work, check if you have copied extra characters</source>
+        <translation>Este tipo de clave debería funcionar, verifique si ha copiado caracteres adicionales</translation>
     </message>
     <message>
-        <location filename="../../../ProductKey.cpp" line="69"/>
-        <source>&lt;br /&gt;If you have not buy your key, go to &lt;a href=&quot;https://ultracopier.herman-brule.com/#ultimate&quot;&gt;https://ultracopier.herman-brule.com/#ultimate&lt;/a&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
+        <location filename="../../../ProductKey.cpp" line="76"/>
         <location filename="../../../ProductKey.cpp" line="78"/>
+        <location filename="../../../ProductKey.cpp" line="80"/>
+        <source>This key is for version %1, then try upgrade this version for this version. Go to &lt;a href=&quot;https://ultracopier.herman-brule.com/#download&quot;&gt;https://ultracopier.herman-brule.com/#download&lt;/a&gt;</source>
+        <translation>Esta clave es para la versión %1, así que intenta actualizarla para esta versión. Ve a &lt;a href=&quot;https://ultracopier.herman-brule.com/#download&quot;&gt;https://ultracopier.herman-brule.com/#download&lt;/a&gt;</translation>
+    </message>
+    <message>
+        <location filename="../../../ProductKey.cpp" line="82"/>
+        <source>Your product key was rejected for this version %1.&lt;br /&gt;If you buy key, unmark check your spam and unmark the mail as spam</source>
+        <translation>Su clave de producto fue rechazada para esta versión %1.&lt;br /&gt;Si compra una clave, verificar en su correo no deseado y desmarque el correo como no deseado</translation>
+    </message>
+    <message>
+        <location filename="../../../ProductKey.cpp" line="83"/>
+        <source>&lt;br /&gt;If you have not buy your key, go to &lt;a href=&quot;https://ultracopier.herman-brule.com/#ultimate&quot;&gt;https://ultracopier.herman-brule.com/#ultimate&lt;/a&gt;</source>
+        <translation>&lt;br /&gt;Si no ha comprado su clave todavia, vaya a &lt;a href=&quot;https://ultracopier.herman-brule.com/#ultimate&quot;&gt;https://ultracopier.herman-brule.com/#ultimate&lt;/a&gt;</translation>
+    </message>
+    <message>
+        <location filename="../../../ProductKey.cpp" line="92"/>
         <source>&lt;br /&gt;Restart to enable the option high performance into option -&gt; Copy Engine -&gt; Ultracopier Spec -&gt; Performance -&gt; OS native copy</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;br /&gt;Reinicie para habilitar la opción de alto rendimiento en opciones -&gt; Motor de copia -&gt; Especificaciones de Ultracopier -&gt; Rendimiento -&gt; Copia nativa del SO</translation>
     </message>
     <message>
-        <location filename="../../../ProductKey.cpp" line="81"/>
+        <location filename="../../../ProductKey.cpp" line="95"/>
         <source>Informations</source>
-        <translation type="unfinished"></translation>
+        <translation>Informaciónes</translation>
     </message>
     <message>
-        <location filename="../../../ProductKey.cpp" line="81"/>
+        <location filename="../../../ProductKey.cpp" line="95"/>
         <source>You have correctly enabled your key.</source>
-        <translation type="unfinished"></translation>
+        <translation>Has habilitado tu clave correctamente.</translation>
     </message>
 </context>
 <context>

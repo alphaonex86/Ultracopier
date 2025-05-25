@@ -23,6 +23,10 @@ ProductKey::~ProductKey()
 bool ProductKey::parseKey(QString orgkey)
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"ultimate key");
+    orgkey.replace(" ","");
+    orgkey.replace("\t","");
+    orgkey.replace("\n","");
+    orgkey.replace("\r","");
     QString key=orgkey;
     if(orgkey.isEmpty())
         key=QString::fromStdString(OptionEngine::optionEngine->getOptionValue("Ultracopier","key"));
@@ -62,11 +66,21 @@ void ProductKey::on_buttonBox_accepted()
     if(!ProductKey::parseKey(ui->productkey->text()))
     {
         QString extra;
-        if(ui->productkey->text().startsWith("UC2"))
+        if(ui->productkey->text().startsWith("UC1"))
             extra+=tr("The major update is not free to support the project.<br />For years I had to update the site and software, fight against hacking attempts, provide user support (and correct bugs in less than 2 hours).<br />The version 1.x was free update during more than 5 years and have years old.<br />The version 2.x was free update during more than 7 years and have years old. (and lot of have stole this version)<br />This is the only way to be able to have time for this project that I am the only one to maintain and without help.<br />You can use the old version and disable update detection<br /><a href=\"https://cdn.confiared.com/ultracopier.herman-brule.com/files/2.2.7.1/ultracopier-windows-x86_64-2.2.7.1-setup.exe\">ultracopier-windows-x86_64-2.2.7.1-setup.exe</a>");
+        else if(ui->productkey->text().startsWith("UC2"))
+            extra+=tr("The major update is not free to support the project.<br />For years I had to update the site and software, fight against hacking attempts, provide user support (and correct bugs in less than 2 hours).<br />The version 1.x was free update during more than 5 years and have years old.<br />The version 2.x was free update during more than 7 years and have years old. (and lot of have stole this version)<br />This is the only way to be able to have time for this project that I am the only one to maintain and without help.<br />You can use the old version and disable update detection<br /><a href=\"https://cdn.confiared.com/ultracopier.herman-brule.com/files/2.2.7.1/ultracopier-windows-x86_64-2.2.7.1-setup.exe\">ultracopier-windows-x86_64-2.2.7.1-setup.exe</a>");
+        else if(ui->productkey->text().startsWith("UC3"))
+            extra+=tr("This kind of key should work, check if you have copied extra characters");
+        else if(ui->productkey->text().startsWith("UC4"))
+            extra+=tr("This key is for version %1, then try upgrade this version for this version. Go to <a href=\"https://ultracopier.herman-brule.com/#download\">https://ultracopier.herman-brule.com/#download</a>").arg(4);
+        else if(ui->productkey->text().startsWith("UC5"))
+            extra+=tr("This key is for version %1, then try upgrade this version for this version. Go to <a href=\"https://ultracopier.herman-brule.com/#download\">https://ultracopier.herman-brule.com/#download</a>").arg(5);
+        else if(ui->productkey->text().startsWith("UC6"))
+            extra+=tr("This key is for version %1, then try upgrade this version for this version. Go to <a href=\"https://ultracopier.herman-brule.com/#download\">https://ultracopier.herman-brule.com/#download</a>").arg(6);
         else
-            extra+=tr("Your product key was rejected for this version %1.<br />If you buy key, unmark check your spam and unmark the mail as spam");
-        extra+=tr("<br />If you have not buy your key, go to <a href=\"https://ultracopier.herman-brule.com/#ultimate\">https://ultracopier.herman-brule.com/#ultimate</a>").arg(QString::fromStdString(FacilityEngine::version()));
+            extra+=tr("Your product key \""+ui->productkey->text()+"\" was rejected for this version %1.<br />If you buy key, unmark check your spam and unmark the mail as spam").arg(QString::fromStdString(FacilityEngine::version()));
+        extra+=tr("<br />If you have not buy your key, go to <a href=\"https://ultracopier.herman-brule.com/#ultimate\">https://ultracopier.herman-brule.com/#ultimate</a>");
         QMessageBox::critical(this,tr("Error"),"<br />"+extra);
     }
     else

@@ -51,4 +51,5 @@
 3.0.0.6: more improvement on Windows
 3.0.0.7: Improve key reject message, enable again build for android and macos
 3.0.0.8: Add high performance option for Ultimate version
-3.0.0.9: Better support of old version of Qt/Windows like Qt 5.5 and Windows XP, fix load the dll of catchcopy, improvement of 0/99 files text, improve error key rejected text
+3.0.0.9: Better support of old version of Qt/Windows like Qt 5.5 and Windows XP, fix load the dll of catchcopy, improvement of 0/99 files text, improve error key rejected text, now official build for windows XP and Windows 7 32/64Bits
+3.0.1.0: better version key check, update translation french and spanish

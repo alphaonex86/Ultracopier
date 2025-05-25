@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.1" language="fr" sourcelanguage="en">
+<TS version="2.1" language="fr_FR" sourcelanguage="en_US">
 <context>
     <name>CliParser</name>
     <message>
@@ -96,33 +96,33 @@
         <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngine.cpp" line="448"/>
         <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngine.cpp" line="471"/>
         <source>The engine is forced to move, you can&apos;t copy with it</source>
-        <translation type="unfinished"></translation>
+        <translation>Le moteur est forcé en déplacement, vous ne pouvez pas copier avec lui</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngine.cpp" line="525"/>
         <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngine.cpp" line="548"/>
         <source>The engine is forced to copy, you can&apos;t move with it</source>
-        <translation type="unfinished"></translation>
+        <translation>Le moteur est forcé en copie, vous ne pouvez pas copier avec lui</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngine.cpp" line="572"/>
         <source>Destination</source>
-        <translation type="unfinished">Destination</translation>
+        <translation>Destination</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngine.cpp" line="572"/>
         <source>Use the actual destination &quot;%1&quot;?</source>
-        <translation type="unfinished"></translation>
+        <translation>Utiliser la destination actuelle &quot;%1&quot;?</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngine.cpp" line="737"/>
         <source>The mode has been forced previously. This is an internal error, please report it</source>
-        <translation type="unfinished"></translation>
+        <translation>Le mode a été forcé précédemment. Il s&apos;agit d&apos;une erreur interne ; veuillez la signaler.</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngine.cpp" line="900"/>
         <source>Supported only on Windows</source>
-        <translation type="unfinished"></translation>
+        <translation>Pris en charge uniquement sous Windows</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngine.cpp" line="1058"/>
@@ -130,7 +130,7 @@
         <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngine.cpp" line="1066"/>
         <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngine.cpp" line="1070"/>
         <source>Ask</source>
-        <translation type="unfinished">Demander</translation>
+        <translation>Demander</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngine.cpp" line="1059"/>
@@ -138,53 +138,53 @@
         <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngine.cpp" line="1067"/>
         <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngine.cpp" line="1071"/>
         <source>Skip</source>
-        <translation type="unfinished">Passer</translation>
+        <translation>Passer</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngine.cpp" line="1062"/>
         <source>Merge</source>
-        <translation type="unfinished"></translation>
+        <translation>Fusionner</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngine.cpp" line="1064"/>
         <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngine.cpp" line="1076"/>
         <source>Rename</source>
-        <translation type="unfinished">Renommer</translation>
+        <translation>Renommer</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngine.cpp" line="1068"/>
         <source>Put at the end</source>
-        <translation type="unfinished"></translation>
+        <translation>Mettre à la fin</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngine.cpp" line="1072"/>
         <source>Overwrite</source>
-        <translation type="unfinished">Écraser</translation>
+        <translation>Remplacer</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngine.cpp" line="1073"/>
         <source>Overwrite if different</source>
-        <translation type="unfinished"></translation>
+        <translation>Remplacer si différent</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngine.cpp" line="1074"/>
         <source>Overwrite if newer</source>
-        <translation type="unfinished">Écraser si plus récent</translation>
+        <translation>Remplacer si plus récent</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngine.cpp" line="1075"/>
         <source>Overwrite if older</source>
-        <translation type="unfinished"></translation>
+        <translation>Écraser si plus ancien</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngine.cpp" line="1146"/>
         <source>Options error</source>
-        <translation type="unfinished"></translation>
+        <translation>Erreur d&apos;options</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngine.cpp" line="1146"/>
         <source>Options engine is not loaded. Unable to access the filters</source>
-        <translation type="unfinished"></translation>
+        <translation>Le moteur d&apos;options n&apos;est pas chargé. Impossible d&apos;accéder aux filtres.</translation>
     </message>
 </context>
 <context>
@@ -193,7 +193,7 @@
         <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="60"/>
         <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="322"/>
         <source>Supported only on Windows</source>
-        <translation type="unfinished"></translation>
+        <translation>Pris en charge uniquement sous Windows</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="452"/>
@@ -201,7 +201,7 @@
         <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="460"/>
         <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="464"/>
         <source>Ask</source>
-        <translation type="unfinished">Demander</translation>
+        <translation>Demander</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="453"/>
@@ -209,59 +209,59 @@
         <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="461"/>
         <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="465"/>
         <source>Skip</source>
-        <translation type="unfinished">Passer</translation>
+        <translation>Passer</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="456"/>
         <source>Merge</source>
-        <translation type="unfinished"></translation>
+        <translation>Fusionner</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="458"/>
         <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="470"/>
         <source>Rename</source>
-        <translation type="unfinished">Renommer</translation>
+        <translation>Renommer</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="462"/>
         <source>Put at the end</source>
-        <translation type="unfinished"></translation>
+        <translation>Mettre à la fin</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="466"/>
         <source>Overwrite</source>
-        <translation type="unfinished">Écraser</translation>
+        <translation>Remplacer</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="467"/>
         <source>Overwrite if different</source>
-        <translation type="unfinished"></translation>
+        <translation>Remplacer si différent</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="468"/>
         <source>Overwrite if newer</source>
-        <translation type="unfinished">Écraser si plus récent</translation>
+        <translation>Remplacer si plus récent</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="469"/>
         <source>Overwrite if older</source>
-        <translation type="unfinished"></translation>
+        <translation>Remplacer si plus ancien</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="485"/>
         <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="524"/>
         <source>Options error</source>
-        <translation type="unfinished"></translation>
+        <translation>Erreur d&apos;options</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="485"/>
         <source>Options engine is not loaded. Unable to access the filters</source>
-        <translation type="unfinished"></translation>
+        <translation>Le moteur d&apos;options n&apos;est pas chargé. Impossible d&apos;accéder aux filtres.</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="524"/>
         <source>Options engine is not loaded, can&apos;t access to the filters</source>
-        <translation type="unfinished"></translation>
+        <translation>Le moteur d&apos;options n&apos;est pas chargé, impossible d&apos;accéder aux filtres</translation>
     </message>
 </context>
 <context>
@@ -388,7 +388,7 @@
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/DiskSpace.ui" line="14"/>
         <source>Disk space</source>
-        <translation type="unfinished"></translation>
+        <translation>Espace disque</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/DiskSpace.ui" line="24"/>
@@ -1838,39 +1838,52 @@ Erreur:%2</translation>
         <translation>Clef de produit</translation>
     </message>
     <message>
-        <location filename="../../../ProductKey.cpp" line="70"/>
+        <location filename="../../../ProductKey.cpp" line="84"/>
         <source>Error</source>
         <translation>Erreur</translation>
     </message>
     <message>
-        <location filename="../../../ProductKey.cpp" line="66"/>
+        <location filename="../../../ProductKey.cpp" line="70"/>
+        <location filename="../../../ProductKey.cpp" line="72"/>
         <source>The major update is not free to support the project.&lt;br /&gt;For years I had to update the site and software, fight against hacking attempts, provide user support (and correct bugs in less than 2 hours).&lt;br /&gt;The version 1.x was free update during more than 5 years and have years old.&lt;br /&gt;The version 2.x was free update during more than 7 years and have years old. (and lot of have stole this version)&lt;br /&gt;This is the only way to be able to have time for this project that I am the only one to maintain and without help.&lt;br /&gt;You can use the old version and disable update detection&lt;br /&gt;&lt;a href=&quot;https://cdn.confiared.com/ultracopier.herman-brule.com/files/2.2.7.1/ultracopier-windows-x86_64-2.2.7.1-setup.exe&quot;&gt;ultracopier-windows-x86_64-2.2.7.1-setup.exe&lt;/a&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>Le changement de version est majeur est payante pour supporter le projet.&lt;br /&gt;J&apos;ai du durant des années actualisé site et software, luter contre les tentatives de piratage, faire support des utilisateurs (et corrigé les bugs en moins de 2h).&lt;br /&gt;La version 1.x à eu ces mises à jours gratuite pendant plus de 5 ans.&lt;br /&gt;La version 2.x à eu ces mises à jours gratuite pendant plus de 7 ans. (et beaucoup ont piraté cette version)&lt;br /&gt;C&apos;est l&apos;unique moyen pour pouvoir avoir du temps pour ce projet que je suis le seul a maintenir et sans aide.&lt;br /&gt;Vous pouvez toujours utiliser l&apos;ancienne version avec votre clef et désactivé la vérification des mis à jour&lt;br /&gt;&lt;a href=&quot;https://cdn.confiared.com/ultracopier.herman-brule.com/files/2.2.7.1/ultracopier-windows-x86_64-2.2.7.1-setup.exe&quot;&gt;ultracopier-windows-x86_64-2.2.7.1-setup.exe&lt;/a&gt;</translation>
     </message>
     <message>
-        <location filename="../../../ProductKey.cpp" line="68"/>
-        <source>Your product key was rejected for this version %1.&lt;br /&gt;If you buy key, unmark check your spam and unmark the mail as spam</source>
-        <translation type="unfinished"></translation>
+        <location filename="../../../ProductKey.cpp" line="74"/>
+        <source>This kind of key should work, check if you have copied extra characters</source>
+        <translation>Ce type de clé devrait fonctionner, vérifiez si vous avez copié des caractères supplémentaires</translation>
     </message>
     <message>
-        <location filename="../../../ProductKey.cpp" line="69"/>
-        <source>&lt;br /&gt;If you have not buy your key, go to &lt;a href=&quot;https://ultracopier.herman-brule.com/#ultimate&quot;&gt;https://ultracopier.herman-brule.com/#ultimate&lt;/a&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
+        <location filename="../../../ProductKey.cpp" line="76"/>
         <location filename="../../../ProductKey.cpp" line="78"/>
+        <location filename="../../../ProductKey.cpp" line="80"/>
+        <source>This key is for version %1, then try upgrade this version for this version. Go to &lt;a href=&quot;https://ultracopier.herman-brule.com/#download&quot;&gt;https://ultracopier.herman-brule.com/#download&lt;/a&gt;</source>
+        <translation>Cette clé est pour la version %1, alors essayez de mettre à niveau cette version pour cette nouvelle version. Accéder à &lt;a href=&quot;https://ultracopier.herman-brule.com/#download&quot;&gt;https://ultracopier.herman-brule.com/#download&lt;/a&gt;</translation>
+    </message>
+    <message>
+        <location filename="../../../ProductKey.cpp" line="82"/>
+        <source>Your product key was rejected for this version %1.&lt;br /&gt;If you buy key, unmark check your spam and unmark the mail as spam</source>
+        <translation>Votre clé de produit a été rejetée pour cette version %1.&lt;br /&gt;Si vous achetez une clé, vérifiez vos spams et décochez le courrier comme spam.</translation>
+    </message>
+    <message>
+        <location filename="../../../ProductKey.cpp" line="83"/>
+        <source>&lt;br /&gt;If you have not buy your key, go to &lt;a href=&quot;https://ultracopier.herman-brule.com/#ultimate&quot;&gt;https://ultracopier.herman-brule.com/#ultimate&lt;/a&gt;</source>
+        <translation>&lt;br /&gt;Si vous n&apos;avez pas encore acheté votre clé, rendez-vous sur &lt;a href=&quot;https://ultracopier.herman-brule.com/#ultimate&quot;&gt;https://ultracopier.herman-brule.com/#ultimate&lt;/a&gt;</translation>
+    </message>
+    <message>
+        <location filename="../../../ProductKey.cpp" line="92"/>
         <source>&lt;br /&gt;Restart to enable the option high performance into option -&gt; Copy Engine -&gt; Ultracopier Spec -&gt; Performance -&gt; OS native copy</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;br /&gt;Redémarrez pour activer l&apos;option haute performance dans l&apos;option -&gt; Moteur de copie -&gt; Spécifications de l&apos;Ultracopieur -&gt; Performances -&gt; Copie native du système d&apos;exploitation</translation>
     </message>
     <message>
-        <location filename="../../../ProductKey.cpp" line="81"/>
+        <location filename="../../../ProductKey.cpp" line="95"/>
         <source>Informations</source>
-        <translation type="unfinished"></translation>
+        <translation>Informations</translation>
     </message>
     <message>
-        <location filename="../../../ProductKey.cpp" line="81"/>
+        <location filename="../../../ProductKey.cpp" line="95"/>
         <source>You have correctly enabled your key.</source>
-        <translation type="unfinished"></translation>
+        <translation>Vous avez correctement activé votre clé.</translation>
     </message>
 </context>
 <context>
@@ -2752,7 +2765,7 @@ Erreur:%2</translation>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/folderExistsDialog.ui" line="252"/>
         <source>Merge</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Fusionner</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/folderExistsDialog.ui" line="259"/>

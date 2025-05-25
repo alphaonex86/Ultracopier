@@ -1830,37 +1830,50 @@ Error:%2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../ProductKey.cpp" line="70"/>
+        <location filename="../../../ProductKey.cpp" line="84"/>
         <source>Error</source>
         <translation type="unfinished">ошибка</translation>
     </message>
     <message>
-        <location filename="../../../ProductKey.cpp" line="66"/>
+        <location filename="../../../ProductKey.cpp" line="70"/>
+        <location filename="../../../ProductKey.cpp" line="72"/>
         <source>The major update is not free to support the project.&lt;br /&gt;For years I had to update the site and software, fight against hacking attempts, provide user support (and correct bugs in less than 2 hours).&lt;br /&gt;The version 1.x was free update during more than 5 years and have years old.&lt;br /&gt;The version 2.x was free update during more than 7 years and have years old. (and lot of have stole this version)&lt;br /&gt;This is the only way to be able to have time for this project that I am the only one to maintain and without help.&lt;br /&gt;You can use the old version and disable update detection&lt;br /&gt;&lt;a href=&quot;https://cdn.confiared.com/ultracopier.herman-brule.com/files/2.2.7.1/ultracopier-windows-x86_64-2.2.7.1-setup.exe&quot;&gt;ultracopier-windows-x86_64-2.2.7.1-setup.exe&lt;/a&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../ProductKey.cpp" line="68"/>
+        <location filename="../../../ProductKey.cpp" line="74"/>
+        <source>This kind of key should work, check if you have copied extra characters</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../ProductKey.cpp" line="76"/>
+        <location filename="../../../ProductKey.cpp" line="78"/>
+        <location filename="../../../ProductKey.cpp" line="80"/>
+        <source>This key is for version %1, then try upgrade this version for this version. Go to &lt;a href=&quot;https://ultracopier.herman-brule.com/#download&quot;&gt;https://ultracopier.herman-brule.com/#download&lt;/a&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../ProductKey.cpp" line="82"/>
         <source>Your product key was rejected for this version %1.&lt;br /&gt;If you buy key, unmark check your spam and unmark the mail as spam</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../ProductKey.cpp" line="69"/>
+        <location filename="../../../ProductKey.cpp" line="83"/>
         <source>&lt;br /&gt;If you have not buy your key, go to &lt;a href=&quot;https://ultracopier.herman-brule.com/#ultimate&quot;&gt;https://ultracopier.herman-brule.com/#ultimate&lt;/a&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../ProductKey.cpp" line="78"/>
+        <location filename="../../../ProductKey.cpp" line="92"/>
         <source>&lt;br /&gt;Restart to enable the option high performance into option -&gt; Copy Engine -&gt; Ultracopier Spec -&gt; Performance -&gt; OS native copy</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../ProductKey.cpp" line="81"/>
+        <location filename="../../../ProductKey.cpp" line="95"/>
         <source>Informations</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../ProductKey.cpp" line="81"/>
+        <location filename="../../../ProductKey.cpp" line="95"/>
         <source>You have correctly enabled your key.</source>
         <translation type="unfinished"></translation>
     </message>
