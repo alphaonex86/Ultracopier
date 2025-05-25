@@ -79,7 +79,7 @@ void ProductKey::on_buttonBox_accepted()
         else if(ui->productkey->text().startsWith("UC6"))
             extra+=tr("This key is for version %1, then try upgrade this version for this version. Go to <a href=\"https://ultracopier.herman-brule.com/#download\">https://ultracopier.herman-brule.com/#download</a>").arg(6);
         else
-            extra+=tr("Your product key \""+ui->productkey->text()+"\" was rejected for this version %1.<br />If you buy key, unmark check your spam and unmark the mail as spam").arg(QString::fromStdString(FacilityEngine::version()));
+            extra+=tr("Your product key \"%1\" was rejected for this version %2.<br />If you buy key, unmark check your spam and unmark the mail as spam").arg(ui->productkey->text()).arg(QString::fromStdString(FacilityEngine::version()));
         extra+=tr("<br />If you have not buy your key, go to <a href=\"https://ultracopier.herman-brule.com/#ultimate\">https://ultracopier.herman-brule.com/#ultimate</a>");
         QMessageBox::critical(this,tr("Error"),"<br />"+extra);
     }

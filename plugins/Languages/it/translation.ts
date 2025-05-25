@@ -1861,7 +1861,7 @@ Errore: %2</translation>
     </message>
     <message>
         <location filename="../../../ProductKey.cpp" line="82"/>
-        <source>Your product key was rejected for this version %1.&lt;br /&gt;If you buy key, unmark check your spam and unmark the mail as spam</source>
+        <source>Your product key &quot;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

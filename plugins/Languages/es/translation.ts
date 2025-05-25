@@ -1860,8 +1860,8 @@ Error:%2</translation>
     </message>
     <message>
         <location filename="../../../ProductKey.cpp" line="82"/>
-        <source>Your product key was rejected for this version %1.&lt;br /&gt;If you buy key, unmark check your spam and unmark the mail as spam</source>
-        <translation>Su clave de producto fue rechazada para esta versión %1.&lt;br /&gt;Si compra una clave, verificar en su correo no deseado y desmarque el correo como no deseado</translation>
+        <source>Your product key &quot;</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../../ProductKey.cpp" line="83"/>
