@@ -1,3 +1,34 @@
+
+<div align="right">
+  <details>
+    <summary >🌐 Language</summary>
+    <div>
+      <div align="center">
+        <a href="https://openaitx.github.io/view.html?user=alphaonex86&project=Ultracopier&lang=en">English</a>
+        | <a href="https://openaitx.github.io/view.html?user=alphaonex86&project=Ultracopier&lang=zh-CN">简体中文</a>
+        | <a href="https://openaitx.github.io/view.html?user=alphaonex86&project=Ultracopier&lang=zh-TW">繁體中文</a>
+        | <a href="https://openaitx.github.io/view.html?user=alphaonex86&project=Ultracopier&lang=ja">日本語</a>
+        | <a href="https://openaitx.github.io/view.html?user=alphaonex86&project=Ultracopier&lang=ko">한국어</a>
+        | <a href="https://openaitx.github.io/view.html?user=alphaonex86&project=Ultracopier&lang=hi">हिन्दी</a>
+        | <a href="https://openaitx.github.io/view.html?user=alphaonex86&project=Ultracopier&lang=th">ไทย</a>
+        | <a href="https://openaitx.github.io/view.html?user=alphaonex86&project=Ultracopier&lang=fr">Français</a>
+        | <a href="https://openaitx.github.io/view.html?user=alphaonex86&project=Ultracopier&lang=de">Deutsch</a>
+        | <a href="https://openaitx.github.io/view.html?user=alphaonex86&project=Ultracopier&lang=es">Español</a>
+        | <a href="https://openaitx.github.io/view.html?user=alphaonex86&project=Ultracopier&lang=it">Italiano</a>
+        | <a href="https://openaitx.github.io/view.html?user=alphaonex86&project=Ultracopier&lang=ru">Русский</a>
+        | <a href="https://openaitx.github.io/view.html?user=alphaonex86&project=Ultracopier&lang=pt">Português</a>
+        | <a href="https://openaitx.github.io/view.html?user=alphaonex86&project=Ultracopier&lang=nl">Nederlands</a>
+        | <a href="https://openaitx.github.io/view.html?user=alphaonex86&project=Ultracopier&lang=pl">Polski</a>
+        | <a href="https://openaitx.github.io/view.html?user=alphaonex86&project=Ultracopier&lang=ar">العربية</a>
+        | <a href="https://openaitx.github.io/view.html?user=alphaonex86&project=Ultracopier&lang=fa">فارسی</a>
+        | <a href="https://openaitx.github.io/view.html?user=alphaonex86&project=Ultracopier&lang=tr">Türkçe</a>
+        | <a href="https://openaitx.github.io/view.html?user=alphaonex86&project=Ultracopier&lang=vi">Tiếng Việt</a>
+        | <a href="https://openaitx.github.io/view.html?user=alphaonex86&project=Ultracopier&lang=id">Bahasa Indonesia</a>
+      </div>
+    </div>
+  </details>
+</div>
+
 # About
 
 [Ultracopier](https://ultracopier.herman-brule.com/) is free and open
