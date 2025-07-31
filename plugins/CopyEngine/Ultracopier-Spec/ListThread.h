@@ -209,6 +209,10 @@ public slots:
     void setBuffer(const bool &buffer);
     void exportErrorIntoTransferList(const std::string &fileName);
 private:
+    #ifdef ULTRACOPIER_PLUGIN_DEBUG
+    uint64_t debug_pos;
+    uint64_t debug_total;
+    #endif
     //can't be static into WriteThread, linked by instance then by ListThread
     QMultiHash<QString,WriteThread *> *writeFileList;
     QMutex       *writeFileListMutex;

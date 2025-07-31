@@ -55,6 +55,10 @@ ListThread::ListThread(FacilityInterface * facilityInterface) :
     speedLimitation(0),
     returnBoolToCopyEngine(true)
 {
+    #ifdef ULTRACOPIER_PLUGIN_DEBUG
+    debug_pos=0;
+    debug_total=0;
+    #endif
     moveToThread(this);
     start(HighPriority);
     this->facilityInterface=facilityInterface;

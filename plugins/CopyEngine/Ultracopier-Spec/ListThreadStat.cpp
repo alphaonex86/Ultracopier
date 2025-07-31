@@ -150,7 +150,12 @@ void ListThread::sendProgression()
                 copiedSize=temp_transfer_thread->copiedSize();
 
                 //for the general progression
-                currentProgression+=copiedSize;
+                if(copiedSize>0)
+                    currentProgression+=copiedSize;
+                #ifdef ULTRACOPIER_PLUGIN_DEBUG
+                if(copiedSize<0)
+                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"error, copiedSize<0");
+                #endif
 
                 //the oversize (when the file is bigger after/during the copy then what was during the listing)
                 if(copiedSize>(qint64)temp_transfer_thread->transferSize)
@@ -169,7 +174,12 @@ void ListThread::sendProgression()
                 progressionList.push_back(tempItem);
 
                 //add the oversize to the general progression
-                oversize+=localOverSize;
+                if(localOverSize>0)
+                    oversize+=localOverSize;
+                #ifdef ULTRACOPIER_PLUGIN_DEBUG
+                if(localOverSize<0)
+                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"error, localOverSize<0");
+                #endif
             }
             break;
             default:
@@ -179,6 +189,16 @@ void ListThread::sendProgression()
     }
     emit pushFileProgression(progressionList);
     progressionList.clear();
-    emit pushGeneralProgression(bytesTransfered+currentProgression,bytesToTransfer+oversize);
+    const uint64_t result_copied=bytesTransfered+currentProgression;
+    const uint64_t result_total=bytesToTransfer+oversize;
+    #ifdef ULTRACOPIER_PLUGIN_DEBUG
+    if(debug_pos>result_copied)
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"error, debug_pos>result_copied");
+    debug_pos=result_copied;
+    if(debug_total>result_total)
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"error, debug_total>result_total");
+    debug_total=result_total;
+    #endif
+    emit pushGeneralProgression(result_copied,result_total);
     realByteTransfered();
 }

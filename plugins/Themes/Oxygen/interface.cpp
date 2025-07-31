@@ -83,6 +83,10 @@ Themes::Themes(const bool &alwaysOnTop,
     haveStarted(false),
     haveError(false)
 {
+    #ifdef ULTRACOPIER_PLUGIN_DEBUG
+    debug_pos=0;
+    debug_total=0;
+    #endif
     this->facilityEngine=facilityEngine;
     ui->setupUi(this);
     uiOptions->setupUi(ui->optionsTab);
@@ -635,6 +639,14 @@ void Themes::setSupportSpeedLimitation(const bool &supportSpeedLimitationBool)
 //get information about the copy
 void Themes::setGeneralProgression(const uint64_t &current,const uint64_t &total)
 {
+    #ifdef ULTRACOPIER_PLUGIN_DEBUG
+    if(debug_pos>current)
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"error, debug_pos>current");
+    debug_pos=current;
+    if(debug_total>total)
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"error, debug_total>total");
+    debug_total=total;
+    #endif
     currentSize=current;
     totalSize=total;
     if(total>0)

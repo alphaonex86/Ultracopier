@@ -396,7 +396,7 @@ void TransferThreadAsync::setProgression(const uint64_t &pos, const uint64_t &si
     }
     else
     {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"["+std::to_string(id)+
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"["+std::to_string(id)+
                              "] transfer_stat:"+std::to_string(transfer_stat)+
                              ", canStartTransfer: "+std::to_string(canStartTransfer)+", transfert id: "+std::to_string(transferId));
     }
@@ -1073,7 +1073,7 @@ uint64_t TransferThreadAsync::realByteTransfered() const
     }
 }
 
-//first is read, second is write
+//first is read, second is write, related to file
 std::pair<uint64_t, uint64_t> TransferThreadAsync::progression() const
 {
     std::pair<uint64_t,uint64_t> returnVar;

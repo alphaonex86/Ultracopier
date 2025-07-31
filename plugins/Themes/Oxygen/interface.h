@@ -163,6 +163,10 @@ private slots:
     void on_exportErrorToTransferList_clicked();
     void ad_ultimate_clicked(const QString& link);
 private:
+    #ifdef ULTRACOPIER_PLUGIN_DEBUG
+    uint64_t debug_pos;
+    uint64_t debug_total;
+    #endif
     uint64_t duration;
     bool durationStarted;
     QPixmap pixmapTop,pixmapBottom;
