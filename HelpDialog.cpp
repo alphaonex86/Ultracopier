@@ -9,6 +9,10 @@
 
 #include <QTreeWidgetItem>
 #include <QApplication>
+#ifdef Q_OS_WIN32
+#include <windows.h>
+#include <QDir>
+#endif
 
 /// \brief Construct the object
 HelpDialog::HelpDialog() :
@@ -101,6 +105,30 @@ void HelpDialog::reloadTextValue()
 
     text=ui->label_platform->text();
     text=text.replace(QStringLiteral("%1"),ULTRACOPIER_PLATFORM_NAME);
+
+    #ifdef Q_OS_WIN32
+        #if defined(_M_X64)//64Bits
+        #else//32Bits
+            char *arch=getenv("windir");
+            if(arch!=NULL)
+            {
+                QDir dir;
+                if(dir.exists(QString(arch)+"\\SysWOW64\\"))
+                    text+=tr(" on Windows 64Bits");
+            }
+        #endif
+    #endif
+
+    #ifdef __clang_patchlevel__
+    text+=tr(", gcc %1.%2.%3").arg(__clang_major__).arg(__clang_minor__).arg(__clang_patchlevel__);
+    #else
+        #ifdef __GNUC_PATCHLEVEL__
+        text+=tr(", gcc %1.%2.%3").arg(__GNUC__).arg(__GNUC_MINOR__).arg(__GNUC_PATCHLEVEL__);
+        #endif
+    #endif
+    #ifdef QT_VERSION
+    text+=tr(", Qt %1").arg(QT_VERSION_STR);
+    #endif
     ui->label_platform->setText(text);
 }
 

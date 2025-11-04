@@ -212,6 +212,7 @@ private:
     #ifdef ULTRACOPIER_PLUGIN_DEBUG
     uint64_t debug_pos;
     uint64_t debug_total;
+    std::vector<std::string> debug_threadWas;
     #endif
     //can't be static into WriteThread, linked by instance then by ListThread
     QMultiHash<QString,WriteThread *> *writeFileList;

@@ -193,11 +193,72 @@ void ListThread::sendProgression()
     const uint64_t result_total=bytesToTransfer+oversize;
     #ifdef ULTRACOPIER_PLUGIN_DEBUG
     if(debug_pos>result_copied)
+    {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"error, debug_pos>result_copied");
+        {
+            int int_for_loop=0;
+            const int &loop_size=debug_threadWas.size();
+            while(int_for_loop<loop_size)
+            {
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,std::string("was: ")+debug_threadWas.at(int_for_loop));
+                int_for_loop++;
+            }
+        }
+        {
+            int int_for_loop=0;
+            const int &loop_size=transferThreadList.size();
+            while(int_for_loop<loop_size)
+            {
+                TransferThreadAsync * temp_transfer_thread=transferThreadList.at(int_for_loop);
+                switch(temp_transfer_thread->getStat())
+                {
+                    case TransferStat_Transfer:
+                    case TransferStat_PostTransfer:
+                    case TransferStat_PostOperation:
+                        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,std::string("now: ")+
+                                               TransferThread::internalStringTostring(temp_transfer_thread->getSourcePath())+" "+
+                                               std::to_string(temp_transfer_thread->getStat())+" "+
+                                               std::to_string(temp_transfer_thread->copiedSize())
+                                               );
+                    break;
+                    default:
+                        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,std::string("now: ")+TransferThread::internalStringTostring(temp_transfer_thread->getSourcePath())+" "+std::to_string(temp_transfer_thread->getStat()));
+                    break;
+                }
+                int_for_loop++;
+            }
+        }
+    }
     debug_pos=result_copied;
     if(debug_total>result_total)
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"error, debug_total>result_total");
     debug_total=result_total;
+
+    debug_threadWas.clear();
+    {
+        int int_for_loop=0;
+        const int &loop_size=transferThreadList.size();
+        while(int_for_loop<loop_size)
+        {
+            TransferThreadAsync * temp_transfer_thread=transferThreadList.at(int_for_loop);
+            switch(temp_transfer_thread->getStat())
+            {
+                case TransferStat_Transfer:
+                case TransferStat_PostTransfer:
+                case TransferStat_PostOperation:
+                    debug_threadWas.push_back(
+                                           TransferThread::internalStringTostring(temp_transfer_thread->getSourcePath())+" "+
+                                           std::to_string(temp_transfer_thread->getStat())+" "+
+                                           std::to_string(temp_transfer_thread->copiedSize())
+                                           );
+                break;
+                default:
+                    debug_threadWas.push_back(TransferThread::internalStringTostring(temp_transfer_thread->getSourcePath())+" "+std::to_string(temp_transfer_thread->getStat()));
+                break;
+            }
+            int_for_loop++;
+        }
+    }
     #endif
     emit pushGeneralProgression(result_copied,result_total);
     realByteTransfered();

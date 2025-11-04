@@ -4,7 +4,7 @@
 <context>
     <name>Themes</name>
     <message>
-        <location filename="../../interface.cpp" line="+353"/>
+        <location filename="../../interface.cpp" line="+357"/>
         <location line="+6"/>
         <source>Buy the Ultimate version to fund development</source>
         <translation>Achetez la version Ultimate pour financer le développement</translation>
@@ -25,7 +25,7 @@
         <translation>Fichier %1/%2, taille: %3/%4</translation>
     </message>
     <message>
-        <location line="+234"/>
+        <location line="+242"/>
         <source>Copy list</source>
         <translation>Liste de copies</translation>
     </message>

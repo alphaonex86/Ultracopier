@@ -7,6 +7,7 @@
 #include "ExtraSocketCatchcopy.h"
 
 #include <QDataStream>
+#include <QDebug>
 
 ClientCatchcopy::ClientCatchcopy()
 {

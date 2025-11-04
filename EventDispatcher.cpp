@@ -6,7 +6,9 @@
 #include <QCoreApplication>
 #include <QMessageBox>
 #include <QWidget>
+#if QT_VERSION > QT_VERSION_CHECK(5, 4, 0)
 #include <QStorageInfo>
+#endif
 #include <iostream>
 
 #include "EventDispatcher.h"
@@ -133,6 +135,7 @@ EventDispatcher::EventDispatcher()
         #endif
     #endif
 
+    #if QT_VERSION > QT_VERSION_CHECK(5, 4, 0)
     {
         const QList<QStorageInfo> mountedVolumesList=QStorageInfo::mountedVolumes();
         int index=0;
@@ -161,6 +164,7 @@ EventDispatcher::EventDispatcher()
         if(mountedVolumesList.isEmpty())
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"mountSysPoint is empty");
     }
+    #endif
 
     //To lunch some initialization after QApplication::exec() to quit eventually
     lunchInitFunction.setInterval(0);

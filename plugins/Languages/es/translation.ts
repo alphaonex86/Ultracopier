@@ -904,7 +904,7 @@ Este motor de copia no soporta mover</translation>
 <context>
     <name>HelpDialog</name>
     <message>
-        <location filename="../../../HelpDialog.cpp" line="36"/>
+        <location filename="../../../HelpDialog.cpp" line="40"/>
         <source>About Ultracopier</source>
         <translation>Acerca Ultracopier</translation>
     </message>
@@ -953,53 +953,69 @@ Esta versión está compilada en versión:%1.</translation>
         <translation>Cerrar</translation>
     </message>
     <message>
-        <location filename="../../../HelpDialog.cpp" line="80"/>
+        <location filename="../../../HelpDialog.cpp" line="84"/>
         <source>For http://portableapps.com/</source>
         <translation>Para http://portableapps.com/</translation>
     </message>
     <message>
-        <location filename="../../../HelpDialog.cpp" line="83"/>
+        <location filename="../../../HelpDialog.cpp" line="87"/>
         <source>Portable and all in one version</source>
         <translation>Portable y todo en una versión</translation>
     </message>
     <message>
-        <location filename="../../../HelpDialog.cpp" line="85"/>
+        <location filename="../../../HelpDialog.cpp" line="89"/>
         <source>Portable version</source>
         <translation>Version portable</translation>
     </message>
     <message>
-        <location filename="../../../HelpDialog.cpp" line="90"/>
+        <location filename="../../../HelpDialog.cpp" line="94"/>
         <source>All in one version</source>
         <translation>Todo en una sola versión</translation>
     </message>
     <message>
-        <location filename="../../../HelpDialog.cpp" line="92"/>
+        <location filename="../../../HelpDialog.cpp" line="96"/>
         <source>Normal version</source>
         <translation>Version normal</translation>
     </message>
     <message>
-        <location filename="../../../HelpDialog.cpp" line="109"/>
+        <location filename="../../../HelpDialog.cpp" line="117"/>
+        <source> on Windows 64Bits</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../HelpDialog.cpp" line="123"/>
+        <location filename="../../../HelpDialog.cpp" line="126"/>
+        <source>, gcc %1.%2.%3</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../HelpDialog.cpp" line="130"/>
+        <source>, Qt %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../HelpDialog.cpp" line="137"/>
         <source>https://ultracopier.herman-brule.com/</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../HelpDialog.cpp" line="115"/>
+        <location filename="../../../HelpDialog.cpp" line="143"/>
         <source>https://ultracopier.herman-brule.com/#download</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../HelpDialog.cpp" line="142"/>
+        <location filename="../../../HelpDialog.cpp" line="170"/>
         <source>Update checking...</source>
         <translation>Comprobación de actualización ...</translation>
     </message>
     <message>
-        <location filename="../../../HelpDialog.cpp" line="148"/>
-        <location filename="../../../HelpDialog.cpp" line="153"/>
+        <location filename="../../../HelpDialog.cpp" line="176"/>
+        <location filename="../../../HelpDialog.cpp" line="181"/>
         <source>Update: %1</source>
         <translation>Actualización: %1</translation>
     </message>
     <message>
-        <location filename="../../../HelpDialog.cpp" line="159"/>
+        <location filename="../../../HelpDialog.cpp" line="187"/>
         <source>No update</source>
         <translation>Ninguna actualización</translation>
     </message>
@@ -1836,7 +1852,7 @@ Error:%2</translation>
         <translation>Clave de producto</translation>
     </message>
     <message>
-        <location filename="../../../ProductKey.cpp" line="84"/>
+        <location filename="../../../ProductKey.cpp" line="80"/>
         <source>Error</source>
         <translation>Error</translation>
     </message>
@@ -1853,33 +1869,31 @@ Error:%2</translation>
     </message>
     <message>
         <location filename="../../../ProductKey.cpp" line="76"/>
-        <location filename="../../../ProductKey.cpp" line="78"/>
-        <location filename="../../../ProductKey.cpp" line="80"/>
         <source>This key is for version %1, then try upgrade this version for this version. Go to &lt;a href=&quot;https://ultracopier.herman-brule.com/#download&quot;&gt;https://ultracopier.herman-brule.com/#download&lt;/a&gt;</source>
         <translation>Esta clave es para la versión %1, así que intenta actualizarla para esta versión. Ve a &lt;a href=&quot;https://ultracopier.herman-brule.com/#download&quot;&gt;https://ultracopier.herman-brule.com/#download&lt;/a&gt;</translation>
     </message>
     <message>
-        <location filename="../../../ProductKey.cpp" line="82"/>
+        <location filename="../../../ProductKey.cpp" line="78"/>
         <source>Your product key &quot;%1&quot; was rejected for this version %2.&lt;br /&gt;If you buy key, unmark check your spam and unmark the mail as spam</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../ProductKey.cpp" line="83"/>
+        <location filename="../../../ProductKey.cpp" line="79"/>
         <source>&lt;br /&gt;If you have not buy your key, go to &lt;a href=&quot;https://ultracopier.herman-brule.com/#ultimate&quot;&gt;https://ultracopier.herman-brule.com/#ultimate&lt;/a&gt;</source>
         <translation>&lt;br /&gt;Si no ha comprado su clave todavia, vaya a &lt;a href=&quot;https://ultracopier.herman-brule.com/#ultimate&quot;&gt;https://ultracopier.herman-brule.com/#ultimate&lt;/a&gt;</translation>
     </message>
     <message>
-        <location filename="../../../ProductKey.cpp" line="92"/>
+        <location filename="../../../ProductKey.cpp" line="88"/>
         <source>&lt;br /&gt;Restart to enable the option high performance into option -&gt; Copy Engine -&gt; Ultracopier Spec -&gt; Performance -&gt; OS native copy</source>
         <translation>&lt;br /&gt;Reinicie para habilitar la opción de alto rendimiento en opciones -&gt; Motor de copia -&gt; Especificaciones de Ultracopier -&gt; Rendimiento -&gt; Copia nativa del SO</translation>
     </message>
     <message>
-        <location filename="../../../ProductKey.cpp" line="95"/>
+        <location filename="../../../ProductKey.cpp" line="91"/>
         <source>Informations</source>
         <translation>Informaciónes</translation>
     </message>
     <message>
-        <location filename="../../../ProductKey.cpp" line="95"/>
+        <location filename="../../../ProductKey.cpp" line="91"/>
         <source>You have correctly enabled your key.</source>
         <translation>Has habilitado tu clave correctamente.</translation>
     </message>
@@ -2140,67 +2154,67 @@ Error:%2</translation>
 <context>
     <name>Themes</name>
     <message>
-        <location filename="../../Themes/Oxygen/interface.cpp" line="353"/>
-        <location filename="../../Themes/Oxygen/interface.cpp" line="359"/>
+        <location filename="../../Themes/Oxygen/interface.cpp" line="357"/>
+        <location filename="../../Themes/Oxygen/interface.cpp" line="363"/>
         <source>Buy the Ultimate version to fund development</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../Themes/Oxygen/interface.cpp" line="357"/>
+        <location filename="../../Themes/Oxygen/interface.cpp" line="361"/>
         <source>Ultimate version have more performance via OS native copy</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../Themes/Oxygen/interface.cpp" line="364"/>
+        <location filename="../../Themes/Oxygen/interface.cpp" line="368"/>
         <source>Register your key</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../Themes/Oxygen/interface.cpp" line="464"/>
+        <location filename="../../Themes/Oxygen/interface.cpp" line="468"/>
         <source>File %1/%2, size: %3/%4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../Themes/Oxygen/interface.cpp" line="698"/>
+        <location filename="../../Themes/Oxygen/interface.cpp" line="710"/>
         <source>Copy list</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../Themes/Oxygen/interface.cpp" line="700"/>
+        <location filename="../../Themes/Oxygen/interface.cpp" line="712"/>
         <source>Move list</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../Themes/Oxygen/interface.cpp" line="1141"/>
+        <location filename="../../Themes/Oxygen/interface.cpp" line="1153"/>
         <source>Don&apos;t close if errors are found</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../Themes/Oxygen/interface.cpp" line="1142"/>
+        <location filename="../../Themes/Oxygen/interface.cpp" line="1154"/>
         <source>Never close</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../Themes/Oxygen/interface.cpp" line="1143"/>
+        <location filename="../../Themes/Oxygen/interface.cpp" line="1155"/>
         <source>Always close</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../Themes/Oxygen/interface.cpp" line="1145"/>
+        <location filename="../../Themes/Oxygen/interface.cpp" line="1157"/>
         <source>File Name, 0KB</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../Themes/Oxygen/interface.cpp" line="1420"/>
         <location filename="../../Themes/Oxygen/interface.cpp" line="1432"/>
         <location filename="../../Themes/Oxygen/interface.cpp" line="1444"/>
+        <location filename="../../Themes/Oxygen/interface.cpp" line="1456"/>
         <source>Select a color</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../Themes/Oxygen/interface.cpp" line="1519"/>
-        <location filename="../../Themes/Oxygen/interface.cpp" line="1523"/>
-        <location filename="../../Themes/Oxygen/interface.cpp" line="1525"/>
+        <location filename="../../Themes/Oxygen/interface.cpp" line="1531"/>
+        <location filename="../../Themes/Oxygen/interface.cpp" line="1535"/>
+        <location filename="../../Themes/Oxygen/interface.cpp" line="1537"/>
         <source>%1 %2% of %3</source>
         <translation type="unfinished"></translation>
     </message>

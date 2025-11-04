@@ -187,7 +187,7 @@ void ListThread::transferInodeIsClosed()
             }
             #endif
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("[%1] have finish, put at idle; for id: %2").arg(QString::fromStdString(threadidstring))
-                                     .arg(temp_transfer_thread->transferId).toStdString()+" "+TransferThread::internalStringTostring(temp_transfer_thread->getDestinationPath()));
+                                     .arg((uint64_t)temp_transfer_thread->transferId).toStdString()+" "+TransferThread::internalStringTostring(temp_transfer_thread->getDestinationPath()));
             Ultracopier::ReturnActionOnCopyList newAction;
             newAction.type=Ultracopier::RemoveItem;
             newAction.userAction.moveAt=0;
@@ -243,7 +243,7 @@ void ListThread::transferInodeIsClosed()
     }
     else
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,QStringLiteral("unable to found item into the todo list, id: %1, index: %2").arg(temp_transfer_thread->transferId).arg(int_for_internal_loop).toStdString());
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,QStringLiteral("unable to found item into the todo list, id: %1, index: %2").arg((uint64_t)temp_transfer_thread->transferId).arg(int_for_internal_loop).toStdString());
         temp_transfer_thread->transferId=0;
         temp_transfer_thread->transferSize=0;
     }
@@ -327,7 +327,7 @@ void ListThread::transferPutAtBottom()
     }
     if(!isFound)
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,QStringLiteral("unable to found item into the todo list, id: %1, index: %2").arg(transfer->transferId).toStdString());
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,QStringLiteral("unable to found item into the todo list, id: %1, index: %2").arg((uint64_t)transfer->transferId).toStdString());
         transfer->transferId=0;
         transfer->transferSize=0;
         putAtBottomAfterError.insert(transfer);

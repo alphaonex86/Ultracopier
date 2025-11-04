@@ -1121,7 +1121,7 @@ bool TransferThread::readSourceFilePermissions(const INTERNALTYPEPATH &source)
     HANDLE hFile = CreateFileW(source.c_str(), GENERIC_READ ,
             FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_FLAG_BACKUP_SEMANTICS, NULL);
     if (hFile == INVALID_HANDLE_VALUE) {
-      ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] CreateFile() failed. Error: INVALID_HANDLE_VALUE: "+TransferThread::GetLastErrorStdStr());
+      ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] CreateFile() failed. Error: INVALID_HANDLE_VALUE: "+TransferThread::GetLastErrorStdStr()+" on "+TransferThread::internalStringTostring(source));
       return false;
     }
     DWORD lasterror = GetSecurityInfo(hFile, SE_FILE_OBJECT, DACL_SECURITY_INFORMATION,
@@ -1146,7 +1146,7 @@ bool TransferThread::writeDestinationFilePermissions(const INTERNALTYPEPATH &des
     #else
     HANDLE hFile = CreateFileW(destination.c_str(),READ_CONTROL | WRITE_OWNER | WRITE_DAC | ACCESS_SYSTEM_SECURITY,0, NULL, OPEN_EXISTING, FILE_FLAG_BACKUP_SEMANTICS, NULL);
     if (hFile == INVALID_HANDLE_VALUE) {
-      ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] CreateFile() failed. Error: INVALID_HANDLE_VALUE: "+TransferThread::GetLastErrorStdStr());
+      ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] CreateFile() failed. Error: INVALID_HANDLE_VALUE: "+TransferThread::GetLastErrorStdStr()+" on "+TransferThread::internalStringTostring(destination));
       return false;
     }
     DWORD lasterror = SetSecurityInfo(hFile, SE_FILE_OBJECT, DACL_SECURITY_INFORMATION , NULL, NULL, dacl, NULL);
