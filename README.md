@@ -20,7 +20,7 @@ Main features include:
 For example on Debian based distros:
 
 ```bash
-sudo apt install make gcc build-essential libssl-dev qtbase6-dev qtchooser qt6-qmake qtbase6-dev-tools qttools6-dev-tools
+sudo apt install make gcc build-essential libssl-dev qt6-base-dev qtchooser qmake6 qt6-base-dev-tools qt6-tools-dev-tools
 ```
 
 # Building
