@@ -333,6 +333,9 @@ void WindowsExplorerLoader::setResources(OptionInterface * options, const std::s
         notunload=stringtobool(optionsEngine->getOptionValue("notunload"));
         optionsWidget->setAllDllIsImportant(allDllIsImportant);
         optionsWidget->setDebug(Debug);
+        optionsWidget->setAllUserIsImportant(allUserIsImportant);
+        optionsWidget->setAtStartup(atstartup);
+        optionsWidget->setNotUnload(notunload);
     }
 }
 

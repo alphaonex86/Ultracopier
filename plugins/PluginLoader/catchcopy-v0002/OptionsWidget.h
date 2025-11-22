@@ -17,6 +17,8 @@ public:
     void setAllDllIsImportant(bool allDllIsImportant);
     void setAllUserIsImportant(bool allDllIsImportant);
     void setDebug(bool Debug);
+    void setAtStartup(bool atstartup);
+    void setNotUnload(bool notunload);
     void retranslate();
 private:
     Ui::OptionsWidget *ui;

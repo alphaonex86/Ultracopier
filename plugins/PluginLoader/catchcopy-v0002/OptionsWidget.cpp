@@ -28,6 +28,16 @@ void OptionsWidget::setDebug(bool Debug)
     ui->Debug->setChecked(Debug);
 }
 
+void OptionsWidget::setAtStartup(bool atstartup)
+{
+    ui->atstartup->setChecked(atstartup);
+}
+
+void OptionsWidget::setNotUnload(bool notunload)
+{
+    ui->notunload->setChecked(notunload);
+}
+
 void OptionsWidget::on_allDllIsImportant_toggled(bool checked)
 {
     emit sendAllDllIsImportant(checked);

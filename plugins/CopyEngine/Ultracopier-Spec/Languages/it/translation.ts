@@ -761,6 +761,11 @@
         <translation>Buffer SO</translation>
     </message>
     <message>
+        <location filename="../../copyEngineOptions.ui" line="484"/>
+        <source>OS Flags</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../../copyEngineOptions.ui" line="507"/>
         <source>Disable parallel transfer when are different devices</source>
         <translation>Disabilita trasferimenti paralleli quando i dispositivi sono diversi</translation>
@@ -771,9 +776,8 @@
         <translation>Buffer per diverso dispositivo</translation>
     </message>
     <message>
-        <location filename="../../copyEngineOptions.ui" line="484"/>
         <source>OS FLags</source>
-        <translation>Flags SO</translation>
+        <translation type="vanished">Flags SO</translation>
     </message>
     <message>
         <location filename="../../copyEngineOptions.ui" line="514"/>

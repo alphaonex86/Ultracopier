@@ -2447,6 +2447,11 @@ Error:%2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../../CopyEngine/Ultracopier-Spec/copyEngineOptions.ui" line="484"/>
+        <source>OS Flags</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/copyEngineOptions.ui" line="507"/>
         <source>Disable parallel transfer when are different devices</source>
         <translation type="unfinished"></translation>
@@ -2454,11 +2459,6 @@ Error:%2</source>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/copyEngineOptions.ui" line="460"/>
         <source>Buffer for different device</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/copyEngineOptions.ui" line="484"/>
-        <source>OS FLags</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

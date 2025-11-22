@@ -758,6 +758,11 @@
         <translation>Búfer del SO</translation>
     </message>
     <message>
+        <location filename="../../copyEngineOptions.ui" line="484"/>
+        <source>OS Flags</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../../copyEngineOptions.ui" line="507"/>
         <source>Disable parallel transfer when are different devices</source>
         <translation>Deshabilitar la transferencia paralela cuando hay diferentes dispositivos</translation>
@@ -768,9 +773,8 @@
         <translation>Búfer para diferentes dispositivos</translation>
     </message>
     <message>
-        <location filename="../../copyEngineOptions.ui" line="484"/>
         <source>OS FLags</source>
-        <translation>Banderas de SO</translation>
+        <translation type="vanished">Banderas de SO</translation>
     </message>
     <message>
         <location filename="../../copyEngineOptions.ui" line="514"/>

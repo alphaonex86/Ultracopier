@@ -53,3 +53,5 @@
 3.0.0.8: Add high performance option for Ultimate version
 3.0.0.9: Better support of old version of Qt/Windows like Qt 5.5 and Windows XP, fix load the dll of catchcopy, improvement of 0/99 files text, improve error key rejected text, now official build for windows XP and Windows 7 32/64Bits
 3.0.1.0: better version key check, update translation french and spanish
+3.0.1.1: More info into about part
+3.0.1.2: Fix options into catchcopy-v0002 no saved

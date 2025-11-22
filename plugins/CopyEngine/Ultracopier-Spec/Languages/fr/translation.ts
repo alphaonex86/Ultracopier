@@ -758,6 +758,11 @@
         <translation>Tampon du système d&apos;exploitation</translation>
     </message>
     <message>
+        <location filename="../../copyEngineOptions.ui" line="484"/>
+        <source>OS Flags</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../../copyEngineOptions.ui" line="507"/>
         <source>Disable parallel transfer when are different devices</source>
         <translation>Désactiver le transfert parallèle lorsque différents appareils</translation>
@@ -768,9 +773,8 @@
         <translation>Tampon pour différents appareils</translation>
     </message>
     <message>
-        <location filename="../../copyEngineOptions.ui" line="484"/>
         <source>OS FLags</source>
-        <translation>Drapeaux du système d&apos;exploitation</translation>
+        <translation type="vanished">Drapeaux du système d&apos;exploitation</translation>
     </message>
     <message>
         <location filename="../../copyEngineOptions.ui" line="514"/>

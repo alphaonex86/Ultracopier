@@ -758,6 +758,11 @@
         <translation type="unfinished">OS 버퍼</translation>
     </message>
     <message>
+        <location filename="../../copyEngineOptions.ui" line="484"/>
+        <source>OS Flags</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../../copyEngineOptions.ui" line="507"/>
         <source>Disable parallel transfer when are different devices</source>
         <translation type="unfinished">다른 장치 일 때 병렬 전송 비활성화</translation>
@@ -768,9 +773,8 @@
         <translation type="unfinished">다른 장치에 대한 버퍼</translation>
     </message>
     <message>
-        <location filename="../../copyEngineOptions.ui" line="484"/>
         <source>OS FLags</source>
-        <translation type="unfinished">OS FLags</translation>
+        <translation type="obsolete">OS FLags</translation>
     </message>
     <message>
         <location filename="../../copyEngineOptions.ui" line="514"/>
