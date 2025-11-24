@@ -55,3 +55,4 @@
 3.0.1.0: better version key check, update translation french and spanish
 3.0.1.1: More info into about part
 3.0.1.2: Fix options into catchcopy-v0002 no saved
+3.0.1.3: Fix for non SSE Windows XP build (Pentium MMX or lower), fix for Qt5 version, tag version on MACOSX

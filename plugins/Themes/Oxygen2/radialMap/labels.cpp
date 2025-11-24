@@ -200,7 +200,7 @@ void RadialMap::Widget::paintExplodedLabels(QPainter &paint) const
                 font.setPointSize(sizes[label->level]);
             }
             QFontMetrics fontMetrics(font);
-            #if QT_VERSION < QT_VERSION_CHECK(5, 6, 0)
+            #if QT_VERSION < QT_VERSION_CHECK(5, 11, 0)
             const int minTextWidth = fontMetrics.width(QStringLiteral("M...")) + LABEL_TEXT_HMARGIN; // Fully elided string
             #else
             const int minTextWidth = fontMetrics.horizontalAdvance(QStringLiteral("M...")) + LABEL_TEXT_HMARGIN; // Fully elided string
@@ -239,7 +239,7 @@ void RadialMap::Widget::paintExplodedLabels(QPainter &paint) const
             int textY = startY + lineSpacing;
 
             int textX;
-            #if QT_VERSION < QT_VERSION_CHECK(5, 6, 0)
+            #if QT_VERSION < QT_VERSION_CHECK(5, 11, 0)
             const int textWidth = fontMetrics.width(string) + LABEL_TEXT_HMARGIN;
             #else
             const int textWidth = fontMetrics.horizontalAdvance(string) + LABEL_TEXT_HMARGIN;
@@ -277,7 +277,7 @@ void RadialMap::Widget::paintExplodedLabels(QPainter &paint) const
                 } else {
                     textX = 0;
                     string = fontMetrics.elidedText(string, Qt::ElideMiddle, startX);
-                    #if QT_VERSION < QT_VERSION_CHECK(5, 6, 0)
+                    #if QT_VERSION < QT_VERSION_CHECK(5, 11, 0)
                     startX = fontMetrics.width(string) + LABEL_TEXT_HMARGIN;
                     #else
                     startX = fontMetrics.horizontalAdvance(string) + LABEL_TEXT_HMARGIN;

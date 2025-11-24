@@ -204,7 +204,7 @@ void RadialMap::Widget::mouseMoveEvent(QMouseEvent *e)
             int tooltipHeight = 0;
             for (const QString &part : string.split(QLatin1Char('\n'))) {
                 tooltipHeight += fontMetrics.height();
-                #if QT_VERSION < QT_VERSION_CHECK(5, 6, 0)
+                #if QT_VERSION < QT_VERSION_CHECK(5, 11, 0)
                 tooltipWidth = qMax(tooltipWidth, fontMetrics.width(part));
                 #else
                 tooltipWidth = qMax(tooltipWidth, fontMetrics.horizontalAdvance(part));
