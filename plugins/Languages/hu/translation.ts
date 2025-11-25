@@ -1028,27 +1028,27 @@ Ez a verzió a következő verzióként került lefordításra: %1.</translation
 <context>
     <name>InternetUpdater</name>
     <message>
-        <location filename="../../../InternetUpdater.cpp" line="94"/>
+        <location filename="../../../InternetUpdater.cpp" line="105"/>
         <source>Reply should not be finished</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../InternetUpdater.cpp" line="104"/>
-        <source>Reply error: %1</source>
+        <location filename="../../../InternetUpdater.cpp" line="111"/>
+        <source>Reply can&apos;t be redirect from %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../InternetUpdater.cpp" line="110"/>
-        <source>Reply can&apos;t be redirect</source>
+        <location filename="../../../InternetUpdater.cpp" line="121"/>
+        <source>QNetworkReply::NetworkError: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../InternetUpdater.cpp" line="119"/>
+        <location filename="../../../InternetUpdater.cpp" line="130"/>
         <source>New version can&apos;t be empty</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../InternetUpdater.cpp" line="128"/>
+        <location filename="../../../InternetUpdater.cpp" line="139"/>
         <source>Version is not into correct format</source>
         <translation type="unfinished"></translation>
     </message>

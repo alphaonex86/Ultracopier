@@ -42,6 +42,15 @@
 /// \brief to disable plugin support, import and remove
 #define ULTRACOPIER_PLUGIN_IMPORT_SUPPORT
 
+#ifdef __GNUC__
+    //workaround for too old openssl version to connect via https
+    #if __GNUC__ < 8
+    #define ULTRACOPIER_UPDATER_URL "http://ultracopier.herman-brule.com/files/updater.txt"
+    #else
+    #define ULTRACOPIER_UPDATER_URL "https://cdn.confiared.com/ultracopier.herman-brule.com/files/updater.txt"
+    #endif
+#else
 #define ULTRACOPIER_UPDATER_URL "https://cdn.confiared.com/ultracopier.herman-brule.com/files/updater.txt"
+#endif
 
 #endif // VARIABLE_H

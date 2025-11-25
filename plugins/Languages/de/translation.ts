@@ -1028,29 +1028,29 @@ Diese Version wurde kompiliert als Version: %1.</translation>
 <context>
     <name>InternetUpdater</name>
     <message>
-        <location filename="../../../InternetUpdater.cpp" line="104"/>
-        <source>Reply error: %1</source>
-        <translation>Antwort Fehler: %1</translation>
-    </message>
-    <message>
-        <location filename="../../../InternetUpdater.cpp" line="128"/>
+        <location filename="../../../InternetUpdater.cpp" line="139"/>
         <source>Version is not into correct format</source>
         <translation>Version ist nicht im richtigen Format</translation>
     </message>
     <message>
-        <location filename="../../../InternetUpdater.cpp" line="94"/>
+        <location filename="../../../InternetUpdater.cpp" line="105"/>
         <source>Reply should not be finished</source>
         <translation>Antwort sollte nicht fertiggestellt werden</translation>
     </message>
     <message>
-        <location filename="../../../InternetUpdater.cpp" line="119"/>
-        <source>New version can&apos;t be empty</source>
-        <translation>Neue Version kann nicht leer sein</translation>
+        <location filename="../../../InternetUpdater.cpp" line="111"/>
+        <source>Reply can&apos;t be redirect from %1</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../InternetUpdater.cpp" line="110"/>
-        <source>Reply can&apos;t be redirect</source>
-        <translation>Antwort kann nicht weitergeleitet werden</translation>
+        <location filename="../../../InternetUpdater.cpp" line="121"/>
+        <source>QNetworkReply::NetworkError: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../InternetUpdater.cpp" line="130"/>
+        <source>New version can&apos;t be empty</source>
+        <translation>Neue Version kann nicht leer sein</translation>
     </message>
 </context>
 <context>
