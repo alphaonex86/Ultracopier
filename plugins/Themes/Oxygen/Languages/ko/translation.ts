@@ -4,7 +4,12 @@
 <context>
     <name>Themes</name>
     <message>
-        <location filename="../../interface.cpp" line="+357"/>
+        <location filename="../../interface.cpp" line="+344"/>
+        <source>ILLEGAL VERSION</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+15"/>
         <location line="+6"/>
         <source>Buy the Ultimate version to fund development</source>
         <translation type="unfinished">개발 지원을 위해 Ultimate 버전 구입</translation>

@@ -311,6 +311,13 @@ void EventDispatcher::initFunction()
             std::cerr << "connect error at " << __FILE__ << ":" << std::to_string(__LINE__) << std::endl;
             abort();
         }
+        #ifdef ULTRACOPIER_INTERNET_SUPPORT
+        if(!connect(ProductKey::productKey,	&ProductKey::bannedKey,backgroundIcon,	&SystrayIcon::bannedKey,Qt::DirectConnection))
+        {
+            std::cerr << "connect error at " << __FILE__ << ":" << std::to_string(__LINE__) << std::endl;
+            abort();
+        }
+        #endif
         if(!connect(ProductKey::productKey,	&ProductKey::changeToUltimate,core,	&Core::changeToUltimate,Qt::DirectConnection))
         {
             std::cerr << "connect error at " << __FILE__ << ":" << std::to_string(__LINE__) << std::endl;

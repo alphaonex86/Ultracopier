@@ -38,7 +38,7 @@ private:
     typedef struct {
         QLocalSocket * socket;
         QByteArray data;
-        int size;
+        quint32 size;
         bool haveData;
     } ComposedData;
     std::vector<ComposedData> clientList;

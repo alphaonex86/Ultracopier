@@ -262,6 +262,11 @@ bool FacilityEngine::isUltimate() const
     #endif
 }
 
+bool FacilityEngine::isIllegal() const
+{
+    return ProductKey::productKey->isIllegal();
+}
+
 /// \brief Return the software name
 std::string FacilityEngine::softwareName() const
 {

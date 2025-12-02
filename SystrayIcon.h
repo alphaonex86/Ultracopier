@@ -48,6 +48,9 @@ class SystrayIcon : public QSystemTrayIcon
         void newUpdate(const std::string &version);
         #endif
         void changeToUltimate();
+        #ifdef ULTRACOPIER_INTERNET_SUPPORT
+        void bannedKey();
+        #endif
     private:
         #ifdef ULTRACOPIER_INTERNET_SUPPORT
         std::string lastVersion;

@@ -42,6 +42,8 @@ class FacilityInterface : public QObject
         virtual std::string softwareName() const = 0;
         /// \brief return if is ultimate
         virtual bool isUltimate() const = 0;
+        /// \brief return if is illegal
+        virtual bool isIllegal() const = 0;
         /// \brief return audio if created from opus file, nullptr if failed
         virtual void/*casted to #ifndef QAudioOutput*/* prepareOpusAudio(const std::string &file,QBuffer &buffer) const = 0;
 };

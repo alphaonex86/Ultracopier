@@ -49,7 +49,7 @@ bool LocalListener::tryConnect()
     }
 
     QLocalSocket localSocket;
-    localSocket.connectToServer(QString::fromStdString(ExtraSocket::pathSocket(ULTRACOPIER_SOCKETNAME)),QIODevice::WriteOnly);
+    localSocket.connectToServer(QString::fromStdString(ExtraSocket::pathSocket(ULTRACOPIER_SOCKETNAME)));
     if(localSocket.waitForConnected(1000))
     {
         if(!localSocket.isValid())
@@ -68,17 +68,39 @@ bool LocalListener::tryConnect()
         QByteArray block;
         QDataStream out(&block, QIODevice::WriteOnly);
         //for total size
-        out << int(0);
+        quint32 stot=0;
+        out << stot;
         //send the arguments
         out << ultracopierArguments;
         //write the size content
         out.device()->seek(0);
-        out << block.size();
-        do
+        if(block.size()<=0)
+            return false;
+        stot=block.size();
+        out << stot;
+        //do
         {
+            const QByteArray &blockToSend=block;
+            /*
+             * qsizetype oldblocksize=block.size();
             QByteArray blockToSend;
             blockToSend=block.left(32*1024);//32KB
-            block.remove(0,blockToSend.size());
+            block.remove(0,blockToSend.size()); split block? this code not work
+            if(block.size()>=oldblocksize)
+            {
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"block.size()>=oldblocksize");
+                localSocket.write(block);
+                localSocket.readAll();
+                break;
+            }
+            if((blockToSend.size()+block.size())!=oldblocksize)
+            {
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"(blockToSend.size()+block.size())!=oldblocksize");
+                localSocket.write(block);
+                localSocket.readAll();
+                break;
+            }
+            */
             #ifdef ULTRACOPIER_DEBUG
             int byteWriten =
             #endif
@@ -106,14 +128,15 @@ bool LocalListener::tryConnect()
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"byteWriten: "+std::to_string(byteWriten)+
                                      ", size sending: "+std::to_string(blockToSend.size()));
         }
-        while(block.size());
+        //while(block.size());
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"disconnect the socket");
         localSocket.readAll();
         localSocket.waitForBytesWritten();
         QThread::msleep(50);
         localSocket.disconnectFromServer();
         QThread::msleep(50);
-        localSocket.waitForDisconnected();
+        if(localSocket.state()==QLocalSocket::ClosingState)
+            localSocket.waitForDisconnected();
         return true;
     }
     else
@@ -191,7 +214,8 @@ void LocalListener::dataIncomming()
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"socket->bytesAvailable() "+std::to_string(socket->bytesAvailable()));
     if(index!=-1)
     {
-        if(!clientList.at(index).haveData)
+        ComposedData &c=clientList[index];
+        if(!c.haveData)
         {
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"tempComposed index found, but no have data, create new entry");
             // If all is ok we get the message
@@ -204,52 +228,59 @@ void LocalListener::dataIncomming()
                 ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"wrong size for set the message size");*/
                 return;
             }
-            in >> clientList[index].size; // Store the size of the message
-            clientList[index].size-=sizeof(int);
-
-            // Check if all the message size is the same as the size given
-            if(socket->bytesAvailable() < clientList.at(index).size) // If not all get then stop it
-            {
-                clientList[index].haveData=true;
-                clientList[index].data.append(socket->readAll());
-                TimeOutQLocalSocket.start();
-                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"Need wait to recomposite: "+std::to_string(clientList.at(index).data.size())+
-                                         ", targeted: "+std::to_string(clientList.at(index).size));
-                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"tempComposed.data: "+clientList.at(index).data.toHex().toStdString());
-            }
-            else if(socket->bytesAvailable() == clientList.at(index).size) //if the size match
-            {
-                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"socket->bytesAvailable(): "+std::to_string(socket->bytesAvailable())+
-                                         ", for total of: "+std::to_string(socket->bytesAvailable()+sizeof(uint32_t)));
-                QStringList ultracopierArguments;
-                in >> ultracopierArguments;
-                std::vector<std::string> ultracopierArgumentsStd;
-                {
-                    int index=0;
-                    while(index<ultracopierArguments.size())
-                    {
-                        ultracopierArgumentsStd.push_back(ultracopierArguments.at(index).toStdString());
-                        index++;
-                    }
-                }
-                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"ultracopierArguments: "+ultracopierArguments.join(";").toStdString());
-                emit cli(ultracopierArgumentsStd,true,false);
-                clientList[index].data.clear();
-                clientList[index].haveData=false;
-                TimeOutQLocalSocket.stop();
-            }
+            in >> c.size; // Store the size of the message
+            if(c.size<=0)
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"c.size<=0 "+c.data.toHex().toStdString());
+            if(c.size>0x00ffffff)
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"c.size>0x00ffffff seam buggy "+c.data.toHex().toStdString());
             else
-                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"socket->bytesAvailable(): "+std::to_string(socket->bytesAvailable())+" > clientList.at(index).size!: "+std::to_string(clientList.at(index).size));
+            {
+                c.size-=sizeof(int);//quit the size of size header
+
+                // Check if all the message size is the same as the size given
+                if(socket->bytesAvailable() < c.size) // If not all get then stop it
+                {
+                    c.haveData=true;
+                    c.data.append(socket->readAll());
+                    TimeOutQLocalSocket.start();
+                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"Need wait to recomposite: "+std::to_string(c.data.size())+
+                                             ", targeted: "+std::to_string(c.size));
+                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"tempComposed.data: "+c.data.toHex().toStdString());
+                }
+                else if(socket->bytesAvailable() == c.size) //if the size match
+                {
+                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"socket->bytesAvailable(): "+std::to_string(socket->bytesAvailable())+
+                                             ", for total of: "+std::to_string(socket->bytesAvailable()+sizeof(uint32_t)));
+                    QStringList ultracopierArguments;
+                    in >> ultracopierArguments;
+                    std::vector<std::string> ultracopierArgumentsStd;
+                    {
+                        int index=0;
+                        while(index<ultracopierArguments.size())
+                        {
+                            ultracopierArgumentsStd.push_back(ultracopierArguments.at(index).toStdString());
+                            index++;
+                        }
+                    }
+                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"ultracopierArguments: "+ultracopierArguments.join(";").toStdString());
+                    emit cli(ultracopierArgumentsStd,true,false);
+                    c.data.clear();
+                    c.haveData=false;
+                    TimeOutQLocalSocket.stop();
+                }
+                else
+                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"socket->bytesAvailable(): "+std::to_string(socket->bytesAvailable())+" > c.size!: "+std::to_string(c.size));
+            }
         }
         else
         {
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Query recomposed with this size: "+std::to_string(clientList.at(index).data.size()));
-            clientList[index].data.append(socket->readAll());
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"Query recomposed with this size: "+std::to_string(clientList.at(index).data.size()));
-            if(clientList.at(index).data.size()==clientList.at(index).size)
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Query recomposed with this size: "+std::to_string(c.data.size()));
+            c.data.append(socket->readAll());
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"Query recomposed with this size: "+std::to_string(c.data.size()));
+            if(c.data.size()==c.size)
             {
                 ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"QByteArray reconstruction finished");
-                QDataStream in(clientList.at(index).data);
+                QDataStream in(c.data);
                 QStringList ultracopierArguments;
                 in >> ultracopierArguments;
                 std::vector<std::string> ultracopierArgumentsStd;
@@ -263,14 +294,14 @@ void LocalListener::dataIncomming()
                 }
                 ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"ultracopierArguments: "+ultracopierArguments.join(";").toStdString());
                 emit cli(ultracopierArgumentsStd,true,false);
-                clientList[index].data.clear();
-                clientList[index].haveData=false;
+                c.data.clear();
+                c.haveData=false;
                 TimeOutQLocalSocket.stop();
             }
             else
             {
                 TimeOutQLocalSocket.start();
-                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"Need wait to recomposite: "+std::to_string(clientList.at(index).data.size())+", targeted: "+std::to_string(clientList.at(index).size));
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"Need wait to recomposite: "+std::to_string(c.data.size())+", targeted: "+std::to_string(clientList.at(index).size));
                 return;
             }
         }

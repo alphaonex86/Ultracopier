@@ -281,7 +281,9 @@ Themes::Themes(const bool &alwaysOnTop,
     updateSpeed();
     alwaysOnTop_clicked(false);
     QString ultimateUrl;
-    if(facilityEngine->isUltimate())
+    if(facilityEngine->isIllegal())
+        ui->ad_ultimate->tr("ILLEGAL VERSION");
+    else if(facilityEngine->isUltimate())
         ui->ad_ultimate->hide();
     else
     {

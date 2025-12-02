@@ -53,4 +53,15 @@
 #define ULTRACOPIER_UPDATER_URL "https://cdn.confiared.com/ultracopier.herman-brule.com/files/updater.txt"
 #endif
 
+#ifdef __GNUC__
+    //workaround for too old openssl version to connect via https
+    #if __GNUC__ < 8
+    #define ULTRACOPIER_BAN_URL "http://ultracopier.herman-brule.com/files/bannedkeys.txt"
+    #else
+    #define ULTRACOPIER_BAN_URL "https://cdn.confiared.com/ultracopier.herman-brule.com/files/bannedkeys.txt"
+    #endif
+#else
+#define ULTRACOPIER_BAN_URL "https://cdn.confiared.com/ultracopier.herman-brule.com/files/bannedkeys.txt"
+#endif
+
 #endif // VARIABLE_H

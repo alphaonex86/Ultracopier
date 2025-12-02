@@ -340,7 +340,9 @@ Themes::Themes(const bool &alwaysOnTop,
     uiOptions->labelAlwaysOnTop->hide();
     uiOptions->alwaysOnTop->hide();
     #endif*/
-    if(facilityEngine->isUltimate())
+    if(facilityEngine->isIllegal())
+        ui->ad_ultimate->tr("ILLEGAL VERSION");
+    else if(facilityEngine->isUltimate())
         ui->ad_ultimate->hide();
     else
     {

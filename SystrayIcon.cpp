@@ -575,3 +575,10 @@ void SystrayIcon::changeToUltimate()
 {
     systrayMenu->removeAction(actionProductKey);
 }
+
+#ifdef ULTRACOPIER_INTERNET_SUPPORT
+void SystrayIcon::bannedKey()
+{
+    showSystrayMessage(tr("You have illegal key, we will start legal procedure shortly").toStdString());
+}
+#endif
