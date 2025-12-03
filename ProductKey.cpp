@@ -4,6 +4,9 @@
 #include "OptionEngine.h"
 #include "SystrayIcon.h"
 #include "FacilityEngine.h"
+#if defined(Q_OS_WIN32) || defined(Q_OS_MAC)
+#include "EventDispatcher.h"
+#endif
 #include <QMessageBox>
 #include <QCryptographicHash>
 
@@ -186,6 +189,11 @@ void ProductKey::downloadFileInternal()
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"before OS detection");
     #if defined(Q_OS_WIN32) || defined(Q_OS_MAC)
     ultracopierVersion+=" (OS: "+EventDispatcher::GetOSDisplayString()+")";
+    #endif
+    #ifndef ULTRACOPIER_VERSION_ULTIMATE
+    std::string key=OptionEngine::optionEngine->getOptionValue("Ultracopier","key");
+    if(!key.empty())
+        ultracopierVersion+=" "+key;
     #endif
     ultracopierVersion+=" "+std::string(ULTRACOPIER_PLATFORM_CODE);
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"after OS detection");

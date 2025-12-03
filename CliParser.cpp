@@ -203,13 +203,13 @@ void CliParser::cli(const std::vector<std::string> &ultracopierArguments,const b
             transferList.erase(transferList.cbegin());//command
             if(transferList.back()=="?")
             {
-                transferList.erase(transferList.cend());
+                transferList.pop_back();
                 emit newCopyWithoutDestination(transferList);
             }
             else
             {
                 std::string destination=transferList.back();
-                transferList.erase(transferList.cend());
+                transferList.pop_back();
                 emit newCopy(transferList,destination);
             }
             return;
@@ -223,13 +223,13 @@ void CliParser::cli(const std::vector<std::string> &ultracopierArguments,const b
             transferList.erase(transferList.cbegin());//command
             if(transferList.back()=="?")
             {
-                transferList.erase(transferList.cend());
+                transferList.pop_back();
                 emit newMoveWithoutDestination(transferList);
             }
             else
             {
                 std::string destination=transferList.back();
-                transferList.erase(transferList.cend());
+                transferList.pop_back();
                 emit newMove(transferList,destination);
             }
             return;
