@@ -142,55 +142,55 @@ void CliParser::cli(const std::vector<std::string> &ultracopierArguments,const b
             }
             return;
         }
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Command line not understand");
-        showHelp();
-        return;
-    }
-    else if(ultracopierArguments.at(1)=="CBmv" || ultracopierArguments.at(1)=="CBcp")
-    {
-        if(ultracopierArguments.size()==3)
+        if(ultracopierArguments.at(1)=="CBmv" || ultracopierArguments.at(1)=="CBcp")
         {
-            QClipboard *clipboard = QGuiApplication::clipboard();
-            #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-            const QStringList &l=clipboard->text().split(QRegularExpression("[\n\r]+"));
-            #else
-            const QStringList &l=clipboard->text().split(QRegularExpression("[\n\r]+"),Qt::SkipEmptyParts);
-            #endif
-            /*linux:
-            file:///path/test/master.zip
-            file:///path/test/New text file
-            Windows:
-            file://Z:/X
-            */
-            std::vector<std::string> sourceList;
-            int index=0;
-            while(index<l.size())
+            if(ultracopierArguments.size()==3)
             {
-                sourceList.push_back(l.at(index).toStdString());
-                index++;
-            }
-            if(ultracopierArguments.back()=="?")
-            {
-                if(ultracopierArguments.at(1)=="CBmv")
-                    emit newMoveWithoutDestination(sourceList);
+                QClipboard *clipboard = QGuiApplication::clipboard();
+                #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+                const QStringList &l=clipboard->text().split(QRegularExpression("[\n\r]+"));
+                #else
+                const QStringList &l=clipboard->text().split(QRegularExpression("[\n\r]+"),Qt::SkipEmptyParts);
+                #endif
+                /*linux:
+                file:///path/test/master.zip
+                file:///path/test/New text file
+                Windows:
+                file://Z:/X
+                */
+                std::vector<std::string> sourceList;
+                int index=0;
+                while(index<l.size())
+                {
+                    sourceList.push_back(l.at(index).toStdString());
+                    index++;
+                }
+                if(ultracopierArguments.back()=="?")
+                {
+                    if(ultracopierArguments.at(1)=="CBmv")
+                        emit newMoveWithoutDestination(sourceList);
+                    else
+                        emit newCopyWithoutDestination(sourceList);
+                }
                 else
-                    emit newCopyWithoutDestination(sourceList);
+                {
+                    if(ultracopierArguments.at(1)=="CBmv")
+                        emit newMove(sourceList,ultracopierArguments.back());
+                    else
+                        emit newCopy(sourceList,ultracopierArguments.back());
+                }
+                return;
             }
             else
             {
-                if(ultracopierArguments.at(1)=="CBmv")
-                    emit newMove(sourceList,ultracopierArguments.back());
-                else
-                    emit newCopy(sourceList,ultracopierArguments.back());
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Command line not understand");
+                showHelp();
+                return;
             }
-            return;
         }
-        else
-        {
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Command line not understand");
-            showHelp();
-            return;
-        }
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Command line not understand");
+        showHelp();
+        return;
     }
     else if(ultracopierArguments.size()>3)
     {

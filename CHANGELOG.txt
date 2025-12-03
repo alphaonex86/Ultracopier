@@ -57,4 +57,4 @@
 3.0.1.2: Fix options into catchcopy-v0002 no saved
 3.0.1.3: Fix for non SSE Windows XP build (Pentium MMX or lower), fix for Qt5 version, tag version on MACOSX
 3.0.1.4: Fix crash when problem with HTTPS (Eg Offline, openssl dll not found, ...), more clean packaging, SSL support for XP/7, use http (NOT https) for url to detected update as workaround on old version
-3.0.1.5: better pass arguements to unique instance (maybe generate bug under Linux), I'm tired to pay 41% of taxes on refunded key when don't have real reason then now I implement banned key, more clear unique instance, fix send arguments when ultracopier is already running
+3.0.1.5: better pass arguements to unique instance (maybe generate bug under Linux), I'm tired to pay 41% of taxes on refunded key when don't have real reason then now I implement banned key, more clear unique instance, fix send arguments when ultracopier is already running, now support correctly working from clipboard
