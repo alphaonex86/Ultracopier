@@ -256,6 +256,8 @@ std::string FacilityEngine::ultimateUrl() const
 bool FacilityEngine::isUltimate() const
 {
     #ifndef ULTRACOPIER_LITTLE
+    if(ProductKey::productKey==NULL)
+        return false;
     return ProductKey::productKey->isUltimate();
     #else
     return true;
@@ -264,7 +266,17 @@ bool FacilityEngine::isUltimate() const
 
 bool FacilityEngine::isIllegal() const
 {
-    return ProductKey::productKey->isIllegal();
+    #ifndef ULTRACOPIER_LITTLE
+        #ifdef ULTRACOPIER_INTERNET_SUPPORT
+        if(ProductKey::productKey==NULL)
+            return false;
+        return ProductKey::productKey->isIllegal();
+        #else
+        return false;
+        #endif
+    #else
+    return false;
+    #endif
 }
 
 /// \brief Return the software name
