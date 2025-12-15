@@ -162,7 +162,19 @@ void CliParser::cli(const std::vector<std::string> &ultracopierArguments,const b
                 int index=0;
                 while(index<l.size())
                 {
-                    sourceList.push_back(l.at(index).toStdString());
+                    //sourceList.push_back(l.at(index).toStdString());
+                    const QString &uriString = l.at(index);
+                    QUrl url(uriString);
+                    if(url.isValid() && url.isLocalFile())
+                    {
+                        QString localPath = url.toLocalFile();
+                        if (!localPath.isEmpty())
+                            sourceList.push_back(localPath.toStdString());
+                        else
+                            sourceList.push_back(l.at(index).toStdString());
+                    }
+                    else
+                        sourceList.push_back(l.at(index).toStdString());
                     index++;
                 }
                 if(ultracopierArguments.back()=="?")
