@@ -83,7 +83,7 @@ void CliParser::cli(const std::vector<std::string> &ultracopierArguments, const 
         }
         else if(ultracopierArguments.back()=="--help")
         {
-            showHelp(ultracopierArguments,false);
+            showHelp(ultracopierArguments,fromStart,false);
             return;
         }
         else if(ultracopierArguments.back()=="--options")
