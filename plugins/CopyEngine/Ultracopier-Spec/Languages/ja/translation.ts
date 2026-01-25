@@ -1085,3 +1085,110 @@
     </message>
 </context>
 </TS>
+"/>
+        <source>File name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../fileIsSameDialog.ui" line="14"/>
+        <source>The source and destination are same</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../fileIsSameDialog.ui" line="90"/>
+        <source>Folder</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../fileIsSameDialog.ui" line="159"/>
+        <source>Suggest new &amp;name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../fileIsSameDialog.ui" line="170"/>
+        <source>&amp;Always perform this action</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../fileIsSameDialog.ui" line="190"/>
+        <source>&amp;Rename</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../fileIsSameDialog.ui" line="197"/>
+        <source>&amp;Skip</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../fileIsSameDialog.ui" line="204"/>
+        <source>&amp;Cancel</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>folderExistsDialog</name>
+    <message>
+        <location filename="../../folderExistsDialog.ui" line="34"/>
+        <source>Source</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../folderExistsDialog.ui" line="50"/>
+        <source>Destination</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../folderExistsDialog.ui" line="14"/>
+        <source>The source and destination is identical</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../folderExistsDialog.ui" line="82"/>
+        <location filename="../../folderExistsDialog.ui" line="150"/>
+        <source>Modified</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../folderExistsDialog.ui" line="99"/>
+        <location filename="../../folderExistsDialog.ui" line="160"/>
+        <source>Folder name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../folderExistsDialog.ui" line="116"/>
+        <location filename="../../folderExistsDialog.ui" line="184"/>
+        <source>Folder</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../folderExistsDialog.ui" line="227"/>
+        <source>Suggest new &amp;name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../folderExistsDialog.ui" line="238"/>
+        <source>&amp;Always perform this action</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../folderExistsDialog.ui" line="245"/>
+        <source>&amp;Rename</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../folderExistsDialog.ui" line="252"/>
+        <source>Merge</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../folderExistsDialog.ui" line="259"/>
+        <source>Skip</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../folderExistsDialog.ui" line="266"/>
+        <source>&amp;Cancel</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+</TS>

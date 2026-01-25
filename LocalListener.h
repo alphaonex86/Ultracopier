@@ -59,7 +59,7 @@ private slots:
     /// can now parse the cli
     void allPluginIsloaded();
 signals:
-    void cli(const std::vector<std::string> &ultracopierArguments,const bool &external,const bool &onlyCheck) const;
+    void cli(const std::vector<std::string> &ultracopierArguments,const bool &external,const bool &onlyCheck,const bool &fromStart) const;
 };
 
 #endif // LOCALLISTENER_H

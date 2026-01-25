@@ -1085,3 +1085,108 @@
     </message>
 </context>
 </TS>
+lation>
+    </message>
+    <message>
+        <location filename="../../fileIsSameDialog.ui" line="14"/>
+        <source>The source and destination are same</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../fileIsSameDialog.ui" line="90"/>
+        <source>Folder</source>
+        <translation type="unfinished">папка</translation>
+    </message>
+    <message>
+        <location filename="../../fileIsSameDialog.ui" line="159"/>
+        <source>Suggest new &amp;name</source>
+        <translation>Предложить новое имя</translation>
+    </message>
+    <message>
+        <location filename="../../fileIsSameDialog.ui" line="170"/>
+        <source>&amp;Always perform this action</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../fileIsSameDialog.ui" line="190"/>
+        <source>&amp;Rename</source>
+        <translation>переименовать</translation>
+    </message>
+    <message>
+        <location filename="../../fileIsSameDialog.ui" line="197"/>
+        <source>&amp;Skip</source>
+        <translation>пропускать</translation>
+    </message>
+    <message>
+        <location filename="../../fileIsSameDialog.ui" line="204"/>
+        <source>&amp;Cancel</source>
+        <translation>отменить</translation>
+    </message>
+</context>
+<context>
+    <name>folderExistsDialog</name>
+    <message>
+        <location filename="../../folderExistsDialog.ui" line="34"/>
+        <source>Source</source>
+        <translation>источник</translation>
+    </message>
+    <message>
+        <location filename="../../folderExistsDialog.ui" line="50"/>
+        <source>Destination</source>
+        <translation>назначение</translation>
+    </message>
+    <message>
+        <location filename="../../folderExistsDialog.ui" line="14"/>
+        <source>The source and destination is identical</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../folderExistsDialog.ui" line="82"/>
+        <location filename="../../folderExistsDialog.ui" line="150"/>
+        <source>Modified</source>
+        <translation>модифицированный</translation>
+    </message>
+    <message>
+        <location filename="../../folderExistsDialog.ui" line="99"/>
+        <location filename="../../folderExistsDialog.ui" line="160"/>
+        <source>Folder name</source>
+        <translation>имя папки</translation>
+    </message>
+    <message>
+        <location filename="../../folderExistsDialog.ui" line="116"/>
+        <location filename="../../folderExistsDialog.ui" line="184"/>
+        <source>Folder</source>
+        <translation type="unfinished">папка</translation>
+    </message>
+    <message>
+        <location filename="../../folderExistsDialog.ui" line="227"/>
+        <source>Suggest new &amp;name</source>
+        <translation>Предложить новое имя</translation>
+    </message>
+    <message>
+        <location filename="../../folderExistsDialog.ui" line="238"/>
+        <source>&amp;Always perform this action</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../folderExistsDialog.ui" line="245"/>
+        <source>&amp;Rename</source>
+        <translation>переименовать</translation>
+    </message>
+    <message>
+        <location filename="../../folderExistsDialog.ui" line="252"/>
+        <source>Merge</source>
+        <translation>слияние</translation>
+    </message>
+    <message>
+        <location filename="../../folderExistsDialog.ui" line="259"/>
+        <source>Skip</source>
+        <translation>пропускать</translation>
+    </message>
+    <message>
+        <location filename="../../folderExistsDialog.ui" line="266"/>
+        <source>&amp;Cancel</source>
+        <translation>отменить</translation>
+    </message>
+</context>
+</TS>

@@ -8,7 +8,7 @@
         <location filename="../../../CliParser.cpp" line="117"/>
         <location filename="../../../CliParser.cpp" line="130"/>
         <location filename="../../../CliParser.cpp" line="140"/>
-        <location filename="../../../CliParser.cpp" line="271"/>
+        <location filename="../../../CliParser.cpp" line="305"/>
         <source>Warning</source>
         <translation>Avertissement</translation>
     </message>
@@ -18,31 +18,31 @@
         <translation>Problème à la lecture, ou taille de fichier nulle</translation>
     </message>
     <message>
-        <location filename="../../../CliParser.cpp" line="251"/>
-        <location filename="../../../CliParser.cpp" line="262"/>
+        <location filename="../../../CliParser.cpp" line="274"/>
+        <location filename="../../../CliParser.cpp" line="296"/>
         <source>The arguments possible are:</source>
         <translation>Les arguments possible sont:</translation>
     </message>
     <message>
-        <location filename="../../../CliParser.cpp" line="253"/>
-        <location filename="../../../CliParser.cpp" line="264"/>
+        <location filename="../../../CliParser.cpp" line="276"/>
+        <location filename="../../../CliParser.cpp" line="298"/>
         <source>To display the options</source>
         <translation>Afficher les options</translation>
     </message>
     <message>
-        <location filename="../../../CliParser.cpp" line="256"/>
-        <location filename="../../../CliParser.cpp" line="267"/>
+        <location filename="../../../CliParser.cpp" line="279"/>
+        <location filename="../../../CliParser.cpp" line="301"/>
         <source>To copy sources to destination, separated by space. If destination is &quot;?&quot;, ultracopier will ask the user</source>
         <translation>Pour copier les sources vers la destination, séparées par des espaces. Si la destination est &quot;?&quot;, Ultracopier demandera à l&apos;utilisateur</translation>
     </message>
     <message>
-        <location filename="../../../CliParser.cpp" line="257"/>
-        <location filename="../../../CliParser.cpp" line="268"/>
+        <location filename="../../../CliParser.cpp" line="280"/>
+        <location filename="../../../CliParser.cpp" line="302"/>
         <source>To move sources to destination, separated by space. If destination is &quot;?&quot;, ultracopier will ask the user</source>
         <translation>Pour copier les sources vers la destination, séparées par des espaces. Si la destination est &quot;?&quot;, Ultracopier demandera à l&apos;utilisateur</translation>
     </message>
     <message>
-        <location filename="../../../CliParser.cpp" line="261"/>
+        <location filename="../../../CliParser.cpp" line="285"/>
         <source>Command not valid</source>
         <translation>Ligne de commande invalide</translation>
     </message>
@@ -67,25 +67,25 @@
         <translation>Impossible d&apos;ouvrir le fichier de liste de transfert</translation>
     </message>
     <message>
-        <location filename="../../../CliParser.cpp" line="252"/>
-        <location filename="../../../CliParser.cpp" line="263"/>
+        <location filename="../../../CliParser.cpp" line="275"/>
+        <location filename="../../../CliParser.cpp" line="297"/>
         <source>To display this help</source>
         <translation>Pour afficher cette aide</translation>
     </message>
     <message>
-        <location filename="../../../CliParser.cpp" line="254"/>
-        <location filename="../../../CliParser.cpp" line="265"/>
+        <location filename="../../../CliParser.cpp" line="277"/>
+        <location filename="../../../CliParser.cpp" line="299"/>
         <source>To quit the other instances (if running)</source>
         <translation>Pour quiter l&apos;autre instance en cour</translation>
     </message>
     <message>
-        <location filename="../../../CliParser.cpp" line="255"/>
-        <location filename="../../../CliParser.cpp" line="266"/>
+        <location filename="../../../CliParser.cpp" line="278"/>
+        <location filename="../../../CliParser.cpp" line="300"/>
         <source>Open transfer list</source>
         <translation>Ouvrir la liste de transfert</translation>
     </message>
     <message>
-        <location filename="../../../CliParser.cpp" line="273"/>
+        <location filename="../../../CliParser.cpp" line="307"/>
         <source>Help</source>
         <translation>Aide</translation>
     </message>
@@ -2165,11 +2165,6 @@ Erreur:%2</translation>
 </context>
 <context>
     <name>Themes</name>
-    <message>
-        <location filename="../../Themes/Oxygen/interface.cpp" line="344"/>
-        <source>ILLEGAL VERSION</source>
-        <translation type="unfinished"></translation>
-    </message>
     <message>
         <location filename="../../Themes/Oxygen/interface.cpp" line="359"/>
         <location filename="../../Themes/Oxygen/interface.cpp" line="365"/>

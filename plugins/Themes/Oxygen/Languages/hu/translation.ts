@@ -4,11 +4,6 @@
 <context>
     <name>Themes</name>
     <message>
-        <location filename="../../interface.cpp" line="344"/>
-        <source>ILLEGAL VERSION</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../../interface.cpp" line="359"/>
         <location filename="../../interface.cpp" line="365"/>
         <source>Buy the Ultimate version to fund development</source>

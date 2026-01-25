@@ -8,7 +8,7 @@
         <location filename="../../../CliParser.cpp" line="117"/>
         <location filename="../../../CliParser.cpp" line="130"/>
         <location filename="../../../CliParser.cpp" line="140"/>
-        <location filename="../../../CliParser.cpp" line="271"/>
+        <location filename="../../../CliParser.cpp" line="305"/>
         <source>Warning</source>
         <translation>알림</translation>
     </message>
@@ -18,37 +18,37 @@
         <translation>파일 읽기 문제이거나 파일 크기가 0입니다.</translation>
     </message>
     <message>
-        <location filename="../../../CliParser.cpp" line="251"/>
-        <location filename="../../../CliParser.cpp" line="262"/>
+        <location filename="../../../CliParser.cpp" line="274"/>
+        <location filename="../../../CliParser.cpp" line="296"/>
         <source>The arguments possible are:</source>
         <translation type="unfinished">가능한 인수:</translation>
     </message>
     <message>
-        <location filename="../../../CliParser.cpp" line="253"/>
-        <location filename="../../../CliParser.cpp" line="264"/>
+        <location filename="../../../CliParser.cpp" line="276"/>
+        <location filename="../../../CliParser.cpp" line="298"/>
         <source>To display the options</source>
         <translation type="unfinished">옵션 표시</translation>
     </message>
     <message>
-        <location filename="../../../CliParser.cpp" line="254"/>
-        <location filename="../../../CliParser.cpp" line="265"/>
+        <location filename="../../../CliParser.cpp" line="277"/>
+        <location filename="../../../CliParser.cpp" line="299"/>
         <source>To quit the other instances (if running)</source>
         <translation type="unfinished">다른 인스턴스 종료 (실행 중일 경우)</translation>
     </message>
     <message>
-        <location filename="../../../CliParser.cpp" line="256"/>
-        <location filename="../../../CliParser.cpp" line="267"/>
+        <location filename="../../../CliParser.cpp" line="279"/>
+        <location filename="../../../CliParser.cpp" line="301"/>
         <source>To copy sources to destination, separated by space. If destination is &quot;?&quot;, ultracopier will ask the user</source>
         <translation>원본을 대상에 복사, 공백으로 구분. 대상이 &quot;?&quot;일 경우 프로그램이 사용자에게 확인합니다.</translation>
     </message>
     <message>
-        <location filename="../../../CliParser.cpp" line="257"/>
-        <location filename="../../../CliParser.cpp" line="268"/>
+        <location filename="../../../CliParser.cpp" line="280"/>
+        <location filename="../../../CliParser.cpp" line="302"/>
         <source>To move sources to destination, separated by space. If destination is &quot;?&quot;, ultracopier will ask the user</source>
         <translation>원본을 대상에 이동, 공백으로 구분. 대상이 &quot;?&quot;일 경우 프로그램이 사용자에게 확인합니다. </translation>
     </message>
     <message>
-        <location filename="../../../CliParser.cpp" line="261"/>
+        <location filename="../../../CliParser.cpp" line="285"/>
         <source>Command not valid</source>
         <translation>명령이 유효하지 않습니다.</translation>
     </message>
@@ -73,19 +73,19 @@
         <translation>전송 목록 파일을 열 수 없습니다.</translation>
     </message>
     <message>
-        <location filename="../../../CliParser.cpp" line="252"/>
-        <location filename="../../../CliParser.cpp" line="263"/>
+        <location filename="../../../CliParser.cpp" line="275"/>
+        <location filename="../../../CliParser.cpp" line="297"/>
         <source>To display this help</source>
         <translation type="unfinished">도움말 표시</translation>
     </message>
     <message>
-        <location filename="../../../CliParser.cpp" line="255"/>
-        <location filename="../../../CliParser.cpp" line="266"/>
+        <location filename="../../../CliParser.cpp" line="278"/>
+        <location filename="../../../CliParser.cpp" line="300"/>
         <source>Open transfer list</source>
         <translation type="unfinished">전송 목록 열기</translation>
     </message>
     <message>
-        <location filename="../../../CliParser.cpp" line="273"/>
+        <location filename="../../../CliParser.cpp" line="307"/>
         <source>Help</source>
         <translation type="unfinished">도움말</translation>
     </message>
@@ -2160,11 +2160,6 @@ Error:%2</source>
 </context>
 <context>
     <name>Themes</name>
-    <message>
-        <location filename="../../Themes/Oxygen/interface.cpp" line="344"/>
-        <source>ILLEGAL VERSION</source>
-        <translation type="unfinished"></translation>
-    </message>
     <message>
         <location filename="../../Themes/Oxygen/interface.cpp" line="359"/>
         <location filename="../../Themes/Oxygen/interface.cpp" line="365"/>

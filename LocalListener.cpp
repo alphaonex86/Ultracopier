@@ -57,7 +57,7 @@ bool LocalListener::tryConnect()
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"localSocket is not valid!");
             return false;
         }
-        emit cli(ultracopierArgumentsStd,false,true);
+        emit cli(ultracopierArgumentsStd,false,true,false);
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"connection succes, number arguments given: "+std::to_string(ultracopierArgumentsStd.size()));
         #ifdef ULTRACOPIER_DEBUG
         for (int i = 0; i < ultracopierArguments.size(); ++i) {
@@ -263,7 +263,7 @@ void LocalListener::dataIncomming()
                         }
                     }
                     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"ultracopierArguments: "+ultracopierArguments.join(";").toStdString());
-                    emit cli(ultracopierArgumentsStd,true,false);
+                    emit cli(ultracopierArgumentsStd,true,false,false);
                     c.data.clear();
                     c.haveData=false;
                     TimeOutQLocalSocket.stop();
@@ -293,7 +293,7 @@ void LocalListener::dataIncomming()
                     }
                 }
                 ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"ultracopierArguments: "+ultracopierArguments.join(";").toStdString());
-                emit cli(ultracopierArgumentsStd,true,false);
+                emit cli(ultracopierArgumentsStd,true,false,false);
                 c.data.clear();
                 c.haveData=false;
                 TimeOutQLocalSocket.stop();
@@ -385,5 +385,5 @@ void LocalListener::allPluginIsloaded()
         }
     }
 
-    emit cli(ultracopierArgumentsStd,false,false);
+    emit cli(ultracopierArgumentsStd,false,false,true);
 }

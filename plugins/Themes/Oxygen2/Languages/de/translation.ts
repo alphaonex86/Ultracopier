@@ -67,11 +67,6 @@
         <translation>Kaufen Sie die Ultimate Version, um die Entwicklung des Programms zu unterstützen</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="285"/>
-        <source>ILLEGAL VERSION</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../../interface.cpp" line="299"/>
         <location filename="../../interface.cpp" line="333"/>
         <source>Ultimate version have more performance via OS native copy</source>

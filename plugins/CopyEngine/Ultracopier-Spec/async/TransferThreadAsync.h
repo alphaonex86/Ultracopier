@@ -4,7 +4,6 @@
 \licence GPL3, see the file COPYING */
 
 #include <QObject>
-#include <QTime>
 
 #include <regex>
 #include <vector>

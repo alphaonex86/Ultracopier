@@ -810,6 +810,112 @@
         <translation>Méret</translation>
     </message>
     <message>
+        <location filename=".    </message>
+    <message>
+        <location filename="../../copyEngineOptions.ui" line="351"/>
+        <source>Rename the original destination</source>
+        <translation>Eredeti cél átnevezése</translation>
+    </message>
+    <message>
+        <location filename="../../copyEngineOptions.ui" line="382"/>
+        <source>Performance</source>
+        <translation>Teljesítmény</translation>
+    </message>
+    <message>
+        <location filename="../../copyEngineOptions.ui" line="388"/>
+        <source>Inode threads</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../copyEngineOptions.ui" line="421"/>
+        <location filename="../../copyEngineOptions.ui" line="491"/>
+        <source>MB</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../copyEngineOptions.ui" line="437"/>
+        <source>Ultimate</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../copyEngineOptions.ui" line="443"/>
+        <source>OS native copy (disable speed limitation/pause)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../copyEngineOptions.ui" line="467"/>
+        <source>Uncheck this under Windows create problem</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../copyEngineOptions.ui" line="477"/>
+        <source>OS Buffer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../copyEngineOptions.ui" line="484"/>
+        <source>OS Flags</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../copyEngineOptions.ui" line="507"/>
+        <source>Disable parallel transfer when are different devices</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../copyEngineOptions.ui" line="460"/>
+        <source>Buffer for different device</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../copyEngineOptions.ui" line="514"/>
+        <source>Buffer for same device</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../copyEngineOptions.ui" line="537"/>
+        <source>Misc</source>
+        <translation>Egyéb</translation>
+    </message>
+    <message>
+        <location filename="../../copyEngineOptions.ui" line="543"/>
+        <source>Check the disk space</source>
+        <translation>Lemezterület ellenőrzése</translation>
+    </message>
+    <message>
+        <location filename="../../copyEngineOptions.ui" line="553"/>
+        <source>Use this folder when destination is not set</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../copyEngineOptions.ui" line="565"/>
+        <source>Browse</source>
+        <translation>Tallózás</translation>
+    </message>
+    <message>
+        <location filename="../../copyEngineOptions.ui" line="587"/>
+        <source>Filters</source>
+        <translation>Szűrők</translation>
+    </message>
+</context>
+<context>
+    <name>fileErrorDialog</name>
+    <message>
+        <location filename="../../fileErrorDialog.ui" line="14"/>
+        <source>Error with file</source>
+        <translation>Hiba a fájllal</translation>
+    </message>
+    <message>
+        <location filename="../../fileErrorDialog.ui" line="20"/>
+        <source>Error</source>
+        <translation>Hiba</translation>
+    </message>
+    <message>
+        <location filename="../../fileErrorDialog.ui" line="59"/>
+        <source>Size</source>
+        <translation>Méret</translation>
+    </message>
+    <message>
         <location filename="../../fileErrorDialog.ui" line="76"/>
         <source>Modified</source>
         <translation>Módosítva</translation>

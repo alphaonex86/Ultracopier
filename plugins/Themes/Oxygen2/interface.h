@@ -13,7 +13,6 @@
 #include <QShortcut>
 #include <QItemSelectionModel>
 #include <QTimer>
-#include <QTime>
 #include <QSystemTrayIcon>
 #include <QPixmap>
 

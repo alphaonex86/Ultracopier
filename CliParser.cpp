@@ -26,7 +26,7 @@ CliParser::CliParser(QObject *parent) :
   \param ultracopierArguments the argument list
   \param external true if the arguments come from other instance of ultracopier
 */
-void CliParser::cli(const std::vector<std::string> &ultracopierArguments,const bool &external,const bool &onlyCheck)
+void CliParser::cli(const std::vector<std::string> &ultracopierArguments, const bool &external, const bool &onlyCheck, const bool &fromStart)
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"ultracopierArguments: "+stringimplode(ultracopierArguments,';'));
     if(ultracopierArguments.size()==1)
@@ -83,7 +83,7 @@ void CliParser::cli(const std::vector<std::string> &ultracopierArguments,const b
         }
         else if(ultracopierArguments.back()=="--help")
         {
-            showHelp(false);
+            showHelp(ultracopierArguments,false);
             return;
         }
         else if(ultracopierArguments.back()=="--options")
@@ -97,7 +97,7 @@ void CliParser::cli(const std::vector<std::string> &ultracopierArguments,const b
             return;
         }
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Command line not understand");
-        showHelp();
+        showHelp(ultracopierArguments,fromStart);
         return;
     }
     else if(ultracopierArguments.size()==3)
@@ -196,12 +196,12 @@ void CliParser::cli(const std::vector<std::string> &ultracopierArguments,const b
             else
             {
                 ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Command line not understand");
-                showHelp();
+                showHelp(ultracopierArguments,fromStart);
                 return;
             }
         }
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Command line not understand");
-        showHelp();
+        showHelp(ultracopierArguments,fromStart);
         return;
     }
     else if(ultracopierArguments.size()>3)
@@ -247,19 +247,30 @@ void CliParser::cli(const std::vector<std::string> &ultracopierArguments,const b
             return;
         }
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Command line not understand");
-        showHelp();
+        showHelp(ultracopierArguments,fromStart);
         return;
     }
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Command line not understand");
-    showHelp();
+    showHelp(ultracopierArguments,fromStart);
 }
 
 /** \brief show the help
  *\param incorrectArguments if the help is call because the arguments are wrong */
-void CliParser::showHelp(const bool &incorrectArguments)
+void CliParser::showHelp(const std::vector<std::string> &ultracopierArguments, const bool &fromStart, const bool &incorrectArguments)
 {
     if(incorrectArguments)
+    {
         qDebug() << "Incorrect arguments detected";
+        unsigned int index=0;
+        while(index<ultracopierArguments.size())
+        {
+            std::string line(ultracopierArguments.at(index));
+            if(fromStart && line.find("ReactOS")!=std::string::npos)
+                return;
+            qDebug() << QString::fromStdString(line);
+            index++;
+        }
+    }
     qDebug() << tr("The arguments possible are:");
     qDebug() << "--help : "+tr("To display this help");
     qDebug() << "--options : "+tr("To display the options");
@@ -270,7 +281,18 @@ void CliParser::showHelp(const bool &incorrectArguments)
 
     QString message;
     if(incorrectArguments)
+    {
         message+="<b>"+tr("Command not valid")+"</b><br />\n";
+        unsigned int index=0;
+        while(index<ultracopierArguments.size())
+        {
+            std::string line(ultracopierArguments.at(index));
+            if(fromStart && line.find("ReactOS")!=std::string::npos)
+                return;
+            message+=QString::fromStdString(line)+"<br />\n";
+            index++;
+        }
+    }
     message+=+"<b></b>"+tr("The arguments possible are:")+"\n<ul>";
     message+="<li><b>--help</b> : "+tr("To display this help")+"</li>\n";
     message+="<li><b>--options</b> : "+tr("To display the options")+"</li>\n";

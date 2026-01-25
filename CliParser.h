@@ -25,7 +25,7 @@ public slots:
       \param ultracopierArguments the argument list
       \param external true if the arguments come from other instance of ultracopier
     */
-    void cli(const std::vector<std::string> &ultracopierArguments,const bool &external,const bool &onlyCheck);
+    void cli(const std::vector<std::string> &ultracopierArguments,const bool &external,const bool &onlyCheck,const bool &fromStart);
 signals:
     /** new copy without destination have been pased by the CLI */
     void newCopyWithoutDestination(std::vector<std::string> sources) const;
@@ -47,7 +47,7 @@ signals:
 private:
     /** \brief show the help
      *\param incorrectArguments if the help is call because the arguments are wrong */
-    void showHelp(const bool &incorrectArguments=true);
+    void showHelp(const std::vector<std::string> &ultracopierArguments,const bool &fromStart,const bool &incorrectArguments=true);
 
     //Core *core;
 };

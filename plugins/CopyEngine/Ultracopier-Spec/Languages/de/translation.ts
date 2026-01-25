@@ -430,6 +430,56 @@
     </message>
 </context>
 <context>
+    <name>ListThread</name>
+    <message>
+        <location filename="../../ListThreadListChange.cpp" line="242"/>
+        <location filename="../../ListThreadListChange.cpp" line="413"/>
+        <source>Unable do to move or copy item into wrong forced mode: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../ListThreadListChange.cpp" line="249"/>
+        <location filename="../../ListThreadListChange.cpp" line="420"/>
+        <source>Unable to save the transfer list: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../ListThreadListChange.cpp" line="270"/>
+        <source>Problem reading file, or file-size is 0</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../ListThreadListChange.cpp" line="277"/>
+        <source>Wrong header: &quot;%1&quot;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../ListThreadListChange.cpp" line="286"/>
+        <source>The transfer list is in mixed mode, but this instance is not in this mode</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../ListThreadListChange.cpp" line="295"/>
+        <source>The transfer list is in copy mode, but this instance is not in this mode</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../ListThreadListChange.cpp" line="301"/>
+        <source>The transfer list is in move mode, but this instance is not in this mode</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../ListThreadListChange.cpp" line="365"/>
+        <source>Some errors have been found during the line parsing</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../ListThreadListChange.cpp" line="373"/>
+        <source>Unable to open the transfer list: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>MkPath</name>
     <message>
         <location filename="../../MkPath.cpp" line="227"/>
@@ -473,6 +523,24 @@
     <message>
         <location filename="../../MkPath.cpp" line="339"/>
         <source>Unable to reverse temporary rename for real move</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>ReadThread</name>
+    <message>
+        <location filename="../../async/ReadThread.cpp" line="78"/>
+        <source>Internal error, please report it!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../async/ReadThread.cpp" line="543"/>
+        <source>Unable to read the source file: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../async/ReadThread.cpp" line="599"/>
+        <source>File truncated during the read, possible data change</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -610,6 +678,31 @@
         <location filename="../../async/TransferThreadAsync.cpp" line="439"/>
         <location filename="../../async/TransferThreadAsync.cpp" line="456"/>
         <source>Unable to create the destination folder, errno: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>WriteThread</name>
+    <message>
+        <location filename="../../async/WriteThread.cpp" line="138"/>
+        <source>Path resolution error (Empty path)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../async/WriteThread.cpp" line="167"/>
+        <location filename="../../async/WriteThread.cpp" line="200"/>
+        <source>Unable to create the destination folder: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../async/WriteThread.cpp" line="178"/>
+        <location filename="../../async/WriteThread.cpp" line="202"/>
+        <source>Unable to create the destination folder, errno: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../async/WriteThread.cpp" line="464"/>
+        <source>Internal error, please report it!</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

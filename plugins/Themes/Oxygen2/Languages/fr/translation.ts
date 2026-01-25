@@ -34,12 +34,7 @@
 <context>
     <name>Themes</name>
     <message>
-        <location filename="../../interface.cpp" line="+285"/>
-        <source>ILLEGAL VERSION</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+10"/>
+        <location filename="../../interface.cpp" line="+295"/>
         <location line="+6"/>
         <location line="+28"/>
         <location line="+6"/>

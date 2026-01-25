@@ -1107,3 +1107,102 @@
     </message>
 </context>
 </TS>
+ge>
+    <message>
+        <location filename="../../fileIsSameDialog.ui" line="90"/>
+        <source>Folder</source>
+        <translation>Cartella</translation>
+    </message>
+    <message>
+        <location filename="../../fileIsSameDialog.ui" line="159"/>
+        <source>Suggest new &amp;name</source>
+        <translation>Suggerisci nuovo &amp;nome</translation>
+    </message>
+    <message>
+        <location filename="../../fileIsSameDialog.ui" line="170"/>
+        <source>&amp;Always perform this action</source>
+        <translation>&amp;Esegui sempre questa azione</translation>
+    </message>
+    <message>
+        <location filename="../../fileIsSameDialog.ui" line="190"/>
+        <source>&amp;Rename</source>
+        <translation>&amp;Rinomina</translation>
+    </message>
+    <message>
+        <location filename="../../fileIsSameDialog.ui" line="197"/>
+        <source>&amp;Skip</source>
+        <translation>&amp;Salta</translation>
+    </message>
+    <message>
+        <location filename="../../fileIsSameDialog.ui" line="204"/>
+        <source>&amp;Cancel</source>
+        <translation>&amp;Annulla</translation>
+    </message>
+</context>
+<context>
+    <name>folderExistsDialog</name>
+    <message>
+        <location filename="../../folderExistsDialog.ui" line="34"/>
+        <source>Source</source>
+        <translation>Origine</translation>
+    </message>
+    <message>
+        <location filename="../../folderExistsDialog.ui" line="50"/>
+        <source>Destination</source>
+        <translation>Destinazione</translation>
+    </message>
+    <message>
+        <location filename="../../folderExistsDialog.ui" line="14"/>
+        <source>The source and destination is identical</source>
+        <translation>Origine e destinazione sono identiche</translation>
+    </message>
+    <message>
+        <location filename="../../folderExistsDialog.ui" line="82"/>
+        <location filename="../../folderExistsDialog.ui" line="150"/>
+        <source>Modified</source>
+        <translation>Modificata/o</translation>
+    </message>
+    <message>
+        <location filename="../../folderExistsDialog.ui" line="99"/>
+        <location filename="../../folderExistsDialog.ui" line="160"/>
+        <source>Folder name</source>
+        <translation>Nome cartella</translation>
+    </message>
+    <message>
+        <location filename="../../folderExistsDialog.ui" line="116"/>
+        <location filename="../../folderExistsDialog.ui" line="184"/>
+        <source>Folder</source>
+        <translation>Cartella</translation>
+    </message>
+    <message>
+        <location filename="../../folderExistsDialog.ui" line="227"/>
+        <source>Suggest new &amp;name</source>
+        <translation>Suggerisci nuovo &amp;nome</translation>
+    </message>
+    <message>
+        <location filename="../../folderExistsDialog.ui" line="238"/>
+        <source>&amp;Always perform this action</source>
+        <translation>&amp;Esegui sempre questa azione</translation>
+    </message>
+    <message>
+        <location filename="../../folderExistsDialog.ui" line="245"/>
+        <source>&amp;Rename</source>
+        <translation>&amp;Rinomina</translation>
+    </message>
+    <message>
+        <location filename="../../folderExistsDialog.ui" line="252"/>
+        <source>Merge</source>
+        <translation>Unisci</translation>
+    </message>
+    <message>
+        <location filename="../../folderExistsDialog.ui" line="259"/>
+        <source>Skip</source>
+        <translation>Salta</translation>
+    </message>
+    <message>
+        <location filename="../../folderExistsDialog.ui" line="266"/>
+        <source>&amp;Cancel</source>
+        <translation>&amp;Annulla</translation>
+    </message>
+</context>
+</TS>
