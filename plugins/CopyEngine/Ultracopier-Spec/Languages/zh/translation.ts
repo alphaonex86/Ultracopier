@@ -806,7 +806,7 @@
     <message>
         <location filename="../../copyEngineOptions.ui" line="382"/>
         <source>Performance</source>
-        <translation type="unfinished"></translation>
+        <translation type="    <messag></translation>
     </message>
     <message>
         <location filename="../../copyEngineOptions.ui" line="388"/>

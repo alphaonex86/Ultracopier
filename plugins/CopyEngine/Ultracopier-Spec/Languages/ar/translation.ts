@@ -430,56 +430,6 @@
     </message>
 </context>
 <context>
-    <name>ListThread</name>
-    <message>
-        <location filename="../../ListThreadListChange.cpp" line="242"/>
-        <location filename="../../ListThreadListChange.cpp" line="413"/>
-        <source>Unable do to move or copy item into wrong forced mode: %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../ListThreadListChange.cpp" line="249"/>
-        <location filename="../../ListThreadListChange.cpp" line="420"/>
-        <source>Unable to save the transfer list: %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../ListThreadListChange.cpp" line="270"/>
-        <source>Problem reading file, or file-size is 0</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../ListThreadListChange.cpp" line="277"/>
-        <source>Wrong header: &quot;%1&quot;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../ListThreadListChange.cpp" line="286"/>
-        <source>The transfer list is in mixed mode, but this instance is not in this mode</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../ListThreadListChange.cpp" line="295"/>
-        <source>The transfer list is in copy mode, but this instance is not in this mode</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../ListThreadListChange.cpp" line="301"/>
-        <source>The transfer list is in move mode, but this instance is not in this mode</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../ListThreadListChange.cpp" line="365"/>
-        <source>Some errors have been found during the line parsing</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../ListThreadListChange.cpp" line="373"/>
-        <source>Unable to open the transfer list: %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
     <name>MkPath</name>
     <message>
         <location filename="../../MkPath.cpp" line="187"/>
@@ -524,24 +474,6 @@
         <location filename="../../MkPath.cpp" line="464"/>
         <source>Unable to remove</source>
         <translation>غير قادر على أزاله</translation>
-    </message>
-</context>
-<context>
-    <name>ReadThread</name>
-    <message>
-        <location filename="../../async/ReadThread.cpp" line="78"/>
-        <source>Internal error, please report it!</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../async/ReadThread.cpp" line="543"/>
-        <source>Unable to read the source file: </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../async/ReadThread.cpp" line="599"/>
-        <source>File truncated during the read, possible data change</source>
-        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -684,26 +616,12 @@
 <context>
     <name>WriteThread</name>
     <message>
-        <location filename="../../async/WriteThread.cpp" line="138"/>
-        <source>Path resolution error (Empty path)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../async/WriteThread.cpp" line="167"/>
-        <location filename="../../async/WriteThread.cpp" line="200"/>
         <source>Unable to create the destination folder: </source>
-        <translation type="unfinished">غير قادر على إنشاء مجلد الوجهة:</translation>
+        <translation type="obsolete">غير قادر على إنشاء مجلد الوجهة:</translation>
     </message>
     <message>
-        <location filename="../../async/WriteThread.cpp" line="178"/>
-        <location filename="../../async/WriteThread.cpp" line="202"/>
         <source>Unable to create the destination folder, errno: %1</source>
-        <translation type="unfinished">errno: %1 غير قادر علي إنشاء المجلد الوجهة</translation>
-    </message>
-    <message>
-        <location filename="../../async/WriteThread.cpp" line="464"/>
-        <source>Internal error, please report it!</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">errno: %1 غير قادر علي إنشاء المجلد الوجهة</translation>
     </message>
 </context>
 <context>
@@ -1084,6 +1002,101 @@
         <location filename="../../fileIsSameDialog.ui" line="90"/>
         <source>Folder</source>
         <translation>مجلد</translation>
+    </message>
+    <message>
+        <location filename="../../fileIsSameDialog.ui" line="159"/>
+        <source>Suggest new &amp;name</source>
+        <translation>اقتراح &amp;اسم جديد</translation>
+    </message>
+    <message>
+        <location filename="../../fileIsSameDialog.ui" line="170"/>
+        <source>&amp;Always perform this action</source>
+        <translation>&amp; تنفيذ هذا الاجراء دوما</translation>
+    </message>
+    <message>
+        <location filename="../../fileIsSameDialog.ui" line="190"/>
+        <source>&amp;Rename</source>
+        <translation>&amp;اعاده تسميه</translation>
+    </message>
+    <message>
+        <location filename="../../fileIsSameDialog.ui" line="197"/>
+        <source>&amp;Skip</source>
+        <translation>&amp;تخطي</translation>
+    </message>
+    <message>
+        <location filename="../../fileIsSameDialog.ui" line="204"/>
+        <source>&amp;Cancel</source>
+        <translation>&amp;الغاء الامر</translation>
+    </message>
+</context>
+<context>
+    <name>folderExistsDialog</name>
+    <message>
+        <location filename="../../folderExistsDialog.ui" line="34"/>
+        <source>Source</source>
+        <translation>المصدر</translation>
+    </message>
+    <message>
+        <location filename="../../folderExistsDialog.ui" line="50"/>
+        <source>Destination</source>
+        <translation>الوجهه</translation>
+    </message>
+    <message>
+        <location filename="../../folderExistsDialog.ui" line="14"/>
+        <source>The source and destination is identical</source>
+        <translation>المصدر والوجهة متطابقان</translation>
+    </message>
+    <message>
+        <location filename="../../folderExistsDialog.ui" line="82"/>
+        <location filename="../../folderExistsDialog.ui" line="150"/>
+        <source>Modified</source>
+        <translation>معدل</translation>
+    </message>
+    <message>
+        <location filename="../../folderExistsDialog.ui" line="99"/>
+        <location filename="../../folderExistsDialog.ui" line="160"/>
+        <source>Folder name</source>
+        <translation>اسم المجلد</translation>
+    </message>
+    <message>
+        <location filename="../../folderExistsDialog.ui" line="116"/>
+        <location filename="../../folderExistsDialog.ui" line="184"/>
+        <source>Folder</source>
+        <translation>مجلد</translation>
+    </message>
+    <message>
+        <location filename="../../folderExistsDialog.ui" line="227"/>
+        <source>Suggest new &amp;name</source>
+        <translation>اقتراح &amp;اسم جديد</translation>
+    </message>
+    <message>
+        <location filename="../../folderExistsDialog.ui" line="238"/>
+        <source>&amp;Always perform this action</source>
+        <translation>&amp; تنفيذ هذا الاجراء دوما</translation>
+    </message>
+    <message>
+        <location filename="../../folderExistsDialog.ui" line="245"/>
+        <source>&amp;Rename</source>
+        <translation>&amp;اعاده تسميه</translation>
+    </message>
+    <message>
+        <location filename="../../folderExistsDialog.ui" line="252"/>
+        <source>Merge</source>
+        <translation>دمج</translation>
+    </message>
+    <message>
+        <location filename="../../folderExistsDialog.ui" line="259"/>
+        <source>Skip</source>
+        <translation>تخطي</translation>
+    </message>
+    <message>
+        <location filename="../../folderExistsDialog.ui" line="266"/>
+        <source>&amp;Cancel</source>
+        <translation>&amp;الغاء الامر</translation>
+    </message>
+</context>
+</TS>
+       <translation>مجلد</translation>
     </message>
     <message>
         <location filename="../../fileIsSameDialog.ui" line="159"/>
