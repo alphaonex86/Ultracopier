@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.1">
+<TS version="2.1" language="ja_JP">
 <context>
     <name>CliParser</name>
     <message>
@@ -10,84 +10,84 @@
         <location filename="../../../CliParser.cpp" line="140"/>
         <location filename="../../../CliParser.cpp" line="305"/>
         <source>Warning</source>
-        <translation type="unfinished"></translation>
+        <translation>警告</translation>
     </message>
     <message>
         <location filename="../../../CliParser.cpp" line="117"/>
         <source>Problem reading file, or file size is 0</source>
-        <translation type="unfinished"></translation>
+        <translation>ファイルの読み取りに問題があるか、ファイルサイズが 0 です</translation>
     </message>
     <message>
         <location filename="../../../CliParser.cpp" line="274"/>
         <location filename="../../../CliParser.cpp" line="296"/>
         <source>The arguments possible are:</source>
-        <translation type="unfinished"></translation>
+        <translation>指定可能な引数:</translation>
     </message>
     <message>
         <location filename="../../../CliParser.cpp" line="276"/>
         <location filename="../../../CliParser.cpp" line="298"/>
         <source>To display the options</source>
-        <translation type="unfinished"></translation>
+        <translation>オプションを表示する</translation>
     </message>
     <message>
         <location filename="../../../CliParser.cpp" line="277"/>
         <location filename="../../../CliParser.cpp" line="299"/>
         <source>To quit the other instances (if running)</source>
-        <translation type="unfinished"></translation>
+        <translation>他のインスタンスを終了する (実行中の場合)</translation>
     </message>
     <message>
         <location filename="../../../CliParser.cpp" line="279"/>
         <location filename="../../../CliParser.cpp" line="301"/>
         <source>To copy sources to destination, separated by space. If destination is &quot;?&quot;, ultracopier will ask the user</source>
-        <translation type="unfinished"></translation>
+        <translation>コピー元をコピー先にコピーします。複数指定する場合はスペースで区切ります。コピー先に &quot;?&quot; を指定すると、ultracopier がユーザーに確認します</translation>
     </message>
     <message>
         <location filename="../../../CliParser.cpp" line="280"/>
         <location filename="../../../CliParser.cpp" line="302"/>
         <source>To move sources to destination, separated by space. If destination is &quot;?&quot;, ultracopier will ask the user</source>
-        <translation type="unfinished"></translation>
+        <translation>移動元を移動先に移動します。複数指定する場合はスペースで区切ります。移動先に &quot;?&quot; を指定すると、ultracopier がユーザーに確認します</translation>
     </message>
     <message>
         <location filename="../../../CliParser.cpp" line="285"/>
         <source>Command not valid</source>
-        <translation type="unfinished"></translation>
+        <translation>無効なコマンドです</translation>
     </message>
     <message>
         <location filename="../../../CliParser.cpp" line="130"/>
         <source>This file is not supported transfer list</source>
-        <translation type="unfinished"></translation>
+        <translation>このファイルは対応していない転送リスト形式です</translation>
     </message>
     <message>
         <location filename="../../../CliParser.cpp" line="39"/>
         <source>Ultracopier is already running, right click on its system tray icon (near the clock) to use it or just copy and paste</source>
-        <translation type="unfinished"></translation>
+        <translation>Ultracopier はすでに起動しています。タスクトレイのアイコン (時計の近く) を右クリックして使用するか、通常のコピー &amp; ペーストを行ってください</translation>
     </message>
     <message>
         <location filename="../../../CliParser.cpp" line="41"/>
         <source>Ultracopier is already running, view all notification area icons (near the clock), right click on its system tray icon to use it or just copy and paste</source>
-        <translation type="unfinished"></translation>
+        <translation>Ultracopier はすでに起動しています。通知領域のアイコン (時計の近く) をすべて表示し、タスクトレイのアイコンを右クリックして使用するか、通常のコピー &amp; ペーストを行ってください</translation>
     </message>
     <message>
         <location filename="../../../CliParser.cpp" line="140"/>
         <source>Unable to open the transfer list file</source>
-        <translation type="unfinished"></translation>
+        <translation>転送リストファイルを開けません</translation>
     </message>
     <message>
         <location filename="../../../CliParser.cpp" line="275"/>
         <location filename="../../../CliParser.cpp" line="297"/>
         <source>To display this help</source>
-        <translation type="unfinished"></translation>
+        <translation>このヘルプを表示する</translation>
     </message>
     <message>
         <location filename="../../../CliParser.cpp" line="278"/>
         <location filename="../../../CliParser.cpp" line="300"/>
         <source>Open transfer list</source>
-        <translation type="unfinished"></translation>
+        <translation>転送リストを開く</translation>
     </message>
     <message>
         <location filename="../../../CliParser.cpp" line="307"/>
         <source>Help</source>
-        <translation type="unfinished"></translation>
+        <translation>ヘルプ</translation>
     </message>
 </context>
 <context>
@@ -96,33 +96,33 @@
         <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngine.cpp" line="448"/>
         <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngine.cpp" line="471"/>
         <source>The engine is forced to move, you can&apos;t copy with it</source>
-        <translation type="unfinished"></translation>
+        <translation>エンジンが移動モードに固定されているため、コピーは実行できません</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngine.cpp" line="525"/>
         <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngine.cpp" line="548"/>
         <source>The engine is forced to copy, you can&apos;t move with it</source>
-        <translation type="unfinished"></translation>
+        <translation>エンジンがコピーモードに固定されているため、移動は実行できません</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngine.cpp" line="572"/>
         <source>Destination</source>
-        <translation type="unfinished"></translation>
+        <translation>コピー先</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngine.cpp" line="572"/>
         <source>Use the actual destination &quot;%1&quot;?</source>
-        <translation type="unfinished"></translation>
+        <translation>現在のコピー先 &quot;%1&quot; を使用しますか?</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngine.cpp" line="737"/>
         <source>The mode has been forced previously. This is an internal error, please report it</source>
-        <translation type="unfinished"></translation>
+        <translation>モードが以前に強制設定されています。これは内部エラーです。報告してください</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngine.cpp" line="900"/>
         <source>Supported only on Windows</source>
-        <translation type="unfinished"></translation>
+        <translation>Windows のみ対応</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngine.cpp" line="1058"/>
@@ -130,7 +130,7 @@
         <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngine.cpp" line="1066"/>
         <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngine.cpp" line="1070"/>
         <source>Ask</source>
-        <translation type="unfinished"></translation>
+        <translation>確認する</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngine.cpp" line="1059"/>
@@ -138,53 +138,53 @@
         <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngine.cpp" line="1067"/>
         <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngine.cpp" line="1071"/>
         <source>Skip</source>
-        <translation type="unfinished"></translation>
+        <translation>スキップ</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngine.cpp" line="1062"/>
         <source>Merge</source>
-        <translation type="unfinished"></translation>
+        <translation>統合</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngine.cpp" line="1064"/>
         <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngine.cpp" line="1076"/>
         <source>Rename</source>
-        <translation type="unfinished"></translation>
+        <translation>名前を変更</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngine.cpp" line="1068"/>
         <source>Put at the end</source>
-        <translation type="unfinished"></translation>
+        <translation>末尾に追加</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngine.cpp" line="1072"/>
         <source>Overwrite</source>
-        <translation type="unfinished"></translation>
+        <translation>上書き</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngine.cpp" line="1073"/>
         <source>Overwrite if different</source>
-        <translation type="unfinished"></translation>
+        <translation>異なる場合は上書き</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngine.cpp" line="1074"/>
         <source>Overwrite if newer</source>
-        <translation type="unfinished"></translation>
+        <translation>新しい場合は上書き</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngine.cpp" line="1075"/>
         <source>Overwrite if older</source>
-        <translation type="unfinished"></translation>
+        <translation>古い場合は上書き</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngine.cpp" line="1146"/>
         <source>Options error</source>
-        <translation type="unfinished"></translation>
+        <translation>オプションエラー</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngine.cpp" line="1146"/>
         <source>Options engine is not loaded. Unable to access the filters</source>
-        <translation type="unfinished"></translation>
+        <translation>オプションエンジンが読み込まれていません。フィルターにアクセスできません</translation>
     </message>
 </context>
 <context>
@@ -193,7 +193,7 @@
         <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="60"/>
         <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="322"/>
         <source>Supported only on Windows</source>
-        <translation type="unfinished"></translation>
+        <translation>Windows のみ対応</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="452"/>
@@ -201,7 +201,7 @@
         <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="460"/>
         <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="464"/>
         <source>Ask</source>
-        <translation type="unfinished"></translation>
+        <translation>確認する</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="453"/>
@@ -209,59 +209,59 @@
         <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="461"/>
         <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="465"/>
         <source>Skip</source>
-        <translation type="unfinished"></translation>
+        <translation>スキップ</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="456"/>
         <source>Merge</source>
-        <translation type="unfinished"></translation>
+        <translation>統合</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="458"/>
         <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="470"/>
         <source>Rename</source>
-        <translation type="unfinished"></translation>
+        <translation>名前を変更</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="462"/>
         <source>Put at the end</source>
-        <translation type="unfinished"></translation>
+        <translation>末尾に追加</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="466"/>
         <source>Overwrite</source>
-        <translation type="unfinished"></translation>
+        <translation>上書き</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="467"/>
         <source>Overwrite if different</source>
-        <translation type="unfinished"></translation>
+        <translation>異なる場合は上書き</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="468"/>
         <source>Overwrite if newer</source>
-        <translation type="unfinished"></translation>
+        <translation>新しい場合は上書き</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="469"/>
         <source>Overwrite if older</source>
-        <translation type="unfinished"></translation>
+        <translation>古い場合は上書き</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="485"/>
         <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="524"/>
         <source>Options error</source>
-        <translation type="unfinished"></translation>
+        <translation>オプションエラー</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="485"/>
         <source>Options engine is not loaded. Unable to access the filters</source>
-        <translation type="unfinished"></translation>
+        <translation>オプションエンジンが読み込まれていません。フィルターにアクセスできません</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="524"/>
         <source>Options engine is not loaded, can&apos;t access to the filters</source>
-        <translation type="unfinished"></translation>
+        <translation>オプションエンジンが読み込まれていないため、フィルターにアクセスできません</translation>
     </message>
 </context>
 <context>
@@ -272,27 +272,27 @@
         <location filename="../../../CopyEngineManager.cpp" line="262"/>
         <location filename="../../../CopyEngineManager.cpp" line="279"/>
         <source>Warning</source>
-        <translation type="unfinished"></translation>
+        <translation>警告</translation>
     </message>
     <message>
         <location filename="../../../CopyEngineManager.cpp" line="234"/>
         <source>Cannot find any copy engine with move support</source>
-        <translation type="unfinished"></translation>
+        <translation>移動をサポートするコピーエンジンが見つかりません</translation>
     </message>
     <message>
         <location filename="../../../CopyEngineManager.cpp" line="262"/>
         <source>This copy engine does not support move</source>
-        <translation type="unfinished"></translation>
+        <translation>このコピーエンジンは移動をサポートしていません</translation>
     </message>
     <message>
         <location filename="../../../CopyEngineManager.cpp" line="239"/>
         <source>Cannot find any compatible engine!</source>
-        <translation type="unfinished"></translation>
+        <translation>互換性のあるエンジンが見つかりません!</translation>
     </message>
     <message>
         <location filename="../../../CopyEngineManager.cpp" line="279"/>
         <source>Cannot find any engine with this name: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>指定された名前のエンジンが見つかりません: %1</translation>
     </message>
 </context>
 <context>
@@ -300,13 +300,14 @@
     <message>
         <location filename="../../../CopyListener.cpp" line="160"/>
         <source>Error</source>
-        <translation type="unfinished"></translation>
+        <translation>エラー</translation>
     </message>
     <message>
         <location filename="../../../CopyListener.cpp" line="160"/>
         <source>Error during the reception of the copy/move list
 %1</source>
-        <translation type="unfinished"></translation>
+        <translation>コピー/移動リストの受信中にエラーが発生しました
+%1</translation>
     </message>
 </context>
 <context>
@@ -326,7 +327,7 @@
         <location filename="../../../Core.cpp" line="413"/>
         <location filename="../../../Core.cpp" line="418"/>
         <source>Error</source>
-        <translation type="unfinished"></translation>
+        <translation>エラー</translation>
     </message>
     <message>
         <location filename="../../../Core.cpp" line="56"/>
@@ -338,48 +339,48 @@
         <location filename="../../../Core.cpp" line="220"/>
         <location filename="../../../Core.cpp" line="241"/>
         <source>Unable to get a copy engine instance</source>
-        <translation type="unfinished"></translation>
+        <translation>コピーエンジンのインスタンスを取得できません</translation>
     </message>
     <message>
         <location filename="../../../Core.cpp" line="104"/>
         <source>Group window</source>
-        <translation type="unfinished"></translation>
+        <translation>グループウィンドウ</translation>
     </message>
     <message>
         <location filename="../../../Core.cpp" line="104"/>
         <source>Do you want group the transfer with another actual running transfer?</source>
-        <translation type="unfinished"></translation>
+        <translation>この転送を、現在実行中の他の転送とグループ化しますか？</translation>
     </message>
     <message>
         <location filename="../../../Core.cpp" line="127"/>
         <source>Unable to get a engine instance</source>
-        <translation type="unfinished"></translation>
+        <translation>エンジンインスタンスを取得できません</translation>
     </message>
     <message>
         <location filename="../../../Core.cpp" line="227"/>
         <source>The argument for the mode is not valid</source>
-        <translation type="unfinished"></translation>
+        <translation>モードの引数が無効です</translation>
     </message>
     <message>
         <location filename="../../../Core.cpp" line="1200"/>
         <source>Do you want to copy? If no, it will be moved.</source>
-        <translation type="unfinished"></translation>
+        <translation>コピーしますか？「いいえ」を選択した場合は移動されます。</translation>
     </message>
     <message>
         <location filename="../../../Core.cpp" line="275"/>
         <location filename="../../../Core.cpp" line="413"/>
         <source>Unable to load the interface, copy aborted</source>
-        <translation type="unfinished"></translation>
+        <translation>インターフェースをロードできません。コピーを中止しました</translation>
     </message>
     <message>
         <location filename="../../../Core.cpp" line="418"/>
         <source>Unable to load the copy engine, copy aborted</source>
-        <translation type="unfinished"></translation>
+        <translation>コピーエンジンをロードできません。コピーを中止しました</translation>
     </message>
     <message>
         <location filename="../../../Core.cpp" line="1199"/>
         <source>Transfer mode</source>
-        <translation type="unfinished"></translation>
+        <translation>転送モード</translation>
     </message>
 </context>
 <context>
@@ -387,27 +388,27 @@
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/DiskSpace.ui" line="14"/>
         <source>Disk space</source>
-        <translation type="unfinished"></translation>
+        <translation>ディスク容量</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/DiskSpace.ui" line="24"/>
         <source>You need more space on this drive to finish this transfer</source>
-        <translation type="unfinished"></translation>
+        <translation>この転送を完了するには、ドライブの空き容量が不足しています</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/DiskSpace.ui" line="49"/>
         <source>Continue</source>
-        <translation type="unfinished"></translation>
+        <translation>続行</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/DiskSpace.ui" line="56"/>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>キャンセル</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/DiskSpace.cpp" line="23"/>
         <source>Drives %1 have %2 available but need %3</source>
-        <translation type="unfinished"></translation>
+        <translation>ドライブ %1 の空き容量は %2 ですが、%3 必要です</translation>
     </message>
 </context>
 <context>
@@ -415,262 +416,262 @@
     <message>
         <location filename="../../../FacilityEngine.cpp" line="60"/>
         <source>Copy engine</source>
-        <translation type="unfinished"></translation>
+        <translation>コピーエンジン</translation>
     </message>
     <message>
         <location filename="../../../FacilityEngine.cpp" line="62"/>
         <source>Copy</source>
         <extracomment>a copy</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>コピー</translation>
     </message>
     <message>
         <location filename="../../../FacilityEngine.cpp" line="66"/>
         <source>Move</source>
         <extracomment>a move</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>移動</translation>
     </message>
     <message>
         <location filename="../../../FacilityEngine.cpp" line="68"/>
         <source>Pause</source>
-        <translation type="unfinished"></translation>
+        <translation>一時停止</translation>
     </message>
     <message>
         <location filename="../../../FacilityEngine.cpp" line="69"/>
         <source>Resume</source>
-        <translation type="unfinished"></translation>
+        <translation>再開</translation>
     </message>
     <message>
         <location filename="../../../FacilityEngine.cpp" line="70"/>
         <location filename="../../../FacilityEngine.cpp" line="85"/>
         <source>Skip</source>
-        <translation type="unfinished"></translation>
+        <translation>スキップ</translation>
     </message>
     <message>
         <location filename="../../../FacilityEngine.cpp" line="71"/>
         <source>Unlimited</source>
-        <translation type="unfinished"></translation>
+        <translation>無制限</translation>
     </message>
     <message>
         <location filename="../../../FacilityEngine.cpp" line="44"/>
         <source>s</source>
-        <translation type="unfinished"></translation>
+        <translation>秒</translation>
     </message>
     <message>
         <location filename="../../../FacilityEngine.cpp" line="45"/>
         <source>Too big</source>
-        <translation type="unfinished"></translation>
+        <translation>サイズが大きすぎます</translation>
     </message>
     <message>
         <location filename="../../../FacilityEngine.cpp" line="46"/>
         <source>B</source>
-        <translation type="unfinished"></translation>
+        <translation>B</translation>
     </message>
     <message>
         <location filename="../../../FacilityEngine.cpp" line="47"/>
         <source>KB</source>
-        <translation type="unfinished"></translation>
+        <translation>KB</translation>
     </message>
     <message>
         <location filename="../../../FacilityEngine.cpp" line="48"/>
         <source>MB</source>
-        <translation type="unfinished"></translation>
+        <translation>MB</translation>
     </message>
     <message>
         <location filename="../../../FacilityEngine.cpp" line="49"/>
         <source>GB</source>
-        <translation type="unfinished"></translation>
+        <translation>GB</translation>
     </message>
     <message>
         <location filename="../../../FacilityEngine.cpp" line="50"/>
         <source>TB</source>
-        <translation type="unfinished"></translation>
+        <translation>TB</translation>
     </message>
     <message>
         <location filename="../../../FacilityEngine.cpp" line="51"/>
         <source>PB</source>
-        <translation type="unfinished"></translation>
+        <translation>PB</translation>
     </message>
     <message>
         <location filename="../../../FacilityEngine.cpp" line="52"/>
         <source>EB</source>
-        <translation type="unfinished"></translation>
+        <translation>EB</translation>
     </message>
     <message>
         <location filename="../../../FacilityEngine.cpp" line="53"/>
         <source>ZB</source>
-        <translation type="unfinished"></translation>
+        <translation>ZB</translation>
     </message>
     <message>
         <location filename="../../../FacilityEngine.cpp" line="54"/>
         <source>YB</source>
-        <translation type="unfinished"></translation>
+        <translation>YB</translation>
     </message>
     <message>
         <location filename="../../../FacilityEngine.cpp" line="55"/>
         <source>Less than %10 seconds</source>
-        <translation type="unfinished"></translation>
+        <translation>残り %10 未満</translation>
     </message>
     <message>
         <location filename="../../../FacilityEngine.cpp" line="56"/>
         <source>About %10 seconds remaining</source>
-        <translation type="unfinished"></translation>
+        <translation>残り約 %10 秒</translation>
     </message>
     <message>
         <location filename="../../../FacilityEngine.cpp" line="57"/>
         <source>About %1 minutes remaining</source>
-        <translation type="unfinished"></translation>
+        <translation>残り約 %1 分</translation>
     </message>
     <message>
         <location filename="../../../FacilityEngine.cpp" line="58"/>
         <source>About %1 hours remaining</source>
-        <translation type="unfinished"></translation>
+        <translation>残り約 %1 時間</translation>
     </message>
     <message>
         <location filename="../../../FacilityEngine.cpp" line="64"/>
         <source>Transfer</source>
         <extracomment>a transfer</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>転送</translation>
     </message>
     <message>
         <location filename="../../../FacilityEngine.cpp" line="67"/>
         <source>Start</source>
-        <translation type="unfinished"></translation>
+        <translation>開始</translation>
     </message>
     <message>
         <location filename="../../../FacilityEngine.cpp" line="72"/>
         <source>Source</source>
-        <translation type="unfinished"></translation>
+        <translation>転送元</translation>
     </message>
     <message>
         <location filename="../../../FacilityEngine.cpp" line="73"/>
         <source>Size</source>
-        <translation type="unfinished"></translation>
+        <translation>サイズ</translation>
     </message>
     <message>
         <location filename="../../../FacilityEngine.cpp" line="74"/>
         <source>Destination</source>
-        <translation type="unfinished"></translation>
+        <translation>転送先</translation>
     </message>
     <message>
         <location filename="../../../FacilityEngine.cpp" line="75"/>
         <source>Quit</source>
-        <translation type="unfinished"></translation>
+        <translation>終了</translation>
     </message>
     <message>
         <location filename="../../../FacilityEngine.cpp" line="76"/>
         <source>Target</source>
-        <translation type="unfinished"></translation>
+        <translation>ターゲット</translation>
     </message>
     <message>
         <location filename="../../../FacilityEngine.cpp" line="77"/>
         <location filename="../../../FacilityEngine.cpp" line="81"/>
         <source>Time remaining:</source>
-        <translation type="unfinished"></translation>
+        <translation>残り時間:</translation>
     </message>
     <message>
         <location filename="../../../FacilityEngine.cpp" line="78"/>
         <source>Listing</source>
-        <translation type="unfinished"></translation>
+        <translation>リスト作成中</translation>
     </message>
     <message>
         <location filename="../../../FacilityEngine.cpp" line="79"/>
         <source>Copying</source>
-        <translation type="unfinished"></translation>
+        <translation>コピー中</translation>
     </message>
     <message>
         <location filename="../../../FacilityEngine.cpp" line="80"/>
         <source>Listing and copying</source>
-        <translation type="unfinished"></translation>
+        <translation>リスト作成およびコピー中</translation>
     </message>
     <message>
         <location filename="../../../FacilityEngine.cpp" line="82"/>
         <source>Remaining:</source>
-        <translation type="unfinished"></translation>
+        <translation>残り:</translation>
     </message>
     <message>
         <location filename="../../../FacilityEngine.cpp" line="84"/>
         <source>Ask</source>
-        <translation type="unfinished"></translation>
+        <translation>確認する</translation>
     </message>
     <message>
         <location filename="../../../FacilityEngine.cpp" line="86"/>
         <source>Overwrite</source>
-        <translation type="unfinished"></translation>
+        <translation>上書き</translation>
     </message>
     <message>
         <location filename="../../../FacilityEngine.cpp" line="87"/>
         <source>Overwrite if newer</source>
-        <translation type="unfinished"></translation>
+        <translation>新しい場合のみ上書き</translation>
     </message>
     <message>
         <location filename="../../../FacilityEngine.cpp" line="88"/>
         <source>Overwrite if the last modification dates are different</source>
-        <translation type="unfinished"></translation>
+        <translation>更新日時が異なる場合に上書き</translation>
     </message>
     <message>
         <location filename="../../../FacilityEngine.cpp" line="89"/>
         <source>Rename</source>
-        <translation type="unfinished"></translation>
+        <translation>名前の変更</translation>
     </message>
     <message>
         <location filename="../../../FacilityEngine.cpp" line="90"/>
         <source>Put to the end of the list</source>
-        <translation type="unfinished"></translation>
+        <translation>リストの最後に追加</translation>
     </message>
     <message>
         <location filename="../../../FacilityEngine.cpp" line="91"/>
         <source>Select source directory</source>
-        <translation type="unfinished"></translation>
+        <translation>転送元ディレクトリを選択</translation>
     </message>
     <message>
         <location filename="../../../FacilityEngine.cpp" line="92"/>
         <source>Select destination directory</source>
-        <translation type="unfinished"></translation>
+        <translation>転送先ディレクトリを選択</translation>
     </message>
     <message>
         <location filename="../../../FacilityEngine.cpp" line="93"/>
         <source>Internal error</source>
-        <translation type="unfinished"></translation>
+        <translation>内部エラー</translation>
     </message>
     <message>
         <location filename="../../../FacilityEngine.cpp" line="94"/>
         <source>Select one or more files to open</source>
-        <translation type="unfinished"></translation>
+        <translation>開くファイルを1つ以上選択してください</translation>
     </message>
     <message>
         <location filename="../../../FacilityEngine.cpp" line="95"/>
         <source>All files</source>
-        <translation type="unfinished"></translation>
+        <translation>すべてのファイル</translation>
     </message>
     <message>
         <location filename="../../../FacilityEngine.cpp" line="96"/>
         <source>Save transfer list</source>
-        <translation type="unfinished"></translation>
+        <translation>転送リストを保存</translation>
     </message>
     <message>
         <location filename="../../../FacilityEngine.cpp" line="97"/>
         <source>Open transfer list</source>
-        <translation type="unfinished"></translation>
+        <translation>転送リストを開く</translation>
     </message>
     <message>
         <location filename="../../../FacilityEngine.cpp" line="98"/>
         <source>Transfer list</source>
-        <translation type="unfinished"></translation>
+        <translation>転送リスト</translation>
     </message>
     <message>
         <location filename="../../../FacilityEngine.cpp" line="99"/>
         <source>Error</source>
-        <translation type="unfinished"></translation>
+        <translation>エラー</translation>
     </message>
     <message>
         <location filename="../../../FacilityEngine.cpp" line="100"/>
         <source>Not supported on this platform</source>
-        <translation type="unfinished"></translation>
+        <translation>このプラットフォームではサポートされていません</translation>
     </message>
     <message>
         <location filename="../../../FacilityEngine.cpp" line="101"/>
         <source>Completed in %1</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 で完了しました</translation>
     </message>
 </context>
 <context>
@@ -678,12 +679,12 @@
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/FileErrorDialog.cpp" line="92"/>
         <source>Error on folder</source>
-        <translation type="unfinished"></translation>
+        <translation>フォルダーのエラー</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/FileErrorDialog.cpp" line="95"/>
         <source>Folder name</source>
-        <translation type="unfinished"></translation>
+        <translation>フォルダー名</translation>
     </message>
 </context>
 <context>
@@ -691,22 +692,22 @@
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/FileExistsDialog.cpp" line="201"/>
         <source>%name% - copy%suffix%</source>
-        <translation type="unfinished"></translation>
+        <translation>%name% - コピー%suffix%</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/FileExistsDialog.cpp" line="208"/>
         <source>%name% - copy (%number%)%suffix%</source>
-        <translation type="unfinished"></translation>
+        <translation>%name% - コピー (%number%)%suffix%</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/FileExistsDialog.cpp" line="299"/>
         <source>Error</source>
-        <translation type="unfinished"></translation>
+        <translation>エラー</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/FileExistsDialog.cpp" line="299"/>
         <source>Try rename with using special characters</source>
-        <translation type="unfinished"></translation>
+        <translation>特殊文字を使用して名前を変更してみてください</translation>
     </message>
 </context>
 <context>
@@ -714,22 +715,22 @@
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/FileIsSameDialog.cpp" line="145"/>
         <source>%name% - copy%suffix%</source>
-        <translation type="unfinished"></translation>
+        <translation>%name% - コピー%suffix%</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/FileIsSameDialog.cpp" line="152"/>
         <source>%name% - copy (%number%)%suffix%</source>
-        <translation type="unfinished"></translation>
+        <translation>%name% - コピー (%number%)%suffix%</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/FileIsSameDialog.cpp" line="225"/>
         <source>Error</source>
-        <translation type="unfinished"></translation>
+        <translation>エラー</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/FileIsSameDialog.cpp" line="225"/>
         <source>Try rename with using special characters</source>
-        <translation type="unfinished"></translation>
+        <translation>特殊文字を使用して名前を変更してみてください</translation>
     </message>
 </context>
 <context>
@@ -737,77 +738,77 @@
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/FilterRules.ui" line="17"/>
         <source>Filters dialog</source>
-        <translation type="unfinished"></translation>
+        <translation>フィルター設定</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/FilterRules.ui" line="33"/>
         <source>Search:</source>
-        <translation type="unfinished"></translation>
+        <translation>検索:</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/FilterRules.ui" line="43"/>
         <source>Search type:</source>
-        <translation type="unfinished"></translation>
+        <translation>検索タイプ:</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/FilterRules.ui" line="51"/>
         <source>Raw text</source>
-        <translation type="unfinished"></translation>
+        <translation>プレーンテキスト</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/FilterRules.ui" line="56"/>
         <source>Simplified regex</source>
-        <translation type="unfinished"></translation>
+        <translation>簡易正規表現</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/FilterRules.ui" line="61"/>
         <source>Perl&apos;s regex</source>
-        <translation type="unfinished"></translation>
+        <translation>Perl互換正規表現</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/FilterRules.ui" line="69"/>
         <source>Apply on:</source>
-        <translation type="unfinished"></translation>
+        <translation>適用対象:</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/FilterRules.ui" line="77"/>
         <source>File</source>
-        <translation type="unfinished"></translation>
+        <translation>ファイル</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/FilterRules.ui" line="82"/>
         <source>Folder</source>
-        <translation type="unfinished"></translation>
+        <translation>フォルダー</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/FilterRules.ui" line="87"/>
         <source>File and folder</source>
-        <translation type="unfinished"></translation>
+        <translation>ファイルとフォルダー</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/FilterRules.ui" line="95"/>
         <source>Whole string must match</source>
-        <translation type="unfinished"></translation>
+        <translation>文字列全体が一致すること</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/FilterRules.ui" line="102"/>
         <source>Checking</source>
-        <translation type="unfinished"></translation>
+        <translation>チェック中</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/FilterRules.ui" line="108"/>
         <source>The regex is valid</source>
-        <translation type="unfinished"></translation>
+        <translation>正規表現は有効です</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/FilterRules.ui" line="115"/>
         <source>Test string:</source>
-        <translation type="unfinished"></translation>
+        <translation>テスト文字列:</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/FilterRules.ui" line="125"/>
         <source>The test string matches with the regex</source>
-        <translation type="unfinished"></translation>
+        <translation>テスト文字列が正規表現に一致しました</translation>
     </message>
 </context>
 <context>
@@ -815,52 +816,52 @@
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/Filters.ui" line="14"/>
         <source>Filters</source>
-        <translation type="unfinished"></translation>
+        <translation>フィルター</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/Filters.ui" line="39"/>
         <source>Exclusion filters</source>
-        <translation type="unfinished"></translation>
+        <translation>除外フィルター</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/Filters.ui" line="111"/>
         <source>Inclusion filters</source>
-        <translation type="unfinished"></translation>
+        <translation>包含フィルター</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/Filters.ui" line="132"/>
         <source>None = Include all</source>
-        <translation type="unfinished"></translation>
+        <translation>なし = すべて含める</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/Filters.cpp" line="94"/>
         <location filename="../../CopyEngine/Ultracopier-Spec/Filters.cpp" line="132"/>
         <source>Raw text</source>
-        <translation type="unfinished"></translation>
+        <translation>プレーンテキスト</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/Filters.cpp" line="97"/>
         <location filename="../../CopyEngine/Ultracopier-Spec/Filters.cpp" line="135"/>
         <source>Simplified regex</source>
-        <translation type="unfinished"></translation>
+        <translation>簡易正規表現</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/Filters.cpp" line="100"/>
         <location filename="../../CopyEngine/Ultracopier-Spec/Filters.cpp" line="138"/>
         <source>Perl&apos;s regex</source>
-        <translation type="unfinished"></translation>
+        <translation>Perl互換正規表現</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/Filters.cpp" line="108"/>
         <location filename="../../CopyEngine/Ultracopier-Spec/Filters.cpp" line="146"/>
         <source>Only on file</source>
-        <translation type="unfinished"></translation>
+        <translation>ファイルのみ</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/Filters.cpp" line="111"/>
         <location filename="../../CopyEngine/Ultracopier-Spec/Filters.cpp" line="149"/>
         <source>Only on folder</source>
-        <translation type="unfinished"></translation>
+        <translation>フォルダーのみ</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/Filters.cpp" line="117"/>
@@ -868,7 +869,7 @@
         <location filename="../../CopyEngine/Ultracopier-Spec/Filters.cpp" line="217"/>
         <location filename="../../CopyEngine/Ultracopier-Spec/Filters.cpp" line="256"/>
         <source>Full match</source>
-        <translation type="unfinished"></translation>
+        <translation>完全一致</translation>
     </message>
 </context>
 <context>
@@ -876,27 +877,27 @@
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/FolderExistsDialog.cpp" line="91"/>
         <source>Folder already exists</source>
-        <translation type="unfinished"></translation>
+        <translation>フォルダーが既に存在します</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/FolderExistsDialog.cpp" line="172"/>
         <source>%name% - copy%suffix%</source>
-        <translation type="unfinished"></translation>
+        <translation>%name% - コピー%suffix%</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/FolderExistsDialog.cpp" line="181"/>
         <source>%name% - copy (%number%)%suffix%</source>
-        <translation type="unfinished"></translation>
+        <translation>%name% - コピー (%number%)%suffix%</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/FolderExistsDialog.cpp" line="248"/>
         <source>Error</source>
-        <translation type="unfinished"></translation>
+        <translation>エラー</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/FolderExistsDialog.cpp" line="248"/>
         <source>Try rename with using special characters</source>
-        <translation type="unfinished"></translation>
+        <translation>特殊文字を使用して名前を変更してみてください</translation>
     </message>
 </context>
 <context>
@@ -904,123 +905,121 @@
     <message>
         <location filename="../../../HelpDialog.cpp" line="40"/>
         <source>About Ultracopier</source>
-        <translation type="unfinished"></translation>
+        <translation>Ultracopier について</translation>
     </message>
     <message>
         <location filename="../../../HelpDialog.ui" line="67"/>
         <source>Based on Qt. Advanced utility to copy files under GPL3 license.
 This version is compiled as version: %1.</source>
-        <extracomment>%1 will be replaced by a variable content (normal, debug, ...)</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Qtベース。GPL3ライセンスの下で提供される高度なファイルコピーユーティリティです。
+このバージョンは「%1」としてコンパイルされています。</translation>
     </message>
     <message>
         <location filename="../../../HelpDialog.ui" line="75"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;For more information see the website &lt;a href=&quot;%1&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0057ae;&quot;&gt;%1&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <extracomment>%1 will be remplaced by the website into the corresponding languages</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;詳細についてはウェブサイトをご覧ください: &lt;a href=&quot;%1&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0057ae;&quot;&gt;%1&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="../../../HelpDialog.ui" line="85"/>
         <source>Platform: %1</source>
-        <extracomment>%1 will be replaced by the platform (windows, mac, linux, ...)</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>プラットフォーム: %1</translation>
     </message>
     <message>
         <location filename="../../../HelpDialog.ui" line="92"/>
         <source>Author: BRULE Herman Jacques Roger (alpha_one_x86), company: &lt;a href=&quot;http://www.confiared.com/&quot;&gt;confiared&lt;/a&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>開発者: BRULE Herman Jacques Roger (alpha_one_x86), 企業: &lt;a href=&quot;http://www.confiared.com/&quot;&gt;confiared&lt;/a&gt;</translation>
     </message>
     <message>
         <location filename="../../../HelpDialog.ui" line="131"/>
         <source>About Qt</source>
-        <translation type="unfinished"></translation>
+        <translation>Qt について</translation>
     </message>
     <message>
         <location filename="../../../HelpDialog.ui" line="154"/>
         <source>Check update</source>
-        <translation type="unfinished"></translation>
+        <translation>アップデートを確認</translation>
     </message>
     <message>
         <location filename="../../../HelpDialog.ui" line="161"/>
         <source>Do a crash</source>
-        <translation type="unfinished"></translation>
+        <translation>強制終了（テスト用）</translation>
     </message>
     <message>
         <location filename="../../../HelpDialog.ui" line="168"/>
         <source>Save bug report</source>
-        <translation type="unfinished"></translation>
+        <translation>バグレポートを保存</translation>
     </message>
     <message>
         <location filename="../../../HelpDialog.ui" line="175"/>
         <source>Close</source>
-        <translation type="unfinished"></translation>
+        <translation>閉じる</translation>
     </message>
     <message>
         <location filename="../../../HelpDialog.cpp" line="84"/>
         <source>For http://portableapps.com/</source>
-        <translation type="unfinished"></translation>
+        <translation>PortableApps.com用</translation>
     </message>
     <message>
         <location filename="../../../HelpDialog.cpp" line="87"/>
         <source>Portable and all in one version</source>
-        <translation type="unfinished"></translation>
+        <translation>ポータブル・オールインワン版</translation>
     </message>
     <message>
         <location filename="../../../HelpDialog.cpp" line="89"/>
         <source>Portable version</source>
-        <translation type="unfinished"></translation>
+        <translation>ポータブル版</translation>
     </message>
     <message>
         <location filename="../../../HelpDialog.cpp" line="94"/>
         <source>All in one version</source>
-        <translation type="unfinished"></translation>
+        <translation>オールインワン版</translation>
     </message>
     <message>
         <location filename="../../../HelpDialog.cpp" line="96"/>
         <source>Normal version</source>
-        <translation type="unfinished"></translation>
+        <translation>通常版</translation>
     </message>
     <message>
         <location filename="../../../HelpDialog.cpp" line="117"/>
         <source> on Windows 64Bits</source>
-        <translation type="unfinished"></translation>
+        <translation> (Windows 64ビット版)</translation>
     </message>
     <message>
         <location filename="../../../HelpDialog.cpp" line="123"/>
         <location filename="../../../HelpDialog.cpp" line="126"/>
         <source>, gcc %1.%2.%3</source>
-        <translation type="unfinished"></translation>
+        <translation>, gcc %1.%2.%3</translation>
     </message>
     <message>
         <location filename="../../../HelpDialog.cpp" line="130"/>
         <source>, Qt %1</source>
-        <translation type="unfinished"></translation>
+        <translation>, Qt %1</translation>
     </message>
     <message>
         <location filename="../../../HelpDialog.cpp" line="137"/>
         <source>https://ultracopier.herman-brule.com/</source>
-        <translation type="unfinished"></translation>
+        <translation>https://ultracopier.herman-brule.com/</translation>
     </message>
     <message>
         <location filename="../../../HelpDialog.cpp" line="143"/>
         <source>https://ultracopier.herman-brule.com/#download</source>
-        <translation type="unfinished"></translation>
+        <translation>https://ultracopier.herman-brule.com/#download</translation>
     </message>
     <message>
         <location filename="../../../HelpDialog.cpp" line="170"/>
         <source>Update checking...</source>
-        <translation type="unfinished"></translation>
+        <translation>アップデートを確認中...</translation>
     </message>
     <message>
         <location filename="../../../HelpDialog.cpp" line="176"/>
         <location filename="../../../HelpDialog.cpp" line="181"/>
         <source>Update: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>アップデート: %1</translation>
     </message>
     <message>
         <location filename="../../../HelpDialog.cpp" line="187"/>
         <source>No update</source>
-        <translation type="unfinished"></translation>
+        <translation>利用可能なアップデートはありません</translation>
     </message>
 </context>
 <context>
@@ -1028,27 +1027,27 @@ This version is compiled as version: %1.</source>
     <message>
         <location filename="../../../InternetUpdater.cpp" line="105"/>
         <source>Reply should not be finished</source>
-        <translation type="unfinished"></translation>
+        <translation>応答が完了していません</translation>
     </message>
     <message>
         <location filename="../../../InternetUpdater.cpp" line="111"/>
         <source>Reply can&apos;t be redirect from %1</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 からの応答をリダイレクトできません</translation>
     </message>
     <message>
         <location filename="../../../InternetUpdater.cpp" line="121"/>
         <source>QNetworkReply::NetworkError: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>ネットワークエラー: %1</translation>
     </message>
     <message>
         <location filename="../../../InternetUpdater.cpp" line="130"/>
         <source>New version can&apos;t be empty</source>
-        <translation type="unfinished"></translation>
+        <translation>新しいバージョンの値が空です</translation>
     </message>
     <message>
         <location filename="../../../InternetUpdater.cpp" line="139"/>
         <source>Version is not into correct format</source>
-        <translation type="unfinished"></translation>
+        <translation>バージョンの形式が正しくありません</translation>
     </message>
 </context>
 <context>
@@ -1057,48 +1056,48 @@ This version is compiled as version: %1.</source>
         <location filename="../../CopyEngine/Ultracopier-Spec/ListThreadListChange.cpp" line="242"/>
         <location filename="../../CopyEngine/Ultracopier-Spec/ListThreadListChange.cpp" line="413"/>
         <source>Unable do to move or copy item into wrong forced mode: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>不正な強制モードでのアイテムの移動またはコピーができません: %1</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/ListThreadListChange.cpp" line="249"/>
         <location filename="../../CopyEngine/Ultracopier-Spec/ListThreadListChange.cpp" line="420"/>
         <source>Unable to save the transfer list: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>転送リストを保存できません: %1</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/ListThreadListChange.cpp" line="270"/>
         <source>Problem reading file, or file-size is 0</source>
-        <translation type="unfinished"></translation>
+        <translation>ファイルの読み込み中に問題が発生したか、ファイルサイズが0です</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/ListThreadListChange.cpp" line="277"/>
         <source>Wrong header: &quot;%1&quot;</source>
-        <translation type="unfinished"></translation>
+        <translation>不正なヘッダー: &quot;%1&quot;</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/ListThreadListChange.cpp" line="286"/>
         <source>The transfer list is in mixed mode, but this instance is not in this mode</source>
-        <translation type="unfinished"></translation>
+        <translation>転送リストは混合モードですが、このインスタンスはそのモードではありません</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/ListThreadListChange.cpp" line="295"/>
         <source>The transfer list is in copy mode, but this instance is not in this mode</source>
-        <translation type="unfinished"></translation>
+        <translation>転送リストはコピーモードですが、このインスタンスはそのモードではありません</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/ListThreadListChange.cpp" line="301"/>
         <source>The transfer list is in move mode, but this instance is not in this mode</source>
-        <translation type="unfinished"></translation>
+        <translation>転送リストは移動モードですが、このインスタンスはそのモードではありません</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/ListThreadListChange.cpp" line="365"/>
         <source>Some errors have been found during the line parsing</source>
-        <translation type="unfinished"></translation>
+        <translation>行の解析中にいくつかのエラーが見つかりました</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/ListThreadListChange.cpp" line="373"/>
         <source>Unable to open the transfer list: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>転送リストを開けません: %1</translation>
     </message>
 </context>
 <context>
@@ -1106,7 +1105,7 @@ This version is compiled as version: %1.</source>
     <message>
         <location filename="../../Listener/catchcopy-v0002/listener.cpp" line="7"/>
         <source>Ultracopier</source>
-        <translation type="unfinished"></translation>
+        <translation>Ultracopier</translation>
     </message>
 </context>
 <context>
@@ -1114,12 +1113,12 @@ This version is compiled as version: %1.</source>
     <message>
         <location filename="../../../LocalListener.cpp" line="191"/>
         <source>Warning</source>
-        <translation type="unfinished"></translation>
+        <translation>警告</translation>
     </message>
     <message>
         <location filename="../../../LocalListener.cpp" line="191"/>
         <source>Timeout while recomposing data from connected clients</source>
-        <translation type="unfinished"></translation>
+        <translation>接続されたクライアントからのデータ再構成中にタイムアウトしました</translation>
     </message>
 </context>
 <context>
@@ -1129,18 +1128,18 @@ This version is compiled as version: %1.</source>
         <location filename="../../../LogThread.cpp" line="116"/>
         <location filename="../../../LogThread.cpp" line="126"/>
         <source>Error</source>
-        <translation type="unfinished"></translation>
+        <translation>エラー</translation>
     </message>
     <message>
         <location filename="../../../LogThread.cpp" line="107"/>
         <source>Log file already open, error: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>ログファイルは既に開かれています。エラー: %1</translation>
     </message>
     <message>
         <location filename="../../../LogThread.cpp" line="116"/>
         <location filename="../../../LogThread.cpp" line="126"/>
         <source>Unable to open the log file, error: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>ログファイルを開けません。エラー: %1</translation>
     </message>
 </context>
 <context>
@@ -1149,7 +1148,7 @@ This version is compiled as version: %1.</source>
         <location filename="../../CopyEngine/Ultracopier-Spec/MkPath.cpp" line="124"/>
         <location filename="../../CopyEngine/Ultracopier-Spec/MkPath.cpp" line="464"/>
         <source>Unable to remove</source>
-        <translation type="unfinished"></translation>
+        <translation>削除できません</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/MkPath.cpp" line="187"/>
@@ -1157,37 +1156,37 @@ This version is compiled as version: %1.</source>
         <location filename="../../CopyEngine/Ultracopier-Spec/MkPath.cpp" line="315"/>
         <location filename="../../CopyEngine/Ultracopier-Spec/MkPath.cpp" line="363"/>
         <source>Unable to create the folder</source>
-        <translation type="unfinished"></translation>
+        <translation>フォルダーを作成できません</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/MkPath.cpp" line="227"/>
         <source>The source folder don&apos;t exists</source>
-        <translation type="unfinished"></translation>
+        <translation>転送元のフォルダーが存在しません</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/MkPath.cpp" line="304"/>
         <source>Unable to temporary rename the folder</source>
-        <translation type="unfinished"></translation>
+        <translation>フォルダーの一時的な名前変更ができません</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/MkPath.cpp" line="339"/>
         <source>Unable to reverse temporary rename for real move</source>
-        <translation type="unfinished"></translation>
+        <translation>移動処理のための一時的な名前変更を元に戻せません</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/MkPath.cpp" line="348"/>
         <source>Unable to do the final real move the folder</source>
-        <translation type="unfinished"></translation>
+        <translation>フォルダーの最終的な移動処理ができません</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/MkPath.cpp" line="379"/>
         <source>Unable to move the folder</source>
-        <translation type="unfinished"></translation>
+        <translation>フォルダーを移動できません</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/MkPath.cpp" line="385"/>
         <source>Unable to move the folder: errno: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>フォルダーを移動できません: エラー番号 %1</translation>
     </message>
 </context>
 <context>
@@ -1195,52 +1194,52 @@ This version is compiled as version: %1.</source>
     <message>
         <location filename="../../../OSSpecific.ui" line="26"/>
         <source>Warning</source>
-        <translation type="unfinished"></translation>
+        <translation>警告</translation>
     </message>
     <message>
         <location filename="../../../OSSpecific.ui" line="119"/>
         <source>Classic</source>
-        <translation type="unfinished"></translation>
+        <translation>クラシック</translation>
     </message>
     <message>
         <location filename="../../../OSSpecific.ui" line="124"/>
         <source>Modern</source>
-        <translation type="unfinished"></translation>
+        <translation>モダン</translation>
     </message>
     <message>
         <location filename="../../../OSSpecific.ui" line="177"/>
         <source>Don&apos;t show again</source>
-        <translation type="unfinished"></translation>
+        <translation>次回から表示しない</translation>
     </message>
     <message>
         <location filename="../../../OSSpecific.ui" line="202"/>
         <source>Ok</source>
-        <translation type="unfinished"></translation>
+        <translation>OK</translation>
     </message>
     <message>
         <location filename="../../../OSSpecific.cpp" line="29"/>
         <source>The replacement of default copy/move system is not supported by the file manager (Dolphin, Nautilus, ...).&lt;br /&gt;Ask the developer of your file manager to support it.&lt;br /&gt;You need do the copy/move manually.</source>
-        <translation type="unfinished"></translation>
+        <translation>標準のコピー/移動システムの置き換えは、お使いのファイルマネージャー（Dolphin, Nautilus等）でサポートされていません。&lt;br /&gt;サポートについてはファイルマネージャーの開発元にお問い合わせください。&lt;br /&gt;手動でコピー/移動を行う必要があります。</translation>
     </message>
     <message>
         <location filename="../../../OSSpecific.cpp" line="31"/>
         <source>Reboot the system if previously had similar software installed (like Teracopy, Supercopier or an earlier version of Ultracopier).</source>
-        <translation type="unfinished"></translation>
+        <translation>以前に同様のソフトウェア（Teracopy, Supercopier, または古いバージョンのUltracopierなど）をインストールしていた場合は、システムを再起動してください。</translation>
     </message>
     <message>
         <location filename="../../../OSSpecific.cpp" line="33"/>
         <source>The replacement of default copy/move system is not supported and blocked by finder of Mac OS X.&lt;br /&gt;You need do the copy/move manually by right clicking on the system tray icon near the clock (not the dock icon).</source>
-        <translation type="unfinished"></translation>
+        <translation>標準のコピー/移動システムの置き換えは、Mac OS XのFinderによってブロックされており、サポートされていません。&lt;br /&gt;時計の隣にあるシステムトレイアイコン（Dockアイコンではありません）を右クリックして、手動でコピー/移動を行ってください。</translation>
     </message>
     <message>
         <location filename="../../../OSSpecific.cpp" line="35"/>
         <source>The replacement of default copy/move system should be not supported by the file manager.&lt;br /&gt;Ask to the developer to support it.&lt;br /&gt;You need do the copy/move manually.</source>
-        <translation type="unfinished"></translation>
+        <translation>標準のコピー/移動システムの置き換えは、ファイルマネージャーでサポートされていない可能性があります。&lt;br /&gt;開発元にサポートを依頼してください。&lt;br /&gt;手動でコピー/移動を行う必要があります。</translation>
     </message>
     <message>
         <location filename="../../../OSSpecific.cpp" line="38"/>
         <source>Consider Supercopier as deprecated, prefer Ultracopier</source>
-        <translation type="unfinished"></translation>
+        <translation>Supercopierは非推奨です。Ultracopierの使用をお勧めします</translation>
     </message>
 </context>
 <context>
@@ -1249,322 +1248,319 @@ This version is compiled as version: %1.</source>
         <location filename="../../../OptionDialog.ui" line="14"/>
         <location filename="../../../OptionDialog.ui" line="60"/>
         <source>Options</source>
-        <translation type="unfinished"></translation>
+        <translation>オプション</translation>
     </message>
     <message>
         <location filename="../../../OptionDialog.ui" line="65"/>
         <source>General</source>
-        <translation type="unfinished"></translation>
+        <translation>全般</translation>
     </message>
     <message>
         <location filename="../../../OptionDialog.ui" line="70"/>
         <source>Plugins</source>
-        <translation type="unfinished"></translation>
+        <translation>プラグイン</translation>
     </message>
     <message>
         <location filename="../../../OptionDialog.ui" line="75"/>
         <location filename="../../../OptionDialog.ui" line="376"/>
         <location filename="../../../OptionDialog.cpp" line="308"/>
         <source>Copy engine</source>
-        <translation type="unfinished"></translation>
+        <translation>コピーエンジン</translation>
     </message>
     <message>
         <location filename="../../../OptionDialog.ui" line="101"/>
         <location filename="../../../OptionDialog.ui" line="404"/>
         <source>Themes</source>
-        <translation type="unfinished"></translation>
+        <translation>テーマ</translation>
     </message>
     <message>
         <location filename="../../../OptionDialog.ui" line="106"/>
         <source>Log</source>
-        <translation type="unfinished"></translation>
+        <translation>ログ</translation>
     </message>
     <message>
         <location filename="../../../OptionDialog.ui" line="289"/>
         <source>Portable (need restart)</source>
-        <translation type="unfinished"></translation>
+        <translation>ポータブル（再起動が必要）</translation>
     </message>
     <message>
         <location filename="../../../OptionDialog.ui" line="366"/>
         <source>Name</source>
-        <translation type="unfinished"></translation>
+        <translation>名前</translation>
     </message>
     <message>
         <location filename="../../../OptionDialog.ui" line="371"/>
         <source>Version</source>
-        <translation type="unfinished"></translation>
+        <translation>バージョン</translation>
     </message>
     <message>
         <location filename="../../../OptionDialog.ui" line="381"/>
         <source>Language</source>
-        <translation type="unfinished"></translation>
+        <translation>言語</translation>
     </message>
     <message>
         <location filename="../../../OptionDialog.ui" line="552"/>
         <source>Client connected</source>
-        <translation type="unfinished"></translation>
+        <translation>クライアント接続済み</translation>
     </message>
     <message>
         <location filename="../../../OptionDialog.ui" line="854"/>
         <source>Write the folder operations</source>
-        <translation type="unfinished"></translation>
+        <translation>フォルダー操作を記録する</translation>
     </message>
     <message>
         <location filename="../../../OptionDialog.ui" line="864"/>
         <source>The variables are %path%, %operation%</source>
-        <extracomment>%path%, %operation% should not be translated</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>変数は %path%, %operation% です</translation>
     </message>
     <message>
         <location filename="../../../OptionDialog.ui" line="80"/>
         <location filename="../../../OptionDialog.ui" line="389"/>
         <location filename="../../../OptionDialog.cpp" line="309"/>
         <source>Listener</source>
-        <translation type="unfinished"></translation>
+        <translation>リスナー</translation>
     </message>
     <message>
         <location filename="../../../OptionDialog.ui" line="85"/>
         <location filename="../../../OptionDialog.ui" line="394"/>
         <location filename="../../../OptionDialog.cpp" line="310"/>
         <source>Plugin loader</source>
-        <translation type="unfinished"></translation>
+        <translation>プラグインローダー</translation>
     </message>
     <message>
         <location filename="../../../OptionDialog.ui" line="93"/>
         <location filename="../../../OptionDialog.ui" line="399"/>
         <location filename="../../../OptionDialog.cpp" line="311"/>
         <source>Session loader</source>
-        <translation type="unfinished"></translation>
+        <translation>セッションローダー</translation>
     </message>
     <message>
         <location filename="../../../OptionDialog.ui" line="126"/>
         <source>Force the language</source>
-        <translation type="unfinished"></translation>
+        <translation>言語を強制指定</translation>
     </message>
     <message>
         <location filename="../../../OptionDialog.ui" line="136"/>
         <source>Force style</source>
-        <translation type="unfinished"></translation>
+        <translation>スタイルを強制指定</translation>
     </message>
     <message>
         <location filename="../../../OptionDialog.ui" line="143"/>
         <source>Replace the default copy and move system</source>
-        <translation type="unfinished"></translation>
+        <translation>標準のコピー/移動システムを置き換える</translation>
     </message>
     <message>
         <location filename="../../../OptionDialog.ui" line="157"/>
         <source>Load at the session loading</source>
-        <translation type="unfinished"></translation>
+        <translation>セッション開始時にロードする</translation>
     </message>
     <message>
         <location filename="../../../OptionDialog.ui" line="171"/>
         <source>When manual open</source>
-        <translation type="unfinished"></translation>
+        <translation>手動で開いたとき</translation>
     </message>
     <message>
         <location filename="../../../OptionDialog.ui" line="197"/>
         <source>Group the windows when</source>
-        <translation type="unfinished"></translation>
+        <translation>ウィンドウをグループ化するタイミング</translation>
     </message>
     <message>
         <location filename="../../../OptionDialog.ui" line="238"/>
         <source>Confirm to group the windows</source>
-        <translation type="unfinished"></translation>
+        <translation>ウィンドウをグループ化する前に確認する</translation>
     </message>
     <message>
         <location filename="../../../OptionDialog.ui" line="248"/>
         <source>Display the OS warning</source>
-        <translation type="unfinished"></translation>
+        <translation>OSの警告を表示する</translation>
     </message>
     <message>
         <location filename="../../../OptionDialog.ui" line="258"/>
         <source>Check for updates</source>
-        <translation type="unfinished"></translation>
+        <translation>アップデートを確認する</translation>
     </message>
     <message>
         <location filename="../../../OptionDialog.ui" line="268"/>
         <source>Remaining time algorithm</source>
-        <translation type="unfinished"></translation>
+        <translation>残り時間の計算アルゴリズム</translation>
     </message>
     <message>
         <location filename="../../../OptionDialog.ui" line="276"/>
         <source>Traditional</source>
-        <translation type="unfinished"></translation>
+        <translation>トラディショナル（従来型）</translation>
     </message>
     <message>
         <location filename="../../../OptionDialog.ui" line="281"/>
         <source>Logarithmic</source>
-        <translation type="unfinished"></translation>
+        <translation>対数（ロガリズミック）</translation>
     </message>
     <message>
         <location filename="../../../OptionDialog.ui" line="318"/>
         <source>default: finish.opus</source>
-        <translation type="unfinished"></translation>
+        <translation>デフォルト: finish.opus</translation>
     </message>
     <message>
         <location filename="../../../OptionDialog.ui" line="325"/>
         <source>Play</source>
-        <translation type="unfinished"></translation>
+        <translation>再生</translation>
     </message>
     <message>
         <location filename="../../../OptionDialog.ui" line="303"/>
         <source>Sound when finish</source>
-        <translation type="unfinished"></translation>
+        <translation>完了時に音を鳴らす</translation>
     </message>
     <message>
         <location filename="../../../OptionDialog.ui" line="412"/>
         <source>Plugin</source>
-        <translation type="unfinished"></translation>
+        <translation>プラグイン</translation>
     </message>
     <message>
         <location filename="../../../OptionDialog.ui" line="431"/>
         <source>Add</source>
-        <translation type="unfinished"></translation>
+        <translation>追加</translation>
     </message>
     <message>
         <location filename="../../../OptionDialog.ui" line="444"/>
         <source>Remove</source>
-        <translation type="unfinished"></translation>
+        <translation>削除</translation>
     </message>
     <message>
         <location filename="../../../OptionDialog.ui" line="454"/>
         <source>Information</source>
-        <translation type="unfinished"></translation>
+        <translation>情報</translation>
     </message>
     <message>
         <location filename="../../../OptionDialog.ui" line="481"/>
         <source>Copy engine by order of preference:</source>
-        <translation type="unfinished"></translation>
+        <translation>優先するコピーエンジンの順序:</translation>
     </message>
     <message>
         <location filename="../../../OptionDialog.ui" line="608"/>
         <source>Themes:</source>
-        <translation type="unfinished"></translation>
+        <translation>テーマ:</translation>
     </message>
     <message>
         <location filename="../../../OptionDialog.ui" line="669"/>
         <source>Unable to load the themes plugin</source>
-        <translation type="unfinished"></translation>
+        <translation>テーマプラグインをロードできません</translation>
     </message>
     <message>
         <location filename="../../../OptionDialog.ui" line="719"/>
         <source>No option for this plugin</source>
-        <translation type="unfinished"></translation>
+        <translation>このプラグインにオプションはありません</translation>
     </message>
     <message>
         <location filename="../../../OptionDialog.ui" line="769"/>
         <source>Browse</source>
-        <translation type="unfinished"></translation>
+        <translation>参照</translation>
     </message>
     <message>
         <location filename="../../../OptionDialog.ui" line="781"/>
         <source>Write directly to the file when it receive a new entry (can produce 50% of lost of performance)</source>
-        <translation type="unfinished"></translation>
+        <translation>新しいエントリを受信したときにファイルへ直接書き込む（パフォーマンスが50%低下する可能性があります）</translation>
     </message>
     <message>
         <location filename="../../../OptionDialog.ui" line="794"/>
         <source>Write the transfers</source>
-        <translation type="unfinished"></translation>
+        <translation>転送を記録する</translation>
     </message>
     <message>
         <location filename="../../../OptionDialog.ui" line="801"/>
         <source>The variables are %time%, %source%, %size%, %destination%</source>
-        <extracomment>%time%, %source%, %size%, %destination% should not be translated</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>変数は %time%, %source%, %size%, %destination% です</translation>
     </message>
     <message>
         <location filename="../../../OptionDialog.ui" line="824"/>
         <source>Write the errors</source>
-        <translation type="unfinished"></translation>
+        <translation>エラーを記録する</translation>
     </message>
     <message>
         <location filename="../../../OptionDialog.ui" line="831"/>
         <source>The variables are %time%, %path%, %size%, %mtime%, %error%</source>
-        <extracomment>%time%, %path%, %size%, %mtime%, %error% should not be translated</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>変数は %time%, %path%, %size%, %mtime%, %error% です</translation>
     </message>
     <message>
         <location filename="../../../OptionDialog.ui" line="750"/>
         <source>Write the log file into:</source>
-        <translation type="unfinished"></translation>
+        <translation>ログファイルの保存先:</translation>
     </message>
     <message>
         <location filename="../../../OptionDialog.cpp" line="215"/>
         <location filename="../../../OptionDialog.cpp" line="229"/>
         <source>Load</source>
-        <translation type="unfinished"></translation>
+        <translation>ロード</translation>
     </message>
     <message>
         <location filename="../../../OptionDialog.cpp" line="215"/>
         <source>Load the theme?</source>
-        <translation type="unfinished"></translation>
+        <translation>テーマをロードしますか？</translation>
     </message>
     <message>
         <location filename="../../../OptionDialog.cpp" line="229"/>
         <source>Load the language?</source>
-        <translation type="unfinished"></translation>
+        <translation>言語をロードしますか？</translation>
     </message>
     <message>
         <location filename="../../../OptionDialog.cpp" line="316"/>
         <source>Do nothing</source>
-        <translation type="unfinished"></translation>
+        <translation>何もしない</translation>
     </message>
     <message>
         <location filename="../../../OptionDialog.cpp" line="317"/>
         <source>Ask source as folder</source>
-        <translation type="unfinished"></translation>
+        <translation>ソースをフォルダーとして確認する</translation>
     </message>
     <message>
         <location filename="../../../OptionDialog.cpp" line="318"/>
         <source>Ask sources as files</source>
-        <translation type="unfinished"></translation>
+        <translation>ソースをファイルとして確認する</translation>
     </message>
     <message>
         <location filename="../../../OptionDialog.cpp" line="319"/>
         <source>Never</source>
-        <translation type="unfinished"></translation>
+        <translation>しない</translation>
     </message>
     <message>
         <location filename="../../../OptionDialog.cpp" line="320"/>
         <source>When source is same</source>
-        <translation type="unfinished"></translation>
+        <translation>ソースが同じとき</translation>
     </message>
     <message>
         <location filename="../../../OptionDialog.cpp" line="321"/>
         <source>When destination is same</source>
-        <translation type="unfinished"></translation>
+        <translation>転送先が同じとき</translation>
     </message>
     <message>
         <location filename="../../../OptionDialog.cpp" line="322"/>
         <source>When source and destination are same</source>
-        <translation type="unfinished"></translation>
+        <translation>ソースと転送先が同じとき</translation>
     </message>
     <message>
         <location filename="../../../OptionDialog.cpp" line="323"/>
         <source>When source or destination are same</source>
-        <translation type="unfinished"></translation>
+        <translation>ソースまたは転送先が同じとき</translation>
     </message>
     <message>
         <location filename="../../../OptionDialog.cpp" line="324"/>
         <source>Always</source>
-        <translation type="unfinished"></translation>
+        <translation>常に</translation>
     </message>
     <message>
         <location filename="../../../OptionDialog.cpp" line="338"/>
         <location filename="../../../OptionDialog.cpp" line="339"/>
         <location filename="../../../OptionDialog.cpp" line="340"/>
         <source>The variables are %1</source>
-        <translation type="unfinished"></translation>
+        <translation>変数は %1 です</translation>
     </message>
     <message>
         <location filename="../../../OptionDialog.cpp" line="1027"/>
         <source>Save logs as: </source>
-        <translation type="unfinished"></translation>
+        <translation>ログを別名で保存: </translation>
     </message>
     <message>
         <location filename="../../../OptionDialog.ui" line="784"/>
         <source>Synchronized log</source>
-        <translation type="unfinished"></translation>
+        <translation>同期ログ</translation>
     </message>
 </context>
 <context>
@@ -1575,7 +1571,7 @@ This version is compiled as version: %1.</source>
         <location filename="../../../OptionEngine.cpp" line="211"/>
         <location filename="../../../OptionEngine.cpp" line="215"/>
         <source>The variable was not found: %1 %2</source>
-        <translation type="unfinished"></translation>
+        <translation>変数が見つかりませんでした: %1 %2</translation>
     </message>
 </context>
 <context>
@@ -1583,27 +1579,27 @@ This version is compiled as version: %1.</source>
     <message>
         <location filename="../../PluginLoader/catchcopy-v0002/OptionsWidget.ui" line="17"/>
         <source>In normal case, only the dll 64Bits is important with 64Bits OS, and 32Bits dll with 32Bits OS. When it&apos;s important, the UAC can be opened to load the dll.</source>
-        <translation type="unfinished"></translation>
+        <translation>通常、64ビットOSでは64ビットのDLLが、32ビットOSでは32ビットのDLLのみが重要です。必要に応じて、DLLをロードするためにUAC（ユーザーアカウント制御）が開かれる場合があります。</translation>
     </message>
     <message>
         <location filename="../../PluginLoader/catchcopy-v0002/OptionsWidget.ui" line="20"/>
         <source>All the dlls are importants</source>
-        <translation type="unfinished"></translation>
+        <translation>すべてのDLLを重要とみなす</translation>
     </message>
     <message>
         <location filename="../../PluginLoader/catchcopy-v0002/OptionsWidget.ui" line="34"/>
         <source>Register for all users</source>
-        <translation type="unfinished"></translation>
+        <translation>すべてのユーザーに対して登録する</translation>
     </message>
     <message>
         <location filename="../../PluginLoader/catchcopy-v0002/OptionsWidget.ui" line="41"/>
         <source>at startup</source>
-        <translation type="unfinished"></translation>
+        <translation>起動時</translation>
     </message>
     <message>
         <location filename="../../PluginLoader/catchcopy-v0002/OptionsWidget.ui" line="48"/>
         <source>not unload</source>
-        <translation type="unfinished"></translation>
+        <translation>アンロードしない</translation>
     </message>
 </context>
 <context>
@@ -1611,87 +1607,87 @@ This version is compiled as version: %1.</source>
     <message>
         <location filename="../../../PluginInformation.ui" line="14"/>
         <source>About this plugin</source>
-        <translation type="unfinished"></translation>
+        <translation>このプラグインについて</translation>
     </message>
     <message>
         <location filename="../../../PluginInformation.ui" line="23"/>
         <source>Name:</source>
-        <translation type="unfinished"></translation>
+        <translation>名前:</translation>
     </message>
     <message>
         <location filename="../../../PluginInformation.ui" line="37"/>
         <source>Category:</source>
-        <translation type="unfinished"></translation>
+        <translation>カテゴリー:</translation>
     </message>
     <message>
         <location filename="../../../PluginInformation.ui" line="51"/>
         <source>Author:</source>
-        <translation type="unfinished"></translation>
+        <translation>作者:</translation>
     </message>
     <message>
         <location filename="../../../PluginInformation.ui" line="79"/>
         <source>Date:</source>
-        <translation type="unfinished"></translation>
+        <translation>日付:</translation>
     </message>
     <message>
         <location filename="../../../PluginInformation.ui" line="93"/>
         <source>Description:</source>
-        <translation type="unfinished"></translation>
+        <translation>説明:</translation>
     </message>
     <message>
         <location filename="../../../PluginInformation.ui" line="107"/>
         <source>Version:</source>
-        <translation type="unfinished"></translation>
+        <translation>バージョン:</translation>
     </message>
     <message>
         <location filename="../../../PluginInformation.cpp" line="39"/>
         <source>Copy engine</source>
-        <translation type="unfinished"></translation>
+        <translation>コピーエンジン</translation>
     </message>
     <message>
         <location filename="../../../PluginInformation.cpp" line="41"/>
         <source>Languages</source>
-        <translation type="unfinished"></translation>
+        <translation>言語</translation>
     </message>
     <message>
         <location filename="../../../PluginInformation.cpp" line="43"/>
         <source>Listener</source>
-        <translation type="unfinished"></translation>
+        <translation>リスナー</translation>
     </message>
     <message>
         <location filename="../../../PluginInformation.cpp" line="45"/>
         <source>Plugin loader</source>
-        <translation type="unfinished"></translation>
+        <translation>プラグインローダー</translation>
     </message>
     <message>
         <location filename="../../../PluginInformation.cpp" line="47"/>
         <source>Session loader</source>
-        <translation type="unfinished"></translation>
+        <translation>セッションローダー</translation>
     </message>
     <message>
         <location filename="../../../PluginInformation.cpp" line="49"/>
         <source>Themes</source>
-        <translation type="unfinished"></translation>
+        <translation>テーマ</translation>
     </message>
     <message>
         <location filename="../../../PluginInformation.cpp" line="52"/>
         <source>Unknown</source>
-        <translation type="unfinished"></translation>
+        <translation>不明</translation>
     </message>
     <message>
         <location filename="../../../PluginInformation.cpp" line="61"/>
         <source>Information about %1</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 に関する情報</translation>
     </message>
     <message>
         <location filename="../../../PluginInformation.ui" line="65"/>
         <source>Website:</source>
-        <translation type="unfinished"></translation>
+        <translation>ウェブサイト:</translation>
     </message>
     <message>
         <location filename="../../../PluginInformation.ui" line="121"/>
         <source>Title:</source>
-        <translation type="unfinished"></translation>
+        <translation>タイトル:</translation>
     </message>
 </context>
 <context>
@@ -1699,88 +1695,89 @@ This version is compiled as version: %1.</source>
     <message>
         <location filename="../../../PluginsManager.cpp" line="225"/>
         <source>informations.xml is not accessible</source>
-        <translation type="unfinished"></translation>
+        <translation>informations.xml にアクセスできません</translation>
     </message>
     <message>
         <location filename="../../../PluginsManager.cpp" line="489"/>
         <source>Dependencies part is wrong</source>
-        <translation type="unfinished"></translation>
+        <translation>依存関係の記述が正しくありません</translation>
     </message>
     <message>
         <location filename="../../../PluginsManager.cpp" line="510"/>
         <source>Dependencies %1 are not satisfied, for plugin: %2</source>
-        <translation type="unfinished"></translation>
+        <translation>プラグイン「%2」に必要な依存関係「%1」が満たされていません</translation>
     </message>
     <message>
         <location filename="../../../PluginsManager.cpp" line="673"/>
         <source>Remove %1</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 を削除</translation>
     </message>
     <message>
         <location filename="../../../PluginsManager.cpp" line="684"/>
         <source>Error</source>
-        <translation type="unfinished"></translation>
+        <translation>エラー</translation>
     </message>
     <message>
         <location filename="../../../PluginsManager.cpp" line="684"/>
         <source>Error while the removing plugin, please check the rights on the folder: 
 %1</source>
-        <translation type="unfinished"></translation>
+        <translation>プラグインの削除中にエラーが発生しました。フォルダーの権限を確認してください: 
+%1</translation>
     </message>
     <message>
         <location filename="../../../PluginsManager.cpp" line="708"/>
         <source>Information</source>
-        <translation type="unfinished"></translation>
+        <translation>情報</translation>
     </message>
     <message>
         <location filename="../../../PluginsManager.cpp" line="257"/>
         <source>%1, parse error at line %2, column %3: %4</source>
-        <translation type="unfinished"></translation>
+        <translation>%1、%2 行目 %3 列目で解析エラー: %4</translation>
     </message>
     <message>
         <location filename="../../../PluginsManager.cpp" line="231"/>
         <source>informations.xml not found for the plugin</source>
-        <translation type="unfinished"></translation>
+        <translation>プラグインの informations.xml が見つかりません</translation>
     </message>
     <message>
         <location filename="../../../PluginsManager.cpp" line="265"/>
         <source>&quot;package&quot; root tag not found for the xml file</source>
-        <translation type="unfinished"></translation>
+        <translation>XMLファイル内に &quot;package&quot; ルートタグが見つかりません</translation>
     </message>
     <message>
         <location filename="../../../PluginsManager.cpp" line="339"/>
         <source>Duplicated plugin found, already loaded!</source>
-        <translation type="unfinished"></translation>
+        <translation>重複するプラグインが見つかりました。既にロードされています!</translation>
     </message>
     <message>
         <location filename="../../../PluginsManager.cpp" line="400"/>
         <source>English text missing in the informations.xml for the tag: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>informations.xml のタグ %1 に英語のテキストがありません</translation>
     </message>
     <message>
         <location filename="../../../PluginsManager.cpp" line="408"/>
         <source>Tag not found: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>タグが見つかりません: %1</translation>
     </message>
     <message>
         <location filename="../../../PluginsManager.cpp" line="673"/>
         <source>Are you sure about removing &quot;%1&quot; in version %2?</source>
-        <translation type="unfinished"></translation>
+        <translation>「%1」のバージョン %2 を削除してもよろしいですか？</translation>
     </message>
     <message>
         <location filename="../../../PluginsManager.cpp" line="708"/>
         <source>Previous import is in progress...</source>
-        <translation type="unfinished"></translation>
+        <translation>以前のインポートが進行中です...</translation>
     </message>
     <message>
         <location filename="../../../PluginsManager.cpp" line="711"/>
         <source>Open Ultracopier plugin</source>
-        <translation type="unfinished"></translation>
+        <translation>Ultracopier プラグインを開く</translation>
     </message>
     <message>
         <location filename="../../../PluginsManager.cpp" line="711"/>
         <source>Ultracopier plugin (*.urc)</source>
-        <translation type="unfinished"></translation>
+        <translation>Ultracopier プラグイン (*.urc)</translation>
     </message>
     <message>
         <location filename="../../../PluginsManager.cpp" line="728"/>
@@ -1794,45 +1791,49 @@ This version is compiled as version: %1.</source>
         <location filename="../../../PluginsManager.cpp" line="877"/>
         <location filename="../../../PluginsManager.cpp" line="884"/>
         <source>Plugin loader</source>
-        <translation type="unfinished"></translation>
+        <translation>プラグインローダー</translation>
     </message>
     <message>
         <location filename="../../../PluginsManager.cpp" line="728"/>
         <source>Unable to open the plugin: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>プラグインを開けません: %1</translation>
     </message>
     <message>
         <location filename="../../../PluginsManager.cpp" line="753"/>
         <location filename="../../../PluginsManager.cpp" line="871"/>
         <location filename="../../../PluginsManager.cpp" line="884"/>
         <source>Unable to load the plugin content, please check it: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>プラグインの内容をロードできません。内容を確認してください: %1</translation>
     </message>
     <message>
         <location filename="../../../PluginsManager.cpp" line="821"/>
         <source>Unable to create a folder to install the plugin:
 %1</source>
-        <translation type="unfinished"></translation>
+        <translation>プラグインインストール用のフォルダーを作成できません:
+%1</translation>
     </message>
     <message>
         <location filename="../../../PluginsManager.cpp" line="834"/>
         <source>Unable to create a file to install the plugin:
 %1
 Error:%2</source>
-        <translation type="unfinished"></translation>
+        <translation>プラグインインストール用のファイルを作成できません:
+%1
+エラー: %2</translation>
     </message>
     <message>
         <location filename="../../../PluginsManager.cpp" line="853"/>
         <source>Folder with same name is present, skip the plugin installation:
 %1</source>
-        <translation type="unfinished"></translation>
+        <translation>同名のフォルダーが存在するため、プラグインのインストールをスキップします:
+%1</translation>
     </message>
     <message>
         <location filename="../../../PluginsManager.cpp" line="859"/>
         <location filename="../../../PluginsManager.cpp" line="865"/>
         <location filename="../../../PluginsManager.cpp" line="877"/>
         <source>Unable to load the plugin content, please check it</source>
-        <translation type="unfinished"></translation>
+        <translation>プラグインの内容をロードできません。内容を確認してください</translation>
     </message>
 </context>
 <context>
@@ -1841,58 +1842,58 @@ Error:%2</source>
         <location filename="../../../ProductKey.ui" line="14"/>
         <location filename="../../../ProductKey.ui" line="24"/>
         <source>Product key</source>
-        <translation type="unfinished"></translation>
+        <translation>プロダクトキー</translation>
     </message>
     <message>
         <location filename="../../../ProductKey.cpp" line="134"/>
         <source>Error</source>
-        <translation type="unfinished"></translation>
+        <translation>エラー</translation>
     </message>
     <message>
         <location filename="../../../ProductKey.cpp" line="123"/>
         <location filename="../../../ProductKey.cpp" line="125"/>
         <source>The major update is not free to support the project.&lt;br /&gt;For years I had to update the site and software, fight against hacking attempts, provide user support (and correct bugs in less than 2 hours).&lt;br /&gt;The version 1.x was free update during more than 5 years and have years old.&lt;br /&gt;The version 2.x was free update during more than 7 years and have years old. (and lot of have stole this version)&lt;br /&gt;This is the only way to be able to have time for this project that I am the only one to maintain and without help.&lt;br /&gt;You can use the old version and disable update detection&lt;br /&gt;&lt;a href=&quot;https://cdn.confiared.com/ultracopier.herman-brule.com/files/2.2.7.1/ultracopier-windows-x86_64-2.2.7.1-setup.exe&quot;&gt;ultracopier-windows-x86_64-2.2.7.1-setup.exe&lt;/a&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>プロジェクトを存続させるため、メジャーアップデートは有償とさせていただいております。&lt;br /&gt;長年、私は一人でサイトやソフトの更新、不正アクセスの対策、ユーザーサポート、そして迅速なバグ修正（多くの場合2時間以内）に努めてきました。&lt;br /&gt;バージョン 1.x は5年以上にわたり、バージョン 2.x は7年以上にわたり無料でアップデートを提供してきましたが、これらは既に旧バージョンとなっています（また、残念ながらバージョン 2.x は多く不正利用されました）。&lt;br /&gt;他者の助けを借りず一人で開発を継続する時間を確保するためには、これが唯一の方法です。&lt;br /&gt;なお、旧バージョンを使い続けたい場合は、アップデート検知を無効にして以下のリンクからご利用いただけます。&lt;br /&gt;&lt;a href=&quot;https://cdn.confiared.com/ultracopier.herman-brule.com/files/2.2.7.1/ultracopier-windows-x86_64-2.2.7.1-setup.exe&quot;&gt;ultracopier-windows-x86_64-2.2.7.1-setup.exe&lt;/a&gt;</translation>
     </message>
     <message>
         <location filename="../../../ProductKey.cpp" line="118"/>
         <source>You have illegal key, we will start legal procedure shortly</source>
-        <translation type="unfinished"></translation>
+        <translation>不正なキーが検出されました。まもなく法的措置を開始します</translation>
     </message>
     <message>
         <location filename="../../../ProductKey.cpp" line="127"/>
         <source>This kind of key should work, check if you have copied extra characters</source>
-        <translation type="unfinished"></translation>
+        <translation>この形式のキーは有効なはずです。余計な文字（スペースなど）をコピーしていないか確認してください</translation>
     </message>
     <message>
         <location filename="../../../ProductKey.cpp" line="129"/>
         <source>This key is for version %1, then try upgrade this version for this version. Go to &lt;a href=&quot;https://ultracopier.herman-brule.com/#download&quot;&gt;https://ultracopier.herman-brule.com/#download&lt;/a&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>このキーはバージョン %1 用です。現在のバージョンに合わせてアップグレードを検討してください。詳細は &lt;a href=&quot;https://ultracopier.herman-brule.com/#download&quot;&gt;こちら&lt;/a&gt; をご覧ください</translation>
     </message>
     <message>
         <location filename="../../../ProductKey.cpp" line="131"/>
         <source>Your product key &quot;%1&quot; was rejected for this version %2.&lt;br /&gt;If you buy key, unmark check your spam and unmark the mail as spam</source>
-        <translation type="unfinished"></translation>
+        <translation>プロダクトキー「%1」は、このバージョン %2 では拒否されました。&lt;br /&gt;もしキーを購入済みの場合は、迷惑メールフォルダを確認し、メールが迷惑メールとして処理されていないか確認してください</translation>
     </message>
     <message>
         <location filename="../../../ProductKey.cpp" line="132"/>
         <source>&lt;br /&gt;If you have not buy your key, go to &lt;a href=&quot;https://ultracopier.herman-brule.com/#ultimate&quot;&gt;https://ultracopier.herman-brule.com/#ultimate&lt;/a&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;br /&gt;キーをまだ購入されていない場合は、&lt;a href=&quot;https://ultracopier.herman-brule.com/#ultimate&quot;&gt;こちら&lt;/a&gt; からご購入いただけます</translation>
     </message>
     <message>
         <location filename="../../../ProductKey.cpp" line="142"/>
         <source>&lt;br /&gt;Restart to enable the option high performance into option -&gt; Copy Engine -&gt; Ultracopier Spec -&gt; Performance -&gt; OS native copy</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;br /&gt;再起動後、「オプション」→「コピーエンジン」→「Ultracopier Spec」→「パフォーマンス」→「OSネイティブコピー」からハイパフォーマンスオプションを有効にできます</translation>
     </message>
     <message>
         <location filename="../../../ProductKey.cpp" line="145"/>
         <source>Informations</source>
-        <translation type="unfinished"></translation>
+        <translation>情報</translation>
     </message>
     <message>
         <location filename="../../../ProductKey.cpp" line="145"/>
         <source>You have correctly enabled your key.</source>
-        <translation type="unfinished"></translation>
+        <translation>キーが正常に有効化されました。</translation>
     </message>
 </context>
 <context>
@@ -1901,43 +1902,43 @@ Error:%2</source>
         <location filename="../../../lib/qt-tar-xz/QXzDecode.cpp" line="38"/>
         <location filename="../../../lib/qt-tar-xz/QXzDecode.cpp" line="93"/>
         <source>Memory allocation failed</source>
-        <translation type="unfinished"></translation>
+        <translation>メモリ割り当てに失敗しました</translation>
     </message>
     <message>
         <location filename="../../../lib/qt-tar-xz/QXzDecode.cpp" line="64"/>
         <location filename="../../../lib/qt-tar-xz/QXzDecode.cpp" line="82"/>
         <source>Write error</source>
-        <translation type="unfinished"></translation>
+        <translation>書き込みエラー</translation>
     </message>
     <message>
         <location filename="../../../lib/qt-tar-xz/QXzDecode.cpp" line="97"/>
         <source>Memory usage limit reached</source>
-        <translation type="unfinished"></translation>
+        <translation>メモリ使用制限に達しました</translation>
     </message>
     <message>
         <location filename="../../../lib/qt-tar-xz/QXzDecode.cpp" line="101"/>
         <source>Not a .xz file</source>
-        <translation type="unfinished"></translation>
+        <translation>.xz ファイルではありません</translation>
     </message>
     <message>
         <location filename="../../../lib/qt-tar-xz/QXzDecode.cpp" line="105"/>
         <source>Unsupported options in the .xz headers</source>
-        <translation type="unfinished"></translation>
+        <translation>.xz ヘッダー内にサポートされていないオプションがあります</translation>
     </message>
     <message>
         <location filename="../../../lib/qt-tar-xz/QXzDecode.cpp" line="110"/>
         <source>The file is corrupted</source>
-        <translation type="unfinished"></translation>
+        <translation>ファイルが破損しています</translation>
     </message>
     <message>
         <location filename="../../../lib/qt-tar-xz/QXzDecode.cpp" line="114"/>
         <source>Bug!</source>
-        <translation type="unfinished"></translation>
+        <translation>バグが発生しました！</translation>
     </message>
     <message>
         <location filename="../../../lib/qt-tar-xz/QXzDecode.cpp" line="124"/>
         <source>The input data is too short</source>
-        <translation type="unfinished"></translation>
+        <translation>入力データが短すぎます</translation>
     </message>
 </context>
 <context>
@@ -1945,17 +1946,17 @@ Error:%2</source>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/async/ReadThread.cpp" line="78"/>
         <source>Internal error, please report it!</source>
-        <translation type="unfinished"></translation>
+        <translation>内部エラーです。開発元に報告してください!</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/async/ReadThread.cpp" line="543"/>
         <source>Unable to read the source file: </source>
-        <translation type="unfinished"></translation>
+        <translation>転送元ファイルを読み取れません: </translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/async/ReadThread.cpp" line="599"/>
         <source>File truncated during the read, possible data change</source>
-        <translation type="unfinished"></translation>
+        <translation>読み取り中にファイルが切り詰められました。データが変更された可能性があります</translation>
     </message>
 </context>
 <context>
@@ -1963,47 +1964,44 @@ Error:%2</source>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/RenamingRules.ui" line="14"/>
         <source>Renaming rules</source>
-        <translation type="unfinished"></translation>
+        <translation>名前変更（リネーム）ルール</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/RenamingRules.ui" line="35"/>
         <source>First renaming</source>
-        <translation type="unfinished"></translation>
+        <translation>1回目のリネーム</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/RenamingRules.ui" line="41"/>
         <source>%name% - copy%suffix%</source>
-        <extracomment>%name% should not be translated</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>%name% - コピー%suffix%</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/RenamingRules.ui" line="51"/>
         <source>Second renaming</source>
-        <translation type="unfinished"></translation>
+        <translation>2回目以降のリネーム</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/RenamingRules.ui" line="57"/>
         <source>%name% - copy (%number%)%suffix%</source>
-        <extracomment>%name%, %number% should not be translated</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>%name% - コピー (%number%)%suffix%</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/RenamingRules.ui" line="67"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Variables: &lt;span style=&quot; font-weight:600;&quot;&gt;%name%&lt;/span&gt; for the original file name, &lt;span style=&quot; font-weight:600;&quot;&gt;%number%&lt;/span&gt; for the extra number, &lt;span style=&quot; font-weight:600;&quot;&gt;%suffix%&lt;/span&gt; file suffix&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <extracomment>%name%, %number% should not be translated</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;変数: &lt;span style=&quot; font-weight:600;&quot;&gt;%name%&lt;/span&gt; 元のファイル名, &lt;span style=&quot; font-weight:600;&quot;&gt;%number%&lt;/span&gt; 連番, &lt;span style=&quot; font-weight:600;&quot;&gt;%suffix%&lt;/span&gt; 拡張子&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/RenamingRules.cpp" line="46"/>
         <location filename="../../CopyEngine/Ultracopier-Spec/RenamingRules.cpp" line="71"/>
         <source>%1 - copy%2</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 - コピー%2</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/RenamingRules.cpp" line="50"/>
         <location filename="../../CopyEngine/Ultracopier-Spec/RenamingRules.cpp" line="84"/>
         <source>%1 - copy (%2)%3</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 - コピー (%2)%3</translation>
     </message>
 </context>
 <context>
@@ -2012,37 +2010,37 @@ Error:%2</source>
         <location filename="../../CopyEngine/Ultracopier-Spec/ScanFileOrFolder.cpp" line="332"/>
         <location filename="../../CopyEngine/Ultracopier-Spec/ScanFileOrFolder.cpp" line="684"/>
         <source>Blacklisted folder</source>
-        <translation type="unfinished"></translation>
+        <translation>ブラックリスト登録済みのフォルダー</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/ScanFileOrFolder.cpp" line="466"/>
         <location filename="../../CopyEngine/Ultracopier-Spec/ScanFileOrFolder.cpp" line="468"/>
         <source>%1 - copy</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 - コピー</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/ScanFileOrFolder.cpp" line="477"/>
         <location filename="../../CopyEngine/Ultracopier-Spec/ScanFileOrFolder.cpp" line="479"/>
         <source>%1 - copy (%2)</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 - コピー (%2)</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/ScanFileOrFolder.cpp" line="590"/>
         <location filename="../../CopyEngine/Ultracopier-Spec/ScanFileOrFolder.cpp" line="592"/>
         <source>%name% - copy</source>
-        <translation type="unfinished"></translation>
+        <translation>%name% - コピー</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/ScanFileOrFolder.cpp" line="601"/>
         <location filename="../../CopyEngine/Ultracopier-Spec/ScanFileOrFolder.cpp" line="603"/>
         <source>%name% - copy (%number%)</source>
-        <translation type="unfinished"></translation>
+        <translation>%name% - コピー (%number%)</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/ScanFileOrFolder.cpp" line="694"/>
         <location filename="../../CopyEngine/Ultracopier-Spec/ScanFileOrFolder.cpp" line="698"/>
         <source>Problem with folder read</source>
-        <translation type="unfinished"></translation>
+        <translation>フォルダーの読み取り中に問題が発生しました</translation>
     </message>
 </context>
 <context>
@@ -2050,107 +2048,107 @@ Error:%2</source>
     <message>
         <location filename="../../../SystrayIcon.cpp" line="169"/>
         <source>No copy listener found. Do the copy manually by right click one the system tray icon.</source>
-        <translation type="unfinished"></translation>
+        <translation>コピーリスナーが見つかりません。システムトレイのアイコンを右クリックして、手動でコピーを実行してください。</translation>
     </message>
     <message>
         <location filename="../../../SystrayIcon.cpp" line="175"/>
         <source>Information</source>
-        <translation type="unfinished"></translation>
+        <translation>情報</translation>
     </message>
     <message>
         <location filename="../../../SystrayIcon.cpp" line="194"/>
         <source>Searching information...</source>
-        <translation type="unfinished"></translation>
+        <translation>情報を検索中...</translation>
     </message>
     <message>
         <location filename="../../../SystrayIcon.cpp" line="207"/>
         <source>Do not replace the explorer copy/move</source>
-        <translation type="unfinished"></translation>
+        <translation>エクスプローラーのコピー/移動を置き換えない</translation>
     </message>
     <message>
         <location filename="../../../SystrayIcon.cpp" line="212"/>
         <source>Semi replace the explorer copy/move</source>
-        <translation type="unfinished"></translation>
+        <translation>エクスプローラーのコピー/移動を部分的に置き換える</translation>
     </message>
     <message>
         <location filename="../../../SystrayIcon.cpp" line="217"/>
         <source>Replace the explorer copy/move</source>
-        <translation type="unfinished"></translation>
+        <translation>エクスプローラーのコピー/移動を完全に置き換える</translation>
     </message>
     <message>
         <location filename="../../../SystrayIcon.cpp" line="396"/>
         <source>Warning</source>
-        <translation type="unfinished"></translation>
+        <translation>警告</translation>
     </message>
     <message>
         <location filename="../../../SystrayIcon.cpp" line="396"/>
         <source>The action on the systray icon is unknown!</source>
-        <translation type="unfinished"></translation>
+        <translation>システムトレイアイコンに対するアクションが不明です！</translation>
     </message>
     <message>
         <location filename="../../../SystrayIcon.cpp" line="444"/>
         <source>&amp;About/Debug report</source>
-        <translation type="unfinished"></translation>
+        <translation>Ultracopier ついて/デバッグレポート(&amp;A)</translation>
     </message>
     <message>
         <location filename="../../../SystrayIcon.cpp" line="446"/>
         <source>&amp;About</source>
-        <translation type="unfinished"></translation>
+        <translation>Ultracopier について(&amp;A)</translation>
     </message>
     <message>
         <location filename="../../../SystrayIcon.cpp" line="449"/>
         <source>&amp;Save bug report</source>
-        <translation type="unfinished"></translation>
+        <translation>バグレポートを保存(&amp;S)</translation>
     </message>
     <message>
         <location filename="../../../SystrayIcon.cpp" line="451"/>
         <source>&amp;Quit</source>
-        <translation type="unfinished"></translation>
+        <translation>終了(&amp;Q)</translation>
     </message>
     <message>
         <location filename="../../../SystrayIcon.cpp" line="452"/>
         <source>&amp;Options</source>
-        <translation type="unfinished"></translation>
+        <translation>オプション(&amp;O)</translation>
     </message>
     <message>
         <location filename="../../../SystrayIcon.cpp" line="453"/>
         <source>&amp;Register product key</source>
-        <translation type="unfinished"></translation>
+        <translation>プロダクトキーを登録(&amp;R)</translation>
     </message>
     <message>
         <location filename="../../../SystrayIcon.cpp" line="491"/>
         <source>New version: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>新しいバージョン: %1</translation>
     </message>
     <message>
         <location filename="../../../SystrayIcon.cpp" line="491"/>
         <source>Go to the download page:</source>
-        <translation type="unfinished"></translation>
+        <translation>ダウンロードページへ移動:</translation>
     </message>
     <message>
         <location filename="../../../SystrayIcon.cpp" line="518"/>
         <source>A&amp;dd copy/moving</source>
-        <translation type="unfinished"></translation>
+        <translation>コピー/移動を追加(&amp;D)</translation>
     </message>
     <message>
         <location filename="../../../SystrayIcon.cpp" line="544"/>
         <source>Add &amp;copy</source>
-        <translation type="unfinished"></translation>
+        <translation>コピーを追加(&amp;C)</translation>
     </message>
     <message>
         <location filename="../../../SystrayIcon.cpp" line="545"/>
         <source>Add &amp;transfer</source>
-        <translation type="unfinished"></translation>
+        <translation>転送を追加(&amp;T)</translation>
     </message>
     <message>
         <location filename="../../../SystrayIcon.cpp" line="546"/>
         <source>Add &amp;move</source>
-        <translation type="unfinished"></translation>
+        <translation>移動を追加(&amp;M)</translation>
     </message>
     <message>
         <location filename="../../../SystrayIcon.cpp" line="582"/>
         <source>You have illegal key, we will start legal procedure shortly</source>
-        <translation type="unfinished"></translation>
+        <translation>不正なキーが検出されました。まもなく法的措置を開始します</translation>
     </message>
 </context>
 <context>
@@ -2159,66 +2157,66 @@ Error:%2</source>
         <location filename="../../Themes/Oxygen/interface.cpp" line="359"/>
         <location filename="../../Themes/Oxygen/interface.cpp" line="365"/>
         <source>Buy the Ultimate version to fund development</source>
-        <translation type="unfinished"></translation>
+        <translation>開発を支援するため、Ultimate版の購入をご検討ください</translation>
     </message>
     <message>
         <location filename="../../Themes/Oxygen/interface.cpp" line="363"/>
         <source>Ultimate version have more performance via OS native copy</source>
-        <translation type="unfinished"></translation>
+        <translation>Ultimate版はOSネイティブコピーにより、より高いパフォーマンスを発揮します</translation>
     </message>
     <message>
         <location filename="../../Themes/Oxygen/interface.cpp" line="370"/>
         <source>Register your key</source>
-        <translation type="unfinished"></translation>
+        <translation>キーを登録する</translation>
     </message>
     <message>
         <location filename="../../Themes/Oxygen/interface.cpp" line="470"/>
         <source>File %1/%2, size: %3/%4</source>
-        <translation type="unfinished"></translation>
+        <translation>ファイル %1/%2, サイズ: %3/%4</translation>
     </message>
     <message>
         <location filename="../../Themes/Oxygen/interface.cpp" line="712"/>
         <source>Copy list</source>
-        <translation type="unfinished"></translation>
+        <translation>コピーリスト</translation>
     </message>
     <message>
         <location filename="../../Themes/Oxygen/interface.cpp" line="714"/>
         <source>Move list</source>
-        <translation type="unfinished"></translation>
+        <translation>移動リスト</translation>
     </message>
     <message>
         <location filename="../../Themes/Oxygen/interface.cpp" line="1155"/>
         <source>Don&apos;t close if errors are found</source>
-        <translation type="unfinished"></translation>
+        <translation>エラーが発生した場合は閉じない</translation>
     </message>
     <message>
         <location filename="../../Themes/Oxygen/interface.cpp" line="1156"/>
         <source>Never close</source>
-        <translation type="unfinished"></translation>
+        <translation>閉じない</translation>
     </message>
     <message>
         <location filename="../../Themes/Oxygen/interface.cpp" line="1157"/>
         <source>Always close</source>
-        <translation type="unfinished"></translation>
+        <translation>常に閉じる</translation>
     </message>
     <message>
         <location filename="../../Themes/Oxygen/interface.cpp" line="1159"/>
         <source>File Name, 0KB</source>
-        <translation type="unfinished"></translation>
+        <translation>ファイル名, 0KB</translation>
     </message>
     <message>
         <location filename="../../Themes/Oxygen/interface.cpp" line="1434"/>
         <location filename="../../Themes/Oxygen/interface.cpp" line="1446"/>
         <location filename="../../Themes/Oxygen/interface.cpp" line="1458"/>
         <source>Select a color</source>
-        <translation type="unfinished"></translation>
+        <translation>色を選択</translation>
     </message>
     <message>
         <location filename="../../Themes/Oxygen/interface.cpp" line="1533"/>
         <location filename="../../Themes/Oxygen/interface.cpp" line="1537"/>
         <location filename="../../Themes/Oxygen/interface.cpp" line="1539"/>
         <source>%1 %2% of %3</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 %2% / %3</translation>
     </message>
 </context>
 <context>
@@ -2226,24 +2224,24 @@ Error:%2</source>
     <message>
         <location filename="../../Themes/Oxygen/ThemesFactory.cpp" line="309"/>
         <source>Don&apos;t close if errors are found</source>
-        <translation type="unfinished"></translation>
+        <translation>エラーが発生した場合は閉じない</translation>
     </message>
     <message>
         <location filename="../../Themes/Oxygen/ThemesFactory.cpp" line="310"/>
         <source>Never close</source>
-        <translation type="unfinished"></translation>
+        <translation>閉じない</translation>
     </message>
     <message>
         <location filename="../../Themes/Oxygen/ThemesFactory.cpp" line="311"/>
         <source>Always close</source>
-        <translation type="unfinished"></translation>
+        <translation>常に閉じる</translation>
     </message>
     <message>
         <location filename="../../Themes/Oxygen/ThemesFactory.cpp" line="525"/>
         <location filename="../../Themes/Oxygen/ThemesFactory.cpp" line="540"/>
         <location filename="../../Themes/Oxygen/ThemesFactory.cpp" line="555"/>
         <source>Select a color</source>
-        <translation type="unfinished"></translation>
+        <translation>色を選択</translation>
     </message>
 </context>
 <context>
@@ -2251,29 +2249,29 @@ Error:%2</source>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/TransferThread.cpp" line="188"/>
         <source>Try rename with using special characters</source>
-        <translation type="unfinished"></translation>
+        <translation>特殊文字を使用して名前変更を試行</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/TransferThread.cpp" line="628"/>
         <source>%name% - copy%suffix%</source>
-        <translation type="unfinished"></translation>
+        <translation>%name% - コピー%suffix%</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/TransferThread.cpp" line="635"/>
         <source>%name% - copy (%number%)%suffix%</source>
-        <translation type="unfinished"></translation>
+        <translation>%name% - コピー (%number%)%suffix%</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/TransferThread.cpp" line="663"/>
         <location filename="../../CopyEngine/Ultracopier-Spec/TransferThread.cpp" line="904"/>
         <source>File not found</source>
-        <translation type="unfinished"></translation>
+        <translation>ファイルが見つかりません</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/TransferThread.cpp" line="904"/>
         <location filename="../../CopyEngine/Ultracopier-Spec/TransferThread.cpp" line="940"/>
         <source>Unable to change the date</source>
-        <translation type="unfinished"></translation>
+        <translation>日付を変更できません</translation>
     </message>
 </context>
 <context>
@@ -2281,19 +2279,19 @@ Error:%2</source>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/async/TransferThreadAsync.cpp" line="342"/>
         <source>Wrong modification date or unable to get it, you can disable time transfer to do it</source>
-        <translation type="unfinished"></translation>
+        <translation>更新日時が正しくないか、取得できません。タイムスタンプの転送を無効にして実行することも可能です</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/async/TransferThreadAsync.cpp" line="436"/>
         <location filename="../../CopyEngine/Ultracopier-Spec/async/TransferThreadAsync.cpp" line="454"/>
         <source>Unable to create the destination folder: </source>
-        <translation type="unfinished"></translation>
+        <translation>転送先フォルダーを作成できません: </translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/async/TransferThreadAsync.cpp" line="439"/>
         <location filename="../../CopyEngine/Ultracopier-Spec/async/TransferThreadAsync.cpp" line="456"/>
         <source>Unable to create the destination folder, errno: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>転送先フォルダーを作成できません（エラー番号: %1）</translation>
     </message>
 </context>
 <context>
@@ -2301,24 +2299,24 @@ Error:%2</source>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/async/WriteThread.cpp" line="138"/>
         <source>Path resolution error (Empty path)</source>
-        <translation type="unfinished"></translation>
+        <translation>パス解決エラー (パスが空です)</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/async/WriteThread.cpp" line="167"/>
         <location filename="../../CopyEngine/Ultracopier-Spec/async/WriteThread.cpp" line="200"/>
         <source>Unable to create the destination folder: </source>
-        <translation type="unfinished"></translation>
+        <translation>転送先フォルダーを作成できません: </translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/async/WriteThread.cpp" line="178"/>
         <location filename="../../CopyEngine/Ultracopier-Spec/async/WriteThread.cpp" line="202"/>
         <source>Unable to create the destination folder, errno: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>転送先フォルダーを作成できません (エラー番号: %1)</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/async/WriteThread.cpp" line="464"/>
         <source>Internal error, please report it!</source>
-        <translation type="unfinished"></translation>
+        <translation>内部エラーが発生しました。報告をお願いします!</translation>
     </message>
 </context>
 <context>
@@ -2326,178 +2324,178 @@ Error:%2</source>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/copyEngineOptions.ui" line="44"/>
         <source>Transfer</source>
-        <translation type="unfinished"></translation>
+        <translation>転送</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/copyEngineOptions.ui" line="50"/>
         <source>Checksum</source>
-        <translation type="unfinished"></translation>
+        <translation>チェックサム</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/copyEngineOptions.ui" line="63"/>
         <source>Auto start</source>
-        <translation type="unfinished"></translation>
+        <translation>自動開始</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/copyEngineOptions.ui" line="91"/>
         <source>Keep the file date</source>
-        <translation type="unfinished"></translation>
+        <translation>ファイルのタイムスタンプを維持する</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/copyEngineOptions.ui" line="98"/>
         <source>Move the whole folder</source>
-        <translation type="unfinished"></translation>
+        <translation>フォルダーごと移動する</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/copyEngineOptions.ui" line="115"/>
         <source>Create full path if not exists</source>
-        <translation type="unfinished"></translation>
+        <translation>存在しない場合はフルパスを作成する</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/copyEngineOptions.ui" line="138"/>
         <source>Transfer the file rights</source>
-        <translation type="unfinished"></translation>
+        <translation>ファイルの権限を継承する</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/copyEngineOptions.ui" line="152"/>
         <source>Ignore blacklist (generate lot of problem)</source>
-        <translation type="unfinished"></translation>
+        <translation>ブラックリストを無視する (トラブルの原因になります)</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/copyEngineOptions.ui" line="168"/>
         <source>Error and collision</source>
-        <translation type="unfinished"></translation>
+        <translation>エラーと競合</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/copyEngineOptions.ui" line="174"/>
         <source>When folder error</source>
-        <translation type="unfinished"></translation>
+        <translation>フォルダーエラー時の処理</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/copyEngineOptions.ui" line="184"/>
         <source>When file error</source>
-        <translation type="unfinished"></translation>
+        <translation>ファイルエラー時の処理</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/copyEngineOptions.ui" line="210"/>
         <source>When file collision</source>
-        <translation type="unfinished"></translation>
+        <translation>ファイル競合時の処理</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/copyEngineOptions.ui" line="253"/>
         <source>Overwrite if not same size</source>
-        <translation type="unfinished"></translation>
+        <translation>サイズが異なる場合は上書き</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/copyEngineOptions.ui" line="258"/>
         <source>Overwrite if modification date differs</source>
-        <translation type="unfinished"></translation>
+        <translation>更新日時が異なる場合は上書き</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/copyEngineOptions.ui" line="280"/>
         <source>When folder collision</source>
-        <translation type="unfinished"></translation>
+        <translation>フォルダー競合時の処理</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/copyEngineOptions.ui" line="311"/>
         <source>Check if destination folder exists</source>
-        <translation type="unfinished"></translation>
+        <translation>転送先フォルダーの存在を確認する</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/copyEngineOptions.ui" line="318"/>
         <source>Renaming rules</source>
-        <translation type="unfinished"></translation>
+        <translation>名前変更ルール</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/copyEngineOptions.ui" line="338"/>
         <source>Delete partially transferred files</source>
-        <translation type="unfinished"></translation>
+        <translation>転送が中断されたファイルを削除する</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/copyEngineOptions.ui" line="351"/>
         <source>Rename the original destination</source>
-        <translation type="unfinished"></translation>
+        <translation>転送先の元のファイル名を変更する</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/copyEngineOptions.ui" line="382"/>
         <source>Performance</source>
-        <translation type="unfinished"></translation>
+        <translation>パフォーマンス</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/copyEngineOptions.ui" line="388"/>
         <source>Inode threads</source>
-        <translation type="unfinished"></translation>
+        <translation>Inodeスレッド数</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/copyEngineOptions.ui" line="421"/>
         <location filename="../../CopyEngine/Ultracopier-Spec/copyEngineOptions.ui" line="491"/>
         <source>MB</source>
-        <translation type="unfinished"></translation>
+        <translation>MB</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/copyEngineOptions.ui" line="437"/>
         <source>Ultimate</source>
-        <translation type="unfinished"></translation>
+        <translation>Ultimate</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/copyEngineOptions.ui" line="443"/>
         <source>OS native copy (disable speed limitation/pause)</source>
-        <translation type="unfinished"></translation>
+        <translation>OSネイティブコピー (速度制限/一時停止は無効になります)</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/copyEngineOptions.ui" line="467"/>
         <source>Uncheck this under Windows create problem</source>
-        <translation type="unfinished"></translation>
+        <translation>Windowsではこのチェックを外すと問題が発生することがあります</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/copyEngineOptions.ui" line="477"/>
         <source>OS Buffer</source>
-        <translation type="unfinished"></translation>
+        <translation>OSバッファー</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/copyEngineOptions.ui" line="484"/>
         <source>OS Flags</source>
-        <translation type="unfinished"></translation>
+        <translation>OSフラグ</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/copyEngineOptions.ui" line="507"/>
         <source>Disable parallel transfer when are different devices</source>
-        <translation type="unfinished"></translation>
+        <translation>異なるデバイス間での並列転送を無効にする</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/copyEngineOptions.ui" line="460"/>
         <source>Buffer for different device</source>
-        <translation type="unfinished"></translation>
+        <translation>別デバイス用のバッファー</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/copyEngineOptions.ui" line="514"/>
         <source>Buffer for same device</source>
-        <translation type="unfinished"></translation>
+        <translation>同一デバイス用のバッファー</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/copyEngineOptions.ui" line="537"/>
         <source>Misc</source>
-        <translation type="unfinished"></translation>
+        <translation>その他</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/copyEngineOptions.ui" line="543"/>
         <source>Check the disk space</source>
-        <translation type="unfinished"></translation>
+        <translation>ディスク空き容量を確認する</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/copyEngineOptions.ui" line="553"/>
         <source>Use this folder when destination is not set</source>
-        <translation type="unfinished"></translation>
+        <translation>転送先が未設定の場合に使用するフォルダー</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/copyEngineOptions.ui" line="565"/>
         <source>Browse</source>
-        <translation type="unfinished"></translation>
+        <translation>参照</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/copyEngineOptions.ui" line="587"/>
         <source>Filters</source>
-        <translation type="unfinished"></translation>
+        <translation>フィルター</translation>
     </message>
 </context>
 <context>
@@ -2505,67 +2503,67 @@ Error:%2</source>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/fileErrorDialog.ui" line="14"/>
         <source>Error with file</source>
-        <translation type="unfinished"></translation>
+        <translation>ファイルエラー</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/fileErrorDialog.ui" line="20"/>
         <source>Error</source>
-        <translation type="unfinished"></translation>
+        <translation>エラー</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/fileErrorDialog.ui" line="59"/>
         <source>Size</source>
-        <translation type="unfinished"></translation>
+        <translation>サイズ</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/fileErrorDialog.ui" line="76"/>
         <source>Modified</source>
-        <translation type="unfinished"></translation>
+        <translation>更新日時</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/fileErrorDialog.ui" line="93"/>
         <source>File name</source>
-        <translation type="unfinished"></translation>
+        <translation>ファイル名</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/fileErrorDialog.ui" line="110"/>
         <source>Destination</source>
-        <translation type="unfinished"></translation>
+        <translation>転送先</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/fileErrorDialog.ui" line="127"/>
         <source>Folder</source>
-        <translation type="unfinished"></translation>
+        <translation>フォルダー</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/fileErrorDialog.ui" line="173"/>
         <source>&amp;Always perform this action</source>
-        <translation type="unfinished"></translation>
+        <translation>常にこの操作を行う(&amp;A)</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/fileErrorDialog.ui" line="193"/>
         <source>Try in with elevated privileges</source>
-        <translation type="unfinished"></translation>
+        <translation>管理者権限で再試行</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/fileErrorDialog.ui" line="200"/>
         <source>Put to bottom</source>
-        <translation type="unfinished"></translation>
+        <translation>リストの最後へ</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/fileErrorDialog.ui" line="207"/>
         <source>Retry</source>
-        <translation type="unfinished"></translation>
+        <translation>再試行</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/fileErrorDialog.ui" line="214"/>
         <source>&amp;Skip</source>
-        <translation type="unfinished"></translation>
+        <translation>スキップ(&amp;S)</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/fileErrorDialog.ui" line="221"/>
         <source>&amp;Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>キャンセル(&amp;C)</translation>
     </message>
 </context>
 <context>
@@ -2573,104 +2571,104 @@ Error:%2</source>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/fileExistsDialog.ui" line="14"/>
         <source>The file exists</source>
-        <translation type="unfinished"></translation>
+        <translation>ファイルが既に存在します</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/fileExistsDialog.ui" line="34"/>
         <source>Source</source>
-        <translation type="unfinished"></translation>
+        <translation>転送元</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/fileExistsDialog.ui" line="50"/>
         <source>Destination</source>
-        <translation type="unfinished"></translation>
+        <translation>転送先</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/fileExistsDialog.ui" line="82"/>
         <location filename="../../CopyEngine/Ultracopier-Spec/fileExistsDialog.ui" line="170"/>
         <source>Size</source>
-        <translation type="unfinished"></translation>
+        <translation>サイズ</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/fileExistsDialog.ui" line="99"/>
         <location filename="../../CopyEngine/Ultracopier-Spec/fileExistsDialog.ui" line="187"/>
         <source>Modified</source>
-        <translation type="unfinished"></translation>
+        <translation>更新日時</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/fileExistsDialog.ui" line="116"/>
         <location filename="../../CopyEngine/Ultracopier-Spec/fileExistsDialog.ui" line="204"/>
         <source>File name</source>
-        <translation type="unfinished"></translation>
+        <translation>ファイル名</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/fileExistsDialog.ui" line="133"/>
         <location filename="../../CopyEngine/Ultracopier-Spec/fileExistsDialog.ui" line="221"/>
         <source>Folder</source>
-        <translation type="unfinished"></translation>
+        <translation>フォルダー</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/fileExistsDialog.ui" line="277"/>
         <source>Suggest new &amp;name</source>
-        <translation type="unfinished"></translation>
+        <translation>新しい名前を提案(&amp;N)</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/fileExistsDialog.ui" line="288"/>
         <source>&amp;Always perform this action</source>
-        <translation type="unfinished"></translation>
+        <translation>常にこの操作を行う(&amp;A)</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/fileExistsDialog.ui" line="308"/>
         <source>&amp;Rename</source>
-        <translation type="unfinished"></translation>
+        <translation>名前変更(&amp;R)</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/fileExistsDialog.ui" line="315"/>
         <source>&amp;Overwrite</source>
-        <translation type="unfinished"></translation>
+        <translation>上書き(&amp;O)</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/fileExistsDialog.ui" line="325"/>
         <source>&amp;Skip</source>
-        <translation type="unfinished"></translation>
+        <translation>スキップ(&amp;S)</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/fileExistsDialog.ui" line="332"/>
         <source>&amp;Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>キャンセル(&amp;C)</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/fileExistsDialog.ui" line="341"/>
         <source>Overwrite if source newer than destination</source>
-        <translation type="unfinished"></translation>
+        <translation>転送元が転送先より新しい場合は上書き</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/fileExistsDialog.ui" line="346"/>
         <location filename="../../CopyEngine/Ultracopier-Spec/fileExistsDialog.ui" line="349"/>
         <source>Overwrite if modification date differs</source>
-        <translation type="unfinished"></translation>
+        <translation>更新日時が異なる場合は上書き</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/fileExistsDialog.ui" line="354"/>
         <source>Overwrite if source older than destination</source>
-        <translation type="unfinished"></translation>
+        <translation>転送元が転送先より古い場合は上書き</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/fileExistsDialog.ui" line="357"/>
         <source>Overwrite if destination older</source>
-        <translation type="unfinished"></translation>
+        <translation>転送先がより古い場合は上書き</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/fileExistsDialog.ui" line="362"/>
         <location filename="../../CopyEngine/Ultracopier-Spec/fileExistsDialog.ui" line="365"/>
         <source>Overwrite if not same size</source>
-        <translation type="unfinished"></translation>
+        <translation>サイズが異なる場合は上書き</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/fileExistsDialog.ui" line="370"/>
         <location filename="../../CopyEngine/Ultracopier-Spec/fileExistsDialog.ui" line="373"/>
         <source>Overwrite if not same size and date</source>
-        <translation type="unfinished"></translation>
+        <translation>サイズと日付のどちらかが異なる場合は上書き</translation>
     </message>
 </context>
 <context>
@@ -2678,52 +2676,52 @@ Error:%2</source>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/fileIsSameDialog.ui" line="14"/>
         <source>The source and destination are same</source>
-        <translation type="unfinished"></translation>
+        <translation>転送元と転送先が同一です</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/fileIsSameDialog.ui" line="40"/>
         <source>Size</source>
-        <translation type="unfinished"></translation>
+        <translation>サイズ</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/fileIsSameDialog.ui" line="70"/>
         <source>File name</source>
-        <translation type="unfinished"></translation>
+        <translation>ファイル名</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/fileIsSameDialog.ui" line="90"/>
         <source>Folder</source>
-        <translation type="unfinished"></translation>
+        <translation>フォルダー</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/fileIsSameDialog.ui" line="110"/>
         <source>Modified</source>
-        <translation type="unfinished"></translation>
+        <translation>更新日時</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/fileIsSameDialog.ui" line="159"/>
         <source>Suggest new &amp;name</source>
-        <translation type="unfinished"></translation>
+        <translation>新しい名前を提案(&amp;N)</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/fileIsSameDialog.ui" line="170"/>
         <source>&amp;Always perform this action</source>
-        <translation type="unfinished"></translation>
+        <translation>常にこの操作を行う(&amp;A)</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/fileIsSameDialog.ui" line="190"/>
         <source>&amp;Rename</source>
-        <translation type="unfinished"></translation>
+        <translation>名前変更(&amp;R)</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/fileIsSameDialog.ui" line="197"/>
         <source>&amp;Skip</source>
-        <translation type="unfinished"></translation>
+        <translation>スキップ(&amp;S)</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/fileIsSameDialog.ui" line="204"/>
         <source>&amp;Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>キャンセル(&amp;C)</translation>
     </message>
 </context>
 <context>
@@ -2731,65 +2729,65 @@ Error:%2</source>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/folderExistsDialog.ui" line="14"/>
         <source>The source and destination is identical</source>
-        <translation type="unfinished"></translation>
+        <translation>転送元と転送先が同一です</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/folderExistsDialog.ui" line="34"/>
         <source>Source</source>
-        <translation type="unfinished"></translation>
+        <translation>転送元</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/folderExistsDialog.ui" line="50"/>
         <source>Destination</source>
-        <translation type="unfinished"></translation>
+        <translation>転送先</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/folderExistsDialog.ui" line="82"/>
         <location filename="../../CopyEngine/Ultracopier-Spec/folderExistsDialog.ui" line="150"/>
         <source>Modified</source>
-        <translation type="unfinished"></translation>
+        <translation>更新日時</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/folderExistsDialog.ui" line="99"/>
         <location filename="../../CopyEngine/Ultracopier-Spec/folderExistsDialog.ui" line="160"/>
         <source>Folder name</source>
-        <translation type="unfinished"></translation>
+        <translation>フォルダー名</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/folderExistsDialog.ui" line="116"/>
         <location filename="../../CopyEngine/Ultracopier-Spec/folderExistsDialog.ui" line="184"/>
         <source>Folder</source>
-        <translation type="unfinished"></translation>
+        <translation>フォルダー</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/folderExistsDialog.ui" line="227"/>
         <source>Suggest new &amp;name</source>
-        <translation type="unfinished"></translation>
+        <translation>新しい名前を提案(&amp;N)</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/folderExistsDialog.ui" line="238"/>
         <source>&amp;Always perform this action</source>
-        <translation type="unfinished"></translation>
+        <translation>常にこの操作を行う(&amp;A)</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/folderExistsDialog.ui" line="245"/>
         <source>&amp;Rename</source>
-        <translation type="unfinished"></translation>
+        <translation>名前変更(&amp;R)</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/folderExistsDialog.ui" line="252"/>
         <source>Merge</source>
-        <translation type="unfinished"></translation>
+        <translation>マージ</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/folderExistsDialog.ui" line="259"/>
         <source>Skip</source>
-        <translation type="unfinished"></translation>
+        <translation>スキップ</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/folderExistsDialog.ui" line="266"/>
         <source>&amp;Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>キャンセル(&amp;C)</translation>
     </message>
 </context>
 <context>
@@ -2797,158 +2795,158 @@ Error:%2</source>
     <message>
         <location filename="../../Themes/Oxygen/interface.ui" line="44"/>
         <source>From:</source>
-        <translation type="unfinished"></translation>
+        <translation>転送元:</translation>
     </message>
     <message>
         <location filename="../../Themes/Oxygen/interface.ui" line="74"/>
         <source>To:</source>
-        <translation type="unfinished"></translation>
+        <translation>転送先:</translation>
     </message>
     <message>
         <location filename="../../Themes/Oxygen/interface.ui" line="127"/>
         <source>Close on transfer completion</source>
-        <translation type="unfinished"></translation>
+        <translation>転送完了時に閉じる</translation>
     </message>
     <message>
         <location filename="../../Themes/Oxygen/interface.ui" line="235"/>
         <source>&amp;More</source>
-        <translation type="unfinished"></translation>
+        <translation>詳細(&amp;M)</translation>
     </message>
     <message>
         <location filename="../../Themes/Oxygen/interface.ui" line="255"/>
         <source>&amp;Pause</source>
-        <translation type="unfinished"></translation>
+        <translation>一時停止(&amp;P)</translation>
     </message>
     <message>
         <location filename="../../Themes/Oxygen/interface.ui" line="269"/>
         <source>&amp;Skip</source>
-        <translation type="unfinished"></translation>
+        <translation>スキップ(&amp;S)</translation>
     </message>
     <message>
         <location filename="../../Themes/Oxygen/interface.ui" line="280"/>
         <source>&amp;Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>キャンセル(&amp;C)</translation>
     </message>
     <message>
         <location filename="../../Themes/Oxygen/interface.ui" line="295"/>
         <source>Limit copy speed to:</source>
-        <translation type="unfinished"></translation>
+        <translation>コピー速度を制限:</translation>
     </message>
     <message>
         <location filename="../../Themes/Oxygen/interface.ui" line="338"/>
         <source>Transfer list</source>
-        <translation type="unfinished"></translation>
+        <translation>転送リスト</translation>
     </message>
     <message>
         <location filename="../../Themes/Oxygen/interface.ui" line="361"/>
         <source>Move the selected items to the top</source>
-        <translation type="unfinished"></translation>
+        <translation>選択したアイテムを最上部へ移動</translation>
     </message>
     <message>
         <location filename="../../Themes/Oxygen/interface.ui" line="387"/>
         <source>Move up the selected items</source>
-        <translation type="unfinished"></translation>
+        <translation>選択したアイテムを上へ移動</translation>
     </message>
     <message>
         <location filename="../../Themes/Oxygen/interface.ui" line="413"/>
         <source>Move down the selected items</source>
-        <translation type="unfinished"></translation>
+        <translation>選択したアイテムを下へ移動</translation>
     </message>
     <message>
         <location filename="../../Themes/Oxygen/interface.ui" line="439"/>
         <source>Move the selected items to the bottom</source>
-        <translation type="unfinished"></translation>
+        <translation>選択したアイテムを最下部へ移動</translation>
     </message>
     <message>
         <location filename="../../Themes/Oxygen/interface.ui" line="465"/>
         <source>Add file/folder</source>
-        <translation type="unfinished"></translation>
+        <translation>ファイル/フォルダーを追加</translation>
     </message>
     <message>
         <location filename="../../Themes/Oxygen/interface.ui" line="494"/>
         <source>Delete the selected items</source>
-        <translation type="unfinished"></translation>
+        <translation>選択したアイテムを削除</translation>
     </message>
     <message>
         <location filename="../../Themes/Oxygen/interface.ui" line="520"/>
         <source>Search</source>
-        <translation type="unfinished"></translation>
+        <translation>検索</translation>
     </message>
     <message>
         <location filename="../../Themes/Oxygen/interface.ui" line="549"/>
         <source>Export the transfer list</source>
-        <translation type="unfinished"></translation>
+        <translation>転送リストをエクスポート</translation>
     </message>
     <message>
         <location filename="../../Themes/Oxygen/interface.ui" line="575"/>
         <source>Import the transfer list</source>
-        <translation type="unfinished"></translation>
+        <translation>転送リストをインポート</translation>
     </message>
     <message>
         <location filename="../../Themes/Oxygen/interface.ui" line="630"/>
         <source>Previous</source>
-        <translation type="unfinished"></translation>
+        <translation>前へ</translation>
     </message>
     <message>
         <location filename="../../Themes/Oxygen/interface.ui" line="637"/>
         <source>Next</source>
-        <translation type="unfinished"></translation>
+        <translation>次へ</translation>
     </message>
     <message>
         <location filename="../../Themes/Oxygen/interface.ui" line="672"/>
         <location filename="../../Themes/Oxygen/interface.ui" line="741"/>
         <source>Error</source>
-        <translation type="unfinished"></translation>
+        <translation>エラー</translation>
     </message>
     <message>
         <location filename="../../Themes/Oxygen/interface.ui" line="692"/>
         <source>Export the errors into transfer list</source>
-        <translation type="unfinished"></translation>
+        <translation>エラーを転送リストにエクスポート</translation>
     </message>
     <message>
         <location filename="../../Themes/Oxygen/interface.ui" line="731"/>
         <source>Source</source>
-        <translation type="unfinished"></translation>
+        <translation>転送元</translation>
     </message>
     <message>
         <location filename="../../Themes/Oxygen/interface.ui" line="736"/>
         <source>Destination</source>
-        <translation type="unfinished"></translation>
+        <translation>転送先</translation>
     </message>
     <message>
         <location filename="../../Themes/Oxygen/interface.ui" line="750"/>
         <source>Interface</source>
-        <translation type="unfinished"></translation>
+        <translation>インターフェース</translation>
     </message>
     <message>
         <location filename="../../Themes/Oxygen/interface.ui" line="796"/>
         <source>Add file</source>
-        <translation type="unfinished"></translation>
+        <translation>ファイルを追加</translation>
     </message>
     <message>
         <location filename="../../Themes/Oxygen/interface.ui" line="805"/>
         <source>Add folder</source>
-        <translation type="unfinished"></translation>
+        <translation>フォルダーを追加</translation>
     </message>
     <message>
         <location filename="../../Themes/Oxygen/interface.ui" line="814"/>
         <source>Move file(s)</source>
-        <translation type="unfinished"></translation>
+        <translation>ファイルを移動</translation>
     </message>
     <message>
         <location filename="../../Themes/Oxygen/interface.ui" line="823"/>
         <source>Move folder</source>
-        <translation type="unfinished"></translation>
+        <translation>フォルダーを移動</translation>
     </message>
     <message>
         <location filename="../../Themes/Oxygen/interface.ui" line="832"/>
         <source>Copy file(s)</source>
-        <translation type="unfinished"></translation>
+        <translation>ファイルをコピー</translation>
     </message>
     <message>
         <location filename="../../Themes/Oxygen/interface.ui" line="841"/>
         <source>Copy folder</source>
-        <translation type="unfinished"></translation>
+        <translation>フォルダーをコピー</translation>
     </message>
 </context>
 <context>
@@ -2956,43 +2954,43 @@ Error:%2</source>
     <message>
         <location filename="../../Themes/Oxygen/options.ui" line="23"/>
         <source> KB/s</source>
-        <translation type="unfinished"></translation>
+        <translation> KB/s</translation>
     </message>
     <message>
         <location filename="../../Themes/Oxygen/options.ui" line="55"/>
         <source>Progression color</source>
-        <translation type="unfinished"></translation>
+        <translation>進行状況の色</translation>
     </message>
     <message>
         <location filename="../../Themes/Oxygen/options.ui" line="62"/>
         <location filename="../../Themes/Oxygen/options.ui" line="132"/>
         <source>Limit copy speed at:</source>
-        <translation type="unfinished"></translation>
+        <translation>コピー速度を制限:</translation>
     </message>
     <message>
         <location filename="../../Themes/Oxygen/options.ui" line="85"/>
         <source>Speed with progress bar</source>
-        <translation type="unfinished"></translation>
+        <translation>プログレスバーに速度を表示</translation>
     </message>
     <message>
         <location filename="../../Themes/Oxygen/options.ui" line="92"/>
         <source>Start with the &quot;more button&quot; pushed</source>
-        <translation type="unfinished"></translation>
+        <translation>詳細設定を開いた状態で開始</translation>
     </message>
     <message>
         <location filename="../../Themes/Oxygen/options.ui" line="112"/>
         <source>Show dual progression</source>
-        <translation type="unfinished"></translation>
+        <translation>デュアルプログレスバーを表示</translation>
     </message>
     <message>
         <location filename="../../Themes/Oxygen/options.ui" line="122"/>
         <source>Show speed as main information</source>
-        <translation type="unfinished"></translation>
+        <translation>速度をメイン情報として表示</translation>
     </message>
     <message>
         <location filename="../../Themes/Oxygen/options.ui" line="149"/>
         <source>At the end of the copy: </source>
-        <translation type="unfinished"></translation>
+        <translation>コピー完了時の動作: </translation>
     </message>
 </context>
 <context>
@@ -3000,113 +2998,113 @@ Error:%2</source>
     <message>
         <location filename="../../Themes/Oxygen/themesOptions.ui" line="44"/>
         <source>Use</source>
-        <translation type="unfinished"></translation>
+        <translation>使用</translation>
     </message>
     <message>
         <location filename="../../Themes/Oxygen/themesOptions.ui" line="53"/>
         <source>Start minimized</source>
-        <translation type="unfinished"></translation>
+        <translation>最小化した状態で起動</translation>
     </message>
     <message>
         <location filename="../../Themes/Oxygen/themesOptions.ui" line="67"/>
         <source>Minimize on close to systray</source>
-        <translation type="unfinished"></translation>
+        <translation>閉じる際にシステムトレイへ最小化</translation>
     </message>
     <message>
         <location filename="../../Themes/Oxygen/themesOptions.ui" line="96"/>
         <source>At the end of the copy</source>
-        <translation type="unfinished"></translation>
+        <translation>コピー完了時</translation>
     </message>
     <message>
         <location filename="../../Themes/Oxygen/themesOptions.ui" line="103"/>
         <location filename="../../Themes/Oxygen/themesOptions.ui" line="137"/>
         <source>Limit copy speed to</source>
-        <translation type="unfinished"></translation>
+        <translation>コピー速度を制限</translation>
     </message>
     <message>
         <location filename="../../Themes/Oxygen/themesOptions.ui" line="147"/>
         <source> KB/s</source>
-        <translation type="unfinished"></translation>
+        <translation> KB/s</translation>
     </message>
     <message>
         <location filename="../../Themes/Oxygen/themesOptions.ui" line="173"/>
         <source>Start with the &quot;more button&quot; pushed</source>
-        <translation type="unfinished"></translation>
+        <translation>詳細設定を開いた状態で開始</translation>
     </message>
     <message>
         <location filename="../../Themes/Oxygen/themesOptions.ui" line="183"/>
         <source>Always on top</source>
-        <translation type="unfinished"></translation>
+        <translation>常に手前に表示</translation>
     </message>
     <message>
         <location filename="../../Themes/Oxygen/themesOptions.ui" line="190"/>
         <source>Save position</source>
-        <translation type="unfinished"></translation>
+        <translation>ウィンドウ位置を保存</translation>
     </message>
     <message>
         <location filename="../../Themes/Oxygen/themesOptions.ui" line="213"/>
         <source>Information</source>
-        <translation type="unfinished"></translation>
+        <translation>情報</translation>
     </message>
     <message>
         <location filename="../../Themes/Oxygen/themesOptions.ui" line="235"/>
         <source>Show speed as main information</source>
-        <translation type="unfinished"></translation>
+        <translation>速度をメイン情報として表示</translation>
     </message>
     <message>
         <location filename="../../Themes/Oxygen/themesOptions.ui" line="243"/>
         <source>Done files</source>
-        <translation type="unfinished"></translation>
+        <translation>完了したファイル</translation>
     </message>
     <message>
         <location filename="../../Themes/Oxygen/themesOptions.ui" line="248"/>
         <source>In progress files</source>
-        <translation type="unfinished"></translation>
+        <translation>進行中のファイル</translation>
     </message>
     <message>
         <location filename="../../Themes/Oxygen/themesOptions.ui" line="256"/>
         <source>File progression</source>
-        <translation type="unfinished"></translation>
+        <translation>ファイルの進行状況</translation>
     </message>
     <message>
         <location filename="../../Themes/Oxygen/themesOptions.ui" line="272"/>
         <source>Display</source>
-        <translation type="unfinished"></translation>
+        <translation>表示</translation>
     </message>
     <message>
         <location filename="../../Themes/Oxygen/themesOptions.ui" line="290"/>
         <source>Click to edit the color</source>
-        <translation type="unfinished"></translation>
+        <translation>クリックして色を編集</translation>
     </message>
     <message>
         <location filename="../../Themes/Oxygen/themesOptions.ui" line="389"/>
         <source>Speed with progress bar</source>
-        <translation type="unfinished"></translation>
+        <translation>プログレスバーに速度を表示</translation>
     </message>
     <message>
         <location filename="../../Themes/Oxygen/themesOptions.ui" line="399"/>
         <source>Progression color</source>
-        <translation type="unfinished"></translation>
+        <translation>進行状況の色</translation>
     </message>
     <message>
         <location filename="../../Themes/Oxygen/themesOptions.ui" line="409"/>
         <source>Show progression in the title</source>
-        <translation type="unfinished"></translation>
+        <translation>タイトルバーに進行状況を表示</translation>
     </message>
     <message>
         <location filename="../../Themes/Oxygen/themesOptions.ui" line="416"/>
         <source>General margin</source>
-        <translation type="unfinished"></translation>
+        <translation>全体の余白</translation>
     </message>
     <message>
         <location filename="../../Themes/Oxygen/themesOptions.ui" line="423"/>
         <source>Show dual progression</source>
-        <translation type="unfinished"></translation>
+        <translation>デュアルプログレスバーを表示</translation>
     </message>
     <message>
         <location filename="../../Themes/Oxygen/themesOptions.ui" line="446"/>
         <source>General spacing</source>
-        <translation type="unfinished"></translation>
+        <translation>全体の間隔</translation>
     </message>
 </context>
 </TS>
