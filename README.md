@@ -1,3 +1,5 @@
+![IO Files](docs/Ultracopier-0.3-copy-engine.png)
+
 # About
 
 [Ultracopier](https://ultracopier.herman-brule.com/) is free and open
@@ -39,6 +41,11 @@ make -j$(nproc)
 ./ultracopier
 ```
 
+# Target
+- minimal dependency (searcg dependency hell, bug/security problem in dependency)
+- no bloatware (no stupid features, no features used for only 1 person if imply lot of code or dangerous code, no unrelated features)
+
+
 # Translations
 
 Translations are provided via [Qt Linguist](http://doc.qt.io/qt-6/qtlinguist-index.html).
@@ -51,6 +58,7 @@ Translations are provided via [Qt Linguist](http://doc.qt.io/qt-6/qtlinguist-ind
 
 # Plugins
 
+![plugins structure](docs/Ultracopier-structure-0.2.png)
 Customizations in form of [Plugins](plugins/README.md) are also possible.
 
 
