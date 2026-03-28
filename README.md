@@ -1,4 +1,4 @@
-![IO Files](docs/Ultracopier-0.3-copy-engine.png)
+![Ultracopier process](docs/ultracopier-process.png)
 
 # About
 
@@ -58,7 +58,7 @@ Translations are provided via [Qt Linguist](http://doc.qt.io/qt-6/qtlinguist-ind
 
 # Plugins
 
-![plugins structure](docs/Ultracopier-structure-0.2.png)
+![plugins structure](docs/plugins.png)
 Customizations in form of [Plugins](plugins/README.md) are also possible.
 
 
