@@ -30,6 +30,9 @@
 #define ULTRACOPIER_PLUGIN_CHECKLISTTYPE
 #define ULTRACOPIER_PLUGIN_SPEED_SUPPORT
 
+//Uncomment to use io_uring instead of traditional open/read/write/close with threads (Linux only)
+//#define ULTRACOPIER_PLUGIN_IO_URING
+
 //#define ULTRACOPIER_PLUGIN_RIGHTS
 
 /** \brief Need be greater than 2, but greater than 20 to be efficient */

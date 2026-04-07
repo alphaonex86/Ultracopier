@@ -4,6 +4,7 @@ mac:QMAKE_CXXFLAGS+="-stdlib=libc++"
 
 QT += widgets xml
 DEFINES += _FILE_OFFSET_BITS=64 UNICODE _UNICODE _LARGE_FILE_SOURCE=1
+linux:DEFINES += ULTRACOPIER_PLUGIN_IO_URING
 TEMPLATE        = lib
 CONFIG         += plugin
 
@@ -31,9 +32,7 @@ HEADERS         += \
     $$PWD/FileIsSameDialog.h \
     $$PWD/FolderExistsDialog.h \
     $$PWD/ScanFileOrFolder.h \
-    $$PWD/DiskSpace.h \
-    async/ReadThread.h \
-    async/WriteThread.h
+    $$PWD/DiskSpace.h
 SOURCES         += \
     $$PWD/TransferThread.cpp \
     $$PWD/MkPath.cpp \
@@ -61,9 +60,7 @@ SOURCES         += \
     ListThreadNew.cpp \
     ListThreadOptions.cpp \
     ListThreadScan.cpp \
-    ListThreadStat.cpp \
-    async/ReadThread.cpp \
-    async/WriteThread.cpp
+    ListThreadStat.cpp
 TARGET          = $$qtLibraryTarget(copyEngine)
 TRANSLATIONS += \
     $$PWD/Languages/ar/translation.ts \
@@ -111,5 +108,16 @@ win32 {
     LIBS += -ladvapi32
     DEFINES += WIDESTRING
 }
-HEADERS         += $$PWD/async/TransferThreadAsync.h
-SOURCES         += $$PWD/async/TransferThreadAsync.cpp
+
+contains(DEFINES, ULTRACOPIER_PLUGIN_IO_URING) {
+    HEADERS += $$PWD/uring/TransferThreadUring.h
+    SOURCES += $$PWD/uring/TransferThreadUring.cpp
+    LIBS += -luring
+} else {
+    HEADERS += $$PWD/async/ReadThread.h \
+               $$PWD/async/WriteThread.h \
+               $$PWD/async/TransferThreadAsync.h
+    SOURCES += $$PWD/async/ReadThread.cpp \
+               $$PWD/async/WriteThread.cpp \
+               $$PWD/async/TransferThreadAsync.cpp
+}

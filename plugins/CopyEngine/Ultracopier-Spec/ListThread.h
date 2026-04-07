@@ -23,7 +23,13 @@
 #include "MkPath.h"
 #include "Environment.h"
 #include "DriveManagement.h"
+#ifdef ULTRACOPIER_PLUGIN_IO_URING
+#include "uring/TransferThreadUring.h"
+typedef TransferThreadUring TransferThreadImpl;
+#else
 #include "async/TransferThreadAsync.h"
+typedef TransferThreadAsync TransferThreadImpl;
+#endif
 
 /// \brief Define the list thread, and management to the action to do
 class ListThread : public QThread
@@ -185,7 +191,7 @@ public slots:
     void doNewActions_inode_manipulation();
     /// \brief restart transfer if it can
     void restartTransferIfItCan();
-    void getNeedPutAtBottom(const INTERNALTYPEPATH &fileInfo, const std::string &errorString, TransferThreadAsync *thread, const ErrorType &errorType);
+    void getNeedPutAtBottom(const INTERNALTYPEPATH &fileInfo, const std::string &errorString, TransferThreadImpl *thread, const ErrorType &errorType);
 
     /// \brief update the transfer stat
     void newTransferStat(const TransferStat &stat,const quint64 &id);
@@ -215,7 +221,11 @@ private:
     std::vector<std::string> debug_threadWas;
     #endif
     //can't be static into WriteThread, linked by instance then by ListThread
+    #ifdef ULTRACOPIER_PLUGIN_IO_URING
+    QMultiHash<QString,TransferThreadImpl *> *writeFileList;
+    #else
     QMultiHash<QString,WriteThread *> *writeFileList;
+    #endif
     QMutex       *writeFileListMutex;
 
     QSemaphore          mkpathTransfer;
@@ -230,7 +240,7 @@ private:
     bool                stopIt;
     std::vector<ScanFileOrFolder *> scanFileOrFolderThreadsPool;
     int                 numberOfTransferIntoToDoList;
-    std::vector<TransferThreadAsync *>		transferThreadList;
+    std::vector<TransferThreadImpl *>		transferThreadList;
     ScanFileOrFolder *		newScanThread(Ultracopier::CopyMode mode);
     uint64_t				bytesToTransfer;
     uint64_t				bytesTransfered;
@@ -252,7 +262,7 @@ private:
     bool                buffer;
     bool                followTheStrictOrder;
     bool                ignoreBlackList;
-    std::unordered_set<TransferThreadAsync *> putAtBottomAfterError;
+    std::unordered_set<TransferThreadImpl *> putAtBottomAfterError;
     std::unordered_map<std::string,uint64_t> requiredSpace;
     std::vector<std::pair<uint64_t,uint32_t> > timeToTransfer;
     //unsigned int        putAtBottom;//why here? more correct into CopyEngine(), then translated to CopyEngine
@@ -393,7 +403,7 @@ signals:
 
     //when can be deleted
     void canBeDeleted() const;
-    void haveNeedPutAtBottom(bool needPutAtBottom,const INTERNALTYPEPATH &fileInfo,const std::string &errorString,TransferThreadAsync * thread,const ErrorType &errorType) const;
+    void haveNeedPutAtBottom(bool needPutAtBottom,const INTERNALTYPEPATH &fileInfo,const std::string &errorString,TransferThreadImpl * thread,const ErrorType &errorType) const;
 
     //send error occurred
     void error(const std::string &path,const uint64_t &size,const uint64_t &mtime,const std::string &error) const;
@@ -411,9 +421,9 @@ signals:
 
     //other signal
     /// \note Can be call without queue because all call will be serialized
-    void send_fileAlreadyExists(const INTERNALTYPEPATH &source,const INTERNALTYPEPATH &destination,const bool &isSame,TransferThreadAsync * thread) const;
+    void send_fileAlreadyExists(const INTERNALTYPEPATH &source,const INTERNALTYPEPATH &destination,const bool &isSame,TransferThreadImpl * thread) const;
     /// \note Can be call without queue because all call will be serialized
-    void send_errorOnFile(const INTERNALTYPEPATH &fileInfo,const std::string &errorString,TransferThreadAsync * thread, const ErrorType &errorType) const;
+    void send_errorOnFile(const INTERNALTYPEPATH &fileInfo,const std::string &errorString,TransferThreadImpl * thread, const ErrorType &errorType) const;
     /// \note Can be call without queue because all call will be serialized
     void send_folderAlreadyExists(const INTERNALTYPEPATH &source,const INTERNALTYPEPATH &destination,const bool &isSame,ScanFileOrFolder * thread) const;
     /// \note Can be call without queue because all call will be serialized

@@ -3,7 +3,7 @@
 #include <QtGlobal>
 #include "../../../cpp11addition.h"
 
-#include "async/TransferThreadAsync.h"
+// TransferThreadImpl typedef comes from ListThread.h
 
 //warning the first entry is accessible will copy
 void ListThread::removeItems(const std::vector<uint64_t> &ids)

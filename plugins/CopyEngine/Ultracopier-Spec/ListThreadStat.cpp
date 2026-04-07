@@ -3,7 +3,7 @@
 #include <QtGlobal>
 #include "../../../cpp11addition.h"
 
-#include "async/TransferThreadAsync.h"
+// TransferThreadImpl typedef comes from ListThread.h
 
 /// \brief update the transfer stat
 void ListThread::newTransferStat(const TransferStat &stat,const quint64 &id)
@@ -140,7 +140,7 @@ void ListThread::sendProgression()
     const int &loop_size=transferThreadList.size();
     while(int_for_loop<loop_size)
     {
-        TransferThreadAsync * temp_transfer_thread=transferThreadList.at(int_for_loop);
+        TransferThreadImpl * temp_transfer_thread=transferThreadList.at(int_for_loop);
         switch(temp_transfer_thread->getStat())
         {
             case TransferStat_Transfer:
@@ -209,7 +209,7 @@ void ListThread::sendProgression()
             const int &loop_size=transferThreadList.size();
             while(int_for_loop<loop_size)
             {
-                TransferThreadAsync * temp_transfer_thread=transferThreadList.at(int_for_loop);
+                TransferThreadImpl * temp_transfer_thread=transferThreadList.at(int_for_loop);
                 switch(temp_transfer_thread->getStat())
                 {
                     case TransferStat_Transfer:
@@ -240,7 +240,7 @@ void ListThread::sendProgression()
         const int &loop_size=transferThreadList.size();
         while(int_for_loop<loop_size)
         {
-            TransferThreadAsync * temp_transfer_thread=transferThreadList.at(int_for_loop);
+            TransferThreadImpl * temp_transfer_thread=transferThreadList.at(int_for_loop);
             switch(temp_transfer_thread->getStat())
             {
                 case TransferStat_Transfer:

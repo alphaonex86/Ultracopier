@@ -8,13 +8,13 @@
 
 //dialog message
 /// \note Can be call without queue because all call will be serialized
-void CopyEngine::fileAlreadyExistsSlot(INTERNALTYPEPATH source,INTERNALTYPEPATH destination,bool isSame,TransferThreadAsync * thread)
+void CopyEngine::fileAlreadyExistsSlot(INTERNALTYPEPATH source,INTERNALTYPEPATH destination,bool isSame,TransferThreadImpl * thread)
 {
     fileAlreadyExists(source,destination,isSame,thread);
 }
 
 /// \note Can be call without queue because all call will be serialized
-void CopyEngine::errorOnFileSlot(INTERNALTYPEPATH fileInfo,std::string errorString,TransferThreadAsync * thread,const ErrorType &errorType)
+void CopyEngine::errorOnFileSlot(INTERNALTYPEPATH fileInfo,std::string errorString,TransferThreadImpl * thread,const ErrorType &errorType)
 {
     errorOnFile(fileInfo,errorString,thread,errorType);
 }
@@ -38,7 +38,7 @@ void CopyEngine::mkPathErrorOnFolderSlot(INTERNALTYPEPATH folder,std::string err
 }
 
 /// \note Can be call without queue because all call will be serialized
-void CopyEngine::fileAlreadyExists(INTERNALTYPEPATH source,INTERNALTYPEPATH destination,bool isSame,TransferThreadAsync * thread)
+void CopyEngine::fileAlreadyExists(INTERNALTYPEPATH source,INTERNALTYPEPATH destination,bool isSame,TransferThreadImpl * thread)
 {
     if(stopIt)
         return;
@@ -214,7 +214,7 @@ void CopyEngine::fileAlreadyExists(INTERNALTYPEPATH source,INTERNALTYPEPATH dest
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"stop");
 }
 
-void CopyEngine::haveNeedPutAtBottom(bool needPutAtBottom, const INTERNALTYPEPATH &fileInfo, const std::string &errorString,TransferThreadAsync *thread,const ErrorType &errorType)
+void CopyEngine::haveNeedPutAtBottom(bool needPutAtBottom, const INTERNALTYPEPATH &fileInfo, const std::string &errorString,TransferThreadImpl *thread,const ErrorType &errorType)
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
     if(!needPutAtBottom)
@@ -251,7 +251,7 @@ void CopyEngine::missingDiskSpace(std::vector<Diskspace> list)
 }
 
 /// \note Can be call without queue because all call will be serialized
-void CopyEngine::errorOnFile(INTERNALTYPEPATH fileInfo, std::string errorString, TransferThreadAsync * thread, const ErrorType &errorType)
+void CopyEngine::errorOnFile(INTERNALTYPEPATH fileInfo, std::string errorString, TransferThreadImpl * thread, const ErrorType &errorType)
 {
     if(stopIt)
         return;

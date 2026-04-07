@@ -1,5 +1,6 @@
 DEFINES += ULTRACOPIER_PLUGIN_ALL_IN_ONE
 DEFINES += ULTRACOPIER_DEBUG ULTRACOPIER_PLUGIN_DEBUG ULTRACOPIER_PLUGIN_DEBUG_WINDOW
+#linux:DEFINES += ULTRACOPIER_PLUGIN_IO_URING
 
 include(other-pro/ultracopier-core.pro)
 
@@ -69,8 +70,6 @@ HEADERS += \
     $$PWD/plugins/CopyEngine/Ultracopier-Spec/StructEnumDefinition.h \
     $$PWD/plugins/CopyEngine/Ultracopier-Spec/TransferThread.h \
     $$PWD/plugins/CopyEngine/Ultracopier-Spec/CopyEngineUltracopier-SpecVariable.h \
-    $$PWD/plugins/CopyEngine/Ultracopier-Spec/async/ReadThread.h \
-    $$PWD/plugins/CopyEngine/Ultracopier-Spec/async/WriteThread.h \
     $$PWD/plugins/Listener/catchcopy-v0002/Listenercatchcopy-v0002Variable.h \
     $$PWD/plugins/Listener/catchcopy-v0002/StructEnumDefinition.h \
     $$PWD/plugins/Listener/catchcopy-v0002/listener.h \
@@ -114,8 +113,6 @@ SOURCES += \
     $$PWD/plugins/CopyEngine/Ultracopier-Spec/ListThreadOptions.cpp \
     $$PWD/plugins/CopyEngine/Ultracopier-Spec/ListThreadScan.cpp \
     $$PWD/plugins/CopyEngine/Ultracopier-Spec/ListThreadStat.cpp \
-    $$PWD/plugins/CopyEngine/Ultracopier-Spec/async/ReadThread.cpp \
-    $$PWD/plugins/CopyEngine/Ultracopier-Spec/async/WriteThread.cpp \
     $$PWD/plugins/Listener/catchcopy-v0002/listener.cpp \
     $$PWD/plugins/Listener/catchcopy-v0002/catchcopy-api-0002/ClientCatchcopy.cpp \
     $$PWD/plugins/Listener/catchcopy-v0002/catchcopy-api-0002/ExtraSocketCatchcopy.cpp \
@@ -123,6 +120,19 @@ SOURCES += \
     $$PWD/plugins/Themes/Oxygen/interface.cpp \
     $$PWD/plugins/Themes/Oxygen/ThemesFactory.cpp \
     $$PWD/plugins/Themes/Oxygen/TransferModel.cpp
+
+contains(DEFINES, ULTRACOPIER_PLUGIN_IO_URING) {
+    HEADERS += $$PWD/plugins/CopyEngine/Ultracopier-Spec/uring/TransferThreadUring.h
+    SOURCES += $$PWD/plugins/CopyEngine/Ultracopier-Spec/uring/TransferThreadUring.cpp
+    LIBS += -luring
+} else {
+    HEADERS += $$PWD/plugins/CopyEngine/Ultracopier-Spec/async/ReadThread.h \
+               $$PWD/plugins/CopyEngine/Ultracopier-Spec/async/WriteThread.h \
+               $$PWD/plugins/CopyEngine/Ultracopier-Spec/async/TransferThreadAsync.h
+    SOURCES += $$PWD/plugins/CopyEngine/Ultracopier-Spec/async/ReadThread.cpp \
+               $$PWD/plugins/CopyEngine/Ultracopier-Spec/async/WriteThread.cpp \
+               $$PWD/plugins/CopyEngine/Ultracopier-Spec/async/TransferThreadAsync.cpp
+}
 
 win32 {
     RESOURCES -= $$PWD/resources/resources-windows-qt-plugin.qrc
@@ -142,6 +152,3 @@ win32 {
     LIBS += -lole32 -lshell32
 }
 
-#temp
-HEADERS += $$PWD/plugins/CopyEngine/Ultracopier-Spec/async/TransferThreadAsync.h
-SOURCES += $$PWD/plugins/CopyEngine/Ultracopier-Spec/async/TransferThreadAsync.cpp

@@ -2,7 +2,7 @@
 #include <QStorageInfo>
 #include <QtGlobal>
 #include "../../../cpp11addition.h"
-#include "async/TransferThreadAsync.h"
+// TransferThreadImpl typedef comes from ListThread.h
 
 // -> add thread safe, by Qt::BlockingQueuedConnection
 bool ListThread::haveSameSource(const std::vector<std::string> &sources)

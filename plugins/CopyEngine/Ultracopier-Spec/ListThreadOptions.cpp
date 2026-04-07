@@ -2,7 +2,7 @@
 #include <QStorageInfo>
 #include <QtGlobal>
 #include "../../../cpp11addition.h"
-#include "async/TransferThreadAsync.h"
+// TransferThreadImpl typedef comes from ListThread.h
 
 //set the copy info and options before runing
 void ListThread::setRightTransfer(const bool doRightTransfer)

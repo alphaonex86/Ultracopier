@@ -82,7 +82,7 @@ private:
     /// \brief error queue
     struct errorQueueItem
     {
-        TransferThreadAsync * transfer;	///< NULL if send by scan thread
+        TransferThreadImpl * transfer;	///< NULL if send by scan thread
         ScanFileOrFolder * scan;	///< NULL if send by transfer thread
         bool mkPath;
         bool rmPath;
@@ -94,7 +94,7 @@ private:
     /// \brief already exists queue
     struct alreadyExistsQueueItem
     {
-        TransferThreadAsync * transfer;	///< NULL if send by scan thread
+        TransferThreadImpl * transfer;	///< NULL if send by scan thread
         ScanFileOrFolder * scan;	///< NULL if send by transfer thread
         INTERNALTYPEPATH source;
         INTERNALTYPEPATH destination;
@@ -129,9 +129,9 @@ private slots:
     /************* External  call ********************/
     //dialog message
     /// \note Can be call without queue because all call will be serialized
-    void fileAlreadyExistsSlot(INTERNALTYPEPATH source, INTERNALTYPEPATH destination, bool isSame, TransferThreadAsync * thread);
+    void fileAlreadyExistsSlot(INTERNALTYPEPATH source, INTERNALTYPEPATH destination, bool isSame, TransferThreadImpl * thread);
     /// \note Can be call without queue because all call will be serialized
-    void errorOnFileSlot(INTERNALTYPEPATH fileInfo, std::string errorString, TransferThreadAsync * thread, const ErrorType &errorType);
+    void errorOnFileSlot(INTERNALTYPEPATH fileInfo, std::string errorString, TransferThreadImpl * thread, const ErrorType &errorType);
     /// \note Can be call without queue because all call will be serialized
     void folderAlreadyExistsSlot(INTERNALTYPEPATH source,INTERNALTYPEPATH destination,bool isSame,ScanFileOrFolder * thread);
     /// \note Can be call without queue because all call will be serialized
@@ -141,9 +141,9 @@ private slots:
 
     //dialog message
     /// \note Can be call without queue because all call will be serialized
-    void fileAlreadyExists(INTERNALTYPEPATH source, INTERNALTYPEPATH destination, bool isSame, TransferThreadAsync * thread);
+    void fileAlreadyExists(INTERNALTYPEPATH source, INTERNALTYPEPATH destination, bool isSame, TransferThreadImpl * thread);
     /// \note Can be call without queue because all call will be serialized
-    void errorOnFile(INTERNALTYPEPATH fileInfo, std::string errorString, TransferThreadAsync * thread, const ErrorType &errorType);
+    void errorOnFile(INTERNALTYPEPATH fileInfo, std::string errorString, TransferThreadImpl * thread, const ErrorType &errorType);
     /// \note Can be call without queue because all call will be serialized
     void folderAlreadyExists(INTERNALTYPEPATH source,INTERNALTYPEPATH destination,bool isSame,ScanFileOrFolder * thread);
     /// \note Can be call without queue because all call will be serialized
@@ -160,7 +160,7 @@ private slots:
     void showRenamingRules();
     void get_realBytesTransfered(quint64 realBytesTransfered);
     void newActionInProgess(Ultracopier::EngineActionInProgress);
-    void haveNeedPutAtBottom(bool needPutAtBottom, const INTERNALTYPEPATH &fileInfo, const std::string &errorString, TransferThreadAsync *thread, const ErrorType &errorType);
+    void haveNeedPutAtBottom(bool needPutAtBottom, const INTERNALTYPEPATH &fileInfo, const std::string &errorString, TransferThreadImpl *thread, const ErrorType &errorType);
     void missingDiskSpace(std::vector<Diskspace> list);
     void exportErrorIntoTransferList() override;
 public:
@@ -336,7 +336,7 @@ signals:
 
     //internal cancel
     void tryCancel() const;
-    void getNeedPutAtBottom(const INTERNALTYPEPATH &fileInfo,const std::string &errorString,TransferThreadAsync * thread,const ErrorType &errorType) const;
+    void getNeedPutAtBottom(const INTERNALTYPEPATH &fileInfo,const std::string &errorString,TransferThreadImpl * thread,const ErrorType &errorType) const;
 
     #ifdef ULTRACOPIER_PLUGIN_DEBUG
     /// \brief To debug source

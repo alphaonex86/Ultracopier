@@ -3,7 +3,7 @@
 #include <QtGlobal>
 #include "../../../cpp11addition.h"
 
-#include "async/TransferThreadAsync.h"
+// TransferThreadImpl typedef comes from ListThread.h
 
 void ListThread::pause()
 {
