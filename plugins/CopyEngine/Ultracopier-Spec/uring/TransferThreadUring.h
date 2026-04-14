@@ -137,6 +137,9 @@ private:
     // High 4 bits = op type, low 60 bits = buffer index
     static constexpr uint64_t OP_READ_TAG  = 0x1000000000000000ULL;
     static constexpr uint64_t OP_WRITE_TAG = 0x2000000000000000ULL;
+    static constexpr uint64_t OP_FSYNC_TAG = 0x3000000000000000ULL;
+    static constexpr uint64_t OP_OPEN_TAG  = 0x4000000000000000ULL;
+    static constexpr uint64_t OP_CLOSE_TAG = 0x5000000000000000ULL;
     static constexpr uint64_t OP_MASK      = 0xF000000000000000ULL;
     static constexpr uint64_t IDX_MASK     = 0x0FFFFFFFFFFFFFFFULL;
 

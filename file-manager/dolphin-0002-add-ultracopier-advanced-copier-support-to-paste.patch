@@ -1,0 +1,104 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index d895088d3..cbeebcf7b 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -56,6 +56,7 @@ find_package(Qt6 ${QT_MIN_VERSION} CONFIG REQUIRED COMPONENTS
+     Widgets
+     Gui
+     DBus
++    Network
+ )
+ 
+ if (Qt6Gui_VERSION VERSION_GREATER_EQUAL "6.10.0")
+diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
+index 4faabe9d5..d323910f7 100644
+--- a/src/CMakeLists.txt
++++ b/src/CMakeLists.txt
+@@ -216,6 +216,7 @@ target_link_libraries(
+     Qt6::Concurrent
+     Qt6::DBus
+     Qt6::Gui
++    Qt6::Network
+     KF6::I18n
+     KF6::GuiAddons
+     KF6::IconThemes
+diff --git a/src/views/dolphinview.cpp b/src/views/dolphinview.cpp
+index 794223861..8c3a2ceef 100644
+--- a/src/views/dolphinview.cpp
++++ b/src/views/dolphinview.cpp
+@@ -63,6 +63,8 @@
+ #include <QActionGroup>
+ #include <QApplication>
+ #include <QClipboard>
++#include <QDataStream>
++#include <QLocalSocket>
+ #include <QDropEvent>
+ #include <QGraphicsOpacityEffect>
+ #include <QGraphicsSceneDragDropEvent>
+@@ -76,6 +78,25 @@
+ #include <QToolTip>
+ #include <QVBoxLayout>
+ 
++#include <unistd.h>
++
++static void sendRawOrderList(const QStringList &order, QLocalSocket &socket, int idNextOrder)
++{
++    QByteArray block;
++    QDataStream out(&block, QIODevice::WriteOnly);
++    out.setVersion(QDataStream::Qt_4_4);
++    out << int(0);
++    out << idNextOrder;
++    out << order;
++    out.device()->seek(0);
++    out << block.size();
++    do {
++        QByteArray blockToSend = block.left(32 * 1024); // 32KB
++        block.remove(0, blockToSend.size());
++        socket.write(blockToSend);
++    } while (block.size());
++}
++
+ DolphinView::DolphinView(const QUrl &url, QWidget *parent)
+     : QWidget(parent)
+     , m_active(true)
+@@ -2554,7 +2575,39 @@ void DolphinView::applyDynamicView()
+ 
+ void DolphinView::pasteToUrl(const QUrl &url)
+ {
+-    KIO::PasteJob *job = KIO::paste(QApplication::clipboard()->mimeData(), url);
++    QClipboard *clipboard = QApplication::clipboard();
++    const QMimeData *mimeData = clipboard->mimeData();
++    const QList<QUrl> urls = KUrlMimeData::urlsFromMimeData(mimeData);
++    const bool isCut = mimeData->data(QStringLiteral("application/x-kde-cutselection")) == "1";
++
++    if (!urls.isEmpty()) {
++        QLocalSocket socket;
++        socket.connectToServer(QStringLiteral("advanced-copier-") + QString::number(getuid()));
++        socket.waitForConnected();
++        if (socket.state() == QLocalSocket::ConnectedState) {
++            sendRawOrderList(QStringList() << QStringLiteral("protocol") << QStringLiteral("0002"), socket, 1);
++            socket.waitForReadyRead();
++            socket.readAll();
++            QStringList l;
++            if (isCut) {
++                l << QStringLiteral("mv");
++                clipboard->clear(QClipboard::Clipboard);
++            } else {
++                l << QStringLiteral("cp");
++            }
++            for (const QUrl &u : urls) {
++                l << u.toString();
++            }
++            l << url.toString();
++            sendRawOrderList(l, socket, 2);
++            socket.waitForBytesWritten();
++            socket.close();
++            return;
++        }
++    }
++
++    // Fallback to standard KIO paste
++    KIO::PasteJob *job = KIO::paste(clipboard->mimeData(), url);
+     KJobWidgets::setWindow(job, this);
+     m_clearSelectionBeforeSelectingNewItems = true;
+     m_markFirstNewlySelectedItemAsCurrent = true;

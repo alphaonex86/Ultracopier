@@ -4,7 +4,7 @@ mac:QMAKE_CXXFLAGS+="-stdlib=libc++"
 
 QT += widgets xml
 DEFINES += _FILE_OFFSET_BITS=64 UNICODE _UNICODE _LARGE_FILE_SOURCE=1
-linux:DEFINES += ULTRACOPIER_PLUGIN_IO_URING
+#linux:DEFINES += ULTRACOPIER_PLUGIN_IO_URING
 TEMPLATE        = lib
 CONFIG         += plugin
 
@@ -54,13 +54,13 @@ SOURCES         += \
     $$PWD/FolderExistsDialog.cpp \
     $$PWD/ScanFileOrFolder.cpp \
     $$PWD/DiskSpace.cpp \
-    ListThreadActions.cpp \
-    ListThreadListChange.cpp \
-    ListThreadMedia.cpp \
-    ListThreadNew.cpp \
-    ListThreadOptions.cpp \
-    ListThreadScan.cpp \
-    ListThreadStat.cpp
+    $$PWD/ListThreadActions.cpp \
+    $$PWD/ListThreadListChange.cpp \
+    $$PWD/ListThreadMedia.cpp \
+    $$PWD/ListThreadNew.cpp \
+    $$PWD/ListThreadOptions.cpp \
+    $$PWD/ListThreadScan.cpp \
+    $$PWD/ListThreadStat.cpp
 TARGET          = $$qtLibraryTarget(copyEngine)
 TRANSLATIONS += \
     $$PWD/Languages/ar/translation.ts \

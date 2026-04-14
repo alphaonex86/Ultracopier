@@ -1,0 +1,15 @@
+diff --git a/src/dolphinmainwindow.cpp b/src/dolphinmainwindow.cpp
+index 12ca26898..09dd6b9be 100644
+--- a/src/dolphinmainwindow.cpp
++++ b/src/dolphinmainwindow.cpp
+@@ -2546,7 +2546,9 @@ void DolphinMainWindow::setupDockWidgets()
+     connect(m_placesPanel, &PlacesPanel::storageTearDownExternallyRequested, this, &DolphinMainWindow::slotStorageTearDownExternallyRequested);
+     DolphinUrlNavigatorsController::slotPlacesPanelVisibilityChanged(m_placesPanel->isVisible());
+ 
+-    auto actionShowAllPlaces = new QAction(QIcon::fromTheme(QStringLiteral("view-hidden")), i18nc("@item:inmenu", "Show Hidden Places"), this);
++    auto actionShowAllPlaces = actionCollection()->addAction(QStringLiteral("show_all_places"));
++    actionShowAllPlaces->setIcon(QIcon::fromTheme(QStringLiteral("view-hidden")));
++    actionShowAllPlaces->setText(i18nc("@item:inmenu", "Show Hidden Places"));
+     actionShowAllPlaces->setCheckable(true);
+     actionShowAllPlaces->setDisabled(true);
+     actionShowAllPlaces->setWhatsThis(i18nc("@info:whatsthis",

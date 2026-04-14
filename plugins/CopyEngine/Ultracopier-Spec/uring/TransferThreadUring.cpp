@@ -92,8 +92,26 @@ TransferThreadUring::~TransferThreadUring()
 void TransferThreadUring::run()
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] start: "+std::to_string((int64_t)QThread::currentThreadId()));
+
+    // Initialize io_uring ring once in the worker thread, reuse across all file transfers
+    int ret=io_uring_queue_init(RING_DEPTH,&ring,0);
+    if(ret<0)
+    {
+        std::cerr << "io_uring_queue_init failed: " << strerror(-ret) << std::endl;
+        abort();
+    }
+    ringInitialized=true;
+
     moveToThread(this);
     exec();
+
+    // Destroy the ring in the same thread that created it
+    if(ringInitialized)
+    {
+        io_uring_queue_exit(&ring);
+        ringInitialized=false;
+    }
+
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] stop: "+std::to_string((int64_t)QThread::currentThreadId()));
 }
 
@@ -130,13 +148,33 @@ void TransferThreadUring::freePipelineBuffers()
 
 int TransferThreadUring::openSourceFile()
 {
-    int fd=::open(TransferThread::internalStringTostring(source).c_str(),O_RDONLY);
+    const std::string sourcePath=TransferThread::internalStringTostring(source);
+    struct io_uring_sqe *sqe=io_uring_get_sqe(&ring);
+    if(!sqe)
+    {
+        errorString_internal="io_uring_get_sqe failed for openat source";
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] "+errorString_internal);
+        return -1;
+    }
+    io_uring_prep_openat(sqe,AT_FDCWD,sourcePath.c_str(),O_RDONLY,0);
+    io_uring_sqe_set_data64(sqe,OP_OPEN_TAG);
+    io_uring_submit(&ring);
+
+    struct io_uring_cqe *cqe;
+    int ret=io_uring_wait_cqe(&ring,&cqe);
+    if(ret<0)
+    {
+        errorString_internal="io_uring_wait_cqe for openat source failed: "+std::string(strerror(-ret));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] "+errorString_internal);
+        return -1;
+    }
+    int fd=cqe->res;
+    io_uring_cqe_seen(&ring,cqe);
     if(fd<0)
     {
-        int t=errno;
-        errorString_internal=strerror(t);
+        errorString_internal=strerror(-fd);
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] Unable to open source: "+
-                                 TransferThread::internalStringTostring(source)+", error: "+errorString_internal+" ("+std::to_string(t)+")");
+                                 sourcePath+", error: "+errorString_internal+" ("+std::to_string(-fd)+")");
         return -1;
     }
     if(os_spec_flags)
@@ -199,13 +237,33 @@ int TransferThreadUring::openDestFile(uint64_t startSize)
         }
     }
 
-    int fd=::open(TransferThread::internalStringTostring(destination).c_str(),O_WRONLY|O_CREAT,0755);
+    const std::string destPath=TransferThread::internalStringTostring(destination);
+    struct io_uring_sqe *sqe=io_uring_get_sqe(&ring);
+    if(!sqe)
+    {
+        errorString_internal="io_uring_get_sqe failed for openat dest";
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] "+errorString_internal);
+        return -1;
+    }
+    io_uring_prep_openat(sqe,AT_FDCWD,destPath.c_str(),O_WRONLY|O_CREAT,0755);
+    io_uring_sqe_set_data64(sqe,OP_OPEN_TAG);
+    io_uring_submit(&ring);
+
+    struct io_uring_cqe *cqe;
+    int ret=io_uring_wait_cqe(&ring,&cqe);
+    if(ret<0)
+    {
+        errorString_internal="io_uring_wait_cqe for openat dest failed: "+std::string(strerror(-ret));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] "+errorString_internal);
+        return -1;
+    }
+    int fd=cqe->res;
+    io_uring_cqe_seen(&ring,cqe);
     if(fd<0)
     {
-        int t=errno;
-        errorString_internal=strerror(t);
+        errorString_internal=strerror(-fd);
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] Unable to open dest: "+
-                                 TransferThread::internalStringTostring(destination)+", error: "+errorString_internal+" ("+std::to_string(t)+")");
+                                 destPath+", error: "+errorString_internal+" ("+std::to_string(-fd)+")");
         return -1;
     }
 
@@ -243,22 +301,70 @@ int TransferThreadUring::openDestFile(uint64_t startSize)
 
 void TransferThreadUring::closeFiles()
 {
+    if(sourceFd<0 && destFd<0)
+        return;
+
+    if(!ringInitialized)
+    {
+        // Fallback to blocking close if ring not available (e.g. during destruction before run())
+        if(sourceFd>=0) { ::close(sourceFd); sourceFd=-1; }
+        if(destFd>=0)   { ::close(destFd);   destFd=-1; }
+        return;
+    }
+
+    int pending=0;
     if(sourceFd>=0)
     {
-        if(::close(sourceFd)!=0)
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] unable to close source: "+std::to_string(errno));
+        struct io_uring_sqe *sqe=io_uring_get_sqe(&ring);
+        if(sqe)
+        {
+            io_uring_prep_close(sqe,sourceFd);
+            io_uring_sqe_set_data64(sqe,OP_CLOSE_TAG|0);
+            pending++;
+        }
+        else
+        {
+            ::close(sourceFd);
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] io_uring_get_sqe failed for close source, used blocking close");
+        }
         sourceFd=-1;
     }
     if(destFd>=0)
     {
-        if(::close(destFd)!=0)
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] unable to close dest: "+std::to_string(errno));
+        struct io_uring_sqe *sqe=io_uring_get_sqe(&ring);
+        if(sqe)
+        {
+            io_uring_prep_close(sqe,destFd);
+            io_uring_sqe_set_data64(sqe,OP_CLOSE_TAG|1);
+            pending++;
+        }
+        else
+        {
+            ::close(destFd);
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] io_uring_get_sqe failed for close dest, used blocking close");
+        }
         destFd=-1;
     }
-    if(ringInitialized)
+
+    if(pending>0)
     {
-        io_uring_queue_exit(&ring);
-        ringInitialized=false;
+        io_uring_submit(&ring);
+        for(int i=0;i<pending;i++)
+        {
+            struct io_uring_cqe *cqe;
+            int ret=io_uring_wait_cqe(&ring,&cqe);
+            if(ret<0)
+            {
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] io_uring_wait_cqe for close failed: "+std::string(strerror(-ret)));
+                continue;
+            }
+            if(cqe->res<0)
+            {
+                uint64_t idx=io_uring_cqe_get_data64(cqe)&IDX_MASK;
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] unable to close "+(idx==0?"source":"dest")+": "+std::string(strerror(-cqe->res)));
+            }
+            io_uring_cqe_seen(&ring,cqe);
+        }
     }
 }
 
@@ -266,18 +372,7 @@ void TransferThreadUring::doTransferPipeline()
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] doTransferPipeline start");
 
-    // Initialize io_uring ring
-    int ret=io_uring_queue_init(RING_DEPTH,&ring,0);
-    if(ret<0)
-    {
-        errorString_internal="io_uring_queue_init failed: "+std::string(strerror(-ret));
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] "+errorString_internal);
-        readError=true;
-        emit errorOnFile(source,errorString_internal);
-        closeFiles();
-        return;
-    }
-    ringInitialized=true;
+    int ret;
 
     // Initialize pipeline buffers
     initPipelineBuffers();
@@ -298,34 +393,38 @@ void TransferThreadUring::doTransferPipeline()
     bool errorOccurred=false;
 
     // Submit initial batch of reads
-    for(int i=0;i<NUM_BUFFERS && !readDone && !stopIt;i++)
     {
-        if((uint64_t)readOffset>=sourceFileSize)
+        int submitted=0;
+        for(int i=0;i<NUM_BUFFERS && !readDone && !stopIt;i++)
         {
-            readDone=true;
-            break;
-        }
-        unsigned int toRead=blockSize;
-        if((uint64_t)(readOffset+toRead)>sourceFileSize)
-            toRead=(unsigned int)(sourceFileSize-readOffset);
+            if((uint64_t)readOffset>=sourceFileSize)
+            {
+                readDone=true;
+                break;
+            }
+            unsigned int toRead=blockSize;
+            if((uint64_t)(readOffset+toRead)>sourceFileSize)
+                toRead=(unsigned int)(sourceFileSize-readOffset);
 
-        struct io_uring_sqe *sqe=io_uring_get_sqe(&ring);
-        if(!sqe)
-        {
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] io_uring_get_sqe failed for initial read");
-            break;
+            struct io_uring_sqe *sqe=io_uring_get_sqe(&ring);
+            if(!sqe)
+            {
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] io_uring_get_sqe failed for initial read");
+                break;
+            }
+            io_uring_prep_read(sqe,sourceFd,pipelineBuffers[i].data,toRead,readOffset);
+            io_uring_sqe_set_data64(sqe,OP_READ_TAG|(uint64_t)i);
+            pipelineBuffers[i].state=PipelineBuffer::Reading;
+            readOffset+=toRead;
+            readsInFlight++;
+            submitted++;
         }
-        io_uring_prep_read(sqe,sourceFd,pipelineBuffers[i].data,toRead,readOffset);
-        io_uring_sqe_set_data64(sqe,OP_READ_TAG|(uint64_t)i);
-        pipelineBuffers[i].state=PipelineBuffer::Reading;
-        readOffset+=toRead;
-        readsInFlight++;
+        if(submitted>0)
+            io_uring_submit(&ring);
     }
 
-    if(readsInFlight>0)
-        io_uring_submit(&ring);
-
-    // Main event loop
+    // Main event loop — batch CQE processing + single submit per iteration
+    struct io_uring_cqe *cqes[RING_DEPTH];
     while((readsInFlight>0 || writesInFlight>0) && !stopIt && !errorOccurred)
     {
         // Handle pause
@@ -337,140 +436,180 @@ void TransferThreadUring::doTransferPipeline()
                 break;
         }
 
-        struct io_uring_cqe *cqe;
-        ret=io_uring_wait_cqe(&ring,&cqe);
-        if(ret<0)
+        // Wait for at least one completion
         {
-            if(ret==-EINTR)
-                continue;
-            errorString_internal="io_uring_wait_cqe failed: "+std::string(strerror(-ret));
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] "+errorString_internal);
-            readError=true;
-            errorOccurred=true;
-            break;
-        }
-
-        uint64_t userData=io_uring_cqe_get_data64(cqe);
-        uint64_t opType=userData&OP_MASK;
-        int bufIdx=(int)(userData&IDX_MASK);
-        int result=cqe->res;
-        io_uring_cqe_seen(&ring,cqe);
-
-        if(opType==OP_READ_TAG)
-        {
-            readsInFlight--;
-            if(result<0)
+            struct io_uring_cqe *cqe;
+            ret=io_uring_wait_cqe(&ring,&cqe);
+            if(ret<0)
             {
-                errorString_internal="Read error: "+std::string(strerror(-result));
+                if(ret==-EINTR)
+                    continue;
+                errorString_internal="io_uring_wait_cqe failed: "+std::string(strerror(-ret));
                 ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] "+errorString_internal);
                 readError=true;
                 errorOccurred=true;
-                emit errorOnFile(source,errorString_internal);
                 break;
             }
-            if(result==0)
-            {
-                // EOF
-                pipelineBuffers[bufIdx].state=PipelineBuffer::Free;
-                readDone=true;
-            }
-            else
-            {
-                // Read completed, submit write
-                pipelineBuffers[bufIdx].bytesUsed=result;
-                pipelineBuffers[bufIdx].state=PipelineBuffer::Writing;
-
-                struct io_uring_sqe *sqe=io_uring_get_sqe(&ring);
-                if(!sqe)
-                {
-                    errorString_internal="io_uring_get_sqe failed for write";
-                    errorOccurred=true;
-                    writeError=true;
-                    emit errorOnFile(destination,errorString_internal);
-                    break;
-                }
-                io_uring_prep_write(sqe,destFd,pipelineBuffers[bufIdx].data,result,writeOffset);
-                io_uring_sqe_set_data64(sqe,OP_WRITE_TAG|(uint64_t)bufIdx);
-                writeOffset+=result;
-                writesInFlight++;
-                io_uring_submit(&ring);
-            }
         }
-        else if(opType==OP_WRITE_TAG)
+
+        // Drain all available completions in one batch
+        unsigned int numCqes=io_uring_peek_batch_cqe(&ring,cqes,RING_DEPTH);
+        bool needSubmit=false;
+
+        for(unsigned int ci=0;ci<numCqes && !errorOccurred && !stopIt;ci++)
         {
-            writesInFlight--;
-            if(result<0)
-            {
-                errorString_internal="Write error: "+std::string(strerror(-result));
-                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] "+errorString_internal);
-                writeError=true;
-                errorOccurred=true;
-                emit errorOnFile(destination,errorString_internal);
-                break;
-            }
-            // Handle short write
-            if(result<pipelineBuffers[bufIdx].bytesUsed)
-            {
-                int remaining=pipelineBuffers[bufIdx].bytesUsed-result;
-                memmove(pipelineBuffers[bufIdx].data,pipelineBuffers[bufIdx].data+result,remaining);
-                pipelineBuffers[bufIdx].bytesUsed=remaining;
+            struct io_uring_cqe *cqe=cqes[ci];
+            uint64_t userData=io_uring_cqe_get_data64(cqe);
+            uint64_t opType=userData&OP_MASK;
+            int bufIdx=(int)(userData&IDX_MASK);
+            int result=cqe->res;
 
-                struct io_uring_sqe *sqe=io_uring_get_sqe(&ring);
-                if(!sqe)
+            if(opType==OP_READ_TAG)
+            {
+                readsInFlight--;
+                if(result<0)
                 {
-                    errorString_internal="io_uring_get_sqe failed for short write retry";
+                    errorString_internal="Read error: "+std::string(strerror(-result));
+                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] "+errorString_internal);
+                    readError=true;
                     errorOccurred=true;
+                    emit errorOnFile(source,errorString_internal);
+                    break;
+                }
+                if(result==0)
+                {
+                    // EOF
+                    pipelineBuffers[bufIdx].state=PipelineBuffer::Free;
+                    readDone=true;
+                }
+                else
+                {
+                    // Read completed, queue write
+                    pipelineBuffers[bufIdx].bytesUsed=result;
+                    pipelineBuffers[bufIdx].state=PipelineBuffer::Writing;
+
+                    struct io_uring_sqe *sqe=io_uring_get_sqe(&ring);
+                    if(!sqe)
+                    {
+                        errorString_internal="io_uring_get_sqe failed for write";
+                        errorOccurred=true;
+                        writeError=true;
+                        emit errorOnFile(destination,errorString_internal);
+                        break;
+                    }
+                    io_uring_prep_write(sqe,destFd,pipelineBuffers[bufIdx].data,result,writeOffset);
+                    io_uring_sqe_set_data64(sqe,OP_WRITE_TAG|(uint64_t)bufIdx);
+                    writeOffset+=result;
+                    writesInFlight++;
+                    needSubmit=true;
+                }
+            }
+            else if(opType==OP_WRITE_TAG)
+            {
+                writesInFlight--;
+                if(result<0)
+                {
+                    errorString_internal="Write error: "+std::string(strerror(-result));
+                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] "+errorString_internal);
                     writeError=true;
+                    errorOccurred=true;
                     emit errorOnFile(destination,errorString_internal);
                     break;
                 }
-                // writeOffset already advanced, need to adjust
-                io_uring_prep_write(sqe,destFd,pipelineBuffers[bufIdx].data,remaining,writeOffset-remaining);
-                io_uring_sqe_set_data64(sqe,OP_WRITE_TAG|(uint64_t)bufIdx);
-                writesInFlight++;
-                io_uring_submit(&ring);
-                continue;
-            }
-
-            // Write completed fully
-            transferProgression=writeOffset;
-            pipelineBuffers[bufIdx].state=PipelineBuffer::Free;
-
-            // Submit next read if data remains
-            if(!readDone && !stopIt && (uint64_t)readOffset<sourceFileSize)
-            {
-                unsigned int toRead=blockSize;
-                if((uint64_t)(readOffset+toRead)>sourceFileSize)
-                    toRead=(unsigned int)(sourceFileSize-readOffset);
-
-                struct io_uring_sqe *sqe=io_uring_get_sqe(&ring);
-                if(sqe)
+                // Handle short write
+                if(result<pipelineBuffers[bufIdx].bytesUsed)
                 {
-                    io_uring_prep_read(sqe,sourceFd,pipelineBuffers[bufIdx].data,toRead,readOffset);
-                    io_uring_sqe_set_data64(sqe,OP_READ_TAG|(uint64_t)bufIdx);
-                    pipelineBuffers[bufIdx].state=PipelineBuffer::Reading;
-                    readOffset+=toRead;
-                    readsInFlight++;
-                    io_uring_submit(&ring);
+                    int remaining=pipelineBuffers[bufIdx].bytesUsed-result;
+                    memmove(pipelineBuffers[bufIdx].data,pipelineBuffers[bufIdx].data+result,remaining);
+                    pipelineBuffers[bufIdx].bytesUsed=remaining;
+
+                    struct io_uring_sqe *sqe=io_uring_get_sqe(&ring);
+                    if(!sqe)
+                    {
+                        errorString_internal="io_uring_get_sqe failed for short write retry";
+                        errorOccurred=true;
+                        writeError=true;
+                        emit errorOnFile(destination,errorString_internal);
+                        break;
+                    }
+                    io_uring_prep_write(sqe,destFd,pipelineBuffers[bufIdx].data,remaining,writeOffset-remaining);
+                    io_uring_sqe_set_data64(sqe,OP_WRITE_TAG|(uint64_t)bufIdx);
+                    writesInFlight++;
+                    needSubmit=true;
+                    continue;
+                }
+
+                // Write completed fully
+                transferProgression=writeOffset;
+                pipelineBuffers[bufIdx].state=PipelineBuffer::Free;
+
+                // Queue next read if data remains
+                if(!readDone && !stopIt && (uint64_t)readOffset<sourceFileSize)
+                {
+                    unsigned int toRead=blockSize;
+                    if((uint64_t)(readOffset+toRead)>sourceFileSize)
+                        toRead=(unsigned int)(sourceFileSize-readOffset);
+
+                    struct io_uring_sqe *sqe=io_uring_get_sqe(&ring);
+                    if(sqe)
+                    {
+                        io_uring_prep_read(sqe,sourceFd,pipelineBuffers[bufIdx].data,toRead,readOffset);
+                        io_uring_sqe_set_data64(sqe,OP_READ_TAG|(uint64_t)bufIdx);
+                        pipelineBuffers[bufIdx].state=PipelineBuffer::Reading;
+                        readOffset+=toRead;
+                        readsInFlight++;
+                        needSubmit=true;
+                    }
+                }
+                else if((uint64_t)readOffset>=sourceFileSize)
+                {
+                    readDone=true;
                 }
             }
-            else if((uint64_t)readOffset>=sourceFileSize)
-            {
-                readDone=true;
-            }
         }
+
+        // Mark all processed CQEs as seen in one go
+        io_uring_cq_advance(&ring,numCqes);
+
+        // Single submit for all queued SQEs this iteration
+        if(needSubmit)
+            io_uring_submit(&ring);
     }
 
     if(!errorOccurred && !stopIt)
     {
-        // fsync the destination
-        if(fsync(destFd)!=0)
+        // Async fsync via io_uring instead of blocking fsync()
+        struct io_uring_sqe *sqe=io_uring_get_sqe(&ring);
+        if(!sqe)
         {
-            int t=errno;
-            errorString_internal=strerror(t);
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] fsync failed: "+errorString_internal);
+            errorString_internal="io_uring_get_sqe failed for fsync";
             writeError=true;
             emit errorOnFile(destination,errorString_internal);
+        }
+        else
+        {
+            io_uring_prep_fsync(sqe,destFd,0);
+            io_uring_sqe_set_data64(sqe,OP_FSYNC_TAG);
+            io_uring_submit(&ring);
+
+            struct io_uring_cqe *cqe;
+            ret=io_uring_wait_cqe(&ring,&cqe);
+            if(ret<0)
+            {
+                errorString_internal="io_uring_wait_cqe for fsync failed: "+std::string(strerror(-ret));
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] "+errorString_internal);
+                writeError=true;
+                emit errorOnFile(destination,errorString_internal);
+            }
+            else if(cqe->res<0)
+            {
+                errorString_internal="fsync error: "+std::string(strerror(-cqe->res));
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] "+errorString_internal);
+                writeError=true;
+                emit errorOnFile(destination,errorString_internal);
+            }
+            if(ret>=0)
+                io_uring_cqe_seen(&ring,cqe);
         }
         transferProgression=sourceFileSize;
     }

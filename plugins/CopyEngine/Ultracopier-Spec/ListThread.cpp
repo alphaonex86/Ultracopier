@@ -1027,7 +1027,9 @@ void ListThread::doNewActions_inode_manipulation()
             #endif
             if(numberOfInodeOperation>=inodeThreads)
                 break;
-            if(followTheStrictOrder)
+            if(followTheStrictOrder &&
+               (sourceDriveMultiple || destinationDriveMultiple ||
+                (!sourceDrive.empty() && !destinationDrive.empty() && sourceDrive!=destinationDrive)))
                 break;
         }
         int_for_loop++;
