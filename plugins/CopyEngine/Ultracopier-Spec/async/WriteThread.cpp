@@ -12,6 +12,10 @@
 #include <fcntl.h>
 #endif
 
+#ifdef Q_OS_WIN32
+#include <VersionHelpers.h>
+#endif
+
 unsigned int WriteThread::numberOfBlock=ULTRACOPIER_PLUGIN_DEFAULT_PARALLEL_NUMBER_OF_BLOCK;
 
 WriteThread::WriteThread()
@@ -244,9 +248,9 @@ bool WriteThread::internalOpen()
     DWORD flags=FILE_ATTRIBUTE_NORMAL;
     if(os_spec_flags)
         flags|=FILE_FLAG_SEQUENTIAL_SCAN;
-    /*if(!buffer)
-        //FILE_FLAG_NO_BUFFERING Under Windows 10 do The parameter is incorrect. (87)
-        flags|=FILE_FLAG_NO_BUFFERING;//FILE_FLAG_WRITE_THROUGH |*/
+    // Bypass cache on pre-Win8 (cache thrashing on XP with large files); Win8+ rejects it (err 87) unless writes are sector-aligned.
+    if(!buffer && !IsWindows8OrGreater())
+        flags|=FILE_FLAG_NO_BUFFERING;
     to=CreateFileW(file.c_str(),GENERIC_WRITE,0,NULL,CREATE_ALWAYS,
                    flags,NULL);
     #endif
@@ -256,6 +260,12 @@ bool WriteThread::internalOpen()
     if(to!=INVALID_HANDLE_VALUE)
     #endif
     {
+        #ifdef Q_OS_WIN32
+        // Mark the destination as sparse so runs of zeros do not consume real disk space.
+        // NTFS-only (silently fails on FAT/exFAT, which is fine); supported since Win2000.
+        DWORD sparseBytesReturned=0;
+        ::DeviceIoControl(to,FSCTL_SET_SPARSE,NULL,0,NULL,0,&sparseBytesReturned,NULL);
+        #endif
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] after the open");
         {
             QMutexLocker lock_mutex(&accessList);

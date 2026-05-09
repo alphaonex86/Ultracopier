@@ -1,0 +1,279 @@
+# CLAUDE.md
+
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+
+## Project Overview
+
+**Ultracopier** is a Qt-based file copy/move utility replacement that intercepts system copy/move operations. It's a modular, plugin-based application written in C++17 with multi-threaded transfer operations.
+
+- **Version**: 3.0.x (C++11 to C++23)
+- **Website**: https://ultracopier.herman-brule.com/
+- **Repository**: https://github.com/alphaonex86/Ultracopier
+- **License**: GPLv3
+- **Language**: C++ with Qt framework (supports Qt5 and Qt6)
+- **Build Systems**: CMake (modern), qmake (.pro files), Qt's automatic UI compilation
+
+## Building and Running
+
+### Prerequisites
+```bash
+# Debian/Ubuntu-based systems
+sudo apt install make gcc build-essential libssl-dev qt6-base-dev qtchooser qmake6 qt6-base-dev-tools qt6-tools-dev-tools
+```
+
+### Build (CMake - NOT Recommended)
+```bash
+# Configure and build
+cmake -B build -DCMAKE_BUILD_TYPE=Release
+cmake --build build -j$(nproc)
+
+# Run
+./build/Ultracopier
+```
+
+### Build (qmake - Recommended)
+```bash
+# Update translations (if needed)
+find ./ -name '*.ts' -exec lrelease {} \;
+
+# Build
+qmake ultracopier.pro
+make -j$(nproc)
+
+# Run
+./ultracopier
+```
+
+### Build with Optional Features
+- **KDE KIO Support** (for sftp, smb, ftp protocols): `-DULTRACOPIER_PLUGIN_KIO=ON`
+- **io_uring Support** (high-performance async I/O): Define `ULTRACOPIER_PLUGIN_IO_URING` in Variable.h (Linux only)
+- **Portable Version**: Define `ULTRACOPIER_VERSION_PORTABLE` in Variable.h
+
+### Testing
+The project has basic test utilities in `/test/` and `/tools/unit-tester/` but no comprehensive unit test framework. Tests are primarily integration-level.
+
+## Architecture
+
+### High-Level Flow
+
+1. **main.cpp** → **EventDispatcher** → **Core** (manages copy/move operations)
+   - EventDispatcher is the central event routing hub
+   - Multiple Core instances can exist (one per copy/move window)
+   - Core delegates to copy engines and themes via plugins
+
+2. **Plugin System** (5 plugin types):
+   - **CopyEngine** - Performs actual file transfers (e.g., Ultracopier-Spec, Rsync, Random)
+   - **Listener** - Intercepts system copy/move (e.g., CatchCopy protocol v0002 for Windows Explorer integration)
+   - **Themes** - UI rendering (e.g., Oxygen theme)
+   - **PluginLoader** - Windows Explorer context menu integration
+   - **SessionLoader** - Persistent state (Windows only)
+
+### Core Components
+
+#### Manager Classes (Singleton Pattern)
+- **EventDispatcher** - Main event loop coordinator; initializes all managers
+- **PluginsManager** - Loads/unloads plugins dynamically; indexes by type
+- **ThemesManager** - Theme selection and lifecycle
+- **CopyEngineManager** - Copy engine selection based on protocols
+- **LanguagesManager** - Translation system
+- **OptionEngine** - Settings persistence (QSettings wrapper)
+- **ResourcesManager** - File path resolution (read/write paths for portable vs. installed)
+
+#### Copy Operation Flow
+```
+EventDispatcher::initFunction()
+  ↓
+Core::newCopy/newMove() [slots receive from listeners/CLI]
+  ↓
+CopyEngineManager::getCopyEngine() [select engine by protocol]
+  ↓
+CopyEngine plugin instantiation (Ultracopier-Spec is default)
+  ↓
+ListThread [scans sources, builds transfer list]
+  ↓
+TransferThread [transfers files: read/write/collision handling]
+  ↓
+ThemesManager [displays progress UI]
+  ↓
+Core::periodicSynchronization() [timer-based sync between engine & UI]
+```
+
+### Critical Classes
+
+#### **Core** (`Core.h/cpp`, 9.7KB / 63.5KB)
+- Manages multiple simultaneous copy/move operations (one CopyInstance per window)
+- Maintains state for each transfer: files, progress, errors, paused state
+- Coordinates signals between CopyEngine plugins and UI themes
+- Calculates transfer speed and remaining time using two algorithms (Traditional vs. Logarithmic)
+- **Key insight**: Works with plugin instances via interfaces, not direct dependencies
+
+#### **CopyEngine (Ultracopier-Spec)** (`plugins/CopyEngine/Ultracopier-Spec/`)
+- **ListThread** - Parallel thread scanning sources, building transfer list, handling collisions
+  - Sub-modules: ListThreadScan, ListThreadNew, ListThreadActions, ListThreadOptions, ListThreadMedia
+  - Handles file/folder collision detection with user interaction
+- **TransferThread** - Parallel thread performing actual file I/O
+  - Two implementations: `async/` (pthreads + select) or `uring/` (Linux io_uring)
+  - Manages pre/post operations (timestamps, permissions, filters)
+  - Emits signals for progress updates, errors, completion
+- **Factory Pattern**: CopyEngineFactory creates instances for concurrent transfers
+
+#### **Themes (Oxygen)** (`plugins/Themes/Oxygen/`)
+- Implements PluginInterface_Themes interface
+- Qt UI rendering (interface.ui, interface.cpp)
+- TransferModel - Qt model for QTreeView/progress display
+- Options UI for theme customization
+
+#### **Listener (CatchCopy v0002)** (`plugins/Listener/catchcopy-v0002/`)
+- Protocol handler for Windows Explorer drag-drop integration
+- ServerCatchcopy / ClientCatchcopy - IPC via sockets
+- Converts explorer operations into Core::newCopy/newMove calls
+
+### Data Flow: Signals and Slots
+
+Plugins communicate via **Qt signals/slots** across thread boundaries:
+```
+CopyEngine::pushFileProgression → Core::periodicSynchronization() → UI update
+CopyEngine::actionInProgess → Core/Interface sync
+CopyEngine::error → Error dialogs
+CopyEngine::canBeDeleted → Cleanup & window close
+```
+
+Each transfer window has separate signal connections, avoiding crosstalk.
+
+## File Structure
+
+```
+/sources/
+├── main.cpp                           # Entry point
+├── EventDispatcher.[h/cpp]            # Central event router
+├── Core.[h/cpp]                       # Transfer session manager
+├── *Manager.[h/cpp]                   # Singleton managers (Plugins, Themes, Options, etc.)
+├── StructEnumDefinition.h             # Core enums (CopyMode, DebugLevel, CopyType, etc.)
+├── interface/                         # Plugin interfaces (abstract)
+│   ├── PluginInterface_CopyEngine.h
+│   ├── PluginInterface_Themes.h
+│   ├── PluginInterface_Listener.h
+│   └── PluginInterface_*.h
+├── plugins/
+│   ├── CopyEngine/
+│   │   └── Ultracopier-Spec/         # Default copy engine (listthread + transferthread)
+│   ├── Listener/
+│   │   └── catchcopy-v0002/          # Windows Explorer integration
+│   ├── Themes/
+│   │   ├── Oxygen/                   # Default theme (Qt UI)
+│   │   ├── Oxygen2/
+│   │   └── Supercopier/
+│   └── Languages/                     # .ts translation files
+├── resources/                         # Qt resource files (.qrc)
+└── other-pro/                         # Build configuration files
+```
+
+## Key Development Notes
+
+### Threading Model
+- **Qt Event Loop** (main thread): EventDispatcher, themes, dialogs
+- **ListThread** (copy engine): File scanning, collision handling
+- **TransferThread** (copy engine): I/O operations (pthreads or io_uring)
+- **Communication**: Qt signals/slots with queued connections across threads
+
+### Plugin Architecture
+- **All-in-one build** (`ULTRACOPIER_PLUGIN_ALL_IN_ONE`): Plugins compiled into main binary
+- **Dynamic load** (without flag): Plugins loaded from `plugins/*/libPluginName.so`
+- **Factory pattern**: Each plugin type has a Factory interface for instantiation
+- **Interface versioning**: Interfaces use Qt's `Q_DECLARE_INTERFACE` macro
+
+### Options/Settings
+- **OptionEngine** stores settings in platform-specific locations:
+  - Linux: `~/.config/ultracopier.conf` or `~/.ultracopier.conf`
+  - Windows: Registry
+  - Portable: Alongside executable (`Variable.h` defines path behavior)
+- Options registered at startup in `main.cpp::registerTheOptions()`
+
+### Important Build Defines
+- `ULTRACOPIER_DEBUG` - Debug logging
+- `ULTRACOPIER_NODEBUG` - Force disable debug
+- `ULTRACOPIER_PLUGIN_ALL_IN_ONE` - Compile plugins into main binary
+- `ULTRACOPIER_PLUGIN_ALL_IN_ONE_DIRECT` - Inline plugin compilation (no separate compilation)
+- `ULTRACOPIER_VERSION_PORTABLE` - Portable installation mode
+- `ULTRACOPIER_INTERNET_SUPPORT` - Update checking, product key validation
+- `ULTRACOPIER_PLUGIN_KIO` - KDE KIO protocol support
+- `ULTRACOPIER_PLUGIN_IO_URING` - Use io_uring instead of pthreads for I/O
+
+### Collision Handling
+- FileExistsDialog, FolderExistsDialog, FileIsSameDialog
+- User chooses: Skip, Overwrite, Rename, Cancel
+- Actions queued in ListThread and applied by TransferThread
+- Filters system allows regex-based automatic collision resolution
+
+## Coding Style
+
+- **Prefer nested `if`/`else` over `continue`.** Inside loops, do not use guard `continue;` statements to skip iterations -- wrap the rest of the body in `if(...) { ... }` (with `else` for failure logging when needed). Yes, this nests deeply; that is the style here.
+
+## Common Tasks
+
+### Adding a New Copy Engine Plugin
+1. Create `/plugins/CopyEngine/YourEngine/`
+2. Implement `PluginInterface_CopyEngine` and `PluginInterface_CopyEngineFactory`
+3. Add `informations.xml` metadata
+4. Create `.pro` file for qmake or `CMakeLists.txt`
+5. Register in `PluginsManager` (automatic if placed in plugins/ directory)
+
+### Modifying the UI Theme
+- Edit `plugins/Themes/Oxygen/interface.ui` (Qt Designer format)
+- Modify `interface.cpp` for custom rendering
+- Register options in `options.ui` and `ThemesFactory.cpp`
+- Rebuild: themes are embedded in binary if all-in-one
+
+### Debugging Transfer Operations
+- Enable debug in `Variable.h`: uncomment `#define ULTRACOPIER_DEBUG`
+- Rebuild with CMake or qmake
+- Debug window shows ListThread and TransferThread operations
+- Check DebugEngine for log output
+
+### Adding CLI Arguments
+- Modify `CliParser.[h/cpp]`
+- Hook into `EventDispatcher::initFunction()` for processing
+- Examples: `--help`, `--version`, transfer lists
+
+## Compilation Warnings
+- Some deprecated Qt functions are intentionally used for Qt5 compatibility
+- Unused return values in error paths are normal (explicit intent)
+- Static analysis may flag thread-safety; singletonic patterns are verified at runtime
+
+## Platform-Specific Notes
+
+### Windows
+- Uses Windows API for native file operations (volume detection, timestamps)
+- CatchCopy plugin enables Explorer integration (drag-drop to ultracopier window)
+- SessionLoader plugin saves/restores session across reboots
+- PluginLoader adds context menu to Explorer
+
+### Linux/Unix
+- Uses POSIX APIs (stat, open, read, write)
+- No session saving (SessionLoader is Windows-only)
+- KIO support available for remote protocols (sftp, smb, ftp)
+- io_uring optional for high-performance async I/O
+
+### macOS
+- Similar to Unix; official binaries no longer provided (compile yourself)
+- No Explorer integration (not applicable)
+
+## External Dependencies
+- **Qt 6.7+** (Core, Gui, Widgets, Network, Xml modules)
+- **OpenSSL** (for HTTPS update checking)
+- **POSIX/Win32 APIs** (for file operations)
+- **liburing** (optional, Linux only, for io_uring mode)
+- **KF6/KF5** (optional, for KIO protocol support)
+
+## Relevant Files for Common Changes
+
+| Task | Files |
+|------|-------|
+| Add command-line argument | `CliParser.h/cpp`, `EventDispatcher::initFunction()` |
+| Add new manager | `main.cpp::registerTheOptions()`, new Manager singleton |
+| Modify copy engine behavior | `CopyEngine.h/cpp`, `ListThread.h/cpp`, `TransferThread.h/cpp` |
+| Change UI layout | `plugins/Themes/Oxygen/interface.ui`, `interface.cpp` |
+| Add new option | `OptionEngine`, `OptionDialog.ui` |
+| Handle new protocol | `CopyEngineManager::getCopyEngine()`, plugin protocol arrays |
+| Collision logic | `FileExistsDialog.cpp`, `CopyEngine-collision-and-error.cpp` |
+
