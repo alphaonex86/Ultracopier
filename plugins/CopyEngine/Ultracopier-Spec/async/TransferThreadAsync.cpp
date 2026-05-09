@@ -3,7 +3,10 @@
 
 #include "TransferThreadAsync.h"
 #include <string>
+#include <vector>
+#include <cstdio>
 #include <dirent.h>
+#include "xxhash.h"
 
 #ifdef Q_OS_WIN32
 #include <accctrl.h>
@@ -63,7 +66,8 @@ if (hToken)
 #endif
 
 TransferThreadAsync::TransferThreadAsync() :
-    transferProgression(0)
+    transferProgression(0),
+    checksumProgression(0)
 {
     haveStartTime=false;
     #ifndef Q_OS_UNIX
@@ -242,6 +246,7 @@ bool TransferThreadAsync::setFiles(const INTERNALTYPEPATH& source, const int64_t
     if(!TransferThread::setFiles(source,size,destination,mode))
         return false;
     transferProgression=0;
+    checksumProgression=0;
     //transferSize=0;//set by ListThread at currentTransferThread->transferSize=currentActionToDoTransfer.size; very important to do parallel small file
     sended_state_readStopped=false;
     readIsClosedVariable=false;
@@ -255,6 +260,7 @@ bool TransferThreadAsync::setFiles(const INTERNALTYPEPATH& source, const int64_t
 void TransferThreadAsync::resetExtraVariable()
 {
     transferProgression=0;
+    checksumProgression=0;
     readIsOpenVariable=false;
     writeIsOpenVariable=false;
     TransferThread::resetExtraVariable();
@@ -851,6 +857,135 @@ void TransferThreadAsync::ifCanStartTransfer()
     checkIfAllIsClosedAndDoOperations();
 }
 
+bool TransferThreadAsync::runChecksumVerify()
+{
+    XXH3_state_t *srcState = XXH3_createState();
+    XXH3_state_t *dstState = XXH3_createState();
+    if(srcState==NULL || dstState==NULL)
+    {
+        if(srcState!=NULL)
+            XXH3_freeState(srcState);
+        if(dstState!=NULL)
+            XXH3_freeState(dstState);
+        emit errorOnFile(destination,tr("Checksum: unable to allocate xxh3 state").toStdString());
+        return false;
+    }
+    XXH3_64bits_reset(srcState);
+    XXH3_64bits_reset(dstState);
+
+    bool readFailure=false;
+    bool sizeMismatch=false;
+
+    #ifdef Q_OS_WIN32
+    HANDLE srcH=CreateFileW(TransferThread::toFinalPath(source).c_str(),GENERIC_READ,FILE_SHARE_READ,NULL,OPEN_EXISTING,FILE_FLAG_SEQUENTIAL_SCAN,NULL);
+    if(srcH==INVALID_HANDLE_VALUE)
+    {
+        XXH3_freeState(srcState);
+        XXH3_freeState(dstState);
+        emit errorOnFile(source,tr("Checksum: unable to re-open source: ").toStdString()+TransferThread::GetLastErrorStdStr());
+        return false;
+    }
+    HANDLE dstH=CreateFileW(TransferThread::toFinalPath(destination).c_str(),GENERIC_READ,FILE_SHARE_READ,NULL,OPEN_EXISTING,FILE_FLAG_SEQUENTIAL_SCAN,NULL);
+    if(dstH==INVALID_HANDLE_VALUE)
+    {
+        CloseHandle(srcH);
+        XXH3_freeState(srcState);
+        XXH3_freeState(dstState);
+        emit errorOnFile(destination,tr("Checksum: unable to re-open destination: ").toStdString()+TransferThread::GetLastErrorStdStr());
+        return false;
+    }
+    #else
+    int srcFd=::open(TransferThread::internalStringTostring(source).c_str(),O_RDONLY);
+    if(srcFd<0)
+    {
+        XXH3_freeState(srcState);
+        XXH3_freeState(dstState);
+        emit errorOnFile(source,std::string(tr("Checksum: unable to re-open source: ").toStdString())+strerror(errno));
+        return false;
+    }
+    int dstFd=::open(TransferThread::internalStringTostring(destination).c_str(),O_RDONLY);
+    if(dstFd<0)
+    {
+        ::close(srcFd);
+        XXH3_freeState(srcState);
+        XXH3_freeState(dstState);
+        emit errorOnFile(destination,std::string(tr("Checksum: unable to re-open destination: ").toStdString())+strerror(errno));
+        return false;
+    }
+    #endif
+
+    const size_t chunk=1*1024*1024;
+    std::vector<char> srcBuf(chunk),dstBuf(chunk);
+    while(!stopIt && !needSkip)
+    {
+        #ifdef Q_OS_WIN32
+        DWORD srcRead=0,dstRead=0;
+        if(!ReadFile(srcH,srcBuf.data(),(DWORD)chunk,&srcRead,NULL))
+        {
+            readFailure=true;
+            break;
+        }
+        if(!ReadFile(dstH,dstBuf.data(),(DWORD)chunk,&dstRead,NULL))
+        {
+            readFailure=true;
+            break;
+        }
+        #else
+        ssize_t srcRead=::read(srcFd,srcBuf.data(),chunk);
+        if(srcRead<0)
+        {
+            readFailure=true;
+            break;
+        }
+        ssize_t dstRead=::read(dstFd,dstBuf.data(),chunk);
+        if(dstRead<0)
+        {
+            readFailure=true;
+            break;
+        }
+        #endif
+        if(srcRead!=dstRead)
+        {
+            sizeMismatch=true;
+            break;
+        }
+        if(srcRead==0)
+            break;
+        XXH3_64bits_update(srcState,srcBuf.data(),(size_t)srcRead);
+        XXH3_64bits_update(dstState,dstBuf.data(),(size_t)dstRead);
+        checksumProgression+=(uint64_t)srcRead;
+    }
+
+    XXH64_hash_t srcDigest=XXH3_64bits_digest(srcState);
+    XXH64_hash_t dstDigest=XXH3_64bits_digest(dstState);
+    XXH3_freeState(srcState);
+    XXH3_freeState(dstState);
+    #ifdef Q_OS_WIN32
+    CloseHandle(srcH);
+    CloseHandle(dstH);
+    #else
+    ::close(srcFd);
+    ::close(dstFd);
+    #endif
+
+    if(stopIt || needSkip)
+        return false;
+    if(readFailure)
+    {
+        emit errorOnFile(destination,tr("Checksum: read error during verify").toStdString());
+        return false;
+    }
+    if(sizeMismatch || srcDigest!=dstDigest)
+    {
+        char hashStr[64];
+        std::snprintf(hashStr,sizeof(hashStr),"0x%016llx vs 0x%016llx",
+                      (unsigned long long)srcDigest,(unsigned long long)dstDigest);
+        emit errorOnFile(destination,tr("Checksum mismatch (xxh3-64): ").toStdString()+hashStr);
+        return false;
+    }
+    return true;
+}
+
 void TransferThreadAsync::checkIfAllIsClosedAndDoOperations()
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] stop copy");
@@ -873,6 +1008,24 @@ void TransferThreadAsync::checkIfAllIsClosedAndDoOperations()
     transfer_stat=TransferStat_Idle;
 
     transferSize=readThread.getLastGoodPosition();
+
+    // Re-open source and destination read-only (after both handles were closed and the
+    // OS write cache flushed) and verify both files xxh3-64 hash. Gated by transferChecksum,
+    // which was snapshotted at setFiles() so the option cannot flip mid-transfer. On
+    // mismatch we abort BEFORE the Move source-removal below, so the source survives.
+    if(transferChecksum && !readError && !writeError && !needSkip && !stopIt
+            && !realMove && size>0)
+    {
+        transfer_stat=TransferStat_Checksum;
+        emit pushStat(transfer_stat,transferId);
+        const bool checksumOk=runChecksumVerify();
+        if(!stopIt && !needSkip && !checksumOk)
+        {
+            fileContentError=true;
+            transfer_stat=TransferStat_PostTransfer;
+            return;
+        }
+    }
 
     if(mode==Ultracopier::Move && !realMove)
     {
@@ -1057,28 +1210,38 @@ void TransferThreadAsync::skip()
 //return info about the copied size
 int64_t TransferThreadAsync::copiedSize()
 {
+    // When the checksum option was snapshotted on at setFiles(), the per-file
+    // budget is split in two: the copy phase fills the first half (0 .. size/2),
+    // the post-copy xxh3 verify fills the second half (size/2 .. size). This is
+    // what produces the 2.5G / 5G / 7.5G / 10G progress curve for a 10G file.
+    int64_t copyPos=0;
     switch(static_cast<TransferStat>(transfer_stat))
     {
     case TransferStat_Transfer:
         if(transferProgression>0)//then native copy started, read/write thread not used
-            return transferProgression;
+            copyPos=transferProgression;
         else
-            return (readThread.getLastGoodPosition()+writeThread.getLastGoodPosition())/2;
+            copyPos=(readThread.getLastGoodPosition()+writeThread.getLastGoodPosition())/2;
         break;
     case TransferStat_PostOperation:
         if(transferProgression>0)//then native copy started, read/write thread not used
-            return transferSize;
+            copyPos=transferSize;
         else
-            return (readThread.getLastGoodPosition()+writeThread.getLastGoodPosition())/2;
+            copyPos=(readThread.getLastGoodPosition()+writeThread.getLastGoodPosition())/2;
         break;
     case TransferStat_PostTransfer:
+    case TransferStat_Checksum:
         if(transferProgression>0)//then native copy started, read/write thread not used
-            return transferProgression;
+            copyPos=transferProgression;
         else
-            return (readThread.getLastGoodPosition()+writeThread.getLastGoodPosition())/2;
+            copyPos=(readThread.getLastGoodPosition()+writeThread.getLastGoodPosition())/2;
+        break;
     default:
         return 0;
     }
+    if(transferChecksum)
+        return (int64_t)(copyPos/2 + checksumProgression/2);
+    return copyPos;
 }
 
 //retry after error
@@ -1160,20 +1323,26 @@ char TransferThreadAsync::writingLetter() const
 //not copied size, ...
 uint64_t TransferThreadAsync::realByteTransfered() const
 {
+    uint64_t copyPos=0;
     switch(static_cast<TransferStat>(transfer_stat))
     {
     case TransferStat_Transfer:
         if(transferProgression>0)//then native copy started, read/write thread not used
-            return transferProgression;
+            copyPos=transferProgression;
         else
-            return readThread.getLastGoodPosition();
+            copyPos=readThread.getLastGoodPosition();
+        break;
     case TransferStat_PostTransfer:
-        return readThread.getLastGoodPosition();
+    case TransferStat_Checksum:
     case TransferStat_PostOperation:
-        return readThread.getLastGoodPosition();
+        copyPos=readThread.getLastGoodPosition();
+        break;
     default:
         return 0;
     }
+    if(transferChecksum)
+        return copyPos/2 + checksumProgression/2;
+    return copyPos;
 }
 
 //first is read, second is write, related to file
@@ -1193,14 +1362,11 @@ std::pair<uint64_t, uint64_t> TransferThreadAsync::progression() const
             returnVar.first=readThread.getLastGoodPosition();
             returnVar.second=writeThread.getLastGoodPosition();
         }
-        /*if(returnVar.first<returnVar.second)
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+QStringLiteral("] read is smaller than write"));*/
     break;
     case TransferStat_PostTransfer:
+    case TransferStat_Checksum:
         returnVar.first=transferSize;
         returnVar.second=transferSize;
-        /*if(returnVar.first<returnVar.second)
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+QStringLiteral("] read is smaller than write"));*/
     break;
     case TransferStat_PostOperation:
         returnVar.first=transferSize;
@@ -1209,6 +1375,11 @@ std::pair<uint64_t, uint64_t> TransferThreadAsync::progression() const
     default:
         returnVar.first=0;
         returnVar.second=0;
+    }
+    if(transferChecksum)
+    {
+        returnVar.first=returnVar.first/2 + checksumProgression/2;
+        returnVar.second=returnVar.second/2 + checksumProgression/2;
     }
     return returnVar;
 }

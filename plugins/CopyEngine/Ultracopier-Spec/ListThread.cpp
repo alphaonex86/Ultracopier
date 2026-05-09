@@ -33,6 +33,7 @@ ListThread::ListThread(FacilityInterface * facilityInterface) :
     renameTheOriginalDestination(false),
     checkDiskSpace(true),
     buffer(false),
+    checksum(false),
     followTheStrictOrder(true),
     ignoreBlackList(false),
     mode(Ultracopier::CopyMode::Copy),
@@ -1247,6 +1248,7 @@ void ListThread::createTransferThread()
     #endif
     last->setDeletePartiallyTransferredFiles(deletePartiallyTransferredFiles);
     last->setBuffer(buffer);
+    last->setChecksum(checksum);
     #ifdef ULTRACOPIER_PLUGIN_RSYNC
     last->setRsync(rsync);
     #endif

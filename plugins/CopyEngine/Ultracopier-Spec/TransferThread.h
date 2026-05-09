@@ -197,6 +197,7 @@ public slots:
     void setDeletePartiallyTransferredFiles(const bool &deletePartiallyTransferredFiles);
     void setRenameTheOriginalDestination(const bool &renameTheOriginalDestination);
     void set_updateMount();
+    void setChecksum(const bool checksum);
 protected:
     void setFileRenameInternal(const std::string &nameForRename);
     void setAlwaysFileExistsActionInternal(const FileExistsAction &action);
@@ -215,6 +216,10 @@ protected:
     #endif
     bool			keepDate;
     bool            mkFullPath;
+    // Live option (toggled from UI). Snapshotted into transferChecksum at setFiles()
+    // so a mid-transfer toggle cannot change the contract for an in-flight file.
+    bool            checksum;
+    bool            transferChecksum;
     volatile bool	stopIt;
     #ifdef Q_OS_WIN32
     int stopItWin;

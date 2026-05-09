@@ -32,6 +32,15 @@ RESOURCES -= $$PWD/resources/resources-windows-qt-plugin.qrc
 DEFINES += ULTRACOPIER_PLUGIN_ALL_IN_ONE
 DEFINES += ULTRACOPIER_PLUGIN_ALL_IN_ONE_DIRECT
 
+# xxhash vendor lib (used by the checksum-after-copy verifier).
+# On Qt5 builds we still target XP / Pentium II hosts that lack SSE2,
+# so force the scalar code path (XXH_VECTOR=0 == XXH_SCALAR) to avoid
+# an "Illegal Instruction" on those CPUs.
+HEADERS += $$PWD/lib/xxhash/xxhash.h
+SOURCES += $$PWD/lib/xxhash/xxhash.c
+INCLUDEPATH += $$PWD/lib/xxhash
+equals(QT_MAJOR_VERSION, 5): DEFINES += XXH_VECTOR=0
+
 FORMS += \
     $$PWD/plugins/CopyEngine/Ultracopier-Spec/copyEngineOptions.ui \
     $$PWD/plugins/CopyEngine/Ultracopier-Spec/debugDialog.ui \

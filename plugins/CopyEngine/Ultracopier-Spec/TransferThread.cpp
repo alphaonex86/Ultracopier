@@ -26,6 +26,8 @@ TransferThread::TransferThread() :
     #endif
     keepDate                        (false),
     mkFullPath                      (false),
+    checksum                        (false),
+    transferChecksum                (false),
     stopIt                          (false),
     fileExistsAction                (FileExists_NotSet),
     alwaysDoFileExistsAction        (FileExists_NotSet),
@@ -163,6 +165,7 @@ bool TransferThread::setFiles(const INTERNALTYPEPATH& source, const int64_t &siz
     readError                       = false;
     haveTransferTime                = false;
     canStartTransfer                = false;
+    transferChecksum                = checksum;
     resetExtraVariable();
     emit internalStartPreOperation();
     startTransferTime.restart();
@@ -887,6 +890,11 @@ void TransferThread::setBuffer(const bool buffer)
 void TransferThread::setKeepDate(const bool keepDate)
 {
     this->keepDate=keepDate;
+}
+
+void TransferThread::setChecksum(const bool checksum)
+{
+    this->checksum=checksum;
 }
 
 bool TransferThread::doFilePostOperation()

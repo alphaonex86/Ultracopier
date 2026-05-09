@@ -26,6 +26,7 @@ void ListThread::newTransferStat(const TransferStat &stat,const quint64 &id)
         break;
         case TransferStat_PostTransfer:
         case TransferStat_PostOperation:
+        case TransferStat_Checksum:
             newAction.type=Ultracopier::PostOperation;
         break;
         default:
@@ -64,6 +65,9 @@ void ListThread::timedUpdateDebugDialog()
             break;
         case TransferStat_PostTransfer:
             stat="PostTransfer";
+            break;
+        case TransferStat_Checksum:
+            stat="Checksum";
             break;
         default:
             stat=QStringLiteral("??? (%1)").arg(transferThreadList.at(index)->getStat());
@@ -151,6 +155,7 @@ void ListThread::sendProgression()
             case TransferStat_Transfer:
             case TransferStat_PostTransfer:
             case TransferStat_PostOperation:
+            case TransferStat_Checksum:
             {
                 copiedSize=temp_transfer_thread->copiedSize();
 
@@ -227,6 +232,7 @@ void ListThread::sendProgression()
                     case TransferStat_Transfer:
                     case TransferStat_PostTransfer:
                     case TransferStat_PostOperation:
+                    case TransferStat_Checksum:
                         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,std::string("now: ")+
                                                TransferThread::internalStringTostring(temp_transfer_thread->getSourcePath())+" "+
                                                std::to_string(temp_transfer_thread->getStat())+" "+
@@ -258,6 +264,7 @@ void ListThread::sendProgression()
                 case TransferStat_Transfer:
                 case TransferStat_PostTransfer:
                 case TransferStat_PostOperation:
+                case TransferStat_Checksum:
                     debug_threadWas.push_back(
                                            TransferThread::internalStringTostring(temp_transfer_thread->getSourcePath())+" "+
                                            std::to_string(temp_transfer_thread->getStat())+" "+

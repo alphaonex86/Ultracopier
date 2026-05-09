@@ -997,6 +997,7 @@ void CopyEngine::setChecksum(const bool checksum)
     this->checksum=checksum;
     if(uiIsInstalled)
         ui->checksum->setChecked(checksum);
+    listThread->setChecksum(checksum);
 }
 
 //reset widget

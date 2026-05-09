@@ -287,6 +287,18 @@ void ListThread::setBuffer(const bool &buffer)
     }
 }
 
+void ListThread::setChecksum(const bool checksum)
+{
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"setChecksum: "+std::to_string(checksum));
+    this->checksum=checksum;
+    unsigned int index=0;
+    while(index<transferThreadList.size())
+    {
+        transferThreadList.at(index)->setChecksum(checksum);
+        index++;
+    }
+}
+
 void ListThread::setFollowTheStrictOrder(const bool &order)
 {
     this->followTheStrictOrder=order;

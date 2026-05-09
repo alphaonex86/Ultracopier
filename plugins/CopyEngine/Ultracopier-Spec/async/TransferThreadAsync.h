@@ -140,6 +140,9 @@ private:
     //ready = open + ready to operation (no error to resolv)
     bool			transferIsReadyVariable;
     uint64_t transferProgression;
+    // Bytes of source already fed to the post-copy xxh3 verifier. Combined with
+    // transferProgression to drive the halved progress curve when checksum is on.
+    uint64_t checksumProgression;
     bool sended_state_readStopped;
     bool readIsClosedVariable;
     bool writeIsClosedVariable;
@@ -152,6 +155,9 @@ private:
     void resetExtraVariable();
     void ifCanStartTransfer();
     void checkIfAllIsClosedAndDoOperations();
+    /// Re-open source and destination read-only and xxh3-64 both. Drives
+    /// checksumProgression and reacts to stopIt/needSkip. Returns true on match.
+    bool runChecksumVerify();
 };
 
 #endif // TransferThreadAsync_H

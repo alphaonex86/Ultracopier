@@ -226,6 +226,7 @@ public slots:
     void setRenameTheOriginalDestination(const bool &renameTheOriginalDestination);
     void setCheckDiskSpace(const bool &checkDiskSpace);
     void setBuffer(const bool &buffer);
+    void setChecksum(const bool checksum);
     void exportErrorIntoTransferList(const std::string &fileName);
 private:
     #ifdef ULTRACOPIER_PLUGIN_DEBUG
@@ -285,6 +286,7 @@ private:
     bool                renameTheOriginalDestination;
     bool                checkDiskSpace;
     bool                buffer;
+    bool                checksum;
     bool                followTheStrictOrder;
     bool                ignoreBlackList;
     std::unordered_set<TransferThreadImpl *> putAtBottomAfterError;
