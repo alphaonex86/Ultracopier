@@ -298,6 +298,22 @@ HEADERS += \
     ../plugins/CopyEngine/Ultracopier-Spec/async/ReadThread.h \
     ../plugins/CopyEngine/Ultracopier-Spec/async/WriteThread.h
 
+# xxhash: prefer system header on non-Windows hosts; fall back to vendored copy
+# (mandatory for win32 cross-compile, since /usr/include/xxhash.h is host-Linux only).
+XXHASH_USE_VENDOR = 1
+!win32 {
+    exists(/usr/include/xxhash.h):       XXHASH_USE_VENDOR = 0
+    exists(/usr/local/include/xxhash.h): XXHASH_USE_VENDOR = 0
+    exists(/opt/local/include/xxhash.h): XXHASH_USE_VENDOR = 0
+}
+equals(XXHASH_USE_VENDOR, 1) {
+    INCLUDEPATH += $$PWD/../lib/xxhash
+    HEADERS += $$PWD/../lib/xxhash/xxhash.h
+    SOURCES += $$PWD/../lib/xxhash/xxhash.c
+} else {
+    LIBS += -lxxhash
+}
+
 #ANDROID_PACKAGE_SOURCE_DIR = $$PWD/../android-sources
 
 #DISTFILES += ../android-sources/AndroidManifest.xml

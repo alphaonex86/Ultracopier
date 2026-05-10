@@ -109,6 +109,24 @@ win32 {
     DEFINES += WIDESTRING
 }
 
+# xxhash: prefer system header if available, otherwise fall back to bundled vendor copy.
+# Under Windows builds (native MinGW, wine-hosted MinGW, MXE cross) the host's
+# /usr/include/xxhash.h is a Linux header that the Windows toolchain cannot use,
+# so always pick the vendored copy. On other platforms, probe the usual prefixes.
+XXHASH_USE_VENDOR = 1
+!win32 {
+    exists(/usr/include/xxhash.h):       XXHASH_USE_VENDOR = 0
+    exists(/usr/local/include/xxhash.h): XXHASH_USE_VENDOR = 0
+    exists(/opt/local/include/xxhash.h): XXHASH_USE_VENDOR = 0
+}
+equals(XXHASH_USE_VENDOR, 1) {
+    INCLUDEPATH += $$PWD/../../../lib/xxhash
+    HEADERS += $$PWD/../../../lib/xxhash/xxhash.h
+    SOURCES += $$PWD/../../../lib/xxhash/xxhash.c
+} else {
+    LIBS += -lxxhash
+}
+
 contains(DEFINES, ULTRACOPIER_PLUGIN_IO_URING) {
     HEADERS += $$PWD/uring/TransferThreadUring.h
     SOURCES += $$PWD/uring/TransferThreadUring.cpp

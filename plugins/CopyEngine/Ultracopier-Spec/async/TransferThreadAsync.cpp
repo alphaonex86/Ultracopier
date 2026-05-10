@@ -700,7 +700,7 @@ void TransferThreadAsync::ifCanStartTransfer()
                 }
             }
             else
-            #elif defined(Q_OS_LINUX)
+            #elif defined(Q_OS_LINUX) && !defined(Q_OS_ANDROID) && !defined(__ANDROID__)
             if(native_copy)
             {
                 ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,internalStringTostring(source)+" to "+internalStringTostring(destination)+": native_copy enabled (copy_file_range)");

@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.5)
 
-project(Ultracopier VERSION 3.0 LANGUAGES CXX)
+project(Ultracopier VERSION 3.0 LANGUAGES C CXX)
 
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
@@ -111,6 +111,32 @@ set(PROJECT_SOURCES
     ../plugins/CopyEngine/Ultracopier-Spec/async/ReadThread.h
     ../plugins/CopyEngine/Ultracopier-Spec/async/WriteThread.h
 )
+
+# xxhash: prefer system header on Unix-like hosts; fall back to vendored copy
+# (mandatory for Android/Windows cross builds, where /usr/include/xxhash.h
+# belongs to the host Linux toolchain and is unusable for the target).
+set(XXHASH_USE_VENDOR ON)
+if(NOT WIN32 AND NOT ANDROID AND NOT CMAKE_CROSSCOMPILING)
+    if(EXISTS "/usr/include/xxhash.h"
+       OR EXISTS "/usr/local/include/xxhash.h"
+       OR EXISTS "/opt/local/include/xxhash.h")
+        set(XXHASH_USE_VENDOR OFF)
+    endif()
+endif()
+if(XXHASH_USE_VENDOR)
+    set(_ucx_xxhash_src ${CMAKE_CURRENT_SOURCE_DIR}/../lib/xxhash/xxhash.c)
+    set_source_files_properties(${_ucx_xxhash_src} PROPERTIES LANGUAGE C)
+    add_library(ultracopier_xxhash STATIC ${_ucx_xxhash_src})
+    set_target_properties(ultracopier_xxhash PROPERTIES
+        AUTOMOC OFF AUTOUIC OFF AUTORCC OFF
+        LINKER_LANGUAGE C
+        POSITION_INDEPENDENT_CODE ON)
+    target_include_directories(ultracopier_xxhash PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/../lib/xxhash)
+    include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../lib/xxhash)
+else()
+    link_libraries(xxhash)
+endif()
+
 add_definitions(-DNOAUDIO -DULTRACOPIER_LITTLE -DULTRACOPIER_PLUGIN_ALL_IN_ONE -DULTRACOPIER_PLUGIN_ALL_IN_ONE_DIRECT -DULTRACOPIER_NODEBUG)
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
@@ -139,6 +165,9 @@ endif()
 target_link_libraries(Ultracopier PRIVATE Qt${QT_VERSION_MAJOR}::Widgets)
 target_link_libraries(Ultracopier PRIVATE Qt${QT_VERSION_MAJOR}::Network)
 target_link_libraries(Ultracopier PRIVATE Qt${QT_VERSION_MAJOR}::Xml)
+if(XXHASH_USE_VENDOR)
+    target_link_libraries(Ultracopier PRIVATE ultracopier_xxhash)
+endif()
 
 set_target_properties(Ultracopier PROPERTIES
     MACOSX_BUNDLE_GUI_IDENTIFIER ultracopier.herman-brule.com
@@ -153,5 +182,9 @@ install(TARGETS Ultracopier
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR})
 
 if(QT_VERSION_MAJOR EQUAL 6)
+    # Silence QTP0002 dev warning on Qt 6.5+ Android builds (target-property paths as JSON).
+    if(COMMAND qt_policy)
+        qt_policy(SET QTP0002 NEW)
+    endif()
     qt_finalize_executable(Ultracopier)
 endif()

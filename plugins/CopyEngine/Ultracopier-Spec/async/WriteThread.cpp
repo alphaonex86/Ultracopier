@@ -13,7 +13,36 @@
 #endif
 
 #ifdef Q_OS_WIN32
-#include <VersionHelpers.h>
+// Lowercase matches mingw-w64 headers on case-sensitive filesystems (MXE, wine cross).
+// Older mingw shipped with Qt5.5/Qt5.6 (XP target) lacks versionhelpers.h entirely;
+// in that case provide a minimal IsWindows8OrGreater() shim using GetVersionEx.
+#  if defined(__has_include)
+#    if __has_include(<versionhelpers.h>)
+#      include <versionhelpers.h>
+#      define ULTRACOPIER_HAVE_VERSIONHELPERS 1
+#    endif
+#  endif
+#  ifndef ULTRACOPIER_HAVE_VERSIONHELPERS
+#    include <windows.h>
+static inline bool IsWindows8OrGreater()
+{
+    OSVERSIONINFOW osvi;
+    ZeroMemory(&osvi, sizeof(osvi));
+    osvi.dwOSVersionInfoSize = sizeof(osvi);
+#    if defined(__GNUC__)
+#      pragma GCC diagnostic push
+#      pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+#    endif
+    if(!GetVersionExW(&osvi))
+        return false;
+#    if defined(__GNUC__)
+#      pragma GCC diagnostic pop
+#    endif
+    // Win8 is 6.2; >=6.2 means Win8 or greater.
+    return (osvi.dwMajorVersion > 6) ||
+           (osvi.dwMajorVersion == 6 && osvi.dwMinorVersion >= 2);
+}
+#  endif
 #endif
 
 unsigned int WriteThread::numberOfBlock=ULTRACOPIER_PLUGIN_DEFAULT_PARALLEL_NUMBER_OF_BLOCK;
