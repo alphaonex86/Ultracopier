@@ -46,11 +46,11 @@ index 794223861..8c3a2ceef 100644
 +    QByteArray block;
 +    QDataStream out(&block, QIODevice::WriteOnly);
 +    out.setVersion(QDataStream::Qt_4_4);
-+    out << int(0);
++    out << (quint32)0;
 +    out << idNextOrder;
 +    out << order;
 +    out.device()->seek(0);
-+    out << block.size();
++    out << (quint32)block.size(); // 4-byte header: Qt6 QByteArray::size() is qsizetype (8B)
 +    do {
 +        QByteArray blockToSend = block.left(32 * 1024); // 32KB
 +        block.remove(0, blockToSend.size());

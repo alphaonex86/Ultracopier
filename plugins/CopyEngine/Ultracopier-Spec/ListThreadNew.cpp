@@ -51,12 +51,25 @@ bool ListThread::newCopy(const std::vector<std::string> &sources,const std::stri
         sourcesClean.push_back(TransferThread::stringToInternalString(source));
     }
     //ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"sourcesClean: "+stringimplode(sourcesClean,";"));
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"destination: "+destination);
-    const INTERNALTYPEPATH &Wdest=TransferThread::stringToInternalString(destination);
+    //the destination can carry the file:// scheme too (same forms as the sources), strip it
+    std::string destinationClean=destination;
+    #ifndef Q_OS_WIN
+    if(stringStartWith(destinationClean,"file:///"))
+        destinationClean.replace(0,7,"");
+    #else
+    if(stringStartWith(destinationClean,"file:///"))
+        destinationClean.replace(0,8,"");
+    else if(stringStartWith(destinationClean,"file://"))
+        destinationClean.replace(0,5,"");
+    else if(stringStartWith(destinationClean,"file:/"))
+        destinationClean.replace(0,6,"");
+    #endif
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"destination: "+destinationClean);
+    const INTERNALTYPEPATH &Wdest=TransferThread::stringToInternalString(destinationClean);
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"destination: "+TransferThread::internalStringTostring(Wdest));
     scanFileOrFolderThread->addToList(sourcesClean,Wdest);
     scanThreadHaveFinish(true);
-    detectDrivesOfCurrentTransfer(sourcesClean,TransferThread::stringToInternalString(destination));
+    detectDrivesOfCurrentTransfer(sourcesClean,Wdest);
     return true;
 }
 
@@ -132,11 +145,24 @@ bool ListThread::newMove(const std::vector<std::string> &sources,const std::stri
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"source is_file: "+std::to_string(TransferThread::is_file(TransferThread::stringToInternalString(source)))+" is_dir: "+std::to_string(TransferThread::is_dir(TransferThread::stringToInternalString(source))));
         sourcesClean.push_back(TransferThread::stringToInternalString(source));
     }
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"destination: "+destination);
-    const INTERNALTYPEPATH &Wdest=TransferThread::stringToInternalString(destination);
+    //the destination can carry the file:// scheme too (same forms as the sources), strip it
+    std::string destinationClean=destination;
+    #ifndef Q_OS_WIN
+    if(stringStartWith(destinationClean,"file:///"))
+        destinationClean.replace(0,7,"");
+    #else
+    if(stringStartWith(destinationClean,"file:///"))
+        destinationClean.replace(0,8,"");
+    else if(stringStartWith(destinationClean,"file://"))
+        destinationClean.replace(0,5,"");
+    else if(stringStartWith(destinationClean,"file:/"))
+        destinationClean.replace(0,6,"");
+    #endif
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"destination: "+destinationClean);
+    const INTERNALTYPEPATH &Wdest=TransferThread::stringToInternalString(destinationClean);
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"destination: "+TransferThread::internalStringTostring(Wdest));
     scanFileOrFolderThread->addToList(sourcesClean,Wdest);
     scanThreadHaveFinish(true);
-    detectDrivesOfCurrentTransfer(sourcesClean,TransferThread::stringToInternalString(destination));
+    detectDrivesOfCurrentTransfer(sourcesClean,Wdest);
     return true;
 }

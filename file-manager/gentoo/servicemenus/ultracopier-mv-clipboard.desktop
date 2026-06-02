@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Name=Move here with Ultracopier
+MimeType=inode/directory;
+Actions=MoveWithUltracopierClipBoard;
+
+[Desktop Action MoveWithUltracopierClipBoard]
+Name=Move here with Ultracopier
+Icon=ultracopier
+Exec=ultracopier CBmv %U

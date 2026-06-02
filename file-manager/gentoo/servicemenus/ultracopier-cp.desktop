@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Name=Copy with Ultracopier
+MimeType=application/octet-stream;inode/directory;
+Actions=CopyWithUltracopier;
+
+[Desktop Action CopyWithUltracopier]
+Name=Copy with Ultracopier
+Icon=ultracopier
+Exec=ultracopier cp %U "?"
