@@ -8,11 +8,12 @@
 #include "cpp11addition.h"
 
 #ifdef ULTRACOPIER_PLUGIN_ALL_IN_ONE_DIRECT
-#include "plugins/Listener/catchcopy-v0002/listener.h"
+#include "plugins/Listener/catchcopy/listener.h"
 #endif
 
 #include <QRegularExpression>
 #include <QMessageBox>
+#include <QDateTime>
 
 CopyListener::CopyListener(OptionDialog *optionDialog)
 {
@@ -31,6 +32,11 @@ CopyListener::CopyListener(OptionDialog *optionDialog)
     #endif
     connect(PluginsManager::pluginsManager,&PluginsManager::pluginListingIsfinish,			this,&CopyListener::allPluginIsloaded,Qt::QueuedConnection);
     connect(pluginLoader,&PluginLoaderCore::pluginLoaderReady,			this,&CopyListener::pluginLoaderReady);
+    // in-process clipboard paste (Ctrl+V/Ctrl+X) from the PluginLoader hook -> same endpoint as a CLI copy
+    connect(pluginLoader,&PluginLoaderCore::newCopy,			this,&CopyListener::copy);
+    connect(pluginLoader,&PluginLoaderCore::newMove,			this,&CopyListener::move);
+    lastPasteDedupMode=-1;
+    lastPasteDedupTimeMs=0;
     foreach(PluginsAvailable currentPlugin,list)
         emit previouslyPluginAdded(currentPlugin);
     PluginsManager::pluginsManager->unlockPluginListEdition();
@@ -280,10 +286,32 @@ void CopyListener::copyWithoutDestination(std::vector<std::string> sources)
     emit newCopyWithoutDestination(incrementOrderId(),list,stripSeparator(sources));
 }
 
+/* Dedup guard: the clipboard paste can in theory reach us from two mechanisms (the in-process
+ * Ctrl+V keyboard hook AND the catchcopy shell extension). The hook swallows Ctrl+V so they
+ * normally never both fire, but this is the safety net: if an identical copy/move (same mode,
+ * same sources, same destination) arrives within a short window, act on it only once. */
+bool CopyListener::isDuplicatePaste(int mode,const std::vector<std::string> &sources,const std::string &destination)
+{
+    const qint64 now=QDateTime::currentMSecsSinceEpoch();
+    if(lastPasteDedupTimeMs!=0 && (now-lastPasteDedupTimeMs)<1000
+       && lastPasteDedupMode==mode && lastPasteDedupDestination==destination && lastPasteDedupSources==sources)
+    {
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"duplicate copy/move within 1s ignored (hook+catchcopy dedup)");
+        return true;
+    }
+    lastPasteDedupMode=mode;
+    lastPasteDedupSources=sources;
+    lastPasteDedupDestination=destination;
+    lastPasteDedupTimeMs=now;
+    return false;
+}
+
 /** new copy with destination have been pased by the CLI */
 void CopyListener::copy(std::vector<std::string> sources,std::string destination)
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
+    if(isDuplicatePaste(0,sources,destination))
+        return;
     std::vector<std::string> list;
     list.push_back("file");
     emit newCopy(incrementOrderId(),list,stripSeparator(sources),"file",destination);
@@ -302,6 +330,8 @@ void CopyListener::moveWithoutDestination(std::vector<std::string> sources)
 void CopyListener::move(std::vector<std::string> sources,std::string destination)
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
+    if(isDuplicatePaste(1,sources,destination))
+        return;
     std::vector<std::string> list;
     list.push_back("file");
     emit newMove(incrementOrderId(),list,stripSeparator(sources),"file",destination);
@@ -359,6 +389,8 @@ void CopyListener::newPluginCopyWithoutDestination(const uint32_t &orderId,const
 void CopyListener::newPluginCopy(const quint32 &orderId,const std::vector<std::string> &sources,const std::string &destination)
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"sources: "+stringimplode(sources,";")+", destination: "+destination);
+    if(isDuplicatePaste(0,sources,destination))
+        return;
     PluginInterface_Listener *plugin		= qobject_cast<PluginInterface_Listener *>(sender());
     CopyRunning newCopyInformation;
     newCopyInformation.listenInterface	= plugin;
@@ -385,6 +417,8 @@ void CopyListener::newPluginMoveWithoutDestination(const uint32_t &orderId,const
 void CopyListener::newPluginMove(const quint32 &orderId,const std::vector<std::string> &sources,const std::string &destination)
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"sources: "+stringimplode(sources,";")+", destination: "+destination);
+    if(isDuplicatePaste(1,sources,destination))
+        return;
     PluginInterface_Listener *plugin		= qobject_cast<PluginInterface_Listener *>(sender());
     CopyRunning newCopyInformation;
     newCopyInformation.listenInterface	= plugin;

@@ -298,12 +298,12 @@
 <context>
     <name>CopyListener</name>
     <message>
-        <location filename="../../../CopyListener.cpp" line="160"/>
+        <location filename="../../../CopyListener.cpp" line="166"/>
         <source>Error</source>
         <translation>エラー</translation>
     </message>
     <message>
-        <location filename="../../../CopyListener.cpp" line="160"/>
+        <location filename="../../../CopyListener.cpp" line="166"/>
         <source>Error during the reception of the copy/move list
 %1</source>
         <translation>コピー/移動リストの受信中にエラーが発生しました
@@ -1106,7 +1106,7 @@ This version is compiled as version: %1.</source>
 <context>
     <name>Listener</name>
     <message>
-        <location filename="../../Listener/catchcopy-v0002/listener.cpp" line="7"/>
+        <location filename="../../Listener/catchcopy/listener.cpp" line="7"/>
         <source>Ultracopier</source>
         <translation>Ultracopier</translation>
     </message>
@@ -1583,29 +1583,39 @@ This version is compiled as version: %1.</source>
 <context>
     <name>OptionsWidget</name>
     <message>
-        <location filename="../../PluginLoader/catchcopy-v0002/OptionsWidget.ui" line="17"/>
+        <location filename="../../PluginLoader/catchcopy/OptionsWidget.ui" line="17"/>
         <source>In normal case, only the dll 64Bits is important with 64Bits OS, and 32Bits dll with 32Bits OS. When it&apos;s important, the UAC can be opened to load the dll.</source>
         <translation>通常、64ビットOSでは64ビットのDLLが、32ビットOSでは32ビットのDLLのみが重要です。必要に応じて、DLLをロードするためにUAC（ユーザーアカウント制御）が開かれる場合があります。</translation>
     </message>
     <message>
-        <location filename="../../PluginLoader/catchcopy-v0002/OptionsWidget.ui" line="20"/>
+        <location filename="../../PluginLoader/catchcopy/OptionsWidget.ui" line="20"/>
         <source>All the dlls are importants</source>
         <translation>すべてのDLLを重要とみなす</translation>
     </message>
     <message>
-        <location filename="../../PluginLoader/catchcopy-v0002/OptionsWidget.ui" line="34"/>
+        <location filename="../../PluginLoader/catchcopy/OptionsWidget.ui" line="34"/>
         <source>Register for all users</source>
         <translation>すべてのユーザーに対して登録する</translation>
     </message>
     <message>
-        <location filename="../../PluginLoader/catchcopy-v0002/OptionsWidget.ui" line="41"/>
+        <location filename="../../PluginLoader/catchcopy/OptionsWidget.ui" line="41"/>
         <source>at startup</source>
         <translation>起動時</translation>
     </message>
     <message>
-        <location filename="../../PluginLoader/catchcopy-v0002/OptionsWidget.ui" line="48"/>
+        <location filename="../../PluginLoader/catchcopy/OptionsWidget.ui" line="48"/>
         <source>not unload</source>
         <translation>アンロードしない</translation>
+    </message>
+    <message>
+        <location filename="../../PluginLoader/catchcopy/OptionsWidget.ui" line="55"/>
+        <source>Intercept Ctrl+C / Ctrl+X then Ctrl+V in Windows Explorer and on the Desktop, and copy/move with Ultracopier. Per-user, no admin needed.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../PluginLoader/catchcopy/OptionsWidget.ui" line="58"/>
+        <source>Catch clipboard copy/paste (Ctrl+C, Ctrl+X, Ctrl+V)</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

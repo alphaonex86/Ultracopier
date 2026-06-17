@@ -77,6 +77,10 @@ private:
 signals:
     void pluginLoaderReady(const Ultracopier::CatchState &state,bool havePlugin,bool someAreInWaitOfReply) const;
     void previouslyPluginAdded(const PluginsAvailable &plugin) const;
+    /// \brief relayed from a PluginLoader plugin (the Ctrl+V/Ctrl+X clipboard hook) to CopyListener,
+    /// so the paste is handled in-process instead of spawning a second ultracopier.exe
+    void newCopy(std::vector<std::string> sources,std::string destination);
+    void newMove(std::vector<std::string> sources,std::string destination);
 };
 
 #endif // PluginLoader_H

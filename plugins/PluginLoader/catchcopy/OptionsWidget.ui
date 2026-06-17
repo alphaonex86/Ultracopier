@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>OptionsWidget</class>
+ <widget class="QWidget" name="OptionsWidget">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>340</width>
+    <height>170</height>
+   </rect>
+  </property>
+  <layout class="QVBoxLayout">
+   <item>
+    <widget class="QCheckBox" name="allDllIsImportant">
+     <property name="toolTip">
+      <string>In normal case, only the dll 64Bits is important with 64Bits OS, and 32Bits dll with 32Bits OS. When it's important, the UAC can be opened to load the dll.</string>
+     </property>
+     <property name="text">
+      <string>All the dlls are importants</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QCheckBox" name="Debug">
+     <property name="text">
+      <string notr="true">Debug</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QCheckBox" name="allUserIsImportant">
+     <property name="text">
+      <string>Register for all users</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QCheckBox" name="atstartup">
+     <property name="text">
+      <string>at startup</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QCheckBox" name="notunload">
+     <property name="text">
+      <string>not unload</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QCheckBox" name="catchPaste">
+     <property name="toolTip">
+      <string>Intercept Ctrl+C / Ctrl+X then Ctrl+V in Windows Explorer and on the Desktop, and copy/move with Ultracopier. Per-user, no admin needed.</string>
+     </property>
+     <property name="text">
+      <string>Catch clipboard copy/paste (Ctrl+C, Ctrl+X, Ctrl+V)</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <spacer name="verticalSpacer">
+     <property name="orientation">
+      <enum>Qt::Orientation::Vertical</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>40</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

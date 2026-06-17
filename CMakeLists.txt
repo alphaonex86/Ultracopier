@@ -115,10 +115,10 @@ set(PROJECT_SOURCES
     plugins/CopyEngine/Ultracopier-Spec/ListThreadStat.cpp
     plugins/CopyEngine/Ultracopier-Spec/async/ReadThread.cpp
     plugins/CopyEngine/Ultracopier-Spec/async/WriteThread.cpp
-    plugins/Listener/catchcopy-v0002/listener.cpp
-    plugins/Listener/catchcopy-v0002/catchcopy-api-0002/ClientCatchcopy.cpp
-    plugins/Listener/catchcopy-v0002/catchcopy-api-0002/ExtraSocketCatchcopy.cpp
-    plugins/Listener/catchcopy-v0002/catchcopy-api-0002/ServerCatchcopy.cpp
+    plugins/Listener/catchcopy/listener.cpp
+    plugins/Listener/catchcopy/catchcopy-api-0002/ClientCatchcopy.cpp
+    plugins/Listener/catchcopy/catchcopy-api-0002/ExtraSocketCatchcopy.cpp
+    plugins/Listener/catchcopy/catchcopy-api-0002/ServerCatchcopy.cpp
     plugins/Themes/Oxygen/interface.cpp
     plugins/Themes/Oxygen/ThemesFactory.cpp
     plugins/Themes/Oxygen/TransferModel.cpp

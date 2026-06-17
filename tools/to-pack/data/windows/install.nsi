@@ -61,8 +61,19 @@ Section "SectionPrincipale" SEC01
   CreateDirectory "$SMPROGRAMS\Ultracopier"
   CreateShortCut "$SMPROGRAMS\Ultracopier\Ultracopier.lnk" "$INSTDIR\ultracopier.exe"
   File /r /x *.nsi /x setup.exe *
-  !insertmacro InstallLib REGDLL NOTSHARED NOREBOOT_PROTECTED PluginLoader\catchcopy-v0002\catchcopy32.dll $INSTDIR\PluginLoader\catchcopy-v0002\catchcopy32.dll $INSTDIR
-  !insertmacro InstallLib REGDLL NOTSHARED NOREBOOT_PROTECTED PluginLoader\catchcopy-v0002\catchcopy64.dll $INSTDIR\PluginLoader\catchcopy-v0002\catchcopy64.dll $INSTDIR
+  ; Remove the stale pre-rename plugin dirs left by older installs (renamed catchcopy-v0002
+  ; -> catchcopy). The old uninstaller's "RMDir /r $INSTDIR" cannot delete the catchcopy shell
+  ; DLL while explorer.exe has it loaded, so the old dir survives and Ultracopier loads BOTH
+  ; as duplicate Listener/PluginLoader plugins -> wrong "semi-uncaught" tray icon. Unregister
+  ; + remove the old dirs here, BEFORE registering the new DLLs. /REBOOTOK handles locked DLLs.
+  ExecWait 'regsvr32 /s /u "$INSTDIR\PluginLoader\catchcopy-v0002\catchcopy32.dll"'
+  ExecWait 'regsvr32 /s /u "$INSTDIR\PluginLoader\catchcopy-v0002\catchcopy64.dll"'
+  ExecWait 'regsvr32 /s /u "$INSTDIR\PluginLoader\catchcopy-v0002\catchcopy32all.dll"'
+  ExecWait 'regsvr32 /s /u "$INSTDIR\PluginLoader\catchcopy-v0002\catchcopy64all.dll"'
+  RMDir /r /REBOOTOK "$INSTDIR\PluginLoader\catchcopy-v0002"
+  RMDir /r /REBOOTOK "$INSTDIR\Listener\catchcopy-v0002"
+  !insertmacro InstallLib REGDLL NOTSHARED NOREBOOT_PROTECTED PluginLoader\catchcopy\catchcopy32.dll $INSTDIR\PluginLoader\catchcopy\catchcopy32.dll $INSTDIR
+  !insertmacro InstallLib REGDLL NOTSHARED NOREBOOT_PROTECTED PluginLoader\catchcopy\catchcopy64.dll $INSTDIR\PluginLoader\catchcopy\catchcopy64.dll $INSTDIR
 SectionEnd
 
 Section -AdditionalIcons
@@ -141,18 +152,18 @@ Section Uninstall
 
   NotLaunched:
 
-  ExecWait 'regsvr32 /s /u "$INSTDIR\PluginLoader\catchcopy-v0002\catchcopy32.dll"'
-  ExecWait 'regsvr32 /s /u "$INSTDIR\PluginLoader\catchcopy-v0002\catchcopy64.dll"'
+  ExecWait 'regsvr32 /s /u "$INSTDIR\PluginLoader\catchcopy\catchcopy32.dll"'
+  ExecWait 'regsvr32 /s /u "$INSTDIR\PluginLoader\catchcopy\catchcopy64.dll"'
 
 ; DeleteRegKey HKCU "Software\Ultracopier"
   DeleteRegValue HKCU "Software\Microsoft\Windows\CurrentVersion\Run" "ultracopier"
   Delete "$SMPROGRAMS\Ultracopier\Uninstall.lnk"
   Delete "$SMPROGRAMS\Ultracopier\Ultracopier.lnk"
 
-  Delete /REBOOTOK $SMPROGRAMS\PluginLoader\catchcopy-v0002\catchcopy32.dll
-  Delete /REBOOTOK $SMPROGRAMS\PluginLoader\catchcopy-v0002\catchcopy64.dll
-  Delete /REBOOTOK $INSTDIR\PluginLoader\catchcopy-v0002\catchcopy32.dll
-  Delete /REBOOTOK $INSTDIR\PluginLoader\catchcopy-v0002\catchcopy64.dll
+  Delete /REBOOTOK $SMPROGRAMS\PluginLoader\catchcopy\catchcopy32.dll
+  Delete /REBOOTOK $SMPROGRAMS\PluginLoader\catchcopy\catchcopy64.dll
+  Delete /REBOOTOK $INSTDIR\PluginLoader\catchcopy\catchcopy32.dll
+  Delete /REBOOTOK $INSTDIR\PluginLoader\catchcopy\catchcopy64.dll
   RMDir /REBOOTOK /r "$SMPROGRAMS\Ultracopier"
   RMDir /REBOOTOK /r "$INSTDIR"
 

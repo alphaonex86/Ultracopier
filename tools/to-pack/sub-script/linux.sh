@@ -69,7 +69,7 @@ function compil {
 			echo "make failed on the linux: ${RETURN_CODE}"
 			exit
 		fi
-		cd ${TEMP_PATH}/${FINAL_ARCHIVE}/plugins/Listener/catchcopy-v0002/
+		cd ${TEMP_PATH}/${FINAL_ARCHIVE}/plugins/Listener/catchcopy/
 		${QMAKE} -config ${QTMODEDEBUGRELEASE}
 		make -j 4 > /dev/null
 		RETURN_CODE=$?

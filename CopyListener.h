@@ -118,6 +118,12 @@ class CopyListener : public QObject
         OptionDialog *optionDialog;
         bool stopIt;
         std::regex stripSeparatorRegex;
+        // dedup of a clipboard paste delivered by both the Ctrl+V hook and catchcopy (safety net)
+        bool isDuplicatePaste(int mode,const std::vector<std::string> &sources,const std::string &destination);
+        int lastPasteDedupMode;
+        std::vector<std::string> lastPasteDedupSources;
+        std::string lastPasteDedupDestination;
+        qint64 lastPasteDedupTimeMs;
 };
 
 #endif // COPYLISTENER_H

@@ -79,15 +79,15 @@ HEADERS += \
     $$PWD/plugins/CopyEngine/Ultracopier-Spec/StructEnumDefinition.h \
     $$PWD/plugins/CopyEngine/Ultracopier-Spec/TransferThread.h \
     $$PWD/plugins/CopyEngine/Ultracopier-Spec/CopyEngineUltracopier-SpecVariable.h \
-    $$PWD/plugins/Listener/catchcopy-v0002/Listenercatchcopy-v0002Variable.h \
-    $$PWD/plugins/Listener/catchcopy-v0002/StructEnumDefinition.h \
-    $$PWD/plugins/Listener/catchcopy-v0002/listener.h \
-    $$PWD/plugins/Listener/catchcopy-v0002/Environment.h \
-    $$PWD/plugins/Listener/catchcopy-v0002/DebugEngineMacro.h \
-    $$PWD/plugins/Listener/catchcopy-v0002/catchcopy-api-0002/ClientCatchcopy.h \
-    $$PWD/plugins/Listener/catchcopy-v0002/catchcopy-api-0002/ExtraSocketCatchcopy.h \
-    $$PWD/plugins/Listener/catchcopy-v0002/catchcopy-api-0002/ServerCatchcopy.h \
-    $$PWD/plugins/Listener/catchcopy-v0002/catchcopy-api-0002/VariablesCatchcopy.h \
+    $$PWD/plugins/Listener/catchcopy/ListenercatchcopyVariable.h \
+    $$PWD/plugins/Listener/catchcopy/StructEnumDefinition.h \
+    $$PWD/plugins/Listener/catchcopy/listener.h \
+    $$PWD/plugins/Listener/catchcopy/Environment.h \
+    $$PWD/plugins/Listener/catchcopy/DebugEngineMacro.h \
+    $$PWD/plugins/Listener/catchcopy/catchcopy-api-0002/ClientCatchcopy.h \
+    $$PWD/plugins/Listener/catchcopy/catchcopy-api-0002/ExtraSocketCatchcopy.h \
+    $$PWD/plugins/Listener/catchcopy/catchcopy-api-0002/ServerCatchcopy.h \
+    $$PWD/plugins/Listener/catchcopy/catchcopy-api-0002/VariablesCatchcopy.h \
     $$PWD/plugins/Themes/Oxygen/DebugEngineMacro.h \
     $$PWD/plugins/Themes/Oxygen/Environment.h \
     $$PWD/plugins/Themes/Oxygen/interface.h \
@@ -122,10 +122,10 @@ SOURCES += \
     $$PWD/plugins/CopyEngine/Ultracopier-Spec/ListThreadOptions.cpp \
     $$PWD/plugins/CopyEngine/Ultracopier-Spec/ListThreadScan.cpp \
     $$PWD/plugins/CopyEngine/Ultracopier-Spec/ListThreadStat.cpp \
-    $$PWD/plugins/Listener/catchcopy-v0002/listener.cpp \
-    $$PWD/plugins/Listener/catchcopy-v0002/catchcopy-api-0002/ClientCatchcopy.cpp \
-    $$PWD/plugins/Listener/catchcopy-v0002/catchcopy-api-0002/ExtraSocketCatchcopy.cpp \
-    $$PWD/plugins/Listener/catchcopy-v0002/catchcopy-api-0002/ServerCatchcopy.cpp \
+    $$PWD/plugins/Listener/catchcopy/listener.cpp \
+    $$PWD/plugins/Listener/catchcopy/catchcopy-api-0002/ClientCatchcopy.cpp \
+    $$PWD/plugins/Listener/catchcopy/catchcopy-api-0002/ExtraSocketCatchcopy.cpp \
+    $$PWD/plugins/Listener/catchcopy/catchcopy-api-0002/ServerCatchcopy.cpp \
     $$PWD/plugins/Themes/Oxygen/interface.cpp \
     $$PWD/plugins/Themes/Oxygen/ThemesFactory.cpp \
     $$PWD/plugins/Themes/Oxygen/TransferModel.cpp
@@ -147,17 +147,17 @@ win32 {
     RESOURCES -= $$PWD/resources/resources-windows-qt-plugin.qrc
 
     HEADERS         += \
-        $$PWD/plugins/PluginLoader/catchcopy-v0002/StructEnumDefinition.h \
-        $$PWD/plugins/PluginLoader/catchcopy-v0002/pluginLoader.h \
-        $$PWD/plugins/PluginLoader/catchcopy-v0002/DebugEngineMacro.h \
-        $$PWD/plugins/PluginLoader/catchcopy-v0002/Environment.h \
-        $$PWD/plugins/PluginLoader/catchcopy-v0002/PluginLoadercatchcopy-v0002Variable.h \
-        $$PWD/plugins/PluginLoader/catchcopy-v0002/PlatformMacro.h \
-        $$PWD/plugins/PluginLoader/catchcopy-v0002/OptionsWidget.h
+        $$PWD/plugins/PluginLoader/catchcopy/StructEnumDefinition.h \
+        $$PWD/plugins/PluginLoader/catchcopy/pluginLoader.h \
+        $$PWD/plugins/PluginLoader/catchcopy/DebugEngineMacro.h \
+        $$PWD/plugins/PluginLoader/catchcopy/Environment.h \
+        $$PWD/plugins/PluginLoader/catchcopy/PluginLoadercatchcopyVariable.h \
+        $$PWD/plugins/PluginLoader/catchcopy/PlatformMacro.h \
+        $$PWD/plugins/PluginLoader/catchcopy/OptionsWidget.h
     SOURCES         += \
-        $$PWD/plugins/PluginLoader/catchcopy-v0002/pluginLoader.cpp \
-        $$PWD/plugins/PluginLoader/catchcopy-v0002/OptionsWidget.cpp
-    FORMS += $$PWD/plugins/PluginLoader/catchcopy-v0002/OptionsWidget.ui
+        $$PWD/plugins/PluginLoader/catchcopy/pluginLoader.cpp \
+        $$PWD/plugins/PluginLoader/catchcopy/OptionsWidget.cpp
+    FORMS += $$PWD/plugins/PluginLoader/catchcopy/OptionsWidget.ui
     LIBS += -lole32 -lshell32
 }
 

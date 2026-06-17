@@ -8,7 +8,7 @@
 
 #ifdef ULTRACOPIER_PLUGIN_ALL_IN_ONE
 #ifdef Q_OS_WIN32
-#include "plugins/PluginLoader/catchcopy-v0002/pluginLoader.h"
+#include "plugins/PluginLoader/catchcopy/pluginLoader.h"
 #endif
 #endif
 
@@ -41,7 +41,7 @@ PluginLoaderCore::~PluginLoaderCore()
     stopIt=true;
     #ifndef ULTRACOPIER_PLUGIN_ALL_IN_ONE_DIRECT
     {
-        /* why it crash here? Only under Window with PluginLoader/catchcopy-v0002
+        /* why it crash here? Only under Window with PluginLoader/catchcopy
         int index=0;
         while(index<pluginList.size())
         {
@@ -145,6 +145,8 @@ void PluginLoaderCore::onePluginAdded(const PluginsAvailable &plugin)
     pluginLoaderInstance->setResources(newEntry.options,plugin.writablePath,plugin.path,ULTRACOPIER_VERSION_PORTABLE_BOOL);
     optionDialog->addPluginOptionWidget(PluginType_PluginLoader,plugin.name,newEntry.pluginLoaderInterface->options());
     connect(pluginList.back().pluginLoaderInterface,&PluginInterface_PluginLoader::newState,this,&PluginLoaderCore::newState,Qt::DirectConnection);
+    connect(pluginList.back().pluginLoaderInterface,&PluginInterface_PluginLoader::newCopy,this,&PluginLoaderCore::newCopy,Qt::DirectConnection);
+    connect(pluginList.back().pluginLoaderInterface,&PluginInterface_PluginLoader::newMove,this,&PluginLoaderCore::newMove,Qt::DirectConnection);
     connect(LanguagesManager::languagesManager,&LanguagesManager::newLanguageLoaded,newEntry.pluginLoaderInterface,&PluginInterface_PluginLoader::newLanguageLoaded,Qt::DirectConnection);
     if(needEnable)
     {
@@ -173,6 +175,8 @@ void PluginLoaderCore::onePluginAdded(const PluginsAvailable &plugin)
     newEntry.pluginLoaderInterface->setResources(newEntry.options,plugin.writablePath,plugin.path,ULTRACOPIER_VERSION_PORTABLE_BOOL);
     optionDialog->addPluginOptionWidget(PluginType_PluginLoader,plugin.name,newEntry.pluginLoaderInterface->options());
     connect(pluginList.back().pluginLoaderInterface,&PluginInterface_PluginLoader::newState,this,&PluginLoaderCore::newState,Qt::DirectConnection);
+    connect(pluginList.back().pluginLoaderInterface,&PluginInterface_PluginLoader::newCopy,this,&PluginLoaderCore::newCopy,Qt::DirectConnection);
+    connect(pluginList.back().pluginLoaderInterface,&PluginInterface_PluginLoader::newMove,this,&PluginLoaderCore::newMove,Qt::DirectConnection);
     connect(LanguagesManager::languagesManager,&LanguagesManager::newLanguageLoaded,newEntry.pluginLoaderInterface,&PluginInterface_PluginLoader::newLanguageLoaded,Qt::DirectConnection);
     if(needEnable)
     {

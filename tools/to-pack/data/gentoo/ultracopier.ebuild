@@ -41,7 +41,7 @@ src_prepare() {
 	find -name "Variable.h" -exec sed -i "s/\/\/#define ULTRACOPIER_VERSION_ULTIMATE/#define ULTRACOPIER_VERSION_ULTIMATE/g" {} \; > /dev/null 2>&1
 	eqmake4 "${S}"/ultracopier-core.pro
 	eqmake4 "${S}"/plugins/CopyEngine/Ultracopier/CopyEngine.pro
-	eqmake4 "${S}"/plugins/Listener/catchcopy-v0002/listener.pro
+	eqmake4 "${S}"/plugins/Listener/catchcopy/listener.pro
 	eqmake4 "${S}"/plugins/plugins/SessionLoader/KDE4/sessionLoader.pro
 	eqmake4 "${S}"/plugins/Themes/Oxygen/interface.pro
 }
@@ -55,7 +55,7 @@ src_compile() {
 	if [ -f Makefile ] ; then
 		emake
 	fi
-	cd "${S}"/plugins/Listener/catchcopy-v0002/
+	cd "${S}"/plugins/Listener/catchcopy/
 	if [ -f Makefile ] ; then
 		emake
 	fi
@@ -79,10 +79,10 @@ src_install() {
 	doins plugins/CopyEngine/Ultracopier/libcopyEngine.so
 	fperms 0755 /plugins/CopyEngine/Ultracopier/libcopyEngine.so
 
-	insinto /usr/share/Ultracopier/Listener/catchcopy-v0002/
-	doins plugins/Listener/catchcopy-v0002/informations.xml
-	doins plugins/Listener/catchcopy-v0002/liblistener.so
-	fperms 0755 /plugins/Listener/catchcopy-v0002/liblistener.so
+	insinto /usr/share/Ultracopier/Listener/catchcopy/
+	doins plugins/Listener/catchcopy/informations.xml
+	doins plugins/Listener/catchcopy/liblistener.so
+	fperms 0755 /plugins/Listener/catchcopy/liblistener.so
 
 	insinto /usr/share/Ultracopier/SessionLoader/KDE4/
 	doins plugins/SessionLoader/KDE4/informations.xml

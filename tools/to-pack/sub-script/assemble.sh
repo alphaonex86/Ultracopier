@@ -35,8 +35,8 @@ function assemble {
 		then
 			mkdir -p ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/CopyEngine/Ultracopier/
 			mkdir -p ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/Languages/
-			mkdir -p ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/Listener/catchcopy-v0002/
-			mkdir -p ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/PluginLoader/catchcopy-v0002/
+			mkdir -p ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/Listener/catchcopy/
+			mkdir -p ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/PluginLoader/catchcopy/
 			mkdir -p ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/SessionLoader/Windows/
 			if [ $SUPERCOPIER -eq 1 ]
 			then
@@ -118,8 +118,8 @@ function assemble {
 			cp -Rf ${BASE_PWD}/data/windows/catchcopy32${CATCHCOPY_SUFIX}.dll ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/catchcopy32${CATCHCOPY_SUFIX}.dll
 			cp -Rf ${BASE_PWD}/data/windows/catchcopy64${CATCHCOPY_SUFIX}.dll ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/catchcopy64${CATCHCOPY_SUFIX}.dll
 		else
-			cp -Rf ${BASE_PWD}/data/windows/catchcopy32${CATCHCOPY_SUFIX}.dll ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/PluginLoader/catchcopy-v0002/catchcopy32${CATCHCOPY_SUFIX}.dll
-			cp -Rf ${BASE_PWD}/data/windows/catchcopy64${CATCHCOPY_SUFIX}.dll ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/PluginLoader/catchcopy-v0002/catchcopy64${CATCHCOPY_SUFIX}.dll
+			cp -Rf ${BASE_PWD}/data/windows/catchcopy32${CATCHCOPY_SUFIX}.dll ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/PluginLoader/catchcopy/catchcopy32${CATCHCOPY_SUFIX}.dll
+			cp -Rf ${BASE_PWD}/data/windows/catchcopy64${CATCHCOPY_SUFIX}.dll ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/PluginLoader/catchcopy/catchcopy64${CATCHCOPY_SUFIX}.dll
 		fi
 		if [ ${STATIC} -ne 1 ]
 		then

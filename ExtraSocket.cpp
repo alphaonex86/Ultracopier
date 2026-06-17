@@ -52,7 +52,11 @@ char * ExtraSocket::toHex(const char *str)
     p = sz = (char *) malloc((len+1)*4);
     for (size_t i=0; i<len; i++)
     {
-        sprintf(p, "%.2x00", str[i]);
+        // unsigned char: a signed char >=0x80 sign-extends so "%.2x" prints 8 hex
+        // digits while p advances by 4 -> heap overflow and an inconsistent socket
+        // name for non-ASCII user names. (This is Ultracopier's own local socket,
+        // not the catchcopy pipe, but it had the identical bug.)
+        sprintf(p, "%.2x00", (unsigned char)str[i]);
         p+=4;
     }
     *p=0;

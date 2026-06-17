@@ -7,6 +7,7 @@
 #define PLUGININTERFACE_PLUGINLOADER_H
 
 #include <string>
+#include <vector>
 
 #include "OptionInterface.h"
 
@@ -30,6 +31,12 @@ class PluginInterface_PluginLoader : public QObject
     // signal to implement
     signals:
         void newState(const Ultracopier::CatchState &catchstate) const;
+        /// \brief deliver a clipboard paste (Ctrl+V) copy IN-PROCESS to the running instance,
+        /// instead of spawning a second ultracopier.exe. Routed to CopyListener::copy (the same
+        /// endpoint the single-instance QLocalServer forwarding reaches via CliParser).
+        void newCopy(std::vector<std::string> sources,std::string destination) const;
+        /// \brief same as newCopy() for a clipboard cut (Ctrl+X) -> move
+        void newMove(std::vector<std::string> sources,std::string destination) const;
         /// \brief To debug source
         void debugInformation(const Ultracopier::DebugLevel &level,const std::string &fonction,const std::string &text,const std::string &file,const int &ligne) const;
 };
