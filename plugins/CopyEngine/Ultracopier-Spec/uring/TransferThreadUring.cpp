@@ -42,6 +42,12 @@ TransferThreadUring::TransferThreadUring() :
     realMove=false;
     size_at_open=0;
     mtime_at_open=0;
+    /* putInPause was the only member left uninitialized. It is read in
+       doTransferPipeline's pause gate: if(putInPause && !stopIt) pauseMutex.acquire().
+       An uninitialized non-zero value made transfer threads block forever on the
+       pause semaphore (no resume() ever comes) -> the copy hung after a handful
+       of files. */
+    putInPause=false;
 
     #ifdef ULTRACOPIER_PLUGIN_SPEED_SUPPORT
     multiForBigSpeed=0;
@@ -412,6 +418,9 @@ void TransferThreadUring::doTransferPipeline()
                 ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] io_uring_get_sqe failed for initial read");
                 break;
             }
+            pipelineBuffers[i].fileOffset=readOffset;
+            pipelineBuffers[i].chunkSize=toRead;
+            pipelineBuffers[i].bytesUsed=0;
             io_uring_prep_read(sqe,sourceFd,pipelineBuffers[i].data,toRead,readOffset);
             io_uring_sqe_set_data64(sqe,OP_READ_TAG|(uint64_t)i);
             pipelineBuffers[i].state=PipelineBuffer::Reading;
@@ -484,9 +493,7 @@ void TransferThreadUring::doTransferPipeline()
                 }
                 else
                 {
-                    // Read completed, queue write
-                    pipelineBuffers[bufIdx].bytesUsed=result;
-                    pipelineBuffers[bufIdx].state=PipelineBuffer::Writing;
+                    pipelineBuffers[bufIdx].bytesUsed+=result;
 
                     struct io_uring_sqe *sqe=io_uring_get_sqe(&ring);
                     if(!sqe)
@@ -497,10 +504,30 @@ void TransferThreadUring::doTransferPipeline()
                         emit errorOnFile(destination,errorString_internal);
                         break;
                     }
-                    io_uring_prep_write(sqe,destFd,pipelineBuffers[bufIdx].data,result,writeOffset);
-                    io_uring_sqe_set_data64(sqe,OP_WRITE_TAG|(uint64_t)bufIdx);
-                    writeOffset+=result;
-                    writesInFlight++;
+                    if((unsigned int)pipelineBuffers[bufIdx].bytesUsed<pipelineBuffers[bufIdx].chunkSize)
+                    {
+                        // Short read: fetch the rest of this chunk into the same buffer
+                        // before writing, so partial reads under load can't corrupt data.
+                        const unsigned int rem=pipelineBuffers[bufIdx].chunkSize-(unsigned int)pipelineBuffers[bufIdx].bytesUsed;
+                        io_uring_prep_read(sqe,sourceFd,
+                                           pipelineBuffers[bufIdx].data+pipelineBuffers[bufIdx].bytesUsed,
+                                           rem,
+                                           pipelineBuffers[bufIdx].fileOffset+pipelineBuffers[bufIdx].bytesUsed);
+                        io_uring_sqe_set_data64(sqe,OP_READ_TAG|(uint64_t)bufIdx);
+                        pipelineBuffers[bufIdx].state=PipelineBuffer::Reading;
+                        readsInFlight++;
+                    }
+                    else
+                    {
+                        // Chunk fully read -> write it back at the exact offset it came
+                        // from (NOT a global write cursor): io_uring completions arrive
+                        // out of order, so completion-order writing scrambled the file.
+                        pipelineBuffers[bufIdx].state=PipelineBuffer::Writing;
+                        io_uring_prep_write(sqe,destFd,pipelineBuffers[bufIdx].data,
+                                            pipelineBuffers[bufIdx].bytesUsed,pipelineBuffers[bufIdx].fileOffset);
+                        io_uring_sqe_set_data64(sqe,OP_WRITE_TAG|(uint64_t)bufIdx);
+                        writesInFlight++;
+                    }
                     needSubmit=true;
                 }
             }
@@ -516,12 +543,14 @@ void TransferThreadUring::doTransferPipeline()
                     emit errorOnFile(destination,errorString_internal);
                     break;
                 }
+                transferProgression+=result;
                 // Handle short write
                 if(result<pipelineBuffers[bufIdx].bytesUsed)
                 {
                     int remaining=pipelineBuffers[bufIdx].bytesUsed-result;
                     memmove(pipelineBuffers[bufIdx].data,pipelineBuffers[bufIdx].data+result,remaining);
                     pipelineBuffers[bufIdx].bytesUsed=remaining;
+                    pipelineBuffers[bufIdx].fileOffset+=result;
 
                     struct io_uring_sqe *sqe=io_uring_get_sqe(&ring);
                     if(!sqe)
@@ -532,15 +561,14 @@ void TransferThreadUring::doTransferPipeline()
                         emit errorOnFile(destination,errorString_internal);
                         break;
                     }
-                    io_uring_prep_write(sqe,destFd,pipelineBuffers[bufIdx].data,remaining,writeOffset-remaining);
+                    io_uring_prep_write(sqe,destFd,pipelineBuffers[bufIdx].data,remaining,pipelineBuffers[bufIdx].fileOffset);
                     io_uring_sqe_set_data64(sqe,OP_WRITE_TAG|(uint64_t)bufIdx);
                     writesInFlight++;
                     needSubmit=true;
                     continue;
                 }
 
-                // Write completed fully
-                transferProgression=writeOffset;
+                // Write completed fully -> reuse this buffer for the next chunk
                 pipelineBuffers[bufIdx].state=PipelineBuffer::Free;
 
                 // Queue next read if data remains
@@ -553,6 +581,9 @@ void TransferThreadUring::doTransferPipeline()
                     struct io_uring_sqe *sqe=io_uring_get_sqe(&ring);
                     if(sqe)
                     {
+                        pipelineBuffers[bufIdx].fileOffset=readOffset;
+                        pipelineBuffers[bufIdx].chunkSize=toRead;
+                        pipelineBuffers[bufIdx].bytesUsed=0;
                         io_uring_prep_read(sqe,sourceFd,pipelineBuffers[bufIdx].data,toRead,readOffset);
                         io_uring_sqe_set_data64(sqe,OP_READ_TAG|(uint64_t)bufIdx);
                         pipelineBuffers[bufIdx].state=PipelineBuffer::Reading;
@@ -578,39 +609,13 @@ void TransferThreadUring::doTransferPipeline()
 
     if(!errorOccurred && !stopIt)
     {
-        // Async fsync via io_uring instead of blocking fsync()
-        struct io_uring_sqe *sqe=io_uring_get_sqe(&ring);
-        if(!sqe)
-        {
-            errorString_internal="io_uring_get_sqe failed for fsync";
-            writeError=true;
-            emit errorOnFile(destination,errorString_internal);
-        }
-        else
-        {
-            io_uring_prep_fsync(sqe,destFd,0);
-            io_uring_sqe_set_data64(sqe,OP_FSYNC_TAG);
-            io_uring_submit(&ring);
-
-            struct io_uring_cqe *cqe;
-            ret=io_uring_wait_cqe(&ring,&cqe);
-            if(ret<0)
-            {
-                errorString_internal="io_uring_wait_cqe for fsync failed: "+std::string(strerror(-ret));
-                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] "+errorString_internal);
-                writeError=true;
-                emit errorOnFile(destination,errorString_internal);
-            }
-            else if(cqe->res<0)
-            {
-                errorString_internal="fsync error: "+std::string(strerror(-cqe->res));
-                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] "+errorString_internal);
-                writeError=true;
-                emit errorOnFile(destination,errorString_internal);
-            }
-            if(ret>=0)
-                io_uring_cqe_seen(&ring,cqe);
-        }
+        /* No per-file fsync. A blocking fsync per file forced a disk-durability
+           flush for every file (~35 ms/file on a spinning/slow volume -> ~1 hour
+           of pure fsync wait for 100k files); this was THE dominant "much slower
+           than rsync" cost, and it is wall-clock/latency, not CPU or I/O
+           bandwidth. Neither rsync nor the async backend fsync each file: the
+           written data stays in the page cache and the kernel flushes it
+           normally. A file copy does not need per-file durability. */
         transferProgression=sourceFileSize;
     }
 

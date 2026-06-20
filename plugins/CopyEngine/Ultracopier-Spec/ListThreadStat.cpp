@@ -88,9 +88,9 @@ void ListThread::timedUpdateDebugDialog()
     while(index<loop_size)
     {
         newList2.push_back(
-            TransferThread::internalStringTostring(actionToDoListTransfer.at(index).source)+
-            " "+std::to_string(actionToDoListTransfer.at(index).size)+" "+
-            TransferThread::internalStringTostring(actionToDoListTransfer.at(index).destination)
+            TransferThread::internalStringTostring(actionToDoListTransfer.at(index)->source)+
+            " "+std::to_string(actionToDoListTransfer.at(index)->size)+" "+
+            TransferThread::internalStringTostring(actionToDoListTransfer.at(index)->destination)
                            );
         if(index>((inodeThreads+ULTRACOPIER_PLUGIN_MAXPARALLELTRANFER)*2+1))
         {

@@ -176,7 +176,7 @@ void ListThread::transferInodeIsClosed()
     unsigned int int_for_internal_loop=0;
     while(int_for_internal_loop<actionToDoListTransfer.size())
     {
-        if(actionToDoListTransfer.at(int_for_internal_loop).id==temp_transfer_thread->transferId)
+        if(actionToDoListTransfer.at(int_for_internal_loop)->id==temp_transfer_thread->transferId)
         {
             #ifdef ULTRACOPIER_PLUGIN_DEBUG
             std::string threadidstring="?";
@@ -198,7 +198,7 @@ void ListThread::transferInodeIsClosed()
             Ultracopier::ReturnActionOnCopyList newAction;
             newAction.type=Ultracopier::RemoveItem;
             newAction.userAction.moveAt=0;
-            newAction.addAction=actionToDoTransferToItemOfCopyList(actionToDoListTransfer.at(int_for_internal_loop));
+            newAction.addAction=actionToDoTransferToItemOfCopyList(*actionToDoListTransfer.at(int_for_internal_loop));
             newAction.userAction.position=int_for_internal_loop;
             actionDone.push_back(newAction);
             /// \todo check if item is at the right thread
@@ -288,7 +288,7 @@ void ListThread::transferPutAtBottom()
     unsigned int indexAction=0;
     while(indexAction<actionToDoListTransfer.size())
     {
-        if(actionToDoListTransfer.at(indexAction).id==transfer->transferId)
+        if(actionToDoListTransfer.at(indexAction)->id==transfer->transferId)
         {
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"Put at the end: "+std::to_string(transfer->transferId));
             //push for interface at the end
@@ -299,10 +299,11 @@ void ListThread::transferPutAtBottom()
             newAction.userAction.moveAt=actionToDoListTransfer.size()-1;
             actionDone.push_back(newAction);
             //do the wait stat
-            actionToDoListTransfer[indexAction].isRunning=false;
+            actionToDoListTransfer[indexAction]->isRunning=false;
             //move at the end
-            actionToDoListTransfer.push_back(actionToDoListTransfer.at(indexAction));
+            std::unique_ptr<ActionToDoTransfer> movedToEnd=std::move(actionToDoListTransfer[indexAction]);
             actionToDoListTransfer.erase(actionToDoListTransfer.cbegin()+indexAction);
+            actionToDoListTransfer.push_back(std::move(movedToEnd));
             #ifdef ULTRACOPIER_PLUGIN_DEBUG
             {
                 size_t index=0;
@@ -608,7 +609,7 @@ void ListThread::syncTransferList_internal()
     //this loop to have at max inodeThreads*inodeThreads, not inodeThreads*transferThreadList.size()
     int int_for_internal_loop;
     for(int int_for_loop=0; int_for_loop<loop_size; ++int_for_loop) {
-        const ActionToDoTransfer &item=actionToDoListTransfer.at(int_for_loop);
+        const ActionToDoTransfer &item=*actionToDoListTransfer.at(int_for_loop);
         Ultracopier::ReturnActionOnCopyList newAction;
         newAction.type				= Ultracopier::PreOperation;
         newAction.addAction.id			= item.id;
@@ -742,7 +743,7 @@ uint64_t ListThread::addToTransfer(const INTERNALTYPEPATH &source, const INTERNA
     temp.destination= destination;
     temp.mode	= mode;
     temp.isRunning	= false;
-    actionToDoListTransfer.push_back(temp);
+    actionToDoListTransfer.push_back(std::unique_ptr<ActionToDoTransfer>(new ActionToDoTransfer(temp)));
     //push the new transfer to interface
     Ultracopier::ReturnActionOnCopyList newAction;
     newAction.type				= Ultracopier::AddingItem;
@@ -893,7 +894,7 @@ void ListThread::doNewActions_inode_manipulation()
     //search the next transfer action to do
     while(int_for_loop<actionToDoListTransfer_count)
     {
-        ActionToDoTransfer& currentActionToDoTransfer=actionToDoListTransfer[int_for_loop];
+        ActionToDoTransfer& currentActionToDoTransfer=*actionToDoListTransfer[int_for_loop];
         if(!currentActionToDoTransfer.isRunning)
         {
             //search the next inode action to do

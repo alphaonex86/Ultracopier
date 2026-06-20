@@ -100,7 +100,9 @@ private:
     struct PipelineBuffer {
         char *data;
         unsigned int allocSize;
-        int bytesUsed;      // bytes read into this buffer
+        int bytesUsed;      // bytes currently held in this buffer (valid data length)
+        int64_t fileOffset; // source/destination offset this buffer's data belongs to
+        unsigned int chunkSize; // intended size of the chunk assigned to this buffer
         enum State { Free, Reading, WriteReady, Writing } state;
     };
     PipelineBuffer pipelineBuffers[NUM_BUFFERS];

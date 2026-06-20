@@ -76,13 +76,13 @@ bool ListThread::skipInternal(const uint64_t &id)
     const int &loop_size=actionToDoListTransfer.size();
     while(int_for_internal_loop<loop_size)
     {
-        if(actionToDoListTransfer.at(int_for_internal_loop).id==id)
+        if(actionToDoListTransfer.at(int_for_internal_loop)->id==id)
         {
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("[%1] remove at not running, for id: %2").arg(int_for_internal_loop).arg(id).toStdString());
             Ultracopier::ReturnActionOnCopyList newAction;
             newAction.type=Ultracopier::RemoveItem;
             newAction.userAction.moveAt=1;
-            newAction.addAction=actionToDoTransferToItemOfCopyList(actionToDoListTransfer.at(int_for_internal_loop));
+            newAction.addAction=actionToDoTransferToItemOfCopyList(*actionToDoListTransfer.at(int_for_internal_loop));
             newAction.userAction.position=int_for_internal_loop;
             actionDone.push_back(newAction);
             actionToDoListTransfer.erase(actionToDoListTransfer.cbegin()+int_for_internal_loop);

@@ -13,6 +13,8 @@
 #include <unordered_set>
 #include <unordered_map>
 #include <string>
+#include <memory>
+#include <utility>
 #include <QSemaphore>
 #include <QTextStream>
 #include <QFile>
@@ -93,7 +95,12 @@ public:
         bool isRunning;///< store if the action si running
         //TTHREAD * transfer; // -> see transferThreadList
     };
-    std::vector<ActionToDoTransfer> actionToDoListTransfer;
+    /* Stored by pointer so that erasing/moving an entry shifts cheap 8-byte
+       handles instead of move-assigning each ActionToDoTransfer (2 std::string).
+       Same queue, same order, same behaviour -- only the element representation
+       changes. Removes the O(n^2) per-file shift cost that pegged the list
+       thread at 100% CPU in -O0/debug builds. */
+    std::vector<std::unique_ptr<ActionToDoTransfer> > actionToDoListTransfer;
     /// \brief to store one action to do
     struct ActionToDoInode
     {

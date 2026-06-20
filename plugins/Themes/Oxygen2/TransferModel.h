@@ -13,6 +13,7 @@
 #include <unordered_set>
 #include <set>
 #include <vector>
+#include <memory>
 
 #include "StructEnumDefinition.h"
 #include "Oxygen2Environment.h"
@@ -80,7 +81,12 @@ public:
     uint64_t checkIntegritySize(const Folder * const tree);
     #endif
 protected:
-    std::vector<TransfertItem> transfertItemList;///< To have a transfer list for the user
+    /* Stored by pointer so that erasing/moving an entry shifts cheap 8-byte
+       handles instead of move-assigning each TransfertItem (3 std::string).
+       Same list, same order, same behaviour -- only the element representation
+       changes. This is what kept the GUI thread from freezing in -O0/debug
+       builds where the per-string moves are not inlined. */
+    std::vector<std::unique_ptr<TransfertItem> > transfertItemList;///< To have a transfer list for the user
     std::set<uint64_t> startId,stopId;///< To show what is started, what is stopped
     std::unordered_map<uint64_t,ItemOfCopyListWithMoreInformations> internalRunningOperation;///< to have progression and stat
 private:

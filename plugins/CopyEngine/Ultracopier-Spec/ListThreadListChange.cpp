@@ -24,19 +24,19 @@ void ListThread::moveItemsOnTop(std::vector<uint64_t> ids)
     //do list operation
     int indexToMove=0;
     for (unsigned int i=0; i<actionToDoListTransfer.size(); ++i) {
-        if(vectorcontainsAtLeastOne(ids,actionToDoListTransfer.at(i).id))
+        if(vectorcontainsAtLeastOne(ids,actionToDoListTransfer.at(i)->id))
         {
-            vectorremoveOne(ids,actionToDoListTransfer.at(i).id);
+            vectorremoveOne(ids,actionToDoListTransfer.at(i)->id);
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"move item "+std::to_string(i)+" to "+std::to_string(indexToMove));
             Ultracopier::ReturnActionOnCopyList newAction;
             newAction.type=Ultracopier::MoveItem;
-            newAction.addAction.id=actionToDoListTransfer.at(i).id;
+            newAction.addAction.id=actionToDoListTransfer.at(i)->id;
             newAction.userAction.moveAt=indexToMove;
             newAction.userAction.position=i;
             actionDone.push_back(newAction);
-            ActionToDoTransfer temp=actionToDoListTransfer.at(i);
+            std::unique_ptr<ActionToDoTransfer> temp=std::move(actionToDoListTransfer[i]);
             actionToDoListTransfer.erase(actionToDoListTransfer.cbegin()+i);
-            actionToDoListTransfer.insert(actionToDoListTransfer.cbegin()+indexToMove,temp);
+            actionToDoListTransfer.insert(actionToDoListTransfer.cbegin()+indexToMove,std::move(temp));
             indexToMove++;
             if(ids.empty())
                 return;
@@ -59,25 +59,22 @@ void ListThread::moveItemsUp(std::vector<uint64_t> ids)
     int lastGoodPositionReal=0;
     bool haveGoodPosition=false;
     for (unsigned int i=0; i<actionToDoListTransfer.size(); ++i) {
-        if(vectorcontainsAtLeastOne(ids,actionToDoListTransfer.at(i).id))
+        if(vectorcontainsAtLeastOne(ids,actionToDoListTransfer.at(i)->id))
         {
             if(haveGoodPosition)
             {
                 ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"move item "+std::to_string(i)+" to "+std::to_string(i-1));
                 Ultracopier::ReturnActionOnCopyList newAction;
                 newAction.type=Ultracopier::MoveItem;
-                newAction.addAction.id=actionToDoListTransfer.at(i).id;
+                newAction.addAction.id=actionToDoListTransfer.at(i)->id;
                 newAction.userAction.moveAt=lastGoodPositionReal;
                 newAction.userAction.position=i;
                 actionDone.push_back(newAction);
-                ActionToDoTransfer temp1=actionToDoListTransfer.at(i);
-                ActionToDoTransfer temp2=actionToDoListTransfer.at(lastGoodPositionReal);
-                actionToDoListTransfer[i]=temp2;
-                actionToDoListTransfer[lastGoodPositionReal]=temp1;
+                std::swap(actionToDoListTransfer[i],actionToDoListTransfer[lastGoodPositionReal]);
             }
             else
                 ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"Try move up false, item "+std::to_string(i));
-            vectorremoveOne(ids,actionToDoListTransfer.at(i).id);
+            vectorremoveOne(ids,actionToDoListTransfer.at(i)->id);
             if(ids.empty())
             {
                 ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"stop with return");
@@ -107,27 +104,24 @@ void ListThread::moveItemsDown(std::vector<uint64_t> ids)
     int lastGoodPositionReal=0;
     bool haveGoodPosition=false;
     for (int i=actionToDoListTransfer.size()-1; i>=0; --i) {
-        if(vectorcontainsAtLeastOne(ids,actionToDoListTransfer.at(i).id))
+        if(vectorcontainsAtLeastOne(ids,actionToDoListTransfer.at(i)->id))
         {
             if(haveGoodPosition)
             {
                 ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"move item "+std::to_string(i)+" to "+std::to_string(i+1));
                 Ultracopier::ReturnActionOnCopyList newAction;
                 newAction.type=Ultracopier::MoveItem;
-                newAction.addAction.id=actionToDoListTransfer.at(i).id;
+                newAction.addAction.id=actionToDoListTransfer.at(i)->id;
                 newAction.userAction.moveAt=lastGoodPositionReal;
                 newAction.userAction.position=i;
                 actionDone.push_back(newAction);
-                ActionToDoTransfer temp1=actionToDoListTransfer.at(i);
-                ActionToDoTransfer temp2=actionToDoListTransfer.at(lastGoodPositionReal);
-                actionToDoListTransfer[i]=temp2;
-                actionToDoListTransfer[lastGoodPositionReal]=temp1;
+                std::swap(actionToDoListTransfer[i],actionToDoListTransfer[lastGoodPositionReal]);
             }
             else
             {
                 ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"Try move up false, item "+std::to_string(i));
             }
-            vectorremoveOne(ids,actionToDoListTransfer.at(i).id);
+            vectorremoveOne(ids,actionToDoListTransfer.at(i)->id);
             if(ids.empty())
             {
                 ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"stop with return");
@@ -157,19 +151,19 @@ void ListThread::moveItemsOnBottom(std::vector<uint64_t> ids)
     int lastGoodPositionReal=actionToDoListTransfer.size()-1;
     for (int i=lastGoodPositionReal; i>=0; --i) {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"Check action on item "+std::to_string(i));
-        if(vectorcontainsAtLeastOne(ids,actionToDoListTransfer.at(i).id))
+        if(vectorcontainsAtLeastOne(ids,actionToDoListTransfer.at(i)->id))
         {
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"move item "+std::to_string(i)+" to "+std::to_string(lastGoodPositionReal));
-            vectorremoveOne(ids,actionToDoListTransfer.at(i).id);
+            vectorremoveOne(ids,actionToDoListTransfer.at(i)->id);
             Ultracopier::ReturnActionOnCopyList newAction;
             newAction.type=Ultracopier::MoveItem;
-            newAction.addAction.id=actionToDoListTransfer.at(i).id;
+            newAction.addAction.id=actionToDoListTransfer.at(i)->id;
             newAction.userAction.moveAt=lastGoodPositionReal;
             newAction.userAction.position=i;
             actionDone.push_back(newAction);
-            ActionToDoTransfer temp=actionToDoListTransfer.at(i);
+            std::unique_ptr<ActionToDoTransfer> temp=std::move(actionToDoListTransfer[i]);
             actionToDoListTransfer.erase(actionToDoListTransfer.cbegin()+i);
-            actionToDoListTransfer.insert(actionToDoListTransfer.cbegin()+lastGoodPositionReal,temp);
+            actionToDoListTransfer.insert(actionToDoListTransfer.cbegin()+lastGoodPositionReal,std::move(temp));
             lastGoodPositionReal--;
             if(ids.empty())
             {
@@ -207,30 +201,30 @@ void ListThread::exportTransferListInternal(const std::string &fileName)
         bool haveError=false;
         int size=actionToDoListTransfer.size();
         for (int index=0;index<size;++index) {
-            if(actionToDoListTransfer.at(index).mode==Ultracopier::Copy)
+            if(actionToDoListTransfer.at(index)->mode==Ultracopier::Copy)
             {
                 if(!forcedMode || mode==Ultracopier::Copy)
                 {
                     if(forcedMode)
-                        transferFile.write((TransferThread::internalStringTostring(actionToDoListTransfer.at(index).source)+
-                                            ";"+TransferThread::internalStringTostring(actionToDoListTransfer.at(index).destination)+"\n").c_str());
+                        transferFile.write((TransferThread::internalStringTostring(actionToDoListTransfer.at(index)->source)+
+                                            ";"+TransferThread::internalStringTostring(actionToDoListTransfer.at(index)->destination)+"\n").c_str());
                     else
-                        transferFile.write(("Copy;"+TransferThread::internalStringTostring(actionToDoListTransfer.at(index).source)+
-                                            ";"+TransferThread::internalStringTostring(actionToDoListTransfer.at(index).destination)+"\n").c_str());
+                        transferFile.write(("Copy;"+TransferThread::internalStringTostring(actionToDoListTransfer.at(index)->source)+
+                                            ";"+TransferThread::internalStringTostring(actionToDoListTransfer.at(index)->destination)+"\n").c_str());
                 }
                 else
                     haveError=true;
             }
-            else if(actionToDoListTransfer.at(index).mode==Ultracopier::Move)
+            else if(actionToDoListTransfer.at(index)->mode==Ultracopier::Move)
             {
                 if(!forcedMode || mode==Ultracopier::Move)
                 {
                     if(forcedMode)
-                        transferFile.write((TransferThread::internalStringTostring(actionToDoListTransfer.at(index).source)+
-                                            ";"+TransferThread::internalStringTostring(actionToDoListTransfer.at(index).destination)+"\n").c_str());
+                        transferFile.write((TransferThread::internalStringTostring(actionToDoListTransfer.at(index)->source)+
+                                            ";"+TransferThread::internalStringTostring(actionToDoListTransfer.at(index)->destination)+"\n").c_str());
                     else
-                        transferFile.write(("Move;"+TransferThread::internalStringTostring(actionToDoListTransfer.at(index).source)+
-                                            ";"+TransferThread::internalStringTostring(actionToDoListTransfer.at(index).destination)+"\n").c_str());
+                        transferFile.write(("Move;"+TransferThread::internalStringTostring(actionToDoListTransfer.at(index)->source)+
+                                            ";"+TransferThread::internalStringTostring(actionToDoListTransfer.at(index)->destination)+"\n").c_str());
                 }
                 else
                     haveError=true;
