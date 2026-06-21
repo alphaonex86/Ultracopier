@@ -4,8 +4,11 @@ mac:QMAKE_CXXFLAGS+="-stdlib=libc++"
 
 QT += widgets xml
 DEFINES += _FILE_OFFSET_BITS=64 UNICODE _UNICODE _LARGE_FILE_SOURCE=1
-linux:DEFINES += ULTRACOPIER_PLUGIN_IO_URING
-win32:DEFINES += ULTRACOPIER_PLUGIN_WINIOCP
+# io_uring needs liburing at build time; fall back to async when it is not installed.
+linux:packagesExist(liburing): DEFINES += ULTRACOPIER_PLUGIN_IO_URING
+# IOCP needs Windows Vista+ APIs (GetQueuedCompletionStatusEx/CancelIoEx), absent on XP.
+# Qt6 only runs on Windows 10+, so gate IOCP on Qt6; Qt5/XP builds use the async backend.
+win32:greaterThan(QT_MAJOR_VERSION, 5): DEFINES += ULTRACOPIER_PLUGIN_WINIOCP
 TEMPLATE        = lib
 CONFIG         += plugin
 

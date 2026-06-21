@@ -13,6 +13,12 @@ empty and cannot affect the existing backends. */
 
 #ifdef ULTRACOPIER_PLUGIN_WINIOCP
 
+// The IOCP backend uses GetQueuedCompletionStatusEx()/CancelIoEx() — Windows Vista+ APIs
+// absent on Windows XP. ULTRACOPIER_PLUGIN_WINIOCP is defined ONLY for Qt6 (Windows 10+)
+// builds by ultracopier.pro / CopyEngine.pro (win32:greaterThan(QT_MAJOR_VERSION,5)); on
+// Qt5 / Windows XP / pre-Vista the define is absent, so the .pro selects the async
+// (thread-based) backend instead and this whole file compiles to nothing. No #error: the
+// build gracefully falls back rather than failing (and stays mingw 4.9.x compatible).
 #include "../pipeline/TransferThreadPipelined.h"
 
 #ifndef NOMINMAX

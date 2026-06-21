@@ -10,8 +10,13 @@ nodebug|contains(DEFINES, ULTRACOPIER_NODEBUG) {
 } else {
     DEFINES += ULTRACOPIER_DEBUG ULTRACOPIER_PLUGIN_DEBUG ULTRACOPIER_PLUGIN_DEBUG_WINDOW
 }
-linux:DEFINES += ULTRACOPIER_PLUGIN_IO_URING
-win32:DEFINES += ULTRACOPIER_PLUGIN_WINIOCP
+# io_uring needs liburing at build time (and a Linux 5.1+ kernel at run time); fall back to
+# the async backend when liburing is not installed (incompatible/old Linux).
+linux:packagesExist(liburing): DEFINES += ULTRACOPIER_PLUGIN_IO_URING
+# IOCP uses GetQueuedCompletionStatusEx()/CancelIoEx() — Windows Vista+ APIs absent on XP.
+# Qt6 only runs on Windows 10+, so gate IOCP on Qt6; Qt5/XP (and other pre-Vista) builds
+# fall back to the async backend. See the in-code guard in win-iocp/TransferThreadWin.h.
+win32:greaterThan(QT_MAJOR_VERSION, 5): DEFINES += ULTRACOPIER_PLUGIN_WINIOCP
 
 include(other-pro/ultracopier-core.pro)
 

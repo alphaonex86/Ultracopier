@@ -9,6 +9,11 @@ all transfer logic lives in the shared base class. */
 #ifndef TRANSFERTHREADURING_H
 #define TRANSFERTHREADURING_H
 
+// The io_uring backend requires liburing at build time (and a Linux 5.1+ kernel at run time).
+// ULTRACOPIER_PLUGIN_IO_URING is defined ONLY when liburing is installed, by ultracopier.pro /
+// CopyEngine.pro (linux:packagesExist(liburing)); without liburing the define is absent, the
+// .pro selects the async (thread-based) backend, and this file is not compiled. The build
+// gracefully falls back rather than failing.
 #include <liburing.h>
 #include <sys/stat.h>
 #include <fcntl.h>
