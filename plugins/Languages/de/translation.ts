@@ -924,7 +924,7 @@
         <translation>Überprüfe auf Updates</translation>
     </message>
     <message>
-        <location filename="../../../HelpDialog.cpp" line="170"/>
+        <location filename="../../../HelpDialog.cpp" line="181"/>
         <source>Update checking...</source>
         <translation>Überprüfe Updates...</translation>
     </message>
@@ -950,12 +950,12 @@
         <translation>Portable Version</translation>
     </message>
     <message>
-        <location filename="../../../HelpDialog.cpp" line="117"/>
+        <location filename="../../../HelpDialog.cpp" line="128"/>
         <source> on Windows 64Bits</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../HelpDialog.cpp" line="187"/>
+        <location filename="../../../HelpDialog.cpp" line="198"/>
         <source>No update</source>
         <translation>Kein Update verfügbar</translation>
     </message>
@@ -970,19 +970,19 @@
         <translation>Zu http://portableapps.com/</translation>
     </message>
     <message>
-        <location filename="../../../HelpDialog.cpp" line="123"/>
-        <location filename="../../../HelpDialog.cpp" line="126"/>
+        <location filename="../../../HelpDialog.cpp" line="134"/>
+        <location filename="../../../HelpDialog.cpp" line="137"/>
         <source>, gcc %1.%2.%3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../HelpDialog.cpp" line="130"/>
+        <location filename="../../../HelpDialog.cpp" line="141"/>
         <source>, Qt %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../HelpDialog.cpp" line="176"/>
-        <location filename="../../../HelpDialog.cpp" line="181"/>
+        <location filename="../../../HelpDialog.cpp" line="187"/>
+        <location filename="../../../HelpDialog.cpp" line="192"/>
         <source>Update: %1</source>
         <translation>Update: %1</translation>
     </message>
@@ -992,12 +992,12 @@
         <translation>Über Qt</translation>
     </message>
     <message>
-        <location filename="../../../HelpDialog.cpp" line="137"/>
+        <location filename="../../../HelpDialog.cpp" line="148"/>
         <source>https://ultracopier.herman-brule.com/</source>
         <translation>https://ultracopier.herman-brule.com/</translation>
     </message>
     <message>
-        <location filename="../../../HelpDialog.cpp" line="143"/>
+        <location filename="../../../HelpDialog.cpp" line="154"/>
         <source>https://ultracopier.herman-brule.com/#download</source>
         <translation>https://ultracopier.herman-brule.com/#download</translation>
     </message>
@@ -1114,12 +1114,12 @@ Diese Version wurde kompiliert als Version: %1.</translation>
 <context>
     <name>LocalListener</name>
     <message>
-        <location filename="../../../LocalListener.cpp" line="191"/>
+        <location filename="../../../LocalListener.cpp" line="199"/>
         <source>Timeout while recomposing data from connected clients</source>
         <translation>Zeitüberschreitung beim Zusammenfügen der Daten von verbundenen Clients</translation>
     </message>
     <message>
-        <location filename="../../../LocalListener.cpp" line="191"/>
+        <location filename="../../../LocalListener.cpp" line="199"/>
         <source>Warning</source>
         <translation>Warnung</translation>
     </message>
