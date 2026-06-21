@@ -39,7 +39,7 @@ switch(currentActionToDoInode.type)
     #endif
     case ActionType_MovePath:
         //then empty (no file), can try remove it
-        if(currentActionToDoInode.size==0 || actionToDoListTransfer.empty())//don't put afterTheTransfer because actionToDoListInode_afterTheTransfer -> already afterTheTransfer
+        if(currentActionToDoInode.size==0 || actionToDoListTransferEmpty())//don't put afterTheTransfer because actionToDoListInode_afterTheTransfer -> already afterTheTransfer
         {
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"launch rmpath: source: "+TransferThread::internalStringTostring(currentActionToDoInode.source)+
                                      ", destination: "+TransferThread::internalStringTostring(currentActionToDoInode.destination));
@@ -62,7 +62,7 @@ switch(currentActionToDoInode.type)
     break;
     case ActionType_SyncDate:
         //then empty (no file), can try remove it
-        if(currentActionToDoInode.size==0 || actionToDoListTransfer.empty())//don't put afterTheTransfer because actionToDoListInode_afterTheTransfer -> already afterTheTransfer
+        if(currentActionToDoInode.size==0 || actionToDoListTransferEmpty())//don't put afterTheTransfer because actionToDoListInode_afterTheTransfer -> already afterTheTransfer
         {
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"launch rmpath: source: "+TransferThread::internalStringTostring(currentActionToDoInode.source)+
                                      ", destination: "+TransferThread::internalStringTostring(currentActionToDoInode.destination));

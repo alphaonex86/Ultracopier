@@ -1,6 +1,17 @@
 DEFINES += ULTRACOPIER_PLUGIN_ALL_IN_ONE
-DEFINES += ULTRACOPIER_DEBUG ULTRACOPIER_PLUGIN_DEBUG ULTRACOPIER_PLUGIN_DEBUG_WINDOW
-#linux:DEFINES += ULTRACOPIER_PLUGIN_IO_URING
+# Debug logging + the live debug window are the dev defaults for this all-in-one
+# .pro. Build a true no-debug (shipping) binary with either:
+#     qmake CONFIG+=nodebug
+#     qmake DEFINES+=ULTRACOPIER_NODEBUG
+# Honouring both keeps it consistent with the packaging scripts in
+# to-pack/to-send/sub-script/, which gate debug via ULTRACOPIER_(NO)DEBUG.
+nodebug|contains(DEFINES, ULTRACOPIER_NODEBUG) {
+    DEFINES *= ULTRACOPIER_NODEBUG
+} else {
+    DEFINES += ULTRACOPIER_DEBUG ULTRACOPIER_PLUGIN_DEBUG ULTRACOPIER_PLUGIN_DEBUG_WINDOW
+}
+linux:DEFINES += ULTRACOPIER_PLUGIN_IO_URING
+win32:DEFINES += ULTRACOPIER_PLUGIN_WINIOCP
 
 include(other-pro/ultracopier-core.pro)
 
@@ -130,9 +141,19 @@ SOURCES += \
     $$PWD/plugins/Themes/Oxygen/ThemesFactory.cpp \
     $$PWD/plugins/Themes/Oxygen/TransferModel.cpp
 
-contains(DEFINES, ULTRACOPIER_PLUGIN_IO_URING) {
-    HEADERS += $$PWD/plugins/CopyEngine/Ultracopier-Spec/uring/TransferThreadUring.h
-    SOURCES += $$PWD/plugins/CopyEngine/Ultracopier-Spec/uring/TransferThreadUring.cpp
+contains(DEFINES, ULTRACOPIER_PLUGIN_WINIOCP) {
+    # Windows IOCP backend: shares all transfer logic with the io_uring backend via
+    # TransferThreadPipelined; only the I/O layer differs. The backend .cpp/.h are
+    # wrapped in #ifdef ULTRACOPIER_PLUGIN_WINIOCP so they compile to nothing on other configs.
+    HEADERS += $$PWD/plugins/CopyEngine/Ultracopier-Spec/pipeline/TransferThreadPipelined.h \
+               $$PWD/plugins/CopyEngine/Ultracopier-Spec/win-iocp/TransferThreadWin.h
+    SOURCES += $$PWD/plugins/CopyEngine/Ultracopier-Spec/pipeline/TransferThreadPipelined.cpp \
+               $$PWD/plugins/CopyEngine/Ultracopier-Spec/win-iocp/TransferThreadWin.cpp
+} else:contains(DEFINES, ULTRACOPIER_PLUGIN_IO_URING) {
+    HEADERS += $$PWD/plugins/CopyEngine/Ultracopier-Spec/pipeline/TransferThreadPipelined.h \
+               $$PWD/plugins/CopyEngine/Ultracopier-Spec/uring/TransferThreadUring.h
+    SOURCES += $$PWD/plugins/CopyEngine/Ultracopier-Spec/pipeline/TransferThreadPipelined.cpp \
+               $$PWD/plugins/CopyEngine/Ultracopier-Spec/uring/TransferThreadUring.cpp
     LIBS += -luring
 } else {
     HEADERS += $$PWD/plugins/CopyEngine/Ultracopier-Spec/async/ReadThread.h \
@@ -156,8 +177,9 @@ win32 {
         $$PWD/plugins/PluginLoader/catchcopy/OptionsWidget.h
     SOURCES         += \
         $$PWD/plugins/PluginLoader/catchcopy/pluginLoader.cpp \
+        $$PWD/plugins/PluginLoader/catchcopy/win-shell-iids.cpp \
         $$PWD/plugins/PluginLoader/catchcopy/OptionsWidget.cpp
     FORMS += $$PWD/plugins/PluginLoader/catchcopy/OptionsWidget.ui
-    LIBS += -lole32 -lshell32
+    LIBS += -lole32 -lshell32 -luuid
 }
 

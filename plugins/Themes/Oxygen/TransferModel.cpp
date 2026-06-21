@@ -169,6 +169,120 @@ bool TransferModel::setData( const QModelIndex& index, const QVariant& value, in
   */
 std::vector<uint64_t> TransferModel::synchronizeItems(const std::vector<Ultracopier::ReturnActionOnCopyList>& returnActions)
 {
+    /* Fast path for the common copy-phase batch: only RemoveItem (completed files) + state
+       updates (PreOperation/Transfer/PostOperation/CustomOperation), no AddingItem/MoveItem.
+       The list columns (source/size/destination) are static, so nothing visible changes
+       except the completed rows leaving. Remove them with granular beginRemoveRows() — the
+       QTreeView then updates only the affected rows (O(removed)) instead of the
+       layoutAboutToBeChanged/layoutChanged full O(n) viewItems rebuild below. The fast
+       pipelined backends (io_uring/IOCP) complete many files per refresh, so the full
+       rebuild was the GUI thread's main cost; this removes it. */
+    bool hasAddOrMove=false;
+    for(const Ultracopier::ReturnActionOnCopyList &a : returnActions)
+        if(a.type==Ultracopier::AddingItem || a.type==Ultracopier::MoveItem)
+        {
+            hasAddOrMove=true;
+            break;
+        }
+    if(!hasAddOrMove)
+    {
+        quint64 fastCurrentFile=0;
+        std::unordered_set<uint64_t> idsToRemoveFast;
+        for(const Ultracopier::ReturnActionOnCopyList &action : returnActions)
+        {
+            switch(action.type)
+            {
+                case Ultracopier::RemoveItem:
+                    if(currentIndexSearch>0 && action.userAction.position<=currentIndexSearch)
+                        currentIndexSearch--;
+                    idsToRemoveFast.insert(action.addAction.id);
+                    fastCurrentFile++;
+                    startId.erase(action.addAction.id);
+                    stopId.erase(action.addAction.id);
+                    internalRunningOperation.erase(action.addAction.id);
+                break;
+                case Ultracopier::PreOperation:
+                {
+                    ItemOfCopyListWithMoreInformations tempItem;
+                    tempItem.currentReadProgression=0;
+                    tempItem.currentWriteProgression=0;
+                    tempItem.generalData=action.addAction;
+                    tempItem.actionType=action.type;
+                    internalRunningOperation[action.addAction.id]=tempItem;
+                }
+                break;
+                case Ultracopier::Transfer:
+                    if(startId.find(action.addAction.id)==startId.cend())
+                        startId.insert(action.addAction.id);
+                    stopId.erase(action.addAction.id);
+                    if(internalRunningOperation.find(action.addAction.id)!=internalRunningOperation.cend())
+                        internalRunningOperation[action.addAction.id].actionType=action.type;
+                break;
+                case Ultracopier::PostOperation:
+                    if(stopId.find(action.addAction.id)==stopId.cend())
+                        stopId.insert(action.addAction.id);
+                    startId.erase(action.addAction.id);
+                break;
+                case Ultracopier::CustomOperation:
+                {
+                    bool custom_with_progression=(action.addAction.size==1);
+                    if(custom_with_progression)
+                    {
+                        if(startId.find(action.addAction.id)!=startId.cend())
+                        {
+                            startId.erase(action.addAction.id);
+                            if(stopId.find(action.addAction.id)==stopId.cend())
+                                stopId.insert(action.addAction.id);
+                        }
+                    }
+                    else
+                    {
+                        stopId.erase(action.addAction.id);
+                        if(startId.find(action.addAction.id)==startId.cend())
+                            startId.insert(action.addAction.id);
+                    }
+                    if(internalRunningOperation.find(action.addAction.id)!=internalRunningOperation.cend())
+                    {
+                        ItemOfCopyListWithMoreInformations &item=internalRunningOperation[action.addAction.id];
+                        item.actionType=action.type;
+                        item.custom_with_progression=custom_with_progression;
+                        item.currentReadProgression=0;
+                        item.currentWriteProgression=0;
+                    }
+                }
+                break;
+                default:
+                break;
+            }
+        }
+        // Remove flagged rows in contiguous ranges, scanning high-to-low so the lower
+        // positions stay valid; each contiguous run is one beginRemoveRows/endRemoveRows.
+        if(!idsToRemoveFast.empty())
+        {
+            int i=(int)transfertItemList.size()-1;
+            while(i>=0)
+            {
+                if(idsToRemoveFast.find(transfertItemList[i]->id)!=idsToRemoveFast.cend())
+                {
+                    const int last=i;
+                    while(i>=0 && idsToRemoveFast.find(transfertItemList[i]->id)!=idsToRemoveFast.cend())
+                        i--;
+                    const int first=i+1;
+                    beginRemoveRows(QModelIndex(),first,last);
+                    transfertItemList.erase(transfertItemList.cbegin()+first,transfertItemList.cbegin()+last+1);
+                    endRemoveRows();
+                }
+                else
+                    i--;
+            }
+        }
+        std::vector<uint64_t> fastList(3);
+        fastList[0]=0;
+        fastList[1]=0;
+        fastList[2]=fastCurrentFile;
+        return fastList;
+    }
+
     const QModelIndexList oldIndexes = persistentIndexList();
     QModelIndexList newIndexes=oldIndexes;
     QMap<int, quint64> oldMapping;  // model index row in model before update, item id

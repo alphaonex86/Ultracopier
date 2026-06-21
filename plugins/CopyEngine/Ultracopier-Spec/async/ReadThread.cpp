@@ -34,6 +34,26 @@ ReadThread::ReadThread()
     #else
     from=nullptr;
     #endif
+    // Defensive init of members otherwise written only by setters/open(): prevents
+    // uninitialised reads on early stop()/dtor/retry paths (e.g. id is logged in stop()
+    // before setId()). All are overwritten before normal use, so this only hardens edges.
+    id=-1;
+    mode=Ultracopier::CopyMode::Copy;
+    os_spec_flags=false;
+    writeThread=nullptr;
+    seekToZero=false;
+    fakeMode=false;
+    size_at_open=0;
+    #ifdef ULTRACOPIER_PLUGIN_SPEED_SUPPORT
+    numberOfBlockCopied=0;
+    multiForBigSpeed=0;
+    #endif
+    #ifdef Q_OS_UNIX
+    mtime_at_open=0;
+    #else
+    mtime_at_open.dwLowDateTime=0;
+    mtime_at_open.dwHighDateTime=0;
+    #endif
 }
 
 ReadThread::~ReadThread()

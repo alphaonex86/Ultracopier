@@ -127,6 +127,16 @@ class DebugEngine : public QObject
         int addDebugInformationCallNumber;
         bool quit;
         //std::regex fileNameCleaner;don't clean, too many performance heart
+        /// \brief grouped file-log buffering. Accumulate messages in RAM and flush the
+        /// whole buffer to logFile in ONE write when it passes ~128KB or after ~1s of
+        /// inactivity (logFlushTimer), instead of one Unbuffered write syscall per debug
+        /// message (was ~600k syscalls / 150MB during a big copy). The log file is still
+        /// kept for crash diagnosis; at most the last <128KB / <1s is lost on a hard crash.
+        std::string logBuffer;
+        qint64 logTotalBytes;       //running total written+buffered (replaces per-message logFile.size() fstat)
+        QTimer logFlushTimer;
+        void flushLogBufferLocked();//append logBuffer to logFile; caller MUST hold mutex
+        void flushLogBuffer();      //locks mutex then flushes (logFlushTimer / shutdown / getTheDebugHtml)
 };
 
 #endif // ULTRACOPIER_DEBUG

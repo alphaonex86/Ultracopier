@@ -1,5 +1,5 @@
 /** \file TransferThreadUring.cpp
-\brief Thread using io_uring for async pipelined file transfer (Linux only)
+\brief io_uring backend: implements the pipelined I/O hooks of TransferThreadPipelined
 \author alpha_one_x86
 \licence GPL3, see the file COPYING */
 
@@ -8,75 +8,41 @@
 #include <cstring>
 #include <cerrno>
 #include <dirent.h>
+#include <vector>
 #include <iostream>
 
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <unistd.h>
 #include <fcntl.h>
+#ifdef Q_OS_LINUX
+#include <sys/resource.h>
+#include <sys/syscall.h>
+#endif
 
 #include "../../../../cpp11addition.h"
 
-TransferThreadUring::TransferThreadUring() :
-    transferProgression(0)
+TransferThreadUring::TransferThreadUring()
 {
-    haveStartTime=false;
-    native_copy=false;
-    writeFileList=nullptr;
-    writeFileListMutex=nullptr;
     ringInitialized=false;
     sourceFd=-1;
     destFd=-1;
     sourceFileSize=0;
     readOffset=0;
     writeOffset=0;
-    blockSize=ULTRACOPIER_PLUGIN_DEFAULT_BLOCK_SIZE*1024;
-    os_spec_flags=false;
-    bufferEnabled=true;
-
-    sended_state_readStopped=false;
-    readIsClosedVariable=false;
-    writeIsClosedVariable=false;
-    readIsOpenVariable=false;
-    writeIsOpenVariable=false;
-    realMove=false;
-    size_at_open=0;
-    mtime_at_open=0;
-    /* putInPause was the only member left uninitialized. It is read in
-       doTransferPipeline's pause gate: if(putInPause && !stopIt) pauseMutex.acquire().
-       An uninitialized non-zero value made transfer threads block forever on the
-       pause semaphore (no resume() ever comes) -> the copy hung after a handful
-       of files. */
-    putInPause=false;
-
-    #ifdef ULTRACOPIER_PLUGIN_SPEED_SUPPORT
-    multiForBigSpeed=0;
-    #endif
 
     for(int i=0;i<NUM_BUFFERS;i++)
     {
         pipelineBuffers[i].data=nullptr;
         pipelineBuffers[i].allocSize=0;
         pipelineBuffers[i].bytesUsed=0;
+        pipelineBuffers[i].fileOffset=0;
+        pipelineBuffers[i].chunkSize=0;
         pipelineBuffers[i].state=PipelineBuffer::Free;
     }
 
-    TransferThread::run();
-    if(!connect(this,&TransferThreadUring::internalStartPostOperation,this,&TransferThreadUring::doFilePostOperation,Qt::QueuedConnection))
-        abort();
-    if(!connect(this,&TransferThread::internalStartPreOperation,this,&TransferThreadUring::preOperation,Qt::QueuedConnection))
-        abort();
-    if(!connect(this,&TransferThread::internalStartPostOperation,this,&TransferThreadUring::postOperation,Qt::QueuedConnection))
-        abort();
-    if(!connect(this,&TransferThread::internalTryStartTheTransfer,this,&TransferThreadUring::internalStartTheTransfer,Qt::QueuedConnection))
-        abort();
-    if(!connect(this,&TransferThreadUring::setFileExistsActionSend,this,&TransferThreadUring::setFileExistsActionInternal,Qt::QueuedConnection))
-        abort();
-
-    #ifdef ULTRACOPIER_PLUGIN_DEBUG
-    if(!connect(&driveManagement,&DriveManagement::debugInformation,this,&TransferThreadUring::debugInformation,Qt::QueuedConnection))
-        abort();
-    #endif
+    // Shared signal/slot wiring + TransferThread::run() base setup, then launch the thread.
+    connectInternalSignals();
 
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] start: "+std::to_string((int64_t)QThread::currentThreadId()));
     start();
@@ -90,14 +56,31 @@ TransferThreadUring::~TransferThreadUring()
     #endif
     pauseMutex.release();
     closeFiles();
-    freePipelineBuffers();
     exit(0);
     wait();
+    // Free the pipeline buffers ONLY after the worker thread has fully stopped (wait()):
+    // run() calls io_uring_queue_exit() right after exec() returns, which tears down the ring
+    // and makes the kernel drop all references to our buffers. Freeing before that (the old
+    // order) raced read/write SQEs still in flight on a cancel/stop mid-file — io_uring's close
+    // op (unlike Win32 CloseHandle) does NOT cancel pending ops — i.e. a kernel use-after-free
+    // of a just-freed buffer. After wait() the ring is gone, so this is safe.
+    freePipelineBuffers();
 }
 
 void TransferThreadUring::run()
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] start: "+std::to_string((int64_t)QThread::currentThreadId()));
+
+    // Lower this I/O worker thread below the GUI thread so, under CPU contention, the
+    // Qt message pump preempts the copy work and the progress UI stays responsive.
+    // setpriority(PRIO_PROCESS,tid,...) sets the nice value of THIS thread only (Linux
+    // per-thread nice via the kernel tid from gettid()), not the whole process; +5 is a
+    // moderate demotion mirroring Windows THREAD_PRIORITY_BELOW_NORMAL. Scheduling-only:
+    // does not touch copy correctness. Only transfer threads are lowered; the inode /
+    // ListThread scheduler keeps its normal priority so listing stays responsive.
+    #ifdef Q_OS_LINUX
+    setpriority(PRIO_PROCESS,(id_t)syscall(SYS_gettid),5);
+    #endif
 
     // Initialize io_uring ring once in the worker thread, reuse across all file transfers
     int ret=io_uring_queue_init(RING_DEPTH,&ring,0);
@@ -204,7 +187,9 @@ int TransferThreadUring::openSourceFile()
     {
         sourceFileSize=0;
     }
-    return fd;
+    // Store internally and report success; the base class no longer captures the fd.
+    sourceFd=fd;
+    return 0;
 }
 
 int TransferThreadUring::openDestFile(uint64_t startSize)
@@ -302,7 +287,9 @@ int TransferThreadUring::openDestFile(uint64_t startSize)
         return -1;
     }
 
-    return fd;
+    // Store internally and report success; the base class no longer captures the fd.
+    destFd=fd;
+    return 0;
 }
 
 void TransferThreadUring::closeFiles()
@@ -621,85 +608,6 @@ void TransferThreadUring::doTransferPipeline()
 
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] doTransferPipeline end, transferred: "+std::to_string(transferProgression));
 }
-
-void TransferThreadUring::startTheTransfer()
-{
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] start, transfert id: "+std::to_string(transferId));
-    if(transferId==0)
-    {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"["+std::to_string(id)+"] can't start transfert if transferId==0");
-        return;
-    }
-    startTransferTime.restart();
-    haveTransferTime=true;
-    emit internalTryStartTheTransfer();
-}
-
-void TransferThreadUring::internalStartTheTransfer()
-{
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] start, transfert id: "+std::to_string(transferId)+
-                             " readError: "+std::to_string(writeError)+" writeError: "+std::to_string(writeError)+" canStartTransfer: "+std::to_string(canStartTransfer));
-    if(transfer_stat==TransferStat_Idle)
-    {
-        if(mode!=Ultracopier::Move)
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"["+std::to_string(id)+"] can't start transfert at idle");
-        return;
-    }
-    if(transfer_stat==TransferStat_PostOperation)
-    {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"["+std::to_string(id)+"] can't start transfert at PostOperation");
-        return;
-    }
-    if(transfer_stat==TransferStat_Transfer && !readError && !writeError)
-    {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"["+std::to_string(id)+"] can't start transfert at Transfer (double start?)");
-        return;
-    }
-    if(canStartTransfer)
-    {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] canStartTransfer is already set to true");
-    }
-    canStartTransfer=true;
-    ifCanStartTransfer();
-}
-
-bool TransferThreadUring::setFiles(const INTERNALTYPEPATH& source, const int64_t &size, const INTERNALTYPEPATH& destination, const Ultracopier::CopyMode &mode)
-{
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] start, source: "+TransferThread::internalStringTostring(source)+
-                             ", destination: "+TransferThread::internalStringTostring(destination));
-    if(transfer_stat!=TransferStat_Idle)
-    {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"["+std::to_string(id)+"] already used, source: "+TransferThread::internalStringTostring(source)+
-                                 ", destination: "+TransferThread::internalStringTostring(destination));
-        return false;
-    }
-    if(!isRunning())
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"["+std::to_string(id)+"] The current thread is not running");
-    if(!TransferThread::setFiles(source,size,destination,mode))
-        return false;
-    transferProgression=0;
-    sended_state_readStopped=false;
-    readIsClosedVariable=false;
-    writeIsClosedVariable=false;
-    readIsOpenVariable=false;
-    writeIsOpenVariable=false;
-    realMove=false;
-    return true;
-}
-
-void TransferThreadUring::resetExtraVariable()
-{
-    transferProgression=0;
-    readIsOpenVariable=false;
-    writeIsOpenVariable=false;
-    TransferThread::resetExtraVariable();
-}
-
-bool TransferThreadUring::remainFileOpen() const
-{
-    return remainSourceOpen() || remainDestinationOpen();
-}
-
 bool TransferThreadUring::remainSourceOpen() const
 {
     return sourceFd>=0;
@@ -710,615 +618,86 @@ bool TransferThreadUring::remainDestinationOpen() const
     return destFd>=0;
 }
 
-void TransferThreadUring::preOperation()
+bool TransferThreadUring::applyDateTimeOnOpenDestination()
 {
-    if(transfer_stat!=TransferStat_PreOperation)
+    // Set the source times (cached into butime by readSourceFileDateTime in preOperation)
+    // on the destination while its fd is STILL OPEN, so doFilePostOperation does not reopen
+    // the file just to utime() it. futimens on the open fd is the fd analog of the path
+    // utime() that writeDestinationFileDateTime() uses; same seconds precision (butime is
+    // a struct utimbuf in whole seconds), so behaviour is unchanged.
+    if(destFd<0)
+        return false;
+    struct timespec ts[2];
+    ts[0].tv_sec=butime.actime;  ts[0].tv_nsec=0; // atime
+    ts[1].tv_sec=butime.modtime; ts[1].tv_nsec=0; // mtime
+    if(futimens(destFd,ts)!=0)
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"["+std::to_string(id)+"] already used, source: "+
-                                 TransferThread::internalStringTostring(source)+", destination: "+TransferThread::internalStringTostring(destination)+
-                                 " transfer_stat: "+std::to_string(transfer_stat));
-        return;
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] futimens on open dest fd failed: "+std::string(strerror(errno)));
+        return false; // fall back to the reopen path in doFilePostOperation
     }
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] start: source: "+
-                             TransferThread::internalStringTostring(source)+", destination: "+TransferThread::internalStringTostring(destination));
-    haveStartTime=true;
-    needRemove=false;
-
-    // Close any previously open files
-    closeFiles();
-
-    if(isSame())
-    {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] is same");
-        return;
-    }
-
-    if(destinationExists())
-    {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] destination exists");
-        return;
-    }
-
-    doTheDateTransfer=true;
-    if(doTheDateTransfer)
-    {
-        doTheDateTransfer=readSourceFileDateTime(source);
-        if(!doTheDateTransfer && keepDate)
-        {
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"!doTheDateTransfer && keepDate");
-            emit errorOnFile(source,tr("Wrong modification date or unable to get it, you can disable time transfer to do it").toStdString());
-            return;
-        }
-    }
-    if(doRightTransfer)
-        havePermission=readSourceFilePermissions(source);
-
-    transfer_stat=TransferStat_WaitForTheTransfer;
-    ifCanStartTransfer();
-    emit preOperationStopped();
+    return true;
 }
 
-void TransferThreadUring::postOperation()
+
+bool TransferThreadUring::trySymlinkCopy()
 {
-    doFilePostOperation();
-}
-
-void TransferThreadUring::ifCanStartTransfer()
-{
-    realMove=false;
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] start "+internalStringTostring(source)+"->"+internalStringTostring(destination));
-    if(transfer_stat!=TransferStat_WaitForTheTransfer || !canStartTransfer)
+    // POSIX semantics: a symlinked source is recreated as a symlink at the destination
+    // (cp -a / rsync -a behaviour), not followed. Return true for any symlink source
+    // (whether the recreation succeeded or an error was emitted); false otherwise.
+    if(!TransferThread::is_symlink(source))
+        return false;
+    realMove=true;
+    bool isFileOrSymlink=false;
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"["+std::to_string(id)+
-                                 "] transfer_stat:"+std::to_string(transfer_stat)+
-                                 ", canStartTransfer: "+std::to_string(canStartTransfer)+", transfert id: "+std::to_string(transferId));
-        return;
-    }
-    transfer_stat=TransferStat_Transfer;
-
-    // Check/create destination folder
-    const size_t destinationIndex=destination.rfind('/');
-    if(destinationIndex!=std::string::npos && destinationIndex<destination.size())
-    {
-        const std::string &path=destination.substr(0,destinationIndex);
-        if(!is_dir(path))
-            if(!TransferThread::mkpath(path))
-            {
-                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] Unable to create the destination folder: "+path);
-                emit errorOnFile(destination,tr("Unable to create the destination folder, errno: %1").arg(QString::number(errno)).toStdString());
-                return;
-            }
-    }
-
-    emit pushStat(transfer_stat,transferId);
-    realMove=(mode==Ultracopier::Move && driveManagement.isSameDrive(
-                       internalStringTostring(source),
-                       internalStringTostring(destination)
-                       ));
-    needRemove=true;
-    bool successFull=false;
-    readError=false;
-    writeError=false;
-
-    if(realMove)
-    {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] start real move");
-        if(TransferThread::exists(source))
-            successFull=TransferThread::rename(source,destination);
-        if(!successFull && errno==18)
+        struct stat p_statbuf;
+        if(lstat(TransferThread::internalStringTostring(destination).c_str(),&p_statbuf)>=0)
         {
-            realMove=false;
-            // fall through to io_uring copy
-        }
-        else if(successFull)
-        {
-            readIsClosedVariable=true;
-            writeIsClosedVariable=true;
-            checkIfAllIsClosedAndDoOperations();
-            return;
+            if(S_ISLNK(p_statbuf.st_mode) || S_ISREG(p_statbuf.st_mode))
+                isFileOrSymlink=true;
         }
     }
-
-    if(!realMove)
-    {
-        if(TransferThread::is_symlink(source))
+    if(isFileOrSymlink)
+        if(!unlink(destination))
         {
-            realMove=true;
-            // Handle symlink
-            bool isFileOrSymlink=false;
+            const int terr=errno;
+            if(terr!=2)
             {
-                struct stat p_statbuf;
-                if(lstat(TransferThread::internalStringTostring(destination).c_str(),&p_statbuf)>=0)
-                {
-                    if(S_ISLNK(p_statbuf.st_mode) || S_ISREG(p_statbuf.st_mode))
-                        isFileOrSymlink=true;
-                }
-            }
-            if(isFileOrSymlink)
-                if(!unlink(destination))
-                {
-                    const int terr=errno;
-                    if(terr!=2)
-                    {
-                        const std::string &strError=strerror(terr);
-                        writeError=true;
-                        emit errorOnFile(destination,strError);
-                        return;
-                    }
-                }
-            std::vector<char> buf(512);
-            ssize_t s=0;
-            do {
-                buf.resize(buf.size()*2);
-                s=readlink(TransferThread::internalStringTostring(source).c_str(),buf.data(),buf.size());
-            } while(s==(ssize_t)buf.size());
-            if(s!=-1)
-            {
-                buf.resize(s+1);
-                buf[s]='\0';
-            }
-            if(s<0)
-            {
-                const int terr=errno;
-                readError=true;
-                emit errorOnFile(source,strerror(terr));
-                return;
-            }
-            else
-            {
-                if(symlink(buf.data(),TransferThread::internalStringTostring(destination).c_str())!=0)
-                {
-                    const int terr=errno;
-                    readError=true;
-                    emit errorOnFile(destination,strerror(terr));
-                    return;
-                }
-            }
-            successFull=true;
-            readIsClosedVariable=true;
-            writeIsClosedVariable=true;
-            checkIfAllIsClosedAndDoOperations();
-            return;
-        }
-        else
-        {
-            // io_uring pipeline copy
-            sourceFd=openSourceFile();
-            if(sourceFd<0)
-            {
-                readError=true;
-                emit errorOnFile(source,errorString_internal);
-                return;
-            }
-            readIsOpenVariable=true;
-
-            destFd=openDestFile(0);
-            if(destFd<0)
-            {
-                if(destFd==-2) // collision
-                    return;
+                const std::string &strError=strerror(terr);
                 writeError=true;
-                ::close(sourceFd);
-                sourceFd=-1;
-                emit errorOnFile(destination,errorString_internal);
-                return;
+                emit errorOnFile(destination,strError);
+                return true;
             }
-            writeIsOpenVariable=true;
-
-            // Do the pipeline transfer
-            doTransferPipeline();
-
-            // Remove write collision entry
-            if(writeFileList!=nullptr && writeFileListMutex!=nullptr)
-            {
-                QMutexLocker lock_mutex(writeFileListMutex);
-                #ifdef WIDESTRING
-                QString qtFile=QString::fromStdWString(destination);
-                #else
-                QString qtFile=QString::fromStdString(destination);
-                #endif
-                writeFileList->remove(qtFile,this);
-            }
-
-            // Close files
-            closeFiles();
-            readIsClosedVariable=true;
-            writeIsClosedVariable=true;
-            readIsOpenVariable=false;
-            writeIsOpenVariable=false;
-
-            if(!readError && !writeError && !stopIt)
-            {
-                emit readStopped();
-                checkIfAllIsClosedAndDoOperations();
-                return;
-            }
-            else if(stopIt)
-            {
-                // Cleanup on stop
-                if(!source.empty() && needRemove)
-                    if(exists(source) && source!=destination)
-                        unlink(destination);
-                return;
-            }
-            // Error case: error already emitted
-            return;
         }
+    std::vector<char> buf(512);
+    ssize_t s=0;
+    do {
+        buf.resize(buf.size()*2);
+        s=readlink(TransferThread::internalStringTostring(source).c_str(),buf.data(),buf.size());
+    } while(s==(ssize_t)buf.size());
+    if(s!=-1)
+    {
+        buf.resize(s+1);
+        buf[s]='\0';
     }
-
-    if(!successFull)
+    if(s<0)
     {
         const int terr=errno;
-        const std::string &strError=strerror(terr);
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] stop copy in error "+
-                                 TransferThread::internalStringTostring(source)+"->"+TransferThread::internalStringTostring(destination)+
-                                 " "+strError+"("+std::to_string(terr)+")");
-        if(stopIt)
-        {
-            if(!source.empty())
-                if(exists(source) && source!=destination)
-                    unlink(destination);
-            resetExtraVariable();
-            return;
-        }
-        if(readError)
-            emit errorOnFile(source,strError);
-        else
-            emit errorOnFile(destination,strError);
-    }
-}
-
-void TransferThreadUring::checkIfAllIsClosedAndDoOperations()
-{
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] stop copy");
-    if((readError || writeError) && !needSkip && !stopIt)
-    {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] resolve error before progress");
-        return;
-    }
-    if(remainFileOpen())
-    {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] remainFileOpen()");
-        return;
-    }
-    if(!source.empty() && needRemove && (stopIt || needSkip))
-        if(is_file(source) && source!=destination)
-            unlink(destination);
-
-    transfer_stat=TransferStat_Idle;
-    transferSize=transferProgression;
-
-    if(mode==Ultracopier::Move && !realMove)
-    {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] remove mode==Ultracopier::Move && !realMove");
-        if(exists(destination))
-            if(!unlink(source))
-                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] move and unable to remove: "+
-                                         TransferThread::internalStringTostring(source)+" "+strerror(errno));
-    }
-    transfer_stat=TransferStat_PostTransfer;
-    emit pushStat(transfer_stat,transferId);
-    transfer_stat=TransferStat_PostOperation;
-    emit pushStat(transfer_stat,transferId);
-    doFilePostOperation();
-
-    source.clear();
-    destination.clear();
-    resetExtraVariable();
-    needRemove=false;
-    needSkip=false;
-    transfer_stat=TransferStat_Idle;
-    emit postOperationStopped();
-}
-
-void TransferThreadUring::stop()
-{
-    stopIt=true;
-    haveStartTime=false;
-    if(transfer_stat==TransferStat_Idle)
-    {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] transfer_stat==TransferStat_Idle");
-        return;
-    }
-    if(transfer_stat==TransferStat_PreOperation)
-    {
-        transfer_stat=TransferStat_Idle;
-        return;
-    }
-    if(realMove)
-    {
-        if(readError || writeError)
-            transfer_stat=TransferStat_Idle;
-        return;
-    }
-    pauseMutex.release();
-    closeFiles();
-}
-
-void TransferThreadUring::skip()
-{
-    stopIt=true;
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] start with stat: "+std::to_string(transfer_stat));
-    switch(static_cast<TransferStat>(transfer_stat))
-    {
-    case TransferStat_WaitForTheTransfer:
-    case TransferStat_PreOperation:
-        if(needSkip)
-        {
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] skip already in progress");
-            return;
-        }
-        needSkip=true;
-        if(remainFileOpen())
-            closeFiles();
-        else
-        {
-            transfer_stat=TransferStat_PostOperation;
-            emit internalStartPostOperation();
-        }
-        resetExtraVariable();
-        break;
-    case TransferStat_Transfer:
-        if(needSkip)
-        {
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] skip already in progress");
-            return;
-        }
-        needSkip=true;
-        if(realMove)
-        {
-            emit readStopped();
-            emit postOperationStopped();
-            transfer_stat=TransferStat_Idle;
-            emit pushStat(transfer_stat,transferId);
-            return;
-        }
-        pauseMutex.release();
-        closeFiles();
-        if(!source.empty() && needRemove)
-            if(exists(source) && source!=destination)
-                unlink(destination);
-        break;
-    case TransferStat_PostTransfer:
-        if(needSkip)
-        {
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] skip already in progress");
-            return;
-        }
-        needSkip=true;
-        closeFiles();
-        break;
-    case TransferStat_PostOperation:
-        break;
-    default:
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] can't skip in this state: "+std::to_string(transfer_stat));
-        return;
-    }
-    transfer_stat=TransferStat_Idle;
-    emit postOperationStopped();
-}
-
-int64_t TransferThreadUring::copiedSize()
-{
-    switch(static_cast<TransferStat>(transfer_stat))
-    {
-    case TransferStat_Transfer:
-    case TransferStat_PostTransfer:
-        return transferProgression;
-    case TransferStat_PostOperation:
-        return transferSize;
-    default:
-        return 0;
-    }
-}
-
-void TransferThreadUring::putAtBottom()
-{
-    emit tryPutAtBottom();
-}
-
-#ifdef ULTRACOPIER_PLUGIN_DEBUG
-void TransferThreadUring::setId(int id)
-{
-    TransferThread::setId(id);
-}
-
-char TransferThreadUring::readingLetter() const
-{
-    // io_uring has no separate read thread, report based on overall transfer stat
-    switch(static_cast<TransferStat>(transfer_stat))
-    {
-    case TransferStat_Idle:
-        return '_';
-    case TransferStat_PreOperation:
-        return 'I';
-    case TransferStat_WaitForTheTransfer:
-        return 'W';
-    case TransferStat_Transfer:
-        return 'C';
-    case TransferStat_PostTransfer:
-    case TransferStat_PostOperation:
-        return 'P';
-    default:
-        return '?';
-    }
-}
-
-char TransferThreadUring::writingLetter() const
-{
-    // io_uring has no separate write thread, report based on overall transfer stat
-    switch(static_cast<TransferStat>(transfer_stat))
-    {
-    case TransferStat_Idle:
-        return '_';
-    case TransferStat_PreOperation:
-        return 'I';
-    case TransferStat_WaitForTheTransfer:
-        return 'W';
-    case TransferStat_Transfer:
-        return 'C';
-    case TransferStat_PostTransfer:
-    case TransferStat_PostOperation:
-        return 'P';
-    default:
-        return '?';
-    }
-}
-#endif
-
-uint64_t TransferThreadUring::realByteTransfered() const
-{
-    switch(static_cast<TransferStat>(transfer_stat))
-    {
-    case TransferStat_Transfer:
-    case TransferStat_PostTransfer:
-    case TransferStat_PostOperation:
-        return transferProgression;
-    default:
-        return 0;
-    }
-}
-
-std::pair<uint64_t, uint64_t> TransferThreadUring::progression() const
-{
-    std::pair<uint64_t,uint64_t> returnVar;
-    switch(static_cast<TransferStat>(transfer_stat))
-    {
-    case TransferStat_Transfer:
-        returnVar.first=transferProgression;
-        returnVar.second=transferProgression;
-        break;
-    case TransferStat_PostTransfer:
-    case TransferStat_PostOperation:
-        returnVar.first=transferSize;
-        returnVar.second=transferSize;
-        break;
-    default:
-        returnVar.first=0;
-        returnVar.second=0;
-    }
-    return returnVar;
-}
-
-void TransferThreadUring::setFileExistsAction(const FileExistsAction &action)
-{
-    emit setFileExistsActionSend(action);
-}
-
-void TransferThreadUring::setFileExistsActionInternal(const FileExistsAction &action)
-{
-    if(transfer_stat!=TransferStat_PreOperation)
-    {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"["+std::to_string(id)+"] already used, source: "+
-                                 TransferThread::internalStringTostring(source)+", destination: "+TransferThread::internalStringTostring(destination));
-        return;
-    }
-    if(action!=FileExists_Rename)
-        fileExistsAction=action;
-    else
-    {
-        fileExistsAction=action;
-        alwaysDoFileExistsAction=action;
-    }
-    if(action==FileExists_Skip)
-    {
-        skip();
-        return;
-    }
-    resetExtraVariable();
-    emit internalStartPreOperation();
-}
-
-void TransferThreadUring::retryAfterError()
-{
-    if(transfer_stat==TransferStat_Idle)
-    {
-        if(transferId==0)
-        {
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"["+std::to_string(id)+"] seam have bug");
-            return;
-        }
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] restart all");
-        readError=false;
-        emit internalStartPreOperation();
-        return;
-    }
-    if(transfer_stat==TransferStat_PreOperation)
-    {
-        readError=false;
-        writeError=false;
-        emit internalStartPreOperation();
-        return;
-    }
-    // For transfer errors, restart from scratch
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] retryAfterError, restart");
-    closeFiles();
-    resetExtraVariable();
-    transfer_stat=TransferStat_PreOperation;
-    emit internalStartPreOperation();
-}
-
-#ifdef ULTRACOPIER_PLUGIN_SPEED_SUPPORT
-bool TransferThreadUring::setBlockSize(const unsigned int blockSize)
-{
-    if(blockSize>1 && blockSize<ULTRACOPIER_PLUGIN_MAX_BLOCK_SIZE*1024)
-    {
-        this->blockSize=blockSize;
+        readError=true;
+        emit errorOnFile(source,strerror(terr));
         return true;
     }
     else
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"block size out of range: "+std::to_string(blockSize));
-        return false;
+        if(symlink(buf.data(),TransferThread::internalStringTostring(destination).c_str())!=0)
+        {
+            const int terr=errno;
+            readError=true;
+            emit errorOnFile(destination,strerror(terr));
+            return true;
+        }
     }
-}
-
-void TransferThreadUring::setMultiForBigSpeed(const int &multiForBigSpeed)
-{
-    this->multiForBigSpeed=multiForBigSpeed;
-    waitNewClockForSpeed.release();
-}
-
-void TransferThreadUring::timeOfTheBlockCopyFinished()
-{
-    if(waitNewClockForSpeed.available()<=1)
-        waitNewClockForSpeed.release();
-}
-
-void TransferThreadUring::setOsSpecFlags(bool os_spec_flags)
-{
-    this->os_spec_flags=os_spec_flags;
-}
-
-void TransferThreadUring::setNativeCopy(bool native_copy)
-{
-    this->native_copy=native_copy;
-}
-#endif
-
-void TransferThreadUring::pause()
-{
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] try put in pause");
-    if(stopIt)
-        return;
-    pauseMutex.tryAcquire(pauseMutex.available());
-    putInPause=true;
-}
-
-void TransferThreadUring::resume()
-{
-    if(putInPause)
-    {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] resume");
-        putInPause=false;
-        stopIt=false;
-    }
-    else
-        return;
-    pauseMutex.release();
-}
-
-void TransferThreadUring::setBuffer(const bool buffer)
-{
-    this->bufferEnabled=buffer;
+    readIsClosedVariable=true;
+    writeIsClosedVariable=true;
+    checkIfAllIsClosedAndDoOperations();
+    return true;
 }

@@ -47,7 +47,7 @@ FolderExistsDialog::FolderExistsDialog(QWidget *parent, INTERNALTYPEPATH source,
 #else
     struct stat source_statbuf;
     memset(&source_statbuf,0,sizeof(source_statbuf));
-    if (lstat(TransferThread::internalStringTostring(source).c_str(), &source_statbuf) < 0)
+    if (lstat(TransferThread::internalStringTostring(source).c_str(), &source_statbuf) == 0)//was '< 0': the date was shown only when lstat FAILED (from a zeroed buffer) and hidden on success
     {
         #ifdef Q_OS_UNIX
             #ifdef Q_OS_MAC

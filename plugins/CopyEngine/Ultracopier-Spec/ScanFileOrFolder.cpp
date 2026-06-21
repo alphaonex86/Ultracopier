@@ -60,7 +60,7 @@ ScanFileOrFolder::ScanFileOrFolder(const Ultracopier::CopyMode &mode) :
         blackList.push_back(INTERNALTYPEPATH("C:\\Users\\")+userNameW+"\\AppData\\Roaming\\");
         #endif
     }
-    delete userNameW;
+    delete[] userNameW;//allocated with new WCHAR[size] -> scalar delete is undefined behaviour
     #endif
 }
 

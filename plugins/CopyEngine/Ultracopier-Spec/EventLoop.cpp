@@ -12,7 +12,8 @@ EventLoop EventLoop::eventLoop;
 
 EventLoop::EventLoop()
 {
-    int efd = epoll_create1(0);
+    efd = epoll_create1(0);//assign the MEMBER (was shadowed by a local 'int efd' -> member left
+                           //uninitialised, used by epoll_wait/epoll_ctl, and the fd leaked)
     if(efd==-1)
     {
         fprintf(stderr,"%s, errno %i\n", strerror(errno), errno);

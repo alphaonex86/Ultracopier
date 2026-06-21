@@ -119,6 +119,10 @@ PluginInterface_CopyEngine * CopyEngineFactory::getInstance()
     connect(this,&CopyEngineFactory::reloadLanguage,realObject,&CopyEngine::newLanguageLoaded);
     realObject->setRightTransfer(ui->doRightTransfer->isChecked());
     realObject->setKeepDate(ui->keepDate->isChecked());
+    // No dedicated checkbox in the UI yet: read the registered option directly
+    // (default "true" from the KeysList above). Add a ui->coalesceSourceStat
+    // QCheckBox + the usual connect/load/save to expose it in the options dialog.
+    realObject->setCoalesceSourceStat(optionsEngine!=NULL ? stringtobool(optionsEngine->getOptionValue("coalesceSourceStat")) : true);
     realObject->setOsSpecFlags(ui->os_spec_flags->isChecked());
     realObject->setNativeCopy(ui->native_copy->isChecked());
     #ifdef ULTRACOPIER_PLUGIN_RSYNC
@@ -139,6 +143,11 @@ PluginInterface_CopyEngine * CopyEngineFactory::getInstance()
     realObject->setignoreBlackList(ui->ignoreBlackList->isChecked());
     realObject->setDeletePartiallyTransferredFiles(ui->deletePartiallyTransferredFiles->isChecked());
     realObject->setInodeThreads(ui->inodeThreads->value());
+    // No dedicated spinbox in the UI yet: read the registered option directly (default "128" KB
+    // from the KeysList). This is what makes parallelizeIfSmallerThan actually take effect instead
+    // of the dead 1024-byte ctor default in ListThread; small files (<128KB) then transfer in
+    // parallel through the existing scheduler (big files stay serial). Mirrors coalesceSourceStat.
+    realObject->setParallelizeIfSmallerThan(optionsEngine!=NULL ? (int)stringtouint32(optionsEngine->getOptionValue("parallelizeIfSmallerThan")) : 128);
     realObject->setRenameTheOriginalDestination(ui->renameTheOriginalDestination->isChecked());
     realObject->setCheckDiskSpace(ui->checkDiskSpace->isChecked());
     realObject->setDefaultDestinationFolder(ui->defaultDestinationFolder->text().toStdString());
@@ -202,6 +211,7 @@ void CopyEngineFactory::setResources(OptionInterface * options,const std::string
         #else
         KeysList.push_back(std::pair<std::string, std::string>("keepDate","true"));
         #endif
+        KeysList.push_back(std::pair<std::string, std::string>("coalesceSourceStat","true"));
         KeysList.push_back(std::pair<std::string, std::string>("native_copy","false"));
         KeysList.push_back(std::pair<std::string, std::string>("os_spec_flags","true"));
         KeysList.push_back(std::pair<std::string, std::string>("blockSize",std::to_string(ULTRACOPIER_PLUGIN_DEFAULT_BLOCK_SIZE)));

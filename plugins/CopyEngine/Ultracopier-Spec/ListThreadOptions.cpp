@@ -30,6 +30,18 @@ void ListThread::setKeepDate(const bool keepDate)
     }
 }
 
+//coalesce the per-file source metadata reads (date+permissions) into one stat()/open()
+void ListThread::setCoalesceSourceStat(const bool coalesceSourceStat)
+{
+    this->coalesceSourceStat=coalesceSourceStat;
+    unsigned int index=0;
+    while(index<transferThreadList.size())
+    {
+        transferThreadList.at(index)->setCoalesceSourceStat(coalesceSourceStat);
+        index++;
+    }
+}
+
 void ListThread::setOsSpecFlags(bool os_spec_flags)
 {
     this->os_spec_flags=os_spec_flags;
@@ -256,6 +268,16 @@ void ListThread::setInodeThreads(const int &inodeThreads)
     this->inodeThreads=inodeThreads;
     createTransferThread();
     deleteTransferThread();
+}
+
+void ListThread::setParallelizeIfSmallerThan(const unsigned int &parallelizeIfSmallerThan)
+{
+    // value arrives already in BYTES (CopyEngine converts the KB option x1024 before emitting).
+    // Only stored here: the scheduler (doNewActions_start_transfer) compares transferSize against
+    // it to decide the parallel small-file path vs the serial big-file path. No transfer-thread
+    // propagation needed (TransferThread never reads it).
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"parallelizeIfSmallerThan in Bytes: "+std::to_string(parallelizeIfSmallerThan));
+    this->parallelizeIfSmallerThan=parallelizeIfSmallerThan;
 }
 
 void ListThread::setRenameTheOriginalDestination(const bool &renameTheOriginalDestination)

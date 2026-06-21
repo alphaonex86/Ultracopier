@@ -99,12 +99,29 @@ void registerTheOptions()
 }
 
 /// \brief Define the main() for the point entry
+#ifdef Q_OS_WIN32
+#include <windows.h>
+#endif
+
 int main(int argc, char *argv[])
 {
     int returnCode;
     QApplication ultracopierApplication(argc, argv);
     ultracopierApplication.setApplicationVersion(QString::fromStdString(FacilityEngine::version()));
     ultracopierApplication.setQuitOnLastWindowClosed(false);
+
+    #ifdef Q_OS_WIN32
+    /* Windows real-time antivirus (Defender / MsMpEng and others) scans every file a copy
+       writes; on a large copy that saturates the CPU and freezes the GUI. We can't disable
+       that scanning from the app (it would need a per-machine exclusion, not viable for a
+       tool shipped to many machines), and raising the COPY threads' priority is
+       counterproductive: it just makes them reach Defender's synchronous per-file scan
+       faster and then block on it (measured: the copy got slower and Defender used more CPU).
+       So raise ONLY the GUI/main thread, so the event loop is scheduled ahead of the
+       normal-priority scanner and the UI stays responsive under load, while the copy threads
+       keep competing with Defender as before. */
+    SetThreadPriority(GetCurrentThread(),THREAD_PRIORITY_ABOVE_NORMAL);
+    #endif
     qRegisterMetaType<PluginsAvailable>("PluginsAvailable");
     qRegisterMetaType<Ultracopier::DebugLevel>("Ultracopier::DebugLevel");
     qRegisterMetaType<Ultracopier::CopyMode>("Ultracopier::CopyMode");

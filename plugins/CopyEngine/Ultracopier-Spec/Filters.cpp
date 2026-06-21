@@ -437,20 +437,23 @@ void Filters::on_edit_inclusion_clicked()
     {
         if(ui->inclusion->item(index)->isSelected())
         {
+            // This is the INCLUSION editor: it must read/write the `include` vector. It
+            // wrongly used `exclude` (copy-paste from on_edit_exclusion_clicked) — indexing
+            // exclude[index] with an inclusion-list index is out-of-bounds UB / throws.
             FilterRules dialog(this);
-            dialog.set_apply_on(exclude.at(index).apply_on);
-            dialog.set_need_match_all(exclude.at(index).need_match_all);
-            dialog.set_search_text(exclude.at(index).search_text);
-            dialog.set_search_type(exclude.at(index).search_type);
+            dialog.set_apply_on(include.at(index).apply_on);
+            dialog.set_need_match_all(include.at(index).need_match_all);
+            dialog.set_search_text(include.at(index).search_text);
+            dialog.set_search_type(include.at(index).search_type);
             dialog.exec();
             if(dialog.getIsValid())
             {
-                exclude[index].apply_on=dialog.get_apply_on();
-                exclude[index].need_match_all=dialog.get_need_match_all();
-                exclude[index].search_text=dialog.get_search_text();
-                exclude[index].search_type=dialog.get_search_type();
-                if(!convertToRegex(exclude[index]))
-                    exclude.erase(exclude.cbegin()+index);
+                include[index].apply_on=dialog.get_apply_on();
+                include[index].need_match_all=dialog.get_need_match_all();
+                include[index].search_text=dialog.get_search_text();
+                include[index].search_type=dialog.get_search_type();
+                if(!convertToRegex(include[index]))
+                    include.erase(include.cbegin()+index);
                 editedEntry=true;
             }
         }

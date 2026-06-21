@@ -25,6 +25,7 @@ TransferThread::TransferThread() :
     rsync                           (false),
     #endif
     keepDate                        (false),
+    coalesceSourceStat              (true),
     mkFullPath                      (false),
     checksum                        (false),
     transferChecksum                (false),
@@ -44,6 +45,11 @@ TransferThread::TransferThread() :
     renameRegex=std::regex("^(.*)(\\.[a-zA-Z0-9]+)$");
     #ifdef Q_OS_WIN32
         regRead=std::regex("^[a-zA-Z]:");
+    #endif
+    sourceStatLoaded=false;
+    dateAppliedOnOpenHandle=false;
+    #ifdef Q_OS_WIN32
+    sourceSecurityLoaded=false;
     #endif
     transferSize                    = 0;//external set by ListThread
 
@@ -153,6 +159,13 @@ bool TransferThread::setFiles(const INTERNALTYPEPATH& source, const int64_t &siz
     this->destination               = destination;
     this->mode                      = mode;
     this->size                      = size;
+    // New file -> drop the cached source metadata so we never reuse the previous
+    // file's date/permissions on this recycled thread.
+    sourceStatLoaded=false;
+    #ifdef Q_OS_WIN32
+    sourceSecurityLoaded=false;
+    #endif
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] source meta cache invalidated for new file: "+TransferThread::internalStringTostring(source));
     stopIt                          = false;
     #ifdef Q_OS_WIN32
     stopItWin=0;
@@ -287,6 +300,7 @@ void TransferThread::resetExtraVariable()
     needSkip                    = false;
     retry                       = false;
     havePermission              = false;
+    dateAppliedOnOpenHandle     = false;
 }
 
 bool TransferThread::isSame()
@@ -892,6 +906,11 @@ void TransferThread::setKeepDate(const bool keepDate)
     this->keepDate=keepDate;
 }
 
+void TransferThread::setCoalesceSourceStat(const bool coalesceSourceStat)
+{
+    this->coalesceSourceStat=coalesceSourceStat;
+}
+
 void TransferThread::setChecksum(const bool checksum)
 {
     this->checksum=checksum;
@@ -933,7 +952,16 @@ bool TransferThread::doFilePostOperation()
                 ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] Try doRightTransfer when source not exists");
         }
         //date at end because previous change can touch the file
-        if(doTheDateTransfer)
+        if(doTheDateTransfer && dateAppliedOnOpenHandle)
+        {
+            /* The pipelined backends (io_uring / Windows IOCP) already applied the
+               source date/time onto the destination via the STILL-OPEN handle/fd just
+               before closeFiles(). Reopening the destination here only to SetFileTime/
+               utime() again would cost one extra open+close per file (an extra
+               handle-close = an extra Defender scan on Windows). Skip it. */
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] date already set on the open destination handle, skip reopen");
+        }
+        else if(doTheDateTransfer)
         {
             if(!writeDestinationFileDateTime(destination))
             {
@@ -1019,14 +1047,82 @@ int64_t TransferThread::readFileMDateTime(const INTERNALTYPEPATH &source)
 }
 
 //fonction to read the file date time
+#ifdef Q_OS_UNIX
+bool TransferThread::statSourceCached()
+{
+    if(coalesceSourceStat && sourceStatLoaded)
+    {
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] source stat cache HIT: "+TransferThread::internalStringTostring(source));
+        return true;
+    }
+    if(stat(TransferThread::internalStringTostring(source).c_str(),&permissions)!=0)
+    {
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] source stat cache FILL failed (errno "+std::to_string(errno)+"): "+TransferThread::internalStringTostring(source));
+        return false;
+    }
+    sourceStatLoaded=true;
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] source stat cache FILL (one stat for date+permissions): "+TransferThread::internalStringTostring(source));
+    return true;
+}
+#endif
+
+#ifdef Q_OS_WIN32
+/* Windows equivalent of the source-metadata coalescing: open the source ONCE
+   and read the file times (and, when permissions are being transferred, the
+   security descriptor) in the same open, instead of one CreateFile()/CloseHandle
+   per piece of metadata. Invalidated per file in setFiles.
+   \warning untested on Windows in this environment - verify on a Windows build. */
+bool TransferThread::statSourceCachedWin(const bool withSecurity)
+{
+    if(coalesceSourceStat && sourceStatLoaded && (!withSecurity || sourceSecurityLoaded))
+    {
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] source meta cache HIT (withSecurity:"+std::to_string(withSecurity)+"): "+TransferThread::internalStringTostring(source));
+        return true;
+    }
+    HANDLE hFile = CreateFileW(TransferThread::toFinalPath(source).c_str(), GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_FLAG_BACKUP_SEMANTICS, NULL);
+    if(hFile == INVALID_HANDLE_VALUE)
+    {
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] source meta cache FILL failed (open): "+TransferThread::internalStringTostring(source));
+        return false;
+    }
+    if(!sourceStatLoaded)
+    {
+        if(!GetFileTime(hFile,&ftCreate,&ftAccess,&ftWrite))
+        {
+            CloseHandle(hFile);
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] source meta cache FILL failed (GetFileTime): "+TransferThread::internalStringTostring(source));
+            return false;
+        }
+        sourceStatLoaded=true;
+    }
+    if(withSecurity && !sourceSecurityLoaded)
+    {
+        DWORD lasterror = GetSecurityInfo(hFile, SE_FILE_OBJECT, DACL_SECURITY_INFORMATION,
+                                          NULL, NULL, &dacl, NULL, &PSecurityD);
+        if(lasterror != ERROR_SUCCESS)
+        {
+            CloseHandle(hFile);
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] source meta cache FILL failed (GetSecurityInfo "+std::to_string(lasterror)+"): "+TransferThread::internalStringTostring(source));
+            return false;
+        }
+        sourceSecurityLoaded=true;
+    }
+    CloseHandle(hFile);
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] source meta cache FILL (one open for date"+std::string(withSecurity?"+permissions":"")+"): "+TransferThread::internalStringTostring(source));
+    return true;
+}
+#endif
+
 bool TransferThread::readSourceFileDateTime(const INTERNALTYPEPATH &source)
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] readFileDateTime("+TransferThread::internalStringTostring(source)+")");
     /** Why not do it with Qt? Because it not support setModificationTime(), and get the time with Qt, that's mean use local time where in C is UTC time */
     #ifdef Q_OS_UNIX
-        struct stat info;
-        if(stat(TransferThread::internalStringTostring(source).c_str(),&info)!=0)
+        // Use the per-file cached stat(source) (shared with permissions) instead
+        // of a dedicated stat() syscall.
+        if(!statSourceCached())
             return false;
+        const struct stat &info=permissions;
         #ifdef Q_OS_MAC
         time_t ctime=info.st_ctimespec.tv_sec;
         time_t actime=info.st_atimespec.tv_sec;
@@ -1051,26 +1147,14 @@ bool TransferThread::readSourceFileDateTime(const INTERNALTYPEPATH &source)
         return true;
     #else
         #ifdef Q_OS_WIN32
-            HANDLE hFileSouce = CreateFileW(TransferThread::toFinalPath(source).c_str(), GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_READONLY, NULL);
-            if(hFileSouce == INVALID_HANDLE_VALUE)
-            {
-                //ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] open failed to read: "+QString::fromWCharArray(filePath).toStdString()+", error: "+TransferThread::GetLastErrorStdStr());
+            // Open the source once; also pull the security descriptor in the same
+            // open when permissions will be transferred (doRightTransfer), so
+            // readSourceFilePermissions becomes a cache hit (no second open).
+            if(!statSourceCachedWin(coalesceSourceStat && doRightTransfer))
                 return false;
-            }
-            FILETIME ftCreate, ftAccess, ftWrite;
-            if(!GetFileTime(hFileSouce, &ftCreate, &ftAccess, &ftWrite))
-            {
-                CloseHandle(hFileSouce);
-                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] unable to get the file time");
-                return false;
-            }
-            this->ftCreate=ftCreate;
-            this->ftAccess=ftAccess;
-            this->ftWrite=ftWrite;
-            CloseHandle(hFileSouce);
             LARGE_INTEGER li;
-            li.LowPart  = ftWrite.dwLowDateTime;
-            li.HighPart = ftWrite.dwHighDateTime;
+            li.LowPart  = this->ftWrite.dwLowDateTime;
+            li.HighPart = this->ftWrite.dwHighDateTime;
             const uint64_t modtime=(li.QuadPart - 0x019DB1DED53E8000) / 10000000;
             if(modtime<ULTRACOPIER_PLUGIN_MINIMALYEAR_TIMESTAMPS)
             {
@@ -1121,24 +1205,20 @@ bool TransferThread::writeDestinationFileDateTime(const INTERNALTYPEPATH &destin
 bool TransferThread::readSourceFilePermissions(const INTERNALTYPEPATH &source)
 {
     #ifdef Q_OS_UNIX
-    if(stat(TransferThread::internalStringTostring(source).c_str(), &permissions)!=0)
+    // Reuse the stat(source) taken a few lines earlier by readSourceFileDateTime
+    // (both run back-to-back in preOperation). permissions IS the cache buffer.
+    Q_UNUSED(source);
+    if(!statSourceCached())
         return false;
     else
         return true;
     #else
-    HANDLE hFile = CreateFileW(source.c_str(), GENERIC_READ ,
-            FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_FLAG_BACKUP_SEMANTICS, NULL);
-    if (hFile == INVALID_HANDLE_VALUE) {
-      ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] CreateFile() failed. Error: INVALID_HANDLE_VALUE: "+TransferThread::GetLastErrorStdStr()+" on "+TransferThread::internalStringTostring(source));
-      return false;
-    }
-    DWORD lasterror = GetSecurityInfo(hFile, SE_FILE_OBJECT, DACL_SECURITY_INFORMATION,
-                                NULL, NULL, &dacl, NULL, &PSecurityD);
-    if (lasterror != ERROR_SUCCESS) {
-      ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] GetSecurityInfo() failed. Error"+std::to_string(lasterror));
-      return false;
-    }
-    CloseHandle(hFile);
+    // The security descriptor was normally already fetched in the same open as
+    // the file time (readSourceFileDateTime -> statSourceCachedWin(doRightTransfer)).
+    // This call is then a cache hit; otherwise it opens once to fetch it.
+    Q_UNUSED(source);
+    if(!statSourceCachedWin(true))
+        return false;
     return true;
     #endif
 }

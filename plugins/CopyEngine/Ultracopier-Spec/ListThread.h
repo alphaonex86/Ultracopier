@@ -30,7 +30,10 @@
 #include <KIO/CopyJob>
 #include <KJob>
 #endif
-#ifdef ULTRACOPIER_PLUGIN_IO_URING
+#if defined(ULTRACOPIER_PLUGIN_WINIOCP)
+#include "win-iocp/TransferThreadWin.h"
+typedef TransferThreadWin TransferThreadImpl;
+#elif defined(ULTRACOPIER_PLUGIN_IO_URING)
 #include "uring/TransferThreadUring.h"
 typedef TransferThreadUring TransferThreadImpl;
 #else
@@ -93,6 +96,7 @@ public:
         #endif
         Ultracopier::CopyMode mode;
         bool isRunning;///< store if the action si running
+        bool removed=false;///< tombstone: logically removed, skipped by all scans, dropped at the next compaction
         //TTHREAD * transfer; // -> see transferThreadList
     };
     /* Stored by pointer so that erasing/moving an entry shifts cheap 8-byte
@@ -101,6 +105,21 @@ public:
        changes. Removes the O(n^2) per-file shift cost that pegged the list
        thread at 100% CPU in -O0/debug builds. */
     std::vector<std::unique_ptr<ActionToDoTransfer> > actionToDoListTransfer;
+    /* Removal of a finished transfer used to erase() from this vector, an O(n)
+       shift per file -> O(n^2) over a copy and the dominant CPU cost on the
+       single-threaded scheduler. Instead an item is tombstoned (removed=true)
+       in O(1); a transferId->physical-index map gives O(1) find; the dead slots
+       are dropped in one compaction pass once enough accumulate. Order is
+       preserved (compaction is stable). Any code that emits POSITION-based
+       MoveItem actions to the model must compactActionToDoListTransfer() first
+       so engine indices match the (dense) model. */
+    size_t actionToDoListTransferRemoved;///< number of tombstoned (removed) slots currently in the vector
+    int64_t indexOfActionToDoTransfer(const uint64_t &id) const;///< physical index of the live item, or -1 (linear, tombstone-skipping)
+    void tombstoneActionToDoTransferAt(const size_t &index);///< O(1) logical removal at a known live index
+    void compactActionToDoListTransfer();///< drop all tombstones (stable), rebuild the index
+    void compactActionToDoListTransferIfNeeded();///< compact once enough tombstones accumulated
+    void rebuildActionToDoTransferIndex();///< rebuild transferId->index from the current vector
+    bool actionToDoListTransferEmpty() const;///< true when no live item remains (logical empty)
     /// \brief to store one action to do
     struct ActionToDoInode
     {
@@ -190,6 +209,8 @@ public slots:
     void setRightTransfer(const bool doRightTransfer);
     /// \brief set keep date
     void setKeepDate(const bool keepDate);
+    /// \brief coalesce the per-file source metadata reads into a single stat()/open() (default true)
+    void setCoalesceSourceStat(const bool coalesceSourceStat);
     void setOsSpecFlags(bool os_spec_flags);
     void setNativeCopy(bool native_copy);
     #ifdef ULTRACOPIER_PLUGIN_RSYNC
@@ -230,6 +251,7 @@ public slots:
     void setignoreBlackList(const bool &ignoreBlackList);
     void setDeletePartiallyTransferredFiles(const bool &deletePartiallyTransferredFiles);
     void setInodeThreads(const int &inodeThreads);
+    void setParallelizeIfSmallerThan(const unsigned int &parallelizeIfSmallerThan);
     void setRenameTheOriginalDestination(const bool &renameTheOriginalDestination);
     void setCheckDiskSpace(const bool &checkDiskSpace);
     void setBuffer(const bool &buffer);
@@ -242,8 +264,8 @@ private:
     std::vector<std::string> debug_threadWas;
     #endif
     //can't be static into WriteThread, linked by instance then by ListThread
-    #ifdef ULTRACOPIER_PLUGIN_IO_URING
-    QMultiHash<QString,TransferThreadImpl *> *writeFileList;
+    #if defined(ULTRACOPIER_PLUGIN_IO_URING) || defined(ULTRACOPIER_PLUGIN_WINIOCP)
+    QMultiHash<QString,TransferThreadPipelined *> *writeFileList;
     #else
     QMultiHash<QString,WriteThread *> *writeFileList;
     #endif
@@ -342,6 +364,7 @@ private:
     //memory variable for transfer thread creation
     bool doRightTransfer;
     bool keepDate;
+    bool coalesceSourceStat;
     bool os_spec_flags;
     bool native_copy;
     bool mkFullPath;

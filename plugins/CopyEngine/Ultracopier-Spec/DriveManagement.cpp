@@ -57,8 +57,10 @@ std::string DriveManagement::getDrive(const std::string &fileOrFolder) const
                             do
                             {
                                 index++;
+                                if(index>=fileOrFolder.size())//bound BEFORE at(index): a bare UNC path
+                                    break;                     //(e.g. "//server/") would otherwise throw std::out_of_range
                                 c=fileOrFolder.at(index);
-                            } while((c=='/' || c=='\\') && index<fileOrFolder.size());
+                            } while(c=='/' || c=='\\');
                             s=index;
                         }
                         else

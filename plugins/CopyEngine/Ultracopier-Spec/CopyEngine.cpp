@@ -32,10 +32,12 @@ CopyEngine::CopyEngine(FacilityInterface * facilityEngine) :
     facilityEngine(NULL),
     doRightTransfer(false),
     keepDate(false),
+    coalesceSourceStat(true),
     followTheStrictOrder(false),
     ignoreBlackList(false),
     deletePartiallyTransferredFiles(false),
     inodeThreads(0),
+    parallelizeIfSmallerThan(128),
     renameTheOriginalDestination(false),
     moveTheWholeFolder(false),
     #ifdef ULTRACOPIER_PLUGIN_RSYNC
@@ -79,11 +81,27 @@ CopyEngine::CopyEngine(FacilityInterface * facilityEngine) :
     ignoreBlackList                 = false;
     deletePartiallyTransferredFiles = true;
     inodeThreads                    = 16;
+    parallelizeIfSmallerThan        = 128;//KB; converted to bytes (x1024) before being sent to ListThread
+    os_spec_flags                   = true; //were uninitialised but applied to listThread in connectTheSignalsSlots()
+    native_copy                     = false;//before the factory's setters run -> indeterminate bool propagated
+    buffer                          = false;
     moveTheWholeFolder              = true;
 
     //implement the SingleShot in this class
     //timerActionDone.setSingleShot(true);
+    #if defined(ULTRACOPIER_PLUGIN_IO_URING) || defined(ULTRACOPIER_PLUGIN_WINIOCP)
+    /* The pipelined backends (io_uring / IOCP) complete small files fast enough that the
+       default 40ms transfer-list refresh drives synchronizeItems()->layoutChanged() ~25x/s.
+       layoutChanged forces the QTreeView to rebuild ALL its row items (O(n)); on a large
+       transfer list that saturates the GUI thread and the UI refresh goes laggy during the
+       copy (listing stays fast: it is mostly appends, no per-tick rebuild churn). The
+       structural list view does not need 25fps: overall progress and per-file progress have
+       their own timers (ULTRACOPIER_TIME_INTERFACE_UPDATE / _TIME_UPDATE_PROGRESSION), so we
+       pace just this list refresh down to ~6fps for these backends. async keeps 40ms. */
+    timerActionDone.setInterval(160);
+    #else
     timerActionDone.setInterval(ULTRACOPIER_PLUGIN_TIME_UPDATE_TRASNFER_LIST);
+    #endif
     //timerProgression.setSingleShot(true);
     timerProgression.setInterval(ULTRACOPIER_PLUGIN_TIME_UPDATE_PROGRESSION);
 
@@ -207,6 +225,8 @@ void CopyEngine::connectTheSignalsSlots()
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to connect setRenameTheOriginalDestination()");
     if(!connect(this,&CopyEngine::send_setInodeThreads,					listThread,&ListThread::setInodeThreads,		Qt::QueuedConnection))
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to connect setInodeThreads()");
+    if(!connect(this,&CopyEngine::send_parallelizeIfSmallerThan,					listThread,&ListThread::setParallelizeIfSmallerThan,		Qt::QueuedConnection))
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to connect setParallelizeIfSmallerThan()");
     if(!connect(this,&CopyEngine::send_followTheStrictOrder,					listThread,&ListThread::setFollowTheStrictOrder,		Qt::QueuedConnection))
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to connect followTheStrictOrder()");
     if(!connect(this,&CopyEngine::send_ignoreBlackList,					listThread,&ListThread::setignoreBlackList,		Qt::QueuedConnection))
@@ -263,12 +283,14 @@ bool CopyEngine::getOptionsEngine(QWidget * tempWidget)
     setChecksum(checksum);
     setRightTransfer(doRightTransfer);
     setKeepDate(keepDate);
+    setCoalesceSourceStat(coalesceSourceStat);
     setOsSpecFlags(os_spec_flags);
     setNativeCopy(native_copy);
     setFollowTheStrictOrder(followTheStrictOrder);
     setignoreBlackList(ignoreBlackList);
     setDeletePartiallyTransferredFiles(deletePartiallyTransferredFiles);
     setInodeThreads(inodeThreads);
+    setParallelizeIfSmallerThan(parallelizeIfSmallerThan);
     setRenameTheOriginalDestination(renameTheOriginalDestination);
     setMoveTheWholeFolder(moveTheWholeFolder);
     setCheckDiskSpace(checkDiskSpace);
@@ -872,6 +894,13 @@ void CopyEngine::setKeepDate(const bool keepDate)
     listThread->setKeepDate(keepDate);
 }
 
+//coalesce the per-file source metadata reads (date+permissions) into one stat()/open()
+void CopyEngine::setCoalesceSourceStat(const bool coalesceSourceStat)
+{
+    this->coalesceSourceStat=coalesceSourceStat;
+    listThread->setCoalesceSourceStat(coalesceSourceStat);
+}
+
 void CopyEngine::setOsSpecFlags(const bool os_spec_flags)
 {
     this->os_spec_flags=os_spec_flags;
@@ -943,6 +972,15 @@ void CopyEngine::setInodeThreads(const int &inodeThreads)
     if(uiIsInstalled)
         ui->inodeThreads->setValue(inodeThreads);
     emit send_setInodeThreads(inodeThreads);
+}
+
+void CopyEngine::setParallelizeIfSmallerThan(const int &parallelizeIfSmallerThan)
+{
+    this->parallelizeIfSmallerThan=parallelizeIfSmallerThan;
+    // the option is expressed in KB; ListThread compares it against transferSize in bytes,
+    // so convert here (the single place the x1024 lives, to avoid double/zero conversion bugs).
+    // No ui->...->setValue(): copyEngineOptions.ui has no spinbox for this option yet.
+    emit send_parallelizeIfSmallerThan(parallelizeIfSmallerThan*1024);
 }
 
 void CopyEngine::setRenameTheOriginalDestination(const bool &renameTheOriginalDestination)

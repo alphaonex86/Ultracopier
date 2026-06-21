@@ -72,26 +72,23 @@ bool ListThread::skipInternal(const uint64_t &id)
         }
         index++;
     }
-    int int_for_internal_loop=0;
-    const int &loop_size=actionToDoListTransfer.size();
-    while(int_for_internal_loop<loop_size)
+    // O(1) find by id, O(1) tombstone removal (RemoveItem is id-based in the model)
+    const int64_t skipIndex=indexOfActionToDoTransfer(id);
+    if(skipIndex>=0)
     {
-        if(actionToDoListTransfer.at(int_for_internal_loop)->id==id)
-        {
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("[%1] remove at not running, for id: %2").arg(int_for_internal_loop).arg(id).toStdString());
-            Ultracopier::ReturnActionOnCopyList newAction;
-            newAction.type=Ultracopier::RemoveItem;
-            newAction.userAction.moveAt=1;
-            newAction.addAction=actionToDoTransferToItemOfCopyList(*actionToDoListTransfer.at(int_for_internal_loop));
-            newAction.userAction.position=int_for_internal_loop;
-            actionDone.push_back(newAction);
-            actionToDoListTransfer.erase(actionToDoListTransfer.cbegin()+int_for_internal_loop);
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("actionToDoListTransfer.size(): %1, actionToDoListInode: %2, actionToDoListInode_afterTheTransfer: %3").arg(actionToDoListTransfer.size()).arg(actionToDoListInode.size()).arg(actionToDoListInode_afterTheTransfer.size()).toStdString());
-            if(actionToDoListTransfer.empty() && actionToDoListInode.empty() && actionToDoListInode_afterTheTransfer.empty())
-                updateTheStatus();
-            return true;
-        }
-        int_for_internal_loop++;
+        const unsigned int int_for_internal_loop=(unsigned int)skipIndex;
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("[%1] remove at not running, for id: %2").arg(int_for_internal_loop).arg(id).toStdString());
+        Ultracopier::ReturnActionOnCopyList newAction;
+        newAction.type=Ultracopier::RemoveItem;
+        newAction.userAction.moveAt=1;
+        newAction.addAction=actionToDoTransferToItemOfCopyList(*actionToDoListTransfer.at(int_for_internal_loop));
+        newAction.userAction.position=int_for_internal_loop;
+        actionDone.push_back(newAction);
+        tombstoneActionToDoTransferAt(int_for_internal_loop);
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("actionToDoListTransfer.size(): %1, actionToDoListInode: %2, actionToDoListInode_afterTheTransfer: %3").arg(actionToDoListTransfer.size()).arg(actionToDoListInode.size()).arg(actionToDoListInode_afterTheTransfer.size()).toStdString());
+        if(actionToDoListTransferEmpty() && actionToDoListInode.empty() && actionToDoListInode_afterTheTransfer.empty())
+            updateTheStatus();
+        return true;
     }
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"skip transfer not found: "+std::to_string(id));
     return false;

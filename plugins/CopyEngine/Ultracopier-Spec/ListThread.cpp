@@ -1,6 +1,7 @@
 #include "ListThread.h"
 #include <QStorageInfo>
 #include <QtGlobal>
+#include <algorithm>
 #include "../../../cpp11addition.h"
 
 // TransferThreadImpl typedef comes from ListThread.h
@@ -25,6 +26,7 @@ ListThread::ListThread(FacilityInterface * facilityInterface) :
     #endif
     idIncrementNumber(1),
     actualRealByteTransfered(0),
+    alwaysDoThisActionForFolderExists(FolderExists_NotSet),//was uninitialised: read in newScanThread() (ListThreadScan.cpp) before any setFolderCollision()
     checkDestinationFolderExists(false),
     parallelizeIfSmallerThan(1024),
     moveTheWholeFolder(false),
@@ -49,6 +51,7 @@ ListThread::ListThread(FacilityInterface * facilityInterface) :
     localOverSize(0),
     doRightTransfer(false),
     keepDate(false),
+    coalesceSourceStat(true),
     os_spec_flags(true),
     native_copy(false),
     mkFullPath(false),
@@ -56,6 +59,7 @@ ListThread::ListThread(FacilityInterface * facilityInterface) :
     speedLimitation(0),
     returnBoolToCopyEngine(true)
 {
+    actionToDoListTransferRemoved=0;
     #ifdef ULTRACOPIER_PLUGIN_DEBUG
     debug_pos=0;
     debug_total=0;
@@ -73,8 +77,8 @@ ListThread::ListThread(FacilityInterface * facilityInterface) :
     autoStart=true;
 
     //can't be static into WriteThread, linked by instance then by ListThread
-    #ifdef ULTRACOPIER_PLUGIN_IO_URING
-    writeFileList=new QMultiHash<QString,TransferThreadImpl *>();
+    #if defined(ULTRACOPIER_PLUGIN_IO_URING) || defined(ULTRACOPIER_PLUGIN_WINIOCP)
+    writeFileList=new QMultiHash<QString,TransferThreadPipelined *>();
     #else
     writeFileList=new QMultiHash<QString,WriteThread *>();
     #endif
@@ -120,7 +124,7 @@ ListThread::ListThread(FacilityInterface * facilityInterface) :
     if(sysinfo(&info)==0)
         MBMem=info.totalhigh*info.mem_unit/1024/1024;
     #endif
-    #ifndef ULTRACOPIER_PLUGIN_IO_URING
+    #if !defined(ULTRACOPIER_PLUGIN_IO_URING) && !defined(ULTRACOPIER_PLUGIN_WINIOCP)
     if(MBMem<1024)
         WriteThread::numberOfBlock=4+MBMem*0.12;
     else
@@ -134,6 +138,61 @@ ListThread::~ListThread()
     waitCancel.acquire();
     quit();
     wait();
+}
+
+#ifndef ULTRACOPIER_PLUGIN_ACTIONLIST_COMPACT_THRESHOLD
+// Drop dead slots once this many tombstones pile up. Absolute (not proportional)
+// so the scheduler's front-skip scan never walks more than this many dead slots,
+// while keeping compaction rare (amortised O(1) per removal).
+#define ULTRACOPIER_PLUGIN_ACTIONLIST_COMPACT_THRESHOLD 512
+#endif
+
+int64_t ListThread::indexOfActionToDoTransfer(const uint64_t &id) const
+{
+    // Linear scan skipping tombstones. Transfers complete roughly FIFO, so the
+    // match sits within the first (live-running + <=threshold dead) slots, which
+    // compaction keeps bounded. The scan was never the O(n^2) cost: the erase was.
+    for(size_t i=0;i<actionToDoListTransfer.size();++i)
+        if(!actionToDoListTransfer.at(i)->removed && actionToDoListTransfer.at(i)->id==id)
+            return (int64_t)i;
+    return -1;
+}
+
+void ListThread::rebuildActionToDoTransferIndex()
+{
+    // No separate index to maintain: find is the linear, tombstone-skipping scan
+    // above. Kept as a hook so callers that reorder the vector stay self-documenting.
+}
+
+void ListThread::compactActionToDoListTransfer()
+{
+    if(actionToDoListTransferRemoved==0)
+        return;
+    actionToDoListTransfer.erase(
+        std::remove_if(actionToDoListTransfer.begin(),actionToDoListTransfer.end(),
+            [](const std::unique_ptr<ActionToDoTransfer> &it){return it->removed;}),
+        actionToDoListTransfer.end());
+    actionToDoListTransferRemoved=0;
+}
+
+void ListThread::compactActionToDoListTransferIfNeeded()
+{
+    if(actionToDoListTransferRemoved>=ULTRACOPIER_PLUGIN_ACTIONLIST_COMPACT_THRESHOLD)
+        compactActionToDoListTransfer();
+}
+
+void ListThread::tombstoneActionToDoTransferAt(const size_t &index)
+{
+    // index must be a live slot. O(1): mark removed + bump the tombstone count.
+    actionToDoListTransfer.at(index)->removed=true;
+    actionToDoListTransferRemoved++;
+    compactActionToDoListTransferIfNeeded();
+}
+
+bool ListThread::actionToDoListTransferEmpty() const
+{
+    // logically empty when every physical slot is a tombstone (or there are none)
+    return actionToDoListTransfer.size()==actionToDoListTransferRemoved;
 }
 
 //transfer is finished
@@ -173,11 +232,13 @@ void ListThread::transferInodeIsClosed()
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"transfer thread not idle!");
         return;
     }
-    unsigned int int_for_internal_loop=0;
-    while(int_for_internal_loop<actionToDoListTransfer.size())
+    // O(1) lookup by transferId (was an O(n) linear scan), then O(1) tombstone
+    // removal (was an O(n) vector erase) -> the per-file work on this serial
+    // scheduler drops from O(n) to O(1) amortised.
+    const int64_t foundIndex=indexOfActionToDoTransfer(temp_transfer_thread->transferId);
+    unsigned int int_for_internal_loop=(foundIndex>=0)?(unsigned int)foundIndex:0;
+    if(foundIndex>=0)
     {
-        if(actionToDoListTransfer.at(int_for_internal_loop)->id==temp_transfer_thread->transferId)
-        {
             #ifdef ULTRACOPIER_PLUGIN_DEBUG
             std::string threadidstring="?";
             {
@@ -208,9 +269,9 @@ void ListThread::transferInodeIsClosed()
                 timeToTransfer.push_back(std::pair<uint64_t,uint32_t>(temp_transfer_thread->transferSize,transferTime));
                 temp_transfer_thread->haveStartTime=false;
             }
-            actionToDoListTransfer.erase(actionToDoListTransfer.cbegin()+int_for_internal_loop);
+            tombstoneActionToDoTransferAt(int_for_internal_loop);
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("actionToDoListTransfer.size(): %1, actionToDoListInode: %2, actionToDoListInode_afterTheTransfer: %3").arg(actionToDoListTransfer.size()).arg(actionToDoListInode.size()).arg(actionToDoListInode_afterTheTransfer.size()).toStdString());
-            if(actionToDoListTransfer.empty() && actionToDoListInode.empty() && actionToDoListInode_afterTheTransfer.empty())
+            if(actionToDoListTransferEmpty() && actionToDoListInode.empty() && actionToDoListInode_afterTheTransfer.empty())
                 updateTheStatus();
 
             //add the current size of file, to general size because it's finish
@@ -232,7 +293,7 @@ void ListThread::transferInodeIsClosed()
             countLocalParse++;
             #endif
             isFound=true;
-            if(actionToDoListTransfer.empty())
+            if(actionToDoListTransferEmpty())
             {
                 ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"actionToDoListTransfer==0");
                 actionToDoListInode.insert(actionToDoListInode.cbegin(),actionToDoListInode_afterTheTransfer.cbegin(),actionToDoListInode_afterTheTransfer.cend());
@@ -240,9 +301,6 @@ void ListThread::transferInodeIsClosed()
                 doNewActions_inode_manipulation();
                 doNewActions_start_transfer();
             }
-            break;
-        }
-        int_for_internal_loop++;
     }
     if(isFound)
     {
@@ -285,11 +343,13 @@ void ListThread::transferPutAtBottom()
     #ifdef ULTRACOPIER_PLUGIN_DEBUG
     int countLocalParse=0;
     #endif
-    unsigned int indexAction=0;
-    while(indexAction<actionToDoListTransfer.size())
+    // This emits a position-based MoveItem; flush tombstones so engine indices
+    // match the (dense) model, then find in O(1).
+    compactActionToDoListTransfer();
+    const int64_t putAtBottomIndex=indexOfActionToDoTransfer(transfer->transferId);
+    unsigned int indexAction=(putAtBottomIndex>=0)?(unsigned int)putAtBottomIndex:0;
+    if(putAtBottomIndex>=0)
     {
-        if(actionToDoListTransfer.at(indexAction)->id==transfer->transferId)
-        {
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"Put at the end: "+std::to_string(transfer->transferId));
             //push for interface at the end
             Ultracopier::ReturnActionOnCopyList newAction;
@@ -300,10 +360,11 @@ void ListThread::transferPutAtBottom()
             actionDone.push_back(newAction);
             //do the wait stat
             actionToDoListTransfer[indexAction]->isRunning=false;
-            //move at the end
+            //move at the end (rare error path; O(n) erase is fine here)
             std::unique_ptr<ActionToDoTransfer> movedToEnd=std::move(actionToDoListTransfer[indexAction]);
             actionToDoListTransfer.erase(actionToDoListTransfer.cbegin()+indexAction);
             actionToDoListTransfer.push_back(std::move(movedToEnd));
+            rebuildActionToDoTransferIndex();//positions changed
             #ifdef ULTRACOPIER_PLUGIN_DEBUG
             {
                 size_t index=0;
@@ -329,9 +390,6 @@ void ListThread::transferPutAtBottom()
             #endif
             isFound=true;
             putAtBottomAfterError.insert(transfer);
-            break;
-        }
-        indexAction++;
     }
     if(!isFound)
     {
@@ -441,6 +499,17 @@ Ultracopier::ItemOfCopyList ListThread::getReturnItemOfCopyListToCopyEngine() co
 void ListThread::realByteTransfered()
 {
     quint64 totalRealByteTransfered=0;
+    #if defined(ULTRACOPIER_PLUGIN_IO_URING) || defined(ULTRACOPIER_PLUGIN_WINIOCP)
+    /* The pipelined backends (io_uring / IOCP) update a transfer's in-flight progress
+       only per write-completion (block-sized chunks), so small files show 0 progress
+       until they finish in one step. Summing ONLY the in-flight threads therefore
+       barely grows on small-file-heavy copies -> the speed (computed from this value's
+       delta in Core) reads ~0 and the ETA derived from it breaks. Seed the total with
+       the cumulative bytes of already-completed files so the speed source is monotone.
+       (Completed files and in-flight files are disjoint: bytesTransfered is incremented
+       at harvest, after the thread's progression has been reset, so no double count.) */
+    totalRealByteTransfered=bytesTransfered;
+    #endif
     int index=0;
     int loop_sub_size_transfer_thread_search=transferThreadList.size();
     while(index<loop_sub_size_transfer_thread_search)
@@ -481,6 +550,7 @@ void ListThread::checkIfReadyToCancel()
         index++;
     }
     actionToDoListTransfer.clear();
+    actionToDoListTransferRemoved=0;
     actionToDoListInode.clear();
     actionToDoListInode_afterTheTransfer.clear();
     actionDone.clear();
@@ -496,7 +566,7 @@ void ListThread::updateTheStatus()
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
     sendActionDone();
     bool updateTheStatus_listing=scanFileOrFolderThreadsPool.size()>0;
-    bool updateTheStatus_copying=actionToDoListTransfer.size()>0 || actionToDoListInode.size()>0 || actionToDoListInode_afterTheTransfer.size()>0;
+    bool updateTheStatus_copying=!actionToDoListTransferEmpty() || actionToDoListInode.size()>0 || actionToDoListInode_afterTheTransfer.size()>0;
     #ifdef ULTRACOPIER_PLUGIN_KIO
     if(!kioJobs.empty())
         updateTheStatus_copying=true;
@@ -603,6 +673,8 @@ void ListThread::syncTransferList_internal()
     emit syncReady();
     actionDone.clear();
     //do list operation
+    //full resync emits position-based actions; flush tombstones so the loop sees a dense list
+    compactActionToDoListTransfer();
     TransferThreadImpl *transferThread;
     const int &loop_size=actionToDoListTransfer.size();
     int loop_sub_size=transferThreadList.size();
@@ -743,6 +815,7 @@ uint64_t ListThread::addToTransfer(const INTERNALTYPEPATH &source, const INTERNA
     temp.destination= destination;
     temp.mode	= mode;
     temp.isRunning	= false;
+    temp.removed	= false;
     actionToDoListTransfer.push_back(std::unique_ptr<ActionToDoTransfer>(new ActionToDoTransfer(temp)));
     //push the new transfer to interface
     Ultracopier::ReturnActionOnCopyList newAction;
@@ -895,7 +968,7 @@ void ListThread::doNewActions_inode_manipulation()
     while(int_for_loop<actionToDoListTransfer_count)
     {
         ActionToDoTransfer& currentActionToDoTransfer=*actionToDoListTransfer[int_for_loop];
-        if(!currentActionToDoTransfer.isRunning)
+        if(!currentActionToDoTransfer.removed && !currentActionToDoTransfer.isRunning)
         {
             //search the next inode action to do
             while(int_for_internal_loop<actionToDoListInode_count)
@@ -1122,7 +1195,7 @@ void ListThread::mkPathFirstFolderFinish()
                 ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"stop mkpath: "+TransferThread::internalStringTostring(actionToDoInode.destination));
                 actionToDoListInode.erase(actionToDoListInode.cbegin()+int_for_loop);
                 ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("actionToDoListTransfer.size(): %1, actionToDoListInode: %2, actionToDoListInode_afterTheTransfer: %3").arg(actionToDoListTransfer.size()).arg(actionToDoListInode.size()).arg(actionToDoListInode_afterTheTransfer.size()).toStdString());
-                if(actionToDoListTransfer.empty() && actionToDoListInode.empty() && actionToDoListInode_afterTheTransfer.empty())
+                if(actionToDoListTransferEmpty() && actionToDoListInode.empty() && actionToDoListInode_afterTheTransfer.empty())
                     updateTheStatus();
                 numberOfInodeOperation--;
                 #ifdef ULTRACOPIER_PLUGIN_DEBUG_SCHEDULER
@@ -1148,7 +1221,7 @@ void ListThread::mkPathFirstFolderFinish()
                 ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"stop mkpath: "+TransferThread::internalStringTostring(actionToDoInode.destination));
                 actionToDoListInode.erase(actionToDoListInode.cbegin()+int_for_loop);
                 ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("actionToDoListTransfer.size(): %1, actionToDoListInode: %2, actionToDoListInode_afterTheTransfer: %3").arg(actionToDoListTransfer.size()).arg(actionToDoListInode.size()).arg(actionToDoListInode_afterTheTransfer.size()).toStdString());
-                if(actionToDoListTransfer.empty() && actionToDoListInode.empty() && actionToDoListInode_afterTheTransfer.empty())
+                if(actionToDoListTransferEmpty() && actionToDoListInode.empty() && actionToDoListInode_afterTheTransfer.empty())
                     updateTheStatus();
                 numberOfInodeOperation--;
                 #ifdef ULTRACOPIER_PLUGIN_DEBUG_SCHEDULER
@@ -1240,6 +1313,7 @@ void ListThread::createTransferThread()
     last->transferSize=0;
     last->setRightTransfer(doRightTransfer);
     last->setKeepDate(keepDate);
+    last->setCoalesceSourceStat(coalesceSourceStat);
     last->setOsSpecFlags(os_spec_flags);
     last->setNativeCopy(native_copy);
     last->setAlwaysFileExistsAction(alwaysDoThisActionForFileExists);
@@ -1254,8 +1328,8 @@ void ListThread::createTransferThread()
     last->setRsync(rsync);
     #endif
 
-    #ifdef ULTRACOPIER_PLUGIN_IO_URING
-    last->writeFileList=new QMultiHash<QString,TransferThreadImpl *>();
+    #if defined(ULTRACOPIER_PLUGIN_IO_URING) || defined(ULTRACOPIER_PLUGIN_WINIOCP)
+    last->writeFileList=new QMultiHash<QString,TransferThreadPipelined *>();
     last->writeFileListMutex=new QMutex();
     #else
     last->writeThread.writeFileList=new QMultiHash<QString,WriteThread *>();
@@ -1295,7 +1369,7 @@ void ListThread::createTransferThread()
     #endif
 
     last->setObjectName(QStringLiteral("transfer %1").arg(transferThreadList.size()-1));
-    #ifndef ULTRACOPIER_PLUGIN_IO_URING
+    #if !defined(ULTRACOPIER_PLUGIN_IO_URING) && !defined(ULTRACOPIER_PLUGIN_WINIOCP)
     last->readThread.setObjectName(QStringLiteral("read %1").arg(transferThreadList.size()-1));
     last->writeThread.setObjectName(QStringLiteral("write %1").arg(transferThreadList.size()-1));
     #endif

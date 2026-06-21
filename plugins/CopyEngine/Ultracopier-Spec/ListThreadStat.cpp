@@ -87,15 +87,18 @@ void ListThread::timedUpdateDebugDialog()
     const int &loop_size=actionToDoListTransfer.size();
     while(index<loop_size)
     {
-        newList2.push_back(
-            TransferThread::internalStringTostring(actionToDoListTransfer.at(index)->source)+
-            " "+std::to_string(actionToDoListTransfer.at(index)->size)+" "+
-            TransferThread::internalStringTostring(actionToDoListTransfer.at(index)->destination)
-                           );
-        if(index>((inodeThreads+ULTRACOPIER_PLUGIN_MAXPARALLELTRANFER)*2+1))
+        if(!actionToDoListTransfer.at(index)->removed)//skip tombstoned (logically removed) entries
         {
-            newList2.push_back("...");
-            break;
+            newList2.push_back(
+                TransferThread::internalStringTostring(actionToDoListTransfer.at(index)->source)+
+                " "+std::to_string(actionToDoListTransfer.at(index)->size)+" "+
+                TransferThread::internalStringTostring(actionToDoListTransfer.at(index)->destination)
+                               );
+            if(index>((inodeThreads+ULTRACOPIER_PLUGIN_MAXPARALLELTRANFER)*2+1))
+            {
+                newList2.push_back("...");
+                break;
+            }
         }
         index++;
     }
@@ -137,10 +140,10 @@ void ListThread::sendActionDone()
 void ListThread::sendProgression()
 {
     #ifdef ULTRACOPIER_PLUGIN_KIO
-    if(actionToDoListTransfer.empty() && kioJobs.empty())
+    if(actionToDoListTransferEmpty() && kioJobs.empty())
         return;
     #else
-    if(actionToDoListTransfer.empty())
+    if(actionToDoListTransferEmpty())
         return;
     #endif
     oversize=0;

@@ -4,7 +4,8 @@ mac:QMAKE_CXXFLAGS+="-stdlib=libc++"
 
 QT += widgets xml
 DEFINES += _FILE_OFFSET_BITS=64 UNICODE _UNICODE _LARGE_FILE_SOURCE=1
-#linux:DEFINES += ULTRACOPIER_PLUGIN_IO_URING
+linux:DEFINES += ULTRACOPIER_PLUGIN_IO_URING
+win32:DEFINES += ULTRACOPIER_PLUGIN_WINIOCP
 TEMPLATE        = lib
 CONFIG         += plugin
 
@@ -127,9 +128,20 @@ equals(XXHASH_USE_VENDOR, 1) {
     LIBS += -lxxhash
 }
 
-contains(DEFINES, ULTRACOPIER_PLUGIN_IO_URING) {
-    HEADERS += $$PWD/uring/TransferThreadUring.h
-    SOURCES += $$PWD/uring/TransferThreadUring.cpp
+contains(DEFINES, ULTRACOPIER_PLUGIN_WINIOCP) {
+    # Windows IOCP backend (analog of io_uring). Single TransferThread per inode,
+    # no separate Read/Write threads. Shares all transfer logic with the io_uring
+    # backend via TransferThreadPipelined; only the I/O layer differs. The backend
+    # .cpp/.h are wrapped in #ifdef ULTRACOPIER_PLUGIN_WINIOCP so they compile to nothing elsewhere.
+    HEADERS += $$PWD/pipeline/TransferThreadPipelined.h \
+               $$PWD/win-iocp/TransferThreadWin.h
+    SOURCES += $$PWD/pipeline/TransferThreadPipelined.cpp \
+               $$PWD/win-iocp/TransferThreadWin.cpp
+} else:contains(DEFINES, ULTRACOPIER_PLUGIN_IO_URING) {
+    HEADERS += $$PWD/pipeline/TransferThreadPipelined.h \
+               $$PWD/uring/TransferThreadUring.h
+    SOURCES += $$PWD/pipeline/TransferThreadPipelined.cpp \
+               $$PWD/uring/TransferThreadUring.cpp
     LIBS += -luring
 } else {
     HEADERS += $$PWD/async/ReadThread.h \

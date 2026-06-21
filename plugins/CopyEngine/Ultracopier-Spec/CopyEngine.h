@@ -57,12 +57,14 @@ private:
     FacilityInterface *		facilityEngine;
     bool                    doRightTransfer;
     bool                    keepDate;
+    bool                    coalesceSourceStat;
     bool                    os_spec_flags;
     bool                    native_copy;
     bool                    followTheStrictOrder;
     bool                    ignoreBlackList;
     bool                    deletePartiallyTransferredFiles;
     int                     inodeThreads;
+    int                     parallelizeIfSmallerThan;//in KB; converted to bytes before being sent to ListThread
     bool                    renameTheOriginalDestination;
     bool                    moveTheWholeFolder;
     bool                    autoStart;
@@ -279,6 +281,8 @@ public slots:
     void setRightTransfer(const bool doRightTransfer);
     /// \brief set keep date
     void setKeepDate(const bool keepDate);
+    /// \brief coalesce the per-file source metadata reads into a single stat()/open() (default true)
+    void setCoalesceSourceStat(const bool coalesceSourceStat);
     void setOsSpecFlags(bool os_spec_flags);
     void setNativeCopy(bool native_copy);
 
@@ -287,6 +291,7 @@ public slots:
     void setignoreBlackList(const bool &ignoreBlackList);
     void setDeletePartiallyTransferredFiles(const bool &deletePartiallyTransferredFiles);
     void setInodeThreads(const int &inodeThreads);
+    void setParallelizeIfSmallerThan(const int &parallelizeIfSmallerThan);
     void setRenameTheOriginalDestination(const bool &renameTheOriginalDestination);
     void inodeThreadsFinished();
 
@@ -352,6 +357,7 @@ signals:
     void send_ignoreBlackList(const bool &ignoreBlackList) const;
     void send_deletePartiallyTransferredFiles(const bool &deletePartiallyTransferredFiles) const;
     void send_setInodeThreads(const int &inodeThreads) const;
+    void send_parallelizeIfSmallerThan(const int &parallelizeIfSmallerThan) const;
     void send_moveTheWholeFolder(const bool &moveTheWholeFolder) const;
     void send_setRenameTheOriginalDestination(const bool &renameTheOriginalDestination) const;
 };

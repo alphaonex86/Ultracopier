@@ -209,6 +209,26 @@ Each transfer window has separate signal connections, avoiding crosstalk.
 
 - **Prefer nested `if`/`else` over `continue`.** Inside loops, do not use guard `continue;` statements to skip iterations -- wrap the rest of the body in `if(...) { ... }` (with `else` for failure logging when needed). Yes, this nests deeply; that is the style here.
 
+## Memory Safety & Verification (required after every change)
+
+This is a mature, widely-used project: it must stay stable and bug-free. After **every** code change, before considering it done:
+
+- **Run a memory-safety tool on the code paths you touched** — check for uninitialised variables, use-after-free, double-free, out-of-bounds, leaks, etc. On Linux use **valgrind** (`valgrind --leak-check=full --track-origins=yes`), or a sanitizer build (`-fsanitize=address,undefined`). Read the findings that touch your changed files and fix them; don't dismiss them as noise without checking the origin trace.
+- **Exercise the actual code path the change affects, not just a build:**
+  - If it impacts the **io_uring** backend, build with `DEFINES+=ULTRACOPIER_PLUGIN_IO_URING` and run a real copy through that path (valgrind 3.27 handles io_uring).
+  - If it impacts the **IOCP / Windows** backend, build via MXE and run a real copy on the Windows test box (valgrind can't run PE binaries — rely on a focused static memory review + the runtime copy + content verification there).
+  - If it impacts the **shared base / async (thread) backend**, run a copy through the default async build and valgrind it on Linux.
+- **Verify content correctness** after a copy on the affected backend: `diff -rq --no-dereference SRC DST` = 0 (content + symlink targets), plus size/mtime/perm spot-checks.
+- New members must be initialised in the constructor; new heap allocations must have a matching free on every path (including error/early-return), and async I/O buffers must not be freed while an operation referencing them is still in flight.
+
+## Command Safety
+
+- **Recursive/forced deletes have already destroyed real data here — treat them as dangerous.** Do not delete recursively unless you are certain the target holds only disposable data and nothing important will be lost.
+- **`rm -Rf <relative-path>` (a relative path) is FORBIDDEN.** A relative path depends on the current directory and can wipe the wrong tree. Recursive force-deletes must use a fully-qualified ABSOLUTE path, e.g. `rm -rf /mnt/data/.../scratch` — never `rm -rf ./build` or `rm -rf sub/`.
+- **Before ANY recursive `rm`, enumerate first with `find`.** Run `find <abs-path>` (the same absolute path you are about to delete, recursively listing every file/folder) and actually read the output — confirm it contains only what you expect to destroy and nothing important. Only after that review run the recursive delete. The `find` is a mandatory dry-run, not optional: it shows the full recursive blast radius before you commit to it.
+- **Double-check the absolute path before running:** no empty/unset variables (a blank `$VAR` makes `rm -rf $VAR/x` become `rm -rf /x`), no stray `/`, no glob that could expand wider than intended. When unsure, `ls -d <abs-path>` first and confirm it is exactly what you mean.
+- Prefer non-destructive cleanup when possible (`make clean`, overwrite in place, or write scratch into a fresh uniquely-named dir). If you are not sure whether the data matters, ask before deleting.
+
 ## Common Tasks
 
 ### Adding a New Copy Engine Plugin

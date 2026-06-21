@@ -52,6 +52,13 @@ DebugEngine::DebugEngine()
         if(ultracopierArguments.last()=="quit")
             quit=true;
     addDebugInformationCallNumber=0;
+    //Grouped log buffering: flush the RAM buffer to the log file at most once per second
+    //(plus immediately when it passes 128KB, see addDebugInformation). Replaces the
+    //per-message Unbuffered write. logTotalBytes tracks written+buffered for the size caps.
+    logTotalBytes=0;
+    logFlushTimer.setInterval(1000);
+    connect(&logFlushTimer,&QTimer::timeout,this,&DebugEngine::flushLogBuffer);
+    logFlushTimer.start();
     //Load the first content
     htmlHeaderContent+="<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">";
     htmlHeaderContent+="<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\">";
@@ -180,6 +187,7 @@ DebugEngine::DebugEngine()
                 logFile.resize(0);
                 currentBackend=File;
                 logFile.write(debugHtmlContent.data(),static_cast<qint64>(debugHtmlContent.size()));
+                logTotalBytes=static_cast<qint64>(debugHtmlContent.size());
             }
         }
     }
@@ -188,13 +196,35 @@ DebugEngine::DebugEngine()
 /// \brief Destroy the ultracopier event dispatcher
 DebugEngine::~DebugEngine()
 {
+    logFlushTimer.stop();
     if(currentBackend==File)
     {
         removeTheLockFile();
+        //flush any buffered log lines before finalizing the file (crash diagnosis)
+        {
+            QMutexLocker lock_mutex(&mutex);
+            flushLogBufferLocked();
+        }
         //Finalize the log file
         logFile.write(endOfLogFile.data(),static_cast<qint64>(endOfLogFile.size()));
         logFile.close();
     }
+}
+
+void DebugEngine::flushLogBufferLocked()
+{
+    //caller MUST hold mutex. Write the whole accumulated buffer to the log file in one go.
+    if(!logBuffer.empty() && currentBackend==File && logFile.isOpen())
+    {
+        logFile.write(logBuffer.data(),static_cast<qint64>(logBuffer.size()));
+        logBuffer.clear();
+    }
+}
+
+void DebugEngine::flushLogBuffer()
+{
+    QMutexLocker lock_mutex(&mutex);
+    flushLogBufferLocked();
 }
 
 /// \brief ask to the user where save the bug report
@@ -400,23 +430,30 @@ void DebugEngine::addDebugInformation(const DebugLevel_custom &level,const std::
         QMutexLocker lock_mutex(&mutex);
         if(currentBackend==File)
         {
-            if(logFile.size()<ULTRACOPIER_DEBUG_MAX_ALL_SIZE*1024*1024 || (important && logFile.size()<ULTRACOPIER_DEBUG_MAX_IMPORTANT_SIZE*1024*1024))
+            //size cap uses the running counter instead of a per-message logFile.size() fstat
+            if(logTotalBytes<ULTRACOPIER_DEBUG_MAX_ALL_SIZE*1024*1024 || (important && logTotalBytes<ULTRACOPIER_DEBUG_MAX_IMPORTANT_SIZE*1024*1024))
             {
+                //Console output disabled (define ULTRACOPIER_DEBUG_CONSOLE to re-enable). It is a
+                //no-op on the Windows GUI subsystem (no attached console) and std::endl forces a
+                //flush per message otherwise.
+#ifdef ULTRACOPIER_DEBUG_CONSOLE
                 std::cout << addDebugInformation_textFormat << std::endl;
-                if(logFile.write(addDebugInformation_htmlFormat.data(),static_cast<qint64>(addDebugInformation_htmlFormat.size()))!=(qint64)addDebugInformation_htmlFormat.size())
-                {
-                    if(!logFile.isOpen())
-                        std::cerr << "Error to write (not open): " << logFile.errorString().toStdString() << std::endl;
-                    else
-                        std::cerr << "Error to write: " << logFile.errorString().toStdString() << std::endl;
-                }
+#endif
+                //Group the file-log writes: append to the RAM buffer, flush in one write per
+                //128KB (or on the 1s logFlushTimer) instead of one Unbuffered syscall per message.
+                logBuffer+=addDebugInformation_htmlFormat;
+                logTotalBytes+=static_cast<qint64>(addDebugInformation_htmlFormat.size());
+                if(logBuffer.size()>=128*1024)
+                    flushLogBufferLocked();
             }
         }
         else
         {
             if(debugHtmlContent.size()<ULTRACOPIER_DEBUG_MAX_ALL_SIZE*1024*1024 || (important && debugHtmlContent.size()<ULTRACOPIER_DEBUG_MAX_IMPORTANT_SIZE*1024*1024))
             {
+#ifdef ULTRACOPIER_DEBUG_CONSOLE
                 std::cout << addDebugInformation_textFormat << std::endl;
+#endif
                 debugHtmlContent+=addDebugInformation_htmlFormat;
             }
         }
@@ -434,6 +471,7 @@ std::string DebugEngine::getTheDebugHtml()
 {
     if(currentBackend==File)
     {
+        flushLogBuffer();//ensure buffered lines are on disk before reading the file back
         logFile.seek(0);
         if(!logFile.isOpen())
             ULTRACOPIER_DEBUGCONSOLE(DebugLevel_custom_Warning,"The log file is not open");

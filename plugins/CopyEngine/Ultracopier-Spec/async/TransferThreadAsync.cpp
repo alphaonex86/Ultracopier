@@ -70,6 +70,16 @@ TransferThreadAsync::TransferThreadAsync() :
     checksumProgression(0)
 {
     haveStartTime=false;
+    // Defensive init: native_copy selects the copy path (otherwise only setNativeCopy());
+    // the *Variable state flags are otherwise written in setFiles() before a transfer.
+    native_copy=false;
+    transferIsReadyVariable=false;
+    sended_state_readStopped=false;
+    readIsClosedVariable=false;
+    writeIsClosedVariable=false;
+    readIsOpenVariable=false;
+    writeIsOpenVariable=false;
+    realMove=false;
     #ifndef Q_OS_UNIX
     PSecurityD=NULL;
     dacl=NULL;

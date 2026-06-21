@@ -140,13 +140,13 @@ void DebugModel::addDebugInformation(const int &time, const DebugLevel_custom &l
     item.file=file+":"+std::to_string(ligne);
     item.location=location;
     list.push_back(item);
-    if(!displayed)
-    {
-        displayed=true;
-        emit layoutChanged();
-    }
-    else
-        inWaitOfDisplay=true;
+    // Just mark the model dirty. The actual layoutChanged() is emitted by the
+    // 100ms updateDisplay() timer, which runs on the GUI thread. This coalesces
+    // the per-message view refresh (hundreds/s during a copy) down to ~10fps and,
+    // importantly, keeps layoutChanged() off worker threads (addDebugInformation()
+    // is called from ListThread/TransferThread): a QAbstractItemModel must only
+    // signal layout changes from its owning (GUI) thread.
+    inWaitOfDisplay=true;
 }
 
 void DebugModel::setupTheTimer()
@@ -160,8 +160,9 @@ void DebugModel::setupTheTimer()
 
 void DebugModel::updateDisplay()
 {
-    displayed=false;
-    if(!inWaitOfDisplay)
+    // Emit at most one layoutChanged() per timer tick, and only when new rows
+    // actually arrived since the last flush (no idle repaints).
+    if(inWaitOfDisplay)
     {
         inWaitOfDisplay=false;
         displayed=true;

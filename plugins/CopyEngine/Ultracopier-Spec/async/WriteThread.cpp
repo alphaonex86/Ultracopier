@@ -67,6 +67,30 @@ WriteThread::WriteThread()
     #else
     to=nullptr;
     #endif
+    // Defensive init of members otherwise written only by setters/open(): prevents
+    // uninitialised reads on early stop()/dtor/retry paths — id is logged in stop();
+    // an uninitialised fakeMode could skip isOpen.release() and deadlock the dtor;
+    // an uninitialised blockArray.data could be free()'d on an early stopIt exit.
+    id=-1;
+    os_spec_flags=false;
+    buffer=false;
+    postOperationRequested=false;
+    writeFullBlocked=false;
+    endDetected=false;
+    fakeMode=false;
+    startSize=0;
+    bytesWriten=0;
+    blockArray.data=nullptr;
+    blockArray.size=0;
+    writeFileList=nullptr;
+    writeFileListMutex=nullptr;
+    #ifdef ULTRACOPIER_PLUGIN_SPEED_SUPPORT
+    numberOfBlockCopied=0;
+    numberOfBlockCopied2=0;
+    multiplicatorForBigSpeed=0;
+    MultiForBigSpeed=0;
+    multiForBigSpeed=0;
+    #endif
 }
 
 WriteThread::~WriteThread()

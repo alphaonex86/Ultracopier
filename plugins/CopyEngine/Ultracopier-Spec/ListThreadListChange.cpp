@@ -21,6 +21,8 @@ void ListThread::moveItemsOnTop(std::vector<uint64_t> ids)
         return;
     }
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
+    //reorder emits position-based MoveItem; flush tombstones so engine indices match the model
+    compactActionToDoListTransfer();
     //do list operation
     int indexToMove=0;
     for (unsigned int i=0; i<actionToDoListTransfer.size(); ++i) {
@@ -39,9 +41,14 @@ void ListThread::moveItemsOnTop(std::vector<uint64_t> ids)
             actionToDoListTransfer.insert(actionToDoListTransfer.cbegin()+indexToMove,std::move(temp));
             indexToMove++;
             if(ids.empty())
+            {
+                rebuildActionToDoTransferIndex();//positions changed
                 return;
+            }
         }
     }
+    rebuildActionToDoTransferIndex();//positions changed
+    rebuildActionToDoTransferIndex();//positions changed
     sendActionDone();
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"stop");
 }
@@ -56,6 +63,7 @@ void ListThread::moveItemsUp(std::vector<uint64_t> ids)
     }
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
     //do list operation
+    compactActionToDoListTransfer();//flush tombstones: position-based MoveItem must match the dense model
     int lastGoodPositionReal=0;
     bool haveGoodPosition=false;
     for (unsigned int i=0; i<actionToDoListTransfer.size(); ++i) {
@@ -78,6 +86,7 @@ void ListThread::moveItemsUp(std::vector<uint64_t> ids)
             if(ids.empty())
             {
                 ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"stop with return");
+                rebuildActionToDoTransferIndex();//positions changed
                 return;
             }
         }
@@ -87,6 +96,7 @@ void ListThread::moveItemsUp(std::vector<uint64_t> ids)
             haveGoodPosition=true;
         }
     }
+    rebuildActionToDoTransferIndex();//positions changed
     sendActionDone();
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"stop");
 }
@@ -101,6 +111,7 @@ void ListThread::moveItemsDown(std::vector<uint64_t> ids)
     }
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
     //do list operation
+    compactActionToDoListTransfer();//flush tombstones: position-based MoveItem must match the dense model
     int lastGoodPositionReal=0;
     bool haveGoodPosition=false;
     for (int i=actionToDoListTransfer.size()-1; i>=0; --i) {
@@ -125,6 +136,7 @@ void ListThread::moveItemsDown(std::vector<uint64_t> ids)
             if(ids.empty())
             {
                 ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"stop with return");
+                rebuildActionToDoTransferIndex();//positions changed
                 return;
             }
         }
@@ -134,6 +146,7 @@ void ListThread::moveItemsDown(std::vector<uint64_t> ids)
             haveGoodPosition=true;
         }
     }
+    rebuildActionToDoTransferIndex();//positions changed
     sendActionDone();
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"stop");
 }
@@ -148,6 +161,7 @@ void ListThread::moveItemsOnBottom(std::vector<uint64_t> ids)
     }
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
     //do list operation
+    compactActionToDoListTransfer();//flush tombstones: position-based MoveItem must match the dense model
     int lastGoodPositionReal=actionToDoListTransfer.size()-1;
     for (int i=lastGoodPositionReal; i>=0; --i) {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"Check action on item "+std::to_string(i));
@@ -168,10 +182,12 @@ void ListThread::moveItemsOnBottom(std::vector<uint64_t> ids)
             if(ids.empty())
             {
                 ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"stop with return");
+                rebuildActionToDoTransferIndex();//positions changed
                 return;
             }
         }
     }
+    rebuildActionToDoTransferIndex();//positions changed
     sendActionDone();
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"stop");
 }
@@ -198,6 +214,7 @@ void ListThread::exportTransferListInternal(const std::string &fileName)
                 transferFile.write(QStringLiteral("Move;").toUtf8());
         }
         transferFile.write(QStringLiteral("Ultracopier\n").toUtf8());
+        compactActionToDoListTransfer();//don't export tombstoned (removed) entries
         bool haveError=false;
         int size=actionToDoListTransfer.size();
         for (int index=0;index<size;++index) {
@@ -296,7 +313,7 @@ void ListThread::importTransferListInternal(const std::string &fileName)
             return;
         }
 
-        bool updateTheStatus_copying=actionToDoListTransfer.size()>0 || actionToDoListInode.size()>0 || actionToDoListInode_afterTheTransfer.size()>0;
+        bool updateTheStatus_copying=!actionToDoListTransferEmpty() || actionToDoListInode.size()>0 || actionToDoListInode_afterTheTransfer.size()>0;
         Ultracopier::EngineActionInProgress updateTheStatus_action_in_progress;
         if(updateTheStatus_copying)
             updateTheStatus_action_in_progress=Ultracopier::CopyingAndListing;

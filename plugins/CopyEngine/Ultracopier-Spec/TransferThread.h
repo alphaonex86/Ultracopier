@@ -185,6 +185,8 @@ public slots:
     virtual void setBuffer(const bool buffer);
     /// \brief set keep date
     void setKeepDate(const bool keepDate);
+    /// \brief enable/disable coalescing the per-file source metadata reads (date+permissions) into a single stat()/open()
+    void setCoalesceSourceStat(const bool coalesceSourceStat);
     /// \brief put the current file at bottom
     void putAtBottom();
 
@@ -215,6 +217,8 @@ protected:
     bool            rsync;
     #endif
     bool			keepDate;
+    /// \brief when true (default) the source date+permissions share one stat()/open() per file
+    bool			coalesceSourceStat;
     bool            mkFullPath;
     // Live option (toggled from UI). Snapshotted into transferChecksum at setFiles()
     // so a mid-transfer toggle cannot change the contract for an in-flight file.
@@ -241,6 +245,12 @@ protected:
     bool            renameTheOriginalDestination;
     bool			fileContentError;
     bool            doTheDateTransfer;
+    /* Set true by a backend that already applied the source date/time onto the STILL-OPEN
+       destination handle/fd (before closeFiles), so doFilePostOperation() must NOT reopen
+       the destination just to set the times again. Only the pipelined backends (io_uring,
+       Windows IOCP) set it; the async backend leaves it false and keeps its reopen path.
+       Reset per file in resetExtraVariable(). */
+    bool            dateAppliedOnOpenHandle;
     int             parallelizeIfSmallerThan;
     //error management
     bool			writeError;
@@ -261,6 +271,22 @@ protected:
     #else
     PSECURITY_DESCRIPTOR PSecurityD;
     PACL dacl;
+    #endif
+    /* Per-file cache of the source-metadata read. The source is read-only during
+       a transfer, so its stat (UNIX) / CreateFile+GetFileTime[+GetSecurityInfo]
+       (Windows) is fetched ONCE and shared by the date and permissions reads
+       instead of one stat()/open() each. MUST be invalidated for every new file
+       (done in setFiles) so a recycled thread never applies a previous file's
+       metadata. Never reused for a "final"/late source check (the source could
+       have changed by then). */
+    bool sourceStatLoaded;
+    #ifdef Q_OS_UNIX
+    bool statSourceCached();
+    #else
+    bool sourceSecurityLoaded;
+    // withSecurity: also fetch the DACL/security descriptor in the same open.
+    // NOTE: untested on Windows in this environment - verify on a Windows build.
+    bool statSourceCachedWin(const bool withSecurity);
     #endif
     bool havePermission;
     //to send state
