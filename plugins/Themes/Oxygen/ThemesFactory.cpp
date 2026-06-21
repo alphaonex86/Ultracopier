@@ -110,8 +110,8 @@ void ThemesFactory::setResources(OptionInterface * optionsEngine,const std::stri
         KeysList.push_back(std::pair<std::string, std::string>("savePosition","false"));
         KeysList.push_back(std::pair<std::string, std::string>("savePositionX","0"));
         KeysList.push_back(std::pair<std::string, std::string>("savePositionY","0"));
-        KeysList.push_back(std::pair<std::string, std::string>("generalMargin","0"));
-        KeysList.push_back(std::pair<std::string, std::string>("generalSpacing","0"));
+        KeysList.push_back(std::pair<std::string, std::string>("generalMargin","3"));
+        KeysList.push_back(std::pair<std::string, std::string>("generalSpacing","3"));
         KeysList.push_back(std::pair<std::string, std::string>("fileProgression","0"));
         optionsEngine->addOptionGroup(KeysList);
         connect(optionsEngine,&OptionInterface::resetOptions,this,&ThemesFactory::resetOptions);

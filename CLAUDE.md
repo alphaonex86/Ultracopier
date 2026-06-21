@@ -209,6 +209,35 @@ Each transfer window has separate signal connections, avoiding crosstalk.
 
 - **Prefer nested `if`/`else` over `continue`.** Inside loops, do not use guard `continue;` statements to skip iterations -- wrap the rest of the body in `if(...) { ... }` (with `else` for failure logging when needed). Yes, this nests deeply; that is the style here.
 
+## Build Portability (required — Ultracopier must ALWAYS build)
+
+Ultracopier ships to a **very large range of OS, compilers and platforms** — Windows XP through Windows 11+,
+Linux (old kernels through current), macOS, multiple architectures, and toolchains from **gcc/mingw 4.9.2**
+up to the latest. **It must always compile on every one of them.** A feature that is unavailable on some
+target (IOCP needs Vista+ APIs; io_uring needs liburing + Linux 5.1+) must **gracefully fall back** to the
+base async/thread backend — **never** `#error`, never break the build. Concretely:
+
+- **Gate optional backends in the `.pro`, not the C preprocessor.** Use qmake predicates
+  (`win32:greaterThan(QT_MAJOR_VERSION, 5)`, `linux:packagesExist(liburing)`) so the unsupported `.cpp`
+  is simply not compiled and the async sources are selected instead. Do **not** use `#error`,
+  `__has_include` (gcc 5+ only — breaks mingw 4.9.2), or `#include <sdkddkver.h>` tricks to detect
+  capability; those either fail the build or have ordering hazards (`sdkddkver.h` locked `_WIN32_WINNT`
+  low and broke the MXE build). Stay **mingw 4.9.2 / C++11-compatible** in anything that can reach an old
+  toolchain.
+- **Every change must keep ALL of these building, fallback included:** IOCP (MXE Qt6 / Windows),
+  io_uring (Linux gcc/Qt6 + liburing), async fallback (Linux without liburing — simulate with
+  `PKG_CONFIG_LIBDIR=/tmp/empty-pc qmake6 …`), and async on **Qt5 / mingw 4.9.2** (Windows XP). When you
+  change backend selection or shared code, compile-verify the affected ones from scratch (let the `.pro`
+  gate pick the backend; confirm via the generated Makefile which backend `.cpp` is actually compiled).
+- **Always check the real packaging/build environment at `/mnt/data/perso/progs/ultracopier/to-pack/to-send`
+  will still compile with your changes.** In particular `./3-compil-wineXP.sh` is the canonical
+  Windows-XP/Qt5.6.3/mingw492 build (its `compil` fn rsyncs the live `sources/` into TEMP_PATH and builds
+  there). Success markers: `compilation... done` per target and **absent** `plugins not created` /
+  `application not created` (wine `make` output goes to `/dev/null` and intermediates are deleted, so judge
+  by the produced `.exe`/`.dll` + those markers, not by grepping compile lines). **Do NOT run
+  `2-pre-send.sh` (uploads via `rsync … root@…`) or `sync.sh` (`git push origin`) autonomously** — those
+  publish; `3-compil-wineXP.sh` alone is enough to verify the XP build.
+
 ## Memory Safety & Verification (required after every change)
 
 This is a mature, widely-used project: it must stay stable and bug-free. After **every** code change, before considering it done:
@@ -220,6 +249,17 @@ This is a mature, widely-used project: it must stay stable and bug-free. After *
   - If it impacts the **shared base / async (thread) backend**, run a copy through the default async build and valgrind it on Linux.
 - **Verify content correctness** after a copy on the affected backend: `diff -rq --no-dereference SRC DST` = 0 (content + symlink targets), plus size/mtime/perm spot-checks.
 - New members must be initialised in the constructor; new heap allocations must have a matching free on every path (including error/early-return), and async I/O buffers must not be freed while an operation referencing them is still in flight.
+
+## Testing Discipline (never mutate the codebase for a test)
+
+- **Do NOT change the code just to make a test easier.** The shipping behavior must be what you test.
+  For example, Ultracopier is tray-resident and intentionally does NOT exit after a copy — so to end a
+  headless test run, drive it from OUTSIDE the process (`pkill -x ultracopier`, `kill <pid>`, a timeout,
+  polling `du` for completion), never by adding an `exit()`/`quit()`/auto-close into the code. Temporary
+  "just for my test" edits (auto-close, hardcoded paths, skipped dialogs, disabled features) corrupt what
+  you are validating and have historically been forgotten and shipped. Use external tooling, CLI args that
+  already exist, env vars, and separate scratch dirs instead. If a test genuinely cannot be done without a
+  code change, stop and ask first.
 
 ## Command Safety
 

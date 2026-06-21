@@ -432,6 +432,11 @@ void TransferThreadWin::doTransferPipeline()
         unsigned int toRead=blockSize;
         if((uint64_t)(readOffset+toRead)>sourceFileSize)
             toRead=(unsigned int)(sourceFileSize-readOffset);
+        // Never read past the buffer's allocated capacity: blockSize can be changed from another
+        // thread (speed-limiter/options) after initPipelineBuffers() sized this buffer, so clamp
+        // to allocSize to prevent a heap overflow if blockSize grew since allocation.
+        if(toRead>pipelineBuffers[i].allocSize)
+            toRead=pipelineBuffers[i].allocSize;
 
         pipelineBuffers[i].fileOffset=readOffset;
         pipelineBuffers[i].chunkSize=toRead;
@@ -583,6 +588,9 @@ void TransferThreadWin::doTransferPipeline()
                             unsigned int toRead=blockSize;
                             if((uint64_t)(readOffset+toRead)>sourceFileSize)
                                 toRead=(unsigned int)(sourceFileSize-readOffset);
+                            // Clamp to the buffer's allocated capacity (see initial-batch note).
+                            if(toRead>pipelineBuffers[bufIdx].allocSize)
+                                toRead=pipelineBuffers[bufIdx].allocSize;
                             pipelineBuffers[bufIdx].fileOffset=readOffset;
                             pipelineBuffers[bufIdx].chunkSize=toRead;
                             pipelineBuffers[bufIdx].bytesUsed=0;
@@ -727,6 +735,7 @@ bool TransferThreadWin::trySymlinkCopy()
         return false;
 
     BYTE buf[MAXIMUM_REPARSE_DATA_BUFFER_SIZE];
+    memset(buf,0,sizeof(buf));
     IOCP_REPARSE_DATA_BUFFER& ReparseBuffer = (IOCP_REPARSE_DATA_BUFFER&)buf;
     DWORD dwRet=0;
     HANDLE hDir = CreateFileW(TransferThread::toFinalPath(source).c_str(), GENERIC_READ, 0, NULL,
@@ -764,7 +773,13 @@ bool TransferThreadWin::trySymlinkCopy()
     bool successFull=false;
     if(isJunction)
     {
-        std::wstring cleanPath(ReparseBuffer.MountPointReparseBuffer.PathBuffer);
+        // Extract the substitute name via its offset+length rather than treating PathBuffer as a
+        // NUL-terminated string: the reparse buffer is not guaranteed NUL-terminated at PathBuffer[0],
+        // so scanning for a NUL could over-read past the kernel-filled data (and feed a garbage,
+        // possibly very long, path to mkJunction).
+        const auto &mp=ReparseBuffer.MountPointReparseBuffer;
+        std::wstring cleanPath((const wchar_t*)((const BYTE*)mp.PathBuffer+mp.SubstituteNameOffset),
+                               mp.SubstituteNameLength/sizeof(WCHAR));
         if(cleanPath.substr(0,4)==L"\\??\\")
             cleanPath=cleanPath.substr(4);
         successFull=mkJunction(TransferThread::toFinalPath(destination).c_str(),cleanPath.c_str());

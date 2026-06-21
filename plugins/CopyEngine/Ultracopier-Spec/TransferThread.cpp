@@ -57,7 +57,7 @@ TransferThread::TransferThread() :
     PSecurityD=NULL;
     dacl=NULL;
     #endif
-    #ifdef Q_OS_Win32
+    #ifdef Q_OS_WIN32
     stopItWin=0;
     #endif
     //if not QThread

@@ -5,6 +5,14 @@ mac:QMAKE_CXXFLAGS+="-stdlib=libc++"
 QMAKE_CXXFLAGS+=""
 DEFINES += _LARGE_FILE_SOURCE=1 _FILE_OFFSET_BITS=64 _UNICODE UNICODE
 
+# Transfer-backend gating (MUST mirror ultracopier.pro and CopyEngine.pro). This is the common
+# base .pro for the GUI app: the shipping build compiles it DIRECTLY (wine qmake ultracopier-core.pro),
+# while the all-in-one build reaches it via include() from ultracopier.pro. Defining the same macros
+# here lets app-side code (e.g. HelpDialog) know which backend the build selected. The async fallback
+# (Windows XP / pre-Vista, or Linux without liburing) leaves both macros undefined -> no backend shown.
+linux:packagesExist(liburing): DEFINES += ULTRACOPIER_PLUGIN_IO_URING
+win32:greaterThan(QT_MAJOR_VERSION, 5): DEFINES += ULTRACOPIER_PLUGIN_WINIOCP
+
 !contains(DEFINES, AUDIO) {
 DEFINES += NOAUDIO
 }

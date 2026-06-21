@@ -21,6 +21,14 @@ LocalListener::LocalListener(QObject *parent) :
 
 LocalListener::~LocalListener()
 {
+    // Disconnect every client socket from our slots BEFORE clientList (and this) is destroyed:
+    // tearing down localServer / its child QLocalSockets can emit a queued disconnected() signal,
+    // which would otherwise invoke deconnectClient() on the already-freed clientList vector
+    // (use-after-free seen under valgrind on shutdown).
+    for(unsigned int i=0;i<clientList.size();++i)
+        if(clientList.at(i).socket!=nullptr)
+            disconnect(clientList.at(i).socket,nullptr,this,nullptr);
+    clientList.clear();
     if(localServer.isListening())
     {
         localServer.close();
@@ -322,7 +330,10 @@ void LocalListener::deconnectClient()
         return;
     for (unsigned int i = 0; i < clientList.size(); ++i) {
         if(clientList.at(i).socket==socket)
+        {
             clientList.erase(clientList.cbegin()+i);
+            break;
+        }
     }
     socket->deleteLater();
 }

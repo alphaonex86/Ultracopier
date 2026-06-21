@@ -106,6 +106,17 @@ void HelpDialog::reloadTextValue()
     text=ui->label_platform->text();
     text=text.replace(QStringLiteral("%1"),ULTRACOPIER_PLATFORM_NAME);
 
+    // Show the high-performance transfer backend ONLY when it is actually compiled in. The
+    // ULTRACOPIER_PLUGIN_* macros are set by the .pro gates (win32+Qt6 -> IOCP, liburing -> io_uring);
+    // on Windows XP / pre-Vista and on platforms without io_uring the build falls back to the async
+    // backend, the macro is absent, and no suffix is appended.
+    #ifdef ULTRACOPIER_PLUGIN_WINIOCP
+    text+=QStringLiteral(" (IOCP)");
+    #endif
+    #ifdef ULTRACOPIER_PLUGIN_IO_URING
+    text+=QStringLiteral(" (io_uring)");
+    #endif
+
     #ifdef Q_OS_WIN32
         #if defined(_M_X64)//64Bits
         #else//32Bits
