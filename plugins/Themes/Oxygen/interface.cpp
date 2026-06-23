@@ -493,6 +493,12 @@ void Themes::actionInProgess(const Ultracopier::EngineActionInProgress &action)
         case Ultracopier::Idle:
             ui->progressBar_all->setMaximum(65535);
             ui->progressBar_all->setMinimum(0);
+            // Completion: the per-file bar may have been left in indeterminate "busy" mode
+            // (setRange(0,0), e.g. while a flaky file's progress was unknown during a put-to-end
+            // retry). An indeterminate QProgressBar self-animates, so if left set the window would
+            // repaint forever after the copy is done. Restore it to a determinate, complete state.
+            ui->progressBar_file->setRange(0,65535);
+            ui->progressBar_file->setValue(65535);
             if(haveStarted && transferModel.rowCount()<=0)
             {
                 if(shutdown && ui->shutdown->isChecked())
@@ -802,13 +808,25 @@ void Themes::updateCurrentFileInformation()
                 ui->progressBar_file->setValue((transfertItem.progressBar_read+transfertItem.progressBar_write)/2);
         }
         else
-            ui->progressBar_file->setRange(0,0);
+        {
+            // Unknown progress: use a DETERMINATE bar at 0%, NOT the indeterminate "busy" mode.
+            // An indeterminate QProgressBar self-animates (internal timer -> endless repaint -> a
+            // pegged CPU core); if it is left set when the copy finishes, the window spins forever
+            // (the Idle-time reset can lose the race against a late unknown-progress update -> the
+            // transient_sector hang). A determinate bar never animates, so the spin is impossible.
+            ui->progressBar_file->setRange(0,65535);
+            ui->progressBar_file->setValue(0);
+        }
     }
     else
     {
         ui->from->setText(QStringLiteral(""));
         ui->to->setText(QStringLiteral(""));
         ui->current_file->setText(QStringLiteral("-"));
+        // No current file -> the per-file bar must be determinate, never left in the
+        // indeterminate "busy" mode (setRange(0,0)) it may have been put in for an
+        // unknown-progress file. An indeterminate bar self-animates and would repaint forever.
+        ui->progressBar_file->setRange(0,65535);
         if(haveStarted && transferModel.rowCount()==0)
             ui->progressBar_file->setValue(65535);
         else if(!haveStarted)

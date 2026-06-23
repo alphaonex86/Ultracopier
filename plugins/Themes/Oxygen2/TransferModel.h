@@ -19,6 +19,7 @@
 #include "Oxygen2Environment.h"
 
 #include "../../../interface/FacilityInterface.h"
+#include "../../../interface/PathTreeStr.h"
 #include "fileTree.h"
 
 /// \brief model to store the transfer list
@@ -26,13 +27,16 @@ class TransferModel : public QAbstractTableModel
 {
     Q_OBJECT
 public:
-    /// \brief the transfer item displayed
+    /// \brief the transfer item displayed. source/destination full paths are stored as 4-byte node
+    /// ids into pathTreeStr (resolved on demand for the viewport), not as strings -- at 50M files
+    /// two full path strings per row is tens of GB of RAM. See PathTreeStr.h. (Independent of the
+    /// Folder tree built by appendToTree, which is the tree-VIEW; this is the flat list's storage.)
     struct TransfertItem
     {
         uint64_t id;
-        std::string source;
+        uint32_t srcNode;///< node id into pathTreeStr for the source full path
+        uint32_t dstNode;///< node id into pathTreeStr for the destination full path
         std::string size;
-        std::string destination;
     };
     /// \brief the transfer item with progression
     struct ItemOfCopyListWithMoreInformations
@@ -87,6 +91,7 @@ protected:
        changes. This is what kept the GUI thread from freezing in -O0/debug
        builds where the per-string moves are not inlined. */
     std::vector<std::unique_ptr<TransfertItem> > transfertItemList;///< To have a transfer list for the user
+    PathTreeStr pathTreeStr;///< memory-compact storage for the rows' source/destination full paths (see PathTreeStr.h)
     std::set<uint64_t> startId,stopId;///< To show what is started, what is stopped
     std::unordered_map<uint64_t,ItemOfCopyListWithMoreInformations> internalRunningOperation;///< to have progression and stat
 private:

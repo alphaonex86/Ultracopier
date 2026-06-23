@@ -88,6 +88,7 @@ HEADERS += \
     $$PWD/plugins/CopyEngine/Ultracopier-Spec/Filters.h \
     $$PWD/plugins/CopyEngine/Ultracopier-Spec/FolderExistsDialog.h \
     $$PWD/plugins/CopyEngine/Ultracopier-Spec/MkPath.h \
+    $$PWD/plugins/CopyEngine/Ultracopier-Spec/PathTree.h \
     $$PWD/plugins/CopyEngine/Ultracopier-Spec/ListThread.h \
     $$PWD/plugins/CopyEngine/Ultracopier-Spec/RenamingRules.h \
     $$PWD/plugins/CopyEngine/Ultracopier-Spec/ScanFileOrFolder.h \
@@ -110,7 +111,8 @@ HEADERS += \
     $$PWD/plugins/Themes/Oxygen/OxygenVariable.h \
     $$PWD/plugins/Themes/Oxygen/StructEnumDefinition.h \
     $$PWD/plugins/Themes/Oxygen/ThemesFactory.h \
-    $$PWD/plugins/Themes/Oxygen/TransferModel.h
+    $$PWD/plugins/Themes/Oxygen/TransferModel.h \
+    $$PWD/interface/PathTreeStr.h
 
 SOURCES += \
     $$PWD/plugins/CopyEngine/Ultracopier-Spec/CopyEngine-collision-and-error.cpp \
@@ -127,6 +129,7 @@ SOURCES += \
     $$PWD/plugins/CopyEngine/Ultracopier-Spec/FolderExistsDialog.cpp \
     $$PWD/plugins/CopyEngine/Ultracopier-Spec/ListThread_InodeAction.cpp \
     $$PWD/plugins/CopyEngine/Ultracopier-Spec/MkPath.cpp \
+    $$PWD/plugins/CopyEngine/Ultracopier-Spec/PathTree.cpp \
     $$PWD/plugins/CopyEngine/Ultracopier-Spec/RenamingRules.cpp \
     $$PWD/plugins/CopyEngine/Ultracopier-Spec/ScanFileOrFolder.cpp \
     $$PWD/plugins/CopyEngine/Ultracopier-Spec/TransferThread.cpp \
@@ -144,7 +147,8 @@ SOURCES += \
     $$PWD/plugins/Listener/catchcopy/catchcopy-api-0002/ServerCatchcopy.cpp \
     $$PWD/plugins/Themes/Oxygen/interface.cpp \
     $$PWD/plugins/Themes/Oxygen/ThemesFactory.cpp \
-    $$PWD/plugins/Themes/Oxygen/TransferModel.cpp
+    $$PWD/plugins/Themes/Oxygen/TransferModel.cpp \
+    $$PWD/interface/PathTreeStr.cpp
 
 contains(DEFINES, ULTRACOPIER_PLUGIN_WINIOCP) {
     # Windows IOCP backend: shares all transfer logic with the io_uring backend via

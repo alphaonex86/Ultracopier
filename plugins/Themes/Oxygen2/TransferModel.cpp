@@ -50,13 +50,13 @@ QVariant TransferModel::data( const QModelIndex& index, int role ) const
         switch(column)
         {
             case 0:
-                return QString::fromStdString(item.source);
+                return QString::fromStdString(pathTreeStr.resolve(item.srcNode));
             break;
             case 1:
                 return QString::fromStdString(item.size);
             break;
             case 2:
-                return QString::fromStdString(item.destination);
+                return QString::fromStdString(pathTreeStr.resolve(item.dstNode));
             break;
             default:
             return QVariant();
@@ -80,8 +80,8 @@ QVariant TransferModel::data( const QModelIndex& index, int role ) const
     }
     else if(role==Qt::BackgroundRole)
     {
-        if(!search_text.empty() && (item.source.find(search_text)!=std::string::npos ||
-                                    item.destination.find(search_text)!=std::string::npos))
+        if(!search_text.empty() && (pathTreeStr.resolve(item.srcNode).find(search_text)!=std::string::npos ||
+                                    pathTreeStr.resolve(item.dstNode).find(search_text)!=std::string::npos))
         {
             if(haveSearchItem && searchId==item.id)
                 return QColor(255,150,150,100);
@@ -143,7 +143,7 @@ bool TransferModel::setData( const QModelIndex& index, const QVariant& value, in
         switch(column)
         {
             case 0:
-                item.source=value.toString().toStdString();
+                item.srcNode=pathTreeStr.intern(value.toString().toStdString());
                 emit dataChanged(index,index);
                 return true;
             break;
@@ -153,7 +153,7 @@ bool TransferModel::setData( const QModelIndex& index, const QVariant& value, in
                 return true;
             break;
             case 2:
-                item.destination=value.toString().toStdString();
+                item.dstNode=pathTreeStr.intern(value.toString().toStdString());
                 emit dataChanged(index,index);
                 return true;
             break;
@@ -359,9 +359,9 @@ std::vector<uint64_t> TransferModel::synchronizeItems(const std::vector<Ultracop
             {
                 std::unique_ptr<TransfertItem> newItem(new TransfertItem);
                 newItem->id=action.addAction.id;
-                newItem->source=action.addAction.sourceFullPath;
+                newItem->srcNode=pathTreeStr.intern(action.addAction.sourceFullPath);
                 newItem->size=facilityEngine->sizeToString(action.addAction.size);
-                newItem->destination=action.addAction.destinationFullPath;
+                newItem->dstNode=pathTreeStr.intern(action.addAction.destinationFullPath);
                 transfertItemList.push_back(std::move(newItem));
                 totalFile++;
                 totalSize+=action.addAction.size;
@@ -551,8 +551,8 @@ int TransferModel::search(const std::string &text, bool searchNext)
     while(index_for_loop<loop_size)
     {
         const TransfertItem &transfertItem=*transfertItemList.at(currentIndexSearch);
-        if(transfertItem.source.find(search_text)!=std::string::npos ||
-                transfertItem.destination.find(search_text)!=std::string::npos)
+        if(pathTreeStr.resolve(transfertItem.srcNode).find(search_text)!=std::string::npos ||
+                pathTreeStr.resolve(transfertItem.dstNode).find(search_text)!=std::string::npos)
         {
             haveSearchItem=true;
             searchId=transfertItemList.at(currentIndexSearch)->id;
@@ -585,8 +585,8 @@ int TransferModel::searchPrev(const std::string &text)
     while(index_for_loop<loop_size)
     {
         const TransfertItem &transfertItem=*transfertItemList.at(currentIndexSearch);
-        if(transfertItem.source.find(search_text)!=std::string::npos ||
-                transfertItem.destination.find(search_text)!=std::string::npos)
+        if(pathTreeStr.resolve(transfertItem.srcNode).find(search_text)!=std::string::npos ||
+                pathTreeStr.resolve(transfertItem.dstNode).find(search_text)!=std::string::npos)
         {
             haveSearchItem=true;
             searchId=transfertItemList.at(currentIndexSearch)->id;

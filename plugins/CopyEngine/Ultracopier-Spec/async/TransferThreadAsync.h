@@ -105,7 +105,10 @@ private slots:
     void write_opened();
 signals:
     //internal signal
-    void internalStartResumeAfterErrorAndSeek() const;
+    // DEAD in async: declared for a resume-after-error-and-seek that async never implemented
+    // (async restarts faulted files from 0). Removed so it stops implying async resumes; the
+    // working version lives in the io_uring/IOCP pipelined backends. See ReadThread.h note.
+    //void internalStartResumeAfterErrorAndSeek() const;
     void internalStartPostOperation() const;
     //async due to tread conflict on from, if(from>=0) {do something, abort() -> on abort from =-1}
     void openRead(const INTERNALTYPEPATH &file, const Ultracopier::CopyMode &mode);
@@ -120,6 +123,11 @@ public slots:
     void stop();
     /// \brief skip the copy
     void skip();
+    /// \brief true once the current/last attempt is fully finalized (postOperationStopped sent =
+    /// read/write threads drained). The list thread must NOT reuse a thread (setFiles) until this is
+    /// true; together with keeping transferId set across a put-to-end, it serialises reuse strictly
+    /// after the old attempt's close so a stale close can't drop the requeued file.
+    bool readyForReuse() const { return sended_state_postOperationStopped; }
     /// \brief return info about the copied size
     int64_t copiedSize();
     /// \brief put the current file at bottom
@@ -144,6 +152,12 @@ private:
     // transferProgression to drive the halved progress curve when checksum is on.
     uint64_t checksumProgression;
     bool sended_state_readStopped;
+    // Emit postOperationStopped() at most once per transfer attempt. skip() emits it AND so does
+    // checkIfAllIsClosedAndDoOperations() when the (skip-)stopped read/write threads close; on the
+    // put-to-end-after-read-error path both fire, double-decrementing the list thread's
+    // numberOfInodeOperation (it went negative) and mishandling the requeued entry -> a permanent
+    // retry stall. Reset per attempt in setFiles(); guards the three emit sites.
+    bool sended_state_postOperationStopped;
     bool readIsClosedVariable;
     bool writeIsClosedVariable;
     bool readIsOpenVariable;

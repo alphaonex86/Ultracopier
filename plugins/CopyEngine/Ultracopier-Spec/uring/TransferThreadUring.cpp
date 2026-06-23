@@ -149,16 +149,28 @@ int TransferThreadUring::openSourceFile()
     io_uring_sqe_set_data64(sqe,OP_OPEN_TAG);
     io_uring_submit(&ring);
 
+    // Wait for THIS openat's completion specifically (user_data==OP_OPEN_TAG), discarding any stale
+    // CQEs still in the ring from a previous errored+drained attempt of the SAME thread (on an
+    // in-place FileError_Retry / media-reconnect resume). Taking the first CQE blindly mistook such
+    // a stale result for the openat fd -> a bogus fd that EBADF'd every later fstat/ftruncate/lseek.
     struct io_uring_cqe *cqe;
-    int ret=io_uring_wait_cqe(&ring,&cqe);
-    if(ret<0)
+    int fd=-1;
+    while(true)
     {
-        errorString_internal="io_uring_wait_cqe for openat source failed: "+std::string(strerror(-ret));
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] "+errorString_internal);
-        return -1;
+        int ret=io_uring_wait_cqe(&ring,&cqe);
+        if(ret<0)
+        {
+            errorString_internal="io_uring_wait_cqe for openat source failed: "+std::string(strerror(-ret));
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] "+errorString_internal);
+            return -1;
+        }
+        const bool isOpenCqe=(io_uring_cqe_get_data64(cqe)==OP_OPEN_TAG);
+        if(isOpenCqe)
+            fd=cqe->res;
+        io_uring_cqe_seen(&ring,cqe);
+        if(isOpenCqe)
+            break;
     }
-    int fd=cqe->res;
-    io_uring_cqe_seen(&ring,cqe);
     if(fd<0)
     {
         errorString_internal=strerror(-fd);
@@ -176,10 +188,17 @@ int TransferThreadUring::openSourceFile()
     if(fstat(fd,&st)==0)
     {
         size_at_open=st.st_size;
+        // Capture FULL-precision mtime + ctime for the media-reconnect resume gate (see
+        // TransferThreadPipelined::resumeAfterErrorAndSeek): sub-second mtime defeats the
+        // same-size/same-whole-second in-place-rewrite splice, ctime catches in-place writes.
         #ifdef Q_OS_MAC
         mtime_at_open=st.st_mtimespec.tv_sec;
+        mtime_nsec_at_open=(uint64_t)st.st_mtimespec.tv_nsec;
+        ctime_at_open=(uint64_t)st.st_ctimespec.tv_sec;
         #else
         mtime_at_open=st.st_mtim.tv_sec;
+        mtime_nsec_at_open=(uint64_t)st.st_mtim.tv_nsec;
+        ctime_at_open=(uint64_t)st.st_ctim.tv_sec;
         #endif
         sourceFileSize=st.st_size;
     }
@@ -240,16 +259,26 @@ int TransferThreadUring::openDestFile(uint64_t startSize)
     io_uring_sqe_set_data64(sqe,OP_OPEN_TAG);
     io_uring_submit(&ring);
 
+    // Wait for THIS openat's completion (user_data==OP_OPEN_TAG), discarding stale CQEs from a
+    // previous errored+drained attempt (see openSourceFile for the full rationale).
     struct io_uring_cqe *cqe;
-    int ret=io_uring_wait_cqe(&ring,&cqe);
-    if(ret<0)
+    int fd=-1;
+    while(true)
     {
-        errorString_internal="io_uring_wait_cqe for openat dest failed: "+std::string(strerror(-ret));
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] "+errorString_internal);
-        return -1;
+        int ret=io_uring_wait_cqe(&ring,&cqe);
+        if(ret<0)
+        {
+            errorString_internal="io_uring_wait_cqe for openat dest failed: "+std::string(strerror(-ret));
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] "+errorString_internal);
+            return -1;
+        }
+        const bool isOpenCqe=(io_uring_cqe_get_data64(cqe)==OP_OPEN_TAG);
+        if(isOpenCqe)
+            fd=cqe->res;
+        io_uring_cqe_seen(&ring,cqe);
+        if(isOpenCqe)
+            break;
     }
-    int fd=cqe->res;
-    io_uring_cqe_seen(&ring,cqe);
     if(fd<0)
     {
         errorString_internal=strerror(-fd);
@@ -264,17 +293,46 @@ int TransferThreadUring::openDestFile(uint64_t startSize)
         posix_fadvise(fd,0,0,POSIX_FADV_SEQUENTIAL);
     }
 
-    // Truncate/preallocate
+    // RESUME keep-prefix guard: startSize>0 only on a media-reconnect resume (the verified
+    // contiguous prefix). The existing destination MUST already contain the whole prefix; if it is
+    // shorter (deleted/truncated externally between attempts), the ftruncate below would EXTEND it
+    // with zeros under the resume point -> corruption. Fail instead -> the retry restarts from 0.
+    // Stat BY PATH, not the just-opened fd (the io_uring-opened dest fd returns EBADF on a plain
+    // fstat() on the resume path; the file is on a normal FS).
     if(startSize>0)
     {
-        if(ftruncate(fd,startSize)!=0)
+        struct stat dst;
+        if(stat(destPath.c_str(),&dst)!=0 || (uint64_t)dst.st_size<startSize)
         {
-            int t=errno;
-            errorString_internal=strerror(t);
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] Unable to truncate: "+errorString_internal);
+            errorString_internal="resume prefix missing/short on destination (have "+
+                std::to_string(stat(destPath.c_str(),&dst)==0?(long long)dst.st_size:-1)+", need "+std::to_string(startSize)+")";
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] "+errorString_internal);
             ::close(fd);
             return -1;
         }
+    }
+    // Truncate the destination to startSize ALWAYS (mirrors async WriteThread::destTruncate):
+    //   startSize==0 -> truncate to 0 = a FRESH file. This is what an OVERWRITE collision needs:
+    //     destinationExists() returns false for Overwrite WITHOUT unlinking (TransferThread.cpp:348),
+    //     leaving the stale dest for the backend to truncate. O_CREAT alone does NOT truncate, so
+    //     before this an overwrite onto a LONGER pre-existing file kept a stale tail (a real io_uring
+    //     overwrite bug; copy_override/move_override exposed it once stale test binaries were rebuilt).
+    //   startSize>0 -> keep the prefix [0,startSize), trim any out-of-order tail above it (resume).
+    if(ftruncate(fd,startSize)!=0)
+    {
+        int t=errno;
+        errorString_internal=strerror(t);
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] Unable to truncate: "+errorString_internal);
+        ::close(fd);
+        return -1;
+    }
+    if(startSize>0)
+    {
+        // Make the kept prefix durable before we trust+append to it (the resume contract). This
+        // fsync is per-RESUME-event (rare), NOT per-file, so it does not reintroduce the per-file
+        // fsync cost that was deliberately removed from the normal path.
+        if(fdatasync(fd)!=0)
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] resume fdatasync failed: "+std::string(strerror(errno)));
     }
 
     // Seek to 0
@@ -376,9 +434,15 @@ void TransferThreadUring::doTransferPipeline()
             return; // error already emitted
         }
 
-    readOffset=0;
-    writeOffset=0;
-    transferProgression=0;
+    // Seed ALL offsets from the resume cursor together (0 for a normal/first transfer ->
+    // byte-for-byte the old behaviour). On a media-reconnect resume, resumeFromOffset is the
+    // verified contiguous prefix already on disk, so reads/writes continue from there and the
+    // already-written prefix is not re-read. The initial read loop below starts at readOffset.
+    readOffset=resumeFromOffset;
+    writeOffset=resumeFromOffset;
+    transferProgression=resumeFromOffset;
+    contiguousWrittenOffset=resumeFromOffset;
+    completedWriteExtents.clear();
 
     int readsInFlight=0;
     int writesInFlight=0;
@@ -531,6 +595,11 @@ void TransferThreadUring::doTransferPipeline()
                     break;
                 }
                 transferProgression+=result;
+                // Fold this completed extent into the contiguous low-water mark. MUST use the LIVE
+                // fileOffset+result (this completion's bytes) BEFORE the short-write advance below,
+                // so out-of-order completions are merged correctly and contiguousWrittenOffset stays
+                // the true written-from-0 prefix (the only safe resume point).
+                recordCompletedWrite(pipelineBuffers[bufIdx].fileOffset,(uint64_t)result);
                 // Handle short write
                 if(result<pipelineBuffers[bufIdx].bytesUsed)
                 {
@@ -604,6 +673,10 @@ void TransferThreadUring::doTransferPipeline()
            written data stays in the page cache and the kernel flushes it
            normally. A file copy does not need per-file durability. */
         transferProgression=sourceFileSize;
+        // Whole file is contiguously written: the resume water-mark equals the file size. (On the
+        // ERROR path we deliberately leave contiguousWrittenOffset at its true mid-file value so the
+        // resume decision in resumeAfterErrorAndSeek() reads the real safe offset.)
+        contiguousWrittenOffset=(uint64_t)sourceFileSize;
     }
 
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] doTransferPipeline end, transferred: "+std::to_string(transferProgression));

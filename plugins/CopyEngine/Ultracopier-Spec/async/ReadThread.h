@@ -104,8 +104,14 @@ signals:
     void closed() const;
     void isSeekToZeroAndWait() const;
     void checkIfIsWait() const;
-    void resumeAfterErrorByRestartAll() const;
-    void resumeAfterErrorByRestartAtTheLastPosition() const;
+    // DEAD resume-at-offset scaffolding, removed to stop it implying async resumes: the async
+    // backend deliberately RESTARTS a faulted file from offset 0 (see TransferThreadAsync::
+    // retryAfterError -- "Simple mean less bug"). These two signals only ever fired from the
+    // long-disabled ReadThread::internalReopen() and were never wired to a working dest seek.
+    // Resume-at-offset on media reconnect lives ONLY in the io_uring/IOCP pipelined backends
+    // (TransferThreadPipelined::resumeAfterErrorAndSeek). Do not re-add here without an explicit ask.
+    //void resumeAfterErrorByRestartAll() const;
+    //void resumeAfterErrorByRestartAtTheLastPosition() const;
     // internal signals
     void internalStartOpen() const;
     //void internalStartReopen() const;-> not valid in version 2, beacause it restart from open in case of error

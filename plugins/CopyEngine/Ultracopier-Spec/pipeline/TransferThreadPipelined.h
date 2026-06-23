@@ -79,6 +79,11 @@ private slots:
     void preOperation();
     void postOperation();
     void internalStartTheTransfer();
+    /// \brief media-reconnect RESUME decision: on a retry after a SOURCE read error, re-stat
+    /// the source and (only if it is byte-identical: size + mtime sec&nsec + ctime all match,
+    /// and a non-empty contiguous prefix is already written) resume the transfer at
+    /// contiguousWrittenOffset; otherwise restart from 0. Wired to internalStartResumeAfterErrorAndSeek.
+    void resumeAfterErrorAndSeek();
 
     void setFileExistsActionInternal(const FileExistsAction &action);
 signals:
@@ -91,6 +96,9 @@ public slots:
     void startTheTransfer();
     void stop();
     void skip();
+    /// \brief pipelined backend has a single completion ring (no separate read/write close to
+    /// drain), so Idle already implies fully finalized.
+    bool readyForReuse() const { return true; }
     int64_t copiedSize();
     void putAtBottom();
     bool setFiles(const INTERNALTYPEPATH &source, const int64_t &size,
@@ -137,9 +145,27 @@ protected:
     /// transferChecksum). Returns true when they match. Mirrors async runChecksumVerify().
     bool runChecksumVerify();
 
+    /// \brief fold a just-COMPLETED destination write extent [off, off+len) into the
+    /// contiguous-from-0 low-water mark. MUST be called once per write completion with the
+    /// LIVE (post-short-write-advance) fileOffset+result, never the logical chunk size --
+    /// out-of-order completions are buffered in completedWriteExtents (bounded by the in-flight
+    /// buffer pool) until they become contiguous. contiguousWrittenOffset is the ONLY offset
+    /// safe to resume from; transferProgression counts in completion order and may sit above a hole.
+    void recordCompletedWrite(uint64_t off, uint64_t len);
+
     // ---- Shared state -----------------------------------------------------------
     uint64_t transferProgression;
     uint64_t checksumProgression; // bytes hashed so far during the post-copy verify
+    /// \brief largest offset N such that EVERY byte in [0,N) is written to the destination.
+    /// Advanced only by recordCompletedWrite across contiguous extents; the safe resume point.
+    uint64_t contiguousWrittenOffset;
+    /// \brief out-of-order completed write extents not yet contiguous with contiguousWrittenOffset.
+    /// Bounded by the in-flight buffer pool (<= NUM_BUFFERS), cleared at each (re)start.
+    std::vector<std::pair<uint64_t,uint64_t> > completedWriteExtents;
+    /// \brief 0 => start/restart the transfer from offset 0; >0 => RESUME keeping the dest
+    /// prefix [0,resumeFromOffset). Set ONLY by resumeAfterErrorAndSeek; zeroed at every new
+    /// file (setFiles) and on every restart path so a stale value can't trim an unrelated dest.
+    uint64_t resumeFromOffset;
 
     unsigned int blockSize;
     bool os_spec_flags;
@@ -164,6 +190,12 @@ protected:
 
     int64_t size_at_open;
     uint64_t mtime_at_open;
+    // Sub-second mtime + ctime captured at source open, used by the resume gate to detect an
+    // in-place rewrite that keeps size AND whole-second mtime identical (which 1s-mtime+size
+    // alone would miss -> spliced old-prefix/new-tail corruption). ctime changes on any
+    // metadata/content write. If nsec is unavailable (0 / FAT-class FS) the gate must NOT resume.
+    uint64_t mtime_nsec_at_open;
+    uint64_t ctime_at_open;
     INTERNALTYPEPATH sourceFile;
     INTERNALTYPEPATH destFile;
 };

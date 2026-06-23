@@ -31,11 +31,20 @@ class FileErrorDialog : public QDialog
 public:
     /// \brief create the object and pass all the informations to it
     explicit FileErrorDialog(QWidget *parent, INTERNALTYPEPATH fileInfo, std::string errorString, const ErrorType &errorType, FacilityInterface *facilityEngine);
-    ~FileErrorDialog();
+    virtual ~FileErrorDialog();
     /// \brief return the the always checkbox is checked
-    bool getAlways();
-    /// \brief return the action clicked
-    FileErrorAction getAction();
+    virtual bool getAlways();
+    /// \brief return the action clicked.
+    /// VIRTUAL on purpose: a headless test build subclasses this dialog and returns a scripted action
+    /// without ever showing the GUI (it also overrides QDialog::exec() to return immediately). This is
+    /// the clean seam for testing the error dialog -- NO #ifdef / env / test logic lives in the engine.
+    virtual FileErrorAction getAction();
+    /// \brief create a FileErrorDialog. The engine creates EVERY fileError dialog through this so a test
+    /// can substitute a subclass. overrideFactory is nullptr in production (-> a normal dialog); only a
+    /// test build's static initializer sets it. (Plain function pointer + .cpp definition keeps this
+    /// C++11/mingw-4.9.2 safe -- no C++17 inline static.)
+    static FileErrorDialog *createInstance(QWidget *parent, INTERNALTYPEPATH fileInfo, std::string errorString, const ErrorType &errorType, FacilityInterface *facilityEngine);
+    static FileErrorDialog *(*overrideFactory)(QWidget *, INTERNALTYPEPATH, std::string, const ErrorType &, FacilityInterface *);
 protected:
     void changeEvent(QEvent *e);
     static bool isInAdmin;

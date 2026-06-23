@@ -75,6 +75,8 @@ ListThread::ListThread(FacilityInterface * facilityInterface) :
     #endif
     putInPause                      = false;
     autoStart=true;
+    retryScheduler                  = NULL;//created+started on this thread in run()
+    safetyStallTicks                = 0;
 
     //can't be static into WriteThread, linked by instance then by ListThread
     #if defined(ULTRACOPIER_PLUGIN_IO_URING) || defined(ULTRACOPIER_PLUGIN_WINIOCP)
@@ -219,6 +221,12 @@ void ListThread::transferInodeIsClosed()
         overCheckUsedThread.erase(temp_transfer_thread);
     if(putAtBottomAfterError.find(temp_transfer_thread)!=putAtBottomAfterError.cend())
     {
+        // The put-to-end attempt has now drained (this is its postOperationStopped). Only NOW make
+        // the thread reusable: reset its transferId and drop it from the set (it deliberately kept
+        // the id so no concurrent pump could reuse it before this point), then reschedule.
+        temp_transfer_thread->transferId=0;
+        temp_transfer_thread->transferSize=0;
+        putAtBottomAfterError.erase(temp_transfer_thread);
         doNewActions_inode_manipulation();
         doNewActions_start_transfer();
         return;
@@ -343,28 +351,50 @@ void ListThread::transferPutAtBottom()
     #ifdef ULTRACOPIER_PLUGIN_DEBUG
     int countLocalParse=0;
     #endif
-    // This emits a position-based MoveItem; flush tombstones so engine indices
-    // match the (dense) model, then find in O(1).
-    compactActionToDoListTransfer();
+    // Requeue exactly like every other removal path: tombstone in place + append a fresh,
+    // not-running COPY (no compact/erase reshuffle of the live vector -- that destroyed the
+    // unique_ptr slots in-flight siblings depend on and dropped a good file, e.g. over_1mib.dat,
+    // when a *different* file hit a read error). A per-file deferCount bounds the retries: a
+    // transiently-failing sector (reads on retry) still recovers, while a permanently-dead one is
+    // eventually given up -- never aborting the backup, never touching the global error policy.
+    // The cap is a small constant (NOT the list size) so a dead file on a 50M-file job gives up
+    // after a handful of passes instead of being retried tens of millions of times.
+    static constexpr uint32_t putToEndRetryCap=16;
     const int64_t putAtBottomIndex=indexOfActionToDoTransfer(transfer->transferId);
     unsigned int indexAction=(putAtBottomIndex>=0)?(unsigned int)putAtBottomIndex:0;
     if(putAtBottomIndex>=0)
     {
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"Put at the end: "+std::to_string(transfer->transferId));
-            //push for interface at the end
+            //display row = number of live (non-tombstone) entries before this one
+            int liveBefore=0;
+            for(size_t i=0;i<(size_t)indexAction;++i)
+                if(!actionToDoListTransfer.at(i)->removed)
+                    liveBefore++;
+            const size_t liveCount=actionToDoListTransfer.size()-actionToDoListTransferRemoved;
+            ActionToDoTransfer requeued=*actionToDoListTransfer[indexAction];//same id/paths/size/mode
+            requeued.isRunning=false;
+            requeued.removed=false;
+            requeued.deferCount++;
+            tombstoneActionToDoTransferAt(indexAction);//O(1), no reshuffle (like the finished-transfer path)
             Ultracopier::ReturnActionOnCopyList newAction;
-            newAction.type=Ultracopier::MoveItem;
             newAction.addAction.id=transfer->transferId;
-            newAction.userAction.position=0;
-            newAction.userAction.moveAt=actionToDoListTransfer.size()-1;
+            newAction.userAction.position=liveBefore;
+            if(requeued.deferCount>putToEndRetryCap)
+            {
+                //bounded retries exhausted: give up on THIS file only (skip it); the model drops the line
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"Give up after "+std::to_string(requeued.deferCount-1)+" retries: "+std::to_string(transfer->transferId));
+                newAction.type=Ultracopier::RemoveItem;
+                newAction.userAction.moveAt=0;
+            }
+            else
+            {
+                //requeue: append a fresh copy at the end and tell the interface the line moved to the bottom
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"Put at the end: "+std::to_string(transfer->transferId));
+                actionToDoListTransfer.push_back(std::unique_ptr<ActionToDoTransfer>(new ActionToDoTransfer(requeued)));
+                newAction.type=Ultracopier::MoveItem;
+                newAction.userAction.moveAt=(int)(liveCount-1);//last live row (live count is unchanged: -1 tombstone +1 append)
+            }
             actionDone.push_back(newAction);
-            //do the wait stat
-            actionToDoListTransfer[indexAction]->isRunning=false;
-            //move at the end (rare error path; O(n) erase is fine here)
-            std::unique_ptr<ActionToDoTransfer> movedToEnd=std::move(actionToDoListTransfer[indexAction]);
-            actionToDoListTransfer.erase(actionToDoListTransfer.cbegin()+indexAction);
-            actionToDoListTransfer.push_back(std::move(movedToEnd));
-            rebuildActionToDoTransferIndex();//positions changed
+            rebuildActionToDoTransferIndex();//no-op hook, keeps reorder callers self-documenting
             #ifdef ULTRACOPIER_PLUGIN_DEBUG
             {
                 size_t index=0;
@@ -383,7 +413,10 @@ void ListThread::transferPutAtBottom()
                                      std::to_string(transfer->transferId)+" on thread "+std::to_string((quint64)QThread::currentThread()));
             }
             #endif
-            transfer->transferId=0;
+            // Keep transferId set so the thread stays OUT of the reuse gate (Idle && transferId==0)
+            // until its read/write threads have drained -- transferInodeIsClosed's put-at-bottom
+            // branch resets it then. This serialises reuse strictly after the old attempt's close,
+            // so a stale close can't be mis-attributed to the retry and drop the requeued file.
             transfer->transferSize=0;
             #ifdef ULTRACOPIER_PLUGIN_DEBUG
             countLocalParse++;
@@ -550,6 +583,7 @@ void ListThread::checkIfReadyToCancel()
         index++;
     }
     actionToDoListTransfer.clear();
+    pathTree.clear();//drop the interned paths of the finished/cancelled job
     actionToDoListTransferRemoved=0;
     actionToDoListInode.clear();
     actionToDoListInode_afterTheTransfer.clear();
@@ -682,36 +716,38 @@ void ListThread::syncTransferList_internal()
     int int_for_internal_loop;
     for(int int_for_loop=0; int_for_loop<loop_size; ++int_for_loop) {
         const ActionToDoTransfer &item=*actionToDoListTransfer.at(int_for_loop);
+        const INTERNALTYPEPATH itemSrc=pathTree.resolve(item.srcNode);//resolve once for this row
+        const INTERNALTYPEPATH itemDst=pathTree.resolve(item.dstNode);
         Ultracopier::ReturnActionOnCopyList newAction;
         newAction.type				= Ultracopier::PreOperation;
         newAction.addAction.id			= item.id;
-        const size_t sourceIndex=item.source.rfind('/');
+        const size_t sourceIndex=itemSrc.rfind('/');
         if(sourceIndex == std::string::npos)
         {
             newAction.addAction.sourceFullPath	= '/';
-            newAction.addAction.sourceFileName	= TransferThread::internalStringTostring(item.source);
+            newAction.addAction.sourceFileName	= TransferThread::internalStringTostring(itemSrc);
         }
         else
         {
-            newAction.addAction.sourceFullPath	= TransferThread::internalStringTostring(item.source);
-            newAction.addAction.sourceFileName	= TransferThread::internalStringTostring(item.source.substr(sourceIndex+1));
+            newAction.addAction.sourceFullPath	= TransferThread::internalStringTostring(itemSrc);
+            newAction.addAction.sourceFileName	= TransferThread::internalStringTostring(itemSrc.substr(sourceIndex+1));
         }
-        const size_t destinationIndex=item.destination.rfind('/');
+        const size_t destinationIndex=itemDst.rfind('/');
         if(destinationIndex == std::string::npos)
         {
             newAction.addAction.destinationFullPath	= '/';
-            newAction.addAction.destinationFileName	= TransferThread::internalStringTostring(item.destination);
+            newAction.addAction.destinationFileName	= TransferThread::internalStringTostring(itemDst);
         }
         else
         {
-            newAction.addAction.destinationFullPath	= TransferThread::internalStringTostring(item.destination);
-            newAction.addAction.destinationFileName	= TransferThread::internalStringTostring(item.destination.substr(destinationIndex+1));
+            newAction.addAction.destinationFullPath	= TransferThread::internalStringTostring(itemDst);
+            newAction.addAction.destinationFileName	= TransferThread::internalStringTostring(itemDst.substr(destinationIndex+1));
         }
         newAction.addAction.size		= item.size;
         newAction.addAction.mode		= item.mode;
         actionDone.push_back(newAction);
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"id: "+std::to_string(item.id)+", size: "+std::to_string(item.size)+
-                                 ", name: "+TransferThread::internalStringTostring(item.source)+", size2: "+std::to_string(newAction.addAction.size));
+                                 ", name: "+TransferThread::internalStringTostring(itemSrc)+", size2: "+std::to_string(newAction.addAction.size));
         if(item.isRunning)
         {
             for(int_for_internal_loop=0; int_for_internal_loop<loop_sub_size; ++int_for_internal_loop) {
@@ -719,27 +755,27 @@ void ListThread::syncTransferList_internal()
                 Ultracopier::ReturnActionOnCopyList newAction;
                 newAction.type				= Ultracopier::PreOperation;
                 newAction.addAction.id			= item.id;
-                const size_t sourceIndex=item.source.rfind('/');
+                const size_t sourceIndex=itemSrc.rfind('/');
                 if(sourceIndex == std::string::npos)
                 {
-                    newAction.addAction.sourceFullPath	= TransferThread::internalStringTostring(item.source);
-                    newAction.addAction.sourceFileName	= TransferThread::internalStringTostring(item.source);
+                    newAction.addAction.sourceFullPath	= TransferThread::internalStringTostring(itemSrc);
+                    newAction.addAction.sourceFileName	= TransferThread::internalStringTostring(itemSrc);
                 }
                 else
                 {
-                    newAction.addAction.sourceFullPath	= TransferThread::internalStringTostring(item.source);
-                    newAction.addAction.sourceFileName	= TransferThread::internalStringTostring(item.source.substr(sourceIndex+1));
+                    newAction.addAction.sourceFullPath	= TransferThread::internalStringTostring(itemSrc);
+                    newAction.addAction.sourceFileName	= TransferThread::internalStringTostring(itemSrc.substr(sourceIndex+1));
                 }
-                const size_t destinationIndex=item.destination.rfind('/');
+                const size_t destinationIndex=itemDst.rfind('/');
                 if(destinationIndex == std::string::npos)
                 {
-                    newAction.addAction.destinationFullPath	= TransferThread::internalStringTostring(item.destination);
-                    newAction.addAction.destinationFileName	= TransferThread::internalStringTostring(item.destination);
+                    newAction.addAction.destinationFullPath	= TransferThread::internalStringTostring(itemDst);
+                    newAction.addAction.destinationFileName	= TransferThread::internalStringTostring(itemDst);
                 }
                 else
                 {
-                    newAction.addAction.destinationFullPath	= TransferThread::internalStringTostring(item.destination);
-                    newAction.addAction.destinationFileName	= TransferThread::internalStringTostring(item.destination.substr(destinationIndex+1));
+                    newAction.addAction.destinationFullPath	= TransferThread::internalStringTostring(itemDst);
+                    newAction.addAction.destinationFileName	= TransferThread::internalStringTostring(itemDst.substr(destinationIndex+1));
                 }
                 newAction.addAction.size		= item.size;
                 newAction.addAction.mode		= item.mode;
@@ -811,8 +847,10 @@ uint64_t ListThread::addToTransfer(const INTERNALTYPEPATH &source, const INTERNA
     ActionToDoTransfer temp;
     temp.id		= generateIdNumber();
     temp.size	= size;
-    temp.source	= source;
-    temp.destination= destination;
+    // Intern source + destination into the path tree (the strings are no longer stored per entry):
+    // directory chains are shared across siblings, the leaf carries only the file name.
+    temp.srcNode	= pathTree.intern(source);
+    temp.dstNode	= pathTree.intern(destination);
     temp.mode	= mode;
     temp.isRunning	= false;
     temp.removed	= false;
@@ -832,28 +870,11 @@ Ultracopier::ItemOfCopyList ListThread::actionToDoTransferToItemOfCopyList(const
 {
     Ultracopier::ItemOfCopyList itemOfCopyList;
     itemOfCopyList.id			= actionToDoTransfer.id;
-    const size_t sourceIndex=actionToDoTransfer.source.rfind('/');
-    if(sourceIndex == std::string::npos)
-    {
-        itemOfCopyList.sourceFullPath	= TransferThread::internalStringTostring(actionToDoTransfer.source);
-        itemOfCopyList.sourceFileName	= TransferThread::internalStringTostring(actionToDoTransfer.source);
-    }
-    else
-    {
-        itemOfCopyList.sourceFullPath	= TransferThread::internalStringTostring(actionToDoTransfer.source);
-        itemOfCopyList.sourceFileName	= TransferThread::internalStringTostring(actionToDoTransfer.source.substr(sourceIndex+1));
-    }
-    const size_t destinationIndex=actionToDoTransfer.destination.rfind('/');
-    if(destinationIndex == std::string::npos)
-    {
-        itemOfCopyList.destinationFullPath	= TransferThread::internalStringTostring(actionToDoTransfer.destination);
-        itemOfCopyList.destinationFileName	= TransferThread::internalStringTostring(actionToDoTransfer.destination);
-    }
-    else
-    {
-        itemOfCopyList.destinationFullPath	= TransferThread::internalStringTostring(actionToDoTransfer.destination);
-        itemOfCopyList.destinationFileName	= TransferThread::internalStringTostring(actionToDoTransfer.destination.substr(destinationIndex+1));
-    }
+    // Full paths resolved from the tree; the leaf node IS the file name (no rfind needed).
+    itemOfCopyList.sourceFullPath	= TransferThread::internalStringTostring(pathTree.resolve(actionToDoTransfer.srcNode));
+    itemOfCopyList.sourceFileName	= TransferThread::internalStringTostring(pathTree.name(actionToDoTransfer.srcNode));
+    itemOfCopyList.destinationFullPath	= TransferThread::internalStringTostring(pathTree.resolve(actionToDoTransfer.dstNode));
+    itemOfCopyList.destinationFileName	= TransferThread::internalStringTostring(pathTree.name(actionToDoTransfer.dstNode));
     itemOfCopyList.size		= actionToDoTransfer.size;
     itemOfCopyList.mode		= actionToDoTransfer.mode;
     return itemOfCopyList;
@@ -998,6 +1019,7 @@ void ListThread::doNewActions_inode_manipulation()
                     */
                 currentTransferThread=transferThreadList.at(int_for_transfer_thread_search);
                 if(currentTransferThread->getStat()==TransferStat_Idle && currentTransferThread->transferId==0 &&
+                        currentTransferThread->readyForReuse() && // old attempt fully drained (put-to-end safety)
                         overCheckUsedThread.find(currentTransferThread)==overCheckUsedThread.cend()) // /!\ important!
                 {
                     #ifdef ULTRACOPIER_PLUGIN_DEBUG
@@ -1020,10 +1042,13 @@ void ListThread::doNewActions_inode_manipulation()
                     #endif
                     overCheckUsedThread.insert(currentTransferThread);
 
-                    std::string drive=driveManagement.getDrive(TransferThread::internalStringTostring(currentActionToDoTransfer.destination));
+                    // resolve the two paths from the tree ONCE for this hand-off
+                    const INTERNALTYPEPATH curSrc=pathTree.resolve(currentActionToDoTransfer.srcNode);
+                    const INTERNALTYPEPATH curDst=pathTree.resolve(currentActionToDoTransfer.dstNode);
+                    std::string drive=driveManagement.getDrive(TransferThread::internalStringTostring(curDst));
                     if(requiredSpace.find(drive)!=requiredSpace.cend() &&
                             (currentActionToDoTransfer.mode!=Ultracopier::Move ||
-                             drive!=driveManagement.getDrive(TransferThread::internalStringTostring(currentActionToDoTransfer.source))))
+                             drive!=driveManagement.getDrive(TransferThread::internalStringTostring(curSrc))))
                     {
                         requiredSpace[drive]-=currentActionToDoTransfer.size;
                         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("space needed removed: %1, space needed: %2, on: %3").arg(
@@ -1033,15 +1058,15 @@ void ListThread::doNewActions_inode_manipulation()
                     currentTransferThread->transferSize=currentActionToDoTransfer.size;
                     putAtBottomAfterError.erase(currentTransferThread);
                     if(!currentTransferThread->setFiles(
-                        currentActionToDoTransfer.source,
+                        curSrc,
                         currentActionToDoTransfer.size,
-                        currentActionToDoTransfer.destination,
+                        curDst,
                         currentActionToDoTransfer.mode
                         ))
                     {
                         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(int_for_loop)+"] id: "+
                                                  std::to_string(currentTransferThread->transferId)+
-                                                 " is idle, but seam busy at set name: "+TransferThread::internalStringTostring(currentActionToDoTransfer.destination)
+                                                 " is idle, but seam busy at set name: "+TransferThread::internalStringTostring(curDst)
                                                  );
                         break;
                     }
@@ -1049,41 +1074,41 @@ void ListThread::doNewActions_inode_manipulation()
                     {
                         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(int_for_loop)+"] id: "+
                                                  std::to_string(currentTransferThread->transferId)+
-                                                 " is idle, but seam busy at set name: "+TransferThread::internalStringTostring(currentActionToDoTransfer.destination)
+                                                 " is idle, but seam busy at set name: "+TransferThread::internalStringTostring(curDst)
                                                  );
                     }
                     currentActionToDoTransfer.isRunning=true;
 
                     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(int_for_loop)+"] id: "+
                                              std::to_string(currentTransferThread->transferId)+
-                                             " is idle, use it for "+TransferThread::internalStringTostring(currentActionToDoTransfer.destination)
+                                             " is idle, use it for "+TransferThread::internalStringTostring(curDst)
                                              );
 
                     /// \note wrong position? Else write why it's here
                     Ultracopier::ReturnActionOnCopyList newAction;
                     newAction.type				= Ultracopier::PreOperation;
                     newAction.addAction.id			= currentActionToDoTransfer.id;
-                    const size_t sourceIndex=currentActionToDoTransfer.source.rfind('/');
+                    const size_t sourceIndex=curSrc.rfind('/');
                     if(sourceIndex == std::string::npos)
                     {
                         newAction.addAction.sourceFullPath	= '/';
-                        newAction.addAction.sourceFileName	= TransferThread::internalStringTostring(currentActionToDoTransfer.source);
+                        newAction.addAction.sourceFileName	= TransferThread::internalStringTostring(curSrc);
                     }
                     else
                     {
-                        newAction.addAction.sourceFullPath	= TransferThread::internalStringTostring(currentActionToDoTransfer.source);
-                        newAction.addAction.sourceFileName	= TransferThread::internalStringTostring(currentActionToDoTransfer.source.substr(sourceIndex+1));
+                        newAction.addAction.sourceFullPath	= TransferThread::internalStringTostring(curSrc);
+                        newAction.addAction.sourceFileName	= TransferThread::internalStringTostring(curSrc.substr(sourceIndex+1));
                     }
-                    const size_t destinationIndex=currentActionToDoTransfer.destination.rfind('/');
+                    const size_t destinationIndex=curDst.rfind('/');
                     if(destinationIndex == std::string::npos)
                     {
                         newAction.addAction.destinationFullPath	= '/';
-                        newAction.addAction.destinationFileName	= TransferThread::internalStringTostring(currentActionToDoTransfer.destination);
+                        newAction.addAction.destinationFileName	= TransferThread::internalStringTostring(curDst);
                     }
                     else
                     {
-                        newAction.addAction.destinationFullPath	= TransferThread::internalStringTostring(currentActionToDoTransfer.destination);
-                        newAction.addAction.destinationFileName	= TransferThread::internalStringTostring(currentActionToDoTransfer.destination.substr(destinationIndex+1));
+                        newAction.addAction.destinationFullPath	= TransferThread::internalStringTostring(curDst);
+                        newAction.addAction.destinationFileName	= TransferThread::internalStringTostring(curDst.substr(destinationIndex+1));
                     }
                     newAction.addAction.size		= currentActionToDoTransfer.size;
                     newAction.addAction.mode		= currentActionToDoTransfer.mode;
@@ -1287,7 +1312,68 @@ void ListThread::run()
     #ifdef ULTRACOPIER_PLUGIN_SPEED_SUPPORT
     clockForTheCopySpeed=new QTimer();
     #endif
+    // Safety re-pump timer: MUST be created+started here (on this thread) so its timeout fires
+    // on the list thread. Low frequency; its slot is O(1)-gated and a no-op unless work is stuck.
+    retryScheduler=new QTimer();
+    connect(retryScheduler,&QTimer::timeout,this,&ListThread::safetyReschedule);
+    retryScheduler->start(500);
     exec();
+}
+
+void ListThread::safetyReschedule()
+{
+    // Guaranteed forward progress for the resilient backup: if nothing is in flight
+    // (numberOfInodeOperation==0) yet a transfer entry is still pending, the event-driven pump
+    // was missed (e.g. a put-to-end retry whose lone thread reached Idle a hair after the single
+    // pump). Restart the scheduler. All checks are O(1), so during normal copying
+    // (numberOfInodeOperation>0) or when idle in the tray (no pending entry) this does nothing.
+    if(stopIt || putInPause)
+    {
+        safetyStallTicks=0;
+        return;
+    }
+    // Backstop for the resilient backup: gate on the RELIABLE running count (iterate the threads),
+    // never on numberOfInodeOperation -- a stale-completion race during a multi-file put-to-end
+    // error storm can leak that counter (observed nInode=3 while 0 threads run) and would wedge a
+    // nInode==0 gate forever.
+    if(getNumberOfTranferRuning()!=0 || (actionToDoListTransferEmpty() && actionToDoListInode.empty()))
+    {
+        safetyStallTicks=0;//a transfer is running, or nothing pending (idle in tray) -> not stalled
+        return;
+    }
+    // "No transfer running yet work pending" -- but ONLY act if it PERSISTS. During normal copying
+    // there are brief windows (between files, mid put-to-end defer) where this is momentarily true;
+    // acting then would re-pump every tick, keep the process non-idle and never let it settle. A
+    // real stall stays true indefinitely, so require a few consecutive ticks (~1.5s) first.
+    if(++safetyStallTicks<3)
+        return;
+    safetyStallTicks=0;
+    // GENUINE STALL (no transfer thread running for ~1.5s, yet work pending). The transfer list is
+    // the source of truth; every transient in-flight flag is stale now (nothing is actually
+    // running). A stale-completion race on the put-to-end path can leave: a thread Idle but still
+    // owning a transferId, an entry flagged isRunning with no live transfer, a leaked
+    // numberOfInodeOperation, or stale members of overCheckUsedThread/putAtBottomAfterError -- any
+    // of which wedges the scheduler. Clear ALL of it and re-derive by re-pumping; this guarantees a
+    // resilient backup always resumes (no permanent stall, no orphaned good file). It runs ONLY on
+    // a sustained real stall, so normal copying is untouched.
+    for(size_t t=0;t<transferThreadList.size();++t)
+    {
+        TransferThreadImpl *th=transferThreadList.at(t);
+        if(th->getStat()==TransferStat_Idle)//Idle => not transferring; any id it still holds is stale
+        {
+            th->transferId=0;
+            th->transferSize=0;
+        }
+    }
+    for(size_t i=0;i<actionToDoListTransfer.size();++i)
+        if(!actionToDoListTransfer[i]->removed)
+            actionToDoListTransfer[i]->isRunning=false;//nothing is running -> re-queue every live entry
+    numberOfInodeOperation=0;
+    overCheckUsedThread.clear();
+    putAtBottomAfterError.clear();
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"safety re-pump: sustained stall -> full scheduler reset + reschedule");
+    doNewActions_inode_manipulation();
+    doNewActions_start_transfer();
 }
 
 void ListThread::getNeedPutAtBottom(const INTERNALTYPEPATH &fileInfo, const std::string &errorString, TransferThreadImpl *thread,

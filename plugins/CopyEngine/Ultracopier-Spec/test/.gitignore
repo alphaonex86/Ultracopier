@@ -1,0 +1,13 @@
+# Your real config with possibly-private SOURCE/DESTINATION paths -- NEVER commit this.
+config.ini
+
+# Python / build / scratch artifacts
+__pycache__/
+*.pyc
+fsoverride/build/
+*.so
+*.o
+.scratch/
+synthtree-cache/
+asan.*
+valgrind*.log

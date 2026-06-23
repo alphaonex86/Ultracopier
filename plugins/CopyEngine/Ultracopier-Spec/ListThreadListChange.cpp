@@ -223,11 +223,11 @@ void ListThread::exportTransferListInternal(const std::string &fileName)
                 if(!forcedMode || mode==Ultracopier::Copy)
                 {
                     if(forcedMode)
-                        transferFile.write((TransferThread::internalStringTostring(actionToDoListTransfer.at(index)->source)+
-                                            ";"+TransferThread::internalStringTostring(actionToDoListTransfer.at(index)->destination)+"\n").c_str());
+                        transferFile.write((TransferThread::internalStringTostring(pathTree.resolve(actionToDoListTransfer.at(index)->srcNode))+
+                                            ";"+TransferThread::internalStringTostring(pathTree.resolve(actionToDoListTransfer.at(index)->dstNode))+"\n").c_str());
                     else
-                        transferFile.write(("Copy;"+TransferThread::internalStringTostring(actionToDoListTransfer.at(index)->source)+
-                                            ";"+TransferThread::internalStringTostring(actionToDoListTransfer.at(index)->destination)+"\n").c_str());
+                        transferFile.write(("Copy;"+TransferThread::internalStringTostring(pathTree.resolve(actionToDoListTransfer.at(index)->srcNode))+
+                                            ";"+TransferThread::internalStringTostring(pathTree.resolve(actionToDoListTransfer.at(index)->dstNode))+"\n").c_str());
                 }
                 else
                     haveError=true;
@@ -237,11 +237,11 @@ void ListThread::exportTransferListInternal(const std::string &fileName)
                 if(!forcedMode || mode==Ultracopier::Move)
                 {
                     if(forcedMode)
-                        transferFile.write((TransferThread::internalStringTostring(actionToDoListTransfer.at(index)->source)+
-                                            ";"+TransferThread::internalStringTostring(actionToDoListTransfer.at(index)->destination)+"\n").c_str());
+                        transferFile.write((TransferThread::internalStringTostring(pathTree.resolve(actionToDoListTransfer.at(index)->srcNode))+
+                                            ";"+TransferThread::internalStringTostring(pathTree.resolve(actionToDoListTransfer.at(index)->dstNode))+"\n").c_str());
                     else
-                        transferFile.write(("Move;"+TransferThread::internalStringTostring(actionToDoListTransfer.at(index)->source)+
-                                            ";"+TransferThread::internalStringTostring(actionToDoListTransfer.at(index)->destination)+"\n").c_str());
+                        transferFile.write(("Move;"+TransferThread::internalStringTostring(pathTree.resolve(actionToDoListTransfer.at(index)->srcNode))+
+                                            ";"+TransferThread::internalStringTostring(pathTree.resolve(actionToDoListTransfer.at(index)->dstNode))+"\n").c_str());
                 }
                 else
                     haveError=true;

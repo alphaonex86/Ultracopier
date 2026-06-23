@@ -90,9 +90,9 @@ void ListThread::timedUpdateDebugDialog()
         if(!actionToDoListTransfer.at(index)->removed)//skip tombstoned (logically removed) entries
         {
             newList2.push_back(
-                TransferThread::internalStringTostring(actionToDoListTransfer.at(index)->source)+
+                TransferThread::internalStringTostring(pathTree.resolve(actionToDoListTransfer.at(index)->srcNode))+
                 " "+std::to_string(actionToDoListTransfer.at(index)->size)+" "+
-                TransferThread::internalStringTostring(actionToDoListTransfer.at(index)->destination)
+                TransferThread::internalStringTostring(pathTree.resolve(actionToDoListTransfer.at(index)->dstNode))
                                );
             if(index>((inodeThreads+ULTRACOPIER_PLUGIN_MAXPARALLELTRANFER)*2+1))
             {

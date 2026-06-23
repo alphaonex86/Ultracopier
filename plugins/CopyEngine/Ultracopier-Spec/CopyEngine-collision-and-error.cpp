@@ -273,17 +273,21 @@ void CopyEngine::errorOnFile(INTERNALTYPEPATH fileInfo, std::string errorString,
             thread->retryAfterError();
         return;
         case FileError_PutToEndOfTheList:
-            errorPutAtEnd++;
+            // Defer this file to the end and keep the policy in force for every other file.
+            // NEVER reset alwaysDoThisActionForFileError here: doing so dropped headless back to
+            // the (blocking, offscreen-invisible) error dialog on the next fault and stalled the
+            // whole backup. Giving up on a permanently-dead file is handled per-file, with a bounded
+            // retry counter, in ListThread::transferPutAtBottom -- so a transient sector still
+            // recovers on retry while a dead one is eventually skipped without aborting the job.
             emit getNeedPutAtBottom(fileInfo,errorString,thread,errorType);
-            if(errorPutAtEnd>listThread->actionToDoListInode.size() || listThread->actionToDoListInode.size()==0)
-            {
-                alwaysDoThisActionForFileError=FileError_NotSet;
-                errorPutAtEnd=0;
-            }
         return;
         case FileError_Cancel:
         return;
         default:
+        {
+            // Interactive ask: show the error dialog. It is created through FileErrorDialog::createInstance
+            // so a headless test build can substitute a subclass that returns a scripted action and never
+            // shows the GUI -- there is NO test code, #ifdef or env hook in this engine path.
             if(dialogIsOpen)
             {
                 errorQueueItem newItem;
@@ -339,10 +343,12 @@ void CopyEngine::errorOnFile(INTERNALTYPEPATH fileInfo, std::string errorString,
             #endif
 
             emit error(TransferThread::internalStringTostring(fileInfo),size,mdate,errorString);
-            FileErrorDialog dialog(uiinterface,fileInfo,errorString,errorType,facilityEngine);
+            FileErrorDialog *dialog=FileErrorDialog::createInstance(uiinterface,fileInfo,errorString,errorType,facilityEngine);
             emit isInPause(true);
-            dialog.exec();/// \bug crash when external close
-            FileErrorAction newAction=dialog.getAction();
+            dialog->exec();/// \bug crash when external close
+            const FileErrorAction newAction=dialog->getAction();
+            const bool dialogAlways=dialog->getAlways();
+            delete dialog;// destroyed before any early return below -> no leak on the Cancel path
             emit isInPause(false);
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"close dialog: "+std::to_string(newAction));
             if(newAction==FileError_Cancel)
@@ -350,7 +356,7 @@ void CopyEngine::errorOnFile(INTERNALTYPEPATH fileInfo, std::string errorString,
                 emit cancelAll();
                 return;
             }
-            if(dialog.getAlways() && newAction!=alwaysDoThisActionForFileError)
+            if(dialogAlways && newAction!=alwaysDoThisActionForFileError)
             {
                 alwaysDoThisActionForFileError=newAction;
                 if(uiIsInstalled)
@@ -374,7 +380,6 @@ void CopyEngine::errorOnFile(INTERNALTYPEPATH fileInfo, std::string errorString,
                     thread->retryAfterError();
                 break;
                 case FileError_PutToEndOfTheList:
-                    errorPutAtEnd++;
                     thread->putAtBottom();
                 break;
                 default:
@@ -387,6 +392,7 @@ void CopyEngine::errorOnFile(INTERNALTYPEPATH fileInfo, std::string errorString,
             emit queryOneNewDialog();
             return;
         break;
+        }
     }
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"stop");
 }
@@ -527,16 +533,18 @@ void CopyEngine::errorOnFolder(INTERNALTYPEPATH fileInfo, std::string errorStrin
 
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"show dialog");
             emit error(TransferThread::internalStringTostring(fileInfo),size,mdate,errorString);
-            FileErrorDialog dialog(uiinterface,fileInfo,errorString,errorType,facilityEngine);
-            dialog.exec();/// \bug crash when external close
-            FileErrorAction newAction=dialog.getAction();
+            FileErrorDialog *dialog=FileErrorDialog::createInstance(uiinterface,fileInfo,errorString,errorType,facilityEngine);
+            dialog->exec();/// \bug crash when external close
+            const FileErrorAction newAction=dialog->getAction();
+            const bool dialogAlways=dialog->getAlways();
+            delete dialog;// destroyed before any early return below -> no leak on the Cancel path
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"close dialog: "+std::to_string(newAction));
             if(newAction==FileError_Cancel)
             {
                 emit cancelAll();
                 return;
             }
-            if(dialog.getAlways() && newAction!=alwaysDoThisActionForFileError)
+            if(dialogAlways && newAction!=alwaysDoThisActionForFileError)
             {
                 setComboBoxFolderError(newAction);
                 alwaysDoThisActionForFolderError=newAction;
@@ -626,16 +634,18 @@ void CopyEngine::mkPathErrorOnFolder(INTERNALTYPEPATH folder, std::string errorS
             #endif
 
             emit error(TransferThread::internalStringTostring(folder),size,mdate,errorString);
-            FileErrorDialog dialog(uiinterface,folder,errorString,errorType,facilityEngine);
-            dialog.exec();/// \bug crash when external close
-            FileErrorAction newAction=dialog.getAction();
+            FileErrorDialog *dialog=FileErrorDialog::createInstance(uiinterface,folder,errorString,errorType,facilityEngine);
+            dialog->exec();/// \bug crash when external close
+            const FileErrorAction newAction=dialog->getAction();
+            const bool dialogAlways=dialog->getAlways();
+            delete dialog;// destroyed before any early return below -> no leak on the Cancel path
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"close dialog: "+std::to_string(newAction));
             if(newAction==FileError_Cancel)
             {
                 emit cancelAll();
                 return;
             }
-            if(dialog.getAlways() && newAction!=alwaysDoThisActionForFileError)
+            if(dialogAlways && newAction!=alwaysDoThisActionForFileError)
             {
                 setComboBoxFolderError(newAction);
                 alwaysDoThisActionForFolderError=newAction;

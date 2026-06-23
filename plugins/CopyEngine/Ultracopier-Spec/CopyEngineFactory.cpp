@@ -128,11 +128,19 @@ PluginInterface_CopyEngine * CopyEngineFactory::getInstance()
     #ifdef ULTRACOPIER_PLUGIN_RSYNC
     realObject->setRsync(ui->rsync->isChecked());
     #endif
-    realObject->setAutoStart(ui->autoStart->isChecked());
-    realObject->setFolderCollision(ui->comboBoxFolderCollision->currentIndex());
-    realObject->setFolderError(ui->comboBoxFolderError->currentIndex());
-    realObject->setFileCollision(ui->comboBoxFileCollision->currentIndex());
-    realObject->setFileError(ui->comboBoxFileError->currentIndex());
+    // Headless/CLI correctness: getOptions() (which copies option values -> the UI comboboxes) is
+    // ONLY called when the options DIALOG is opened. So for a `ultracopier cp/mv` from the command
+    // line the comboboxes are still at their setupUi default (index 0 = "Ask") and the engine would
+    // IGNORE the configured/persisted collision & error policy and pop a dialog -- which blocks
+    // forever in a headless run, and silently overrides the user's CLI policy in a GUI run. Read
+    // these policy options DIRECTLY from optionsEngine (same pattern as coalesceSourceStat /
+    // parallelizeIfSmallerThan); the UI stays in sync because each combobox change handler writes
+    // setOptionValue(). Fall back to the UI only if optionsEngine is somehow unavailable.
+    realObject->setAutoStart(optionsEngine!=NULL ? stringtobool(optionsEngine->getOptionValue("autoStart")) : ui->autoStart->isChecked());
+    realObject->setFolderCollision(optionsEngine!=NULL ? (int)stringtouint32(optionsEngine->getOptionValue("folderCollision")) : ui->comboBoxFolderCollision->currentIndex());
+    realObject->setFolderError(optionsEngine!=NULL ? (int)stringtouint32(optionsEngine->getOptionValue("folderError")) : ui->comboBoxFolderError->currentIndex());
+    realObject->setFileCollision(optionsEngine!=NULL ? (int)stringtouint32(optionsEngine->getOptionValue("fileCollision")) : ui->comboBoxFileCollision->currentIndex());
+    realObject->setFileError(optionsEngine!=NULL ? (int)stringtouint32(optionsEngine->getOptionValue("fileError")) : ui->comboBoxFileError->currentIndex());
     realObject->setCheckDestinationFolderExists(ui->checkBoxDestinationFolderExists->isChecked());
     realObject->setMkFullPath(ui->mkpath->isChecked());
     realObject->setChecksum(ui->checksum->isChecked());
@@ -142,7 +150,11 @@ PluginInterface_CopyEngine * CopyEngineFactory::getInstance()
     realObject->setFollowTheStrictOrder(ui->followTheStrictOrder->isChecked());
     realObject->setignoreBlackList(ui->ignoreBlackList->isChecked());
     realObject->setDeletePartiallyTransferredFiles(ui->deletePartiallyTransferredFiles->isChecked());
-    realObject->setInodeThreads(ui->inodeThreads->value());
+    // Headless/CLI: getOptions() never ran, so ui->inodeThreads is at its setupUi default (the
+    // minimum, 1) instead of the configured value (default 16). One transfer thread makes the
+    // put-to-end retry stall-prone (the requeued file's only thread may not be Idle at the single
+    // pump, and nothing re-pumps). Read the configured option directly, like the policy settings.
+    realObject->setInodeThreads(optionsEngine!=NULL ? (int)stringtouint32(optionsEngine->getOptionValue("inodeThreads")) : ui->inodeThreads->value());
     // No dedicated spinbox in the UI yet: read the registered option directly (default "128" KB
     // from the KeysList). This is what makes parallelizeIfSmallerThan actually take effect instead
     // of the dead 1024-byte ctor default in ListThread; small files (<128KB) then transfer in

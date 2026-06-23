@@ -13,6 +13,7 @@ applies to both backends at once instead of being updated in one and forgotten i
 the other. */
 
 #include "TransferThreadPipelined.h"
+#include "ContiguousWatermark.h"
 #include <string>
 #include <cstring>
 #include <cerrno>
@@ -53,6 +54,11 @@ TransferThreadPipelined::TransferThreadPipelined() :
     realMove=false;
     size_at_open=0;
     mtime_at_open=0;
+    mtime_nsec_at_open=0;
+    ctime_at_open=0;
+    contiguousWrittenOffset=0;
+    resumeFromOffset=0;
+    completedWriteExtents.clear();
     /* putInPause was historically the only member left uninitialized; an
        uninitialized non-zero value made transfer threads block forever on the pause
        semaphore (no resume() ever comes) -> the copy hung after a handful of files.
@@ -75,6 +81,11 @@ void TransferThreadPipelined::connectInternalSignals()
     if(!connect(this,&TransferThreadPipelined::internalStartPostOperation,this,&TransferThreadPipelined::doFilePostOperation,Qt::QueuedConnection))
         abort();
     if(!connect(this,&TransferThread::internalStartPreOperation,this,&TransferThreadPipelined::preOperation,Qt::QueuedConnection))
+        abort();
+    // media-reconnect RESUME: the retry path emits internalStartResumeAfterErrorAndSeek instead of
+    // restarting from 0 when a SOURCE read error MAY be resumable; the slot makes the size/mtime/ctime
+    // decision on the transfer thread (queued), then re-opens via preOperation.
+    if(!connect(this,&TransferThreadPipelined::internalStartResumeAfterErrorAndSeek,this,&TransferThreadPipelined::resumeAfterErrorAndSeek,Qt::QueuedConnection))
         abort();
     if(!connect(this,&TransferThread::internalStartPostOperation,this,&TransferThreadPipelined::postOperation,Qt::QueuedConnection))
         abort();
@@ -152,6 +163,11 @@ bool TransferThreadPipelined::setFiles(const INTERNALTYPEPATH& source, const int
     readIsOpenVariable=false;
     writeIsOpenVariable=false;
     realMove=false;
+    // A NEW file always starts fresh: a stale resumeFromOffset here would make openDestFile
+    // keep/trim a just-created destination to a previous file's offset (cross-file corruption).
+    contiguousWrittenOffset=0;
+    resumeFromOffset=0;
+    completedWriteExtents.clear();
     return true;
 }
 
@@ -161,7 +177,19 @@ void TransferThreadPipelined::resetExtraVariable()
     checksumProgression=0;
     readIsOpenVariable=false;
     writeIsOpenVariable=false;
+    // The contiguous water-mark and its pending extents belong to a single transfer attempt;
+    // clear them here. resumeFromOffset is DELIBERATELY NOT cleared: resumeAfterErrorAndSeek()
+    // sets it just before this runs on the resume leg, and every restart path zeroes it itself.
+    contiguousWrittenOffset=0;
+    completedWriteExtents.clear();
     TransferThread::resetExtraVariable();
+}
+
+void TransferThreadPipelined::recordCompletedWrite(uint64_t off, uint64_t len)
+{
+    // Algorithm lives in pipeline/ContiguousWatermark.h so it can be unit-tested directly
+    // (test/unit/watermark_test.cpp). completedWriteExtents is bounded by the in-flight buffer pool.
+    uc_foldCompletedWrite(contiguousWrittenOffset,completedWriteExtents,off,len);
 }
 
 bool TransferThreadPipelined::remainFileOpen() const
@@ -192,19 +220,22 @@ void TransferThreadPipelined::preOperation()
         return;
     }
 
-    if(destinationExists())
+    // On a media-reconnect RESUME (resumeFromOffset>0) the existing destination is OUR partial
+    // prefix -- we wrote [0,resumeFromOffset) and will keep+append to it via openDestFile. It must
+    // NOT be treated as a collision and overwritten/unlinked here, or the prefix is destroyed and
+    // openDestFile's keep-prefix guard then forces a restart from 0 (defeating the resume).
+    if(resumeFromOffset==0 && destinationExists())
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] destination exists");
         return;
     }
 
-    #ifdef Q_OS_WIN32
-    // a Windows symlink/junction is recreated (not followed) by trySymlinkCopy, so don't
-    // read/apply the (followed) target's date here. Mirrors the async backend.
+    // A symlink/junction is recreated verbatim (readlink+symlink / trySymlinkCopy), not followed,
+    // so its target's date must NOT be read here: readSourceFileDateTime/stat FOLLOWS the link, and a
+    // dangling/escaping/absolute target makes it fail -> errorOnFile -> the entry (and a sibling caught
+    // in the error storm) get dropped. utime() can't set a symlink's own time anyway. Skip on EVERY OS
+    // (Windows already did this; the UNIX io_uring / IOCP-source branch was missing the guard).
     doTheDateTransfer=!is_symlink(source);
-    #else
-    doTheDateTransfer=true;
-    #endif
     if(doTheDateTransfer)
     {
         doTheDateTransfer=readSourceFileDateTime(source);
@@ -466,7 +497,11 @@ void TransferThreadPipelined::ifCanStartTransfer()
         }
         readIsOpenVariable=true;
 
-        const int destRet=openDestFile(0);
+        // resumeFromOffset is 0 for a normal/first transfer (-> openDestFile creates a fresh
+        // destination, byte-for-byte the previous behaviour) and >0 only on a media-reconnect
+        // RESUME, where it equals the verified contiguousWrittenOffset and the backend keeps the
+        // destination prefix [0,resumeFromOffset) and trims any out-of-order tail above it.
+        const int destRet=openDestFile(resumeFromOffset);
         if(destRet<0)
         {
             if(destRet==-2) // collision, not an error
@@ -1008,10 +1043,81 @@ void TransferThreadPipelined::retryAfterError()
         emit internalStartPreOperation();
         return;
     }
-    // For transfer errors, restart from scratch
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] retryAfterError, restart");
+    // Transfer (data-streaming) error. Snapshot the error flags BEFORE anything clears them:
+    // a DEST write error sets writeError; an open()/OOM failure sets BOTH read+write (see ~l.327).
+    // Resume-at-offset is safe ONLY for a PURE SOURCE read error -- any write/open error means the
+    // destination prefix cannot be trusted, so we must restart from 0 (the user's spec: dest always
+    // resumes from 0). resumeAfterErrorAndSeek() then makes the size/mtime/ctime identity decision.
+    const bool wasWriteError=writeError;
+    const bool wasReadError=readError;
     closeFiles();
-    resetExtraVariable();
+    if(wasWriteError || !wasReadError)
+    {
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] retryAfterError, restart from 0 (write/open error)");
+        resumeFromOffset=0;
+        resetExtraVariable();
+        transfer_stat=TransferStat_PreOperation;
+        emit internalStartPreOperation();
+        return;
+    }
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] retryAfterError, evaluate media-reconnect resume");
+    emit internalStartResumeAfterErrorAndSeek();
+}
+
+void TransferThreadPipelined::resumeAfterErrorAndSeek()
+{
+    // Decide RESUME-at-offset vs RESTART-from-0. Resume ONLY when the source is byte-identical to
+    // the version we started copying -- size AND full-precision mtime (sec+sub-second) AND ctime
+    // all unchanged -- and a non-empty contiguous prefix is already on the destination, within the
+    // current source size. Any uncertainty (re-stat failed, any field differs, sub-second mtime
+    // unavailable, no prefix) RESTARTS from 0. This is the safe side: restart is always correct.
+    readError=false;
+    writeError=false;
+    uint64_t resume=0;
+    int64_t curSize=-1;
+    uint64_t curMtime=0,curMtimeNsec=0,curCtime=0;
+    bool statOk=false;
+    #ifdef Q_OS_WIN32
+    WIN32_FILE_ATTRIBUTE_DATA fad;
+    if(GetFileAttributesExW(source.c_str(),GetFileExInfoStandard,&fad)!=0)
+    {
+        ULARGE_INTEGER sz; sz.HighPart=fad.nFileSizeHigh; sz.LowPart=fad.nFileSizeLow;
+        curSize=(int64_t)sz.QuadPart;
+        ULARGE_INTEGER mt; mt.LowPart=fad.ftLastWriteTime.dwLowDateTime; mt.HighPart=fad.ftLastWriteTime.dwHighDateTime;
+        // FILETIME is 100ns ticks since 1601; keep FULL precision: seconds + 100ns remainder.
+        uint64_t unixTicks=(mt.QuadPart>=116444736000000000ULL)?(mt.QuadPart-116444736000000000ULL):0;
+        curMtime=unixTicks/10000000ULL;
+        curMtimeNsec=unixTicks%10000000ULL;   // 100ns units -> mtime is effectively 100ns-precise on Windows
+        curCtime=0;                            // Windows WIN32_FILE_ATTRIBUTE_DATA has no POSIX ctime
+        statOk=true;
+    }
+    #else
+    struct stat st;
+    if(::stat(source.c_str(),&st)==0)
+    {
+        curSize=st.st_size;
+        curMtime=(uint64_t)st.st_mtim.tv_sec;
+        curMtimeNsec=(uint64_t)st.st_mtim.tv_nsec;
+        curCtime=(uint64_t)st.st_ctim.tv_sec;   // ctime changes on any in-place content/metadata write
+        statOk=true;
+    }
+    #endif
+    if(statOk
+       && curSize==size_at_open
+       && curMtime==mtime_at_open
+       && curMtimeNsec==mtime_nsec_at_open
+       && mtime_nsec_at_open!=0                        // require sub-second precision; 1s-only is too coarse to trust
+       && curCtime==ctime_at_open
+       && contiguousWrittenOffset>0
+       && (int64_t)contiguousWrittenOffset<size_at_open)
+    {
+        resume=contiguousWrittenOffset;
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] media-reconnect RESUME at "+std::to_string(resume)+"/"+std::to_string(size_at_open));
+    }
+    else
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] resume rejected -> restart from 0 (statOk="+std::to_string(statOk)+", contiguous="+std::to_string(contiguousWrittenOffset)+")");
+    resumeFromOffset=resume;
+    resetExtraVariable();   // clears the water-mark/extents + transferProgression but PRESERVES resumeFromOffset
     transfer_stat=TransferStat_PreOperation;
     emit internalStartPreOperation();
 }

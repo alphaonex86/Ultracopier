@@ -113,7 +113,6 @@ private:
     std::vector<std::string> includeStrings,includeOptions,excludeStrings,excludeOptions;
     std::string firstRenamingRule;
     std::string otherRenamingRule;
-    uint64_t errorPutAtEnd;
 
     //send action done timer
     QTimer timerActionDone;

@@ -7,6 +7,18 @@
 
 bool FileErrorDialog::isInAdmin=false;
 
+// nullptr in the shipping binary: createInstance() then just news a real FileErrorDialog and the GUI is
+// shown exactly as before. A test build sets this (static initializer) to return a headless subclass.
+FileErrorDialog *(*FileErrorDialog::overrideFactory)(QWidget *, INTERNALTYPEPATH, std::string, const ErrorType &, FacilityInterface *)=NULL;
+
+FileErrorDialog *FileErrorDialog::createInstance(QWidget *parent, INTERNALTYPEPATH fileInfo, std::string errorString, const ErrorType &errorType, FacilityInterface *facilityEngine)
+{
+    if(overrideFactory!=NULL)
+        return overrideFactory(parent,fileInfo,errorString,errorType,facilityEngine);
+    else
+        return new FileErrorDialog(parent,fileInfo,errorString,errorType,facilityEngine);
+}
+
 FileErrorDialog::FileErrorDialog(QWidget *parent, INTERNALTYPEPATH fileInfo, std::string errorString, const ErrorType &errorType,FacilityInterface * facilityEngine) :
     QDialog(parent),
     ui(new Ui::fileErrorDialog)

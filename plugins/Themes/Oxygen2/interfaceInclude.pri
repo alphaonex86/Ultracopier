@@ -15,6 +15,7 @@ HEADERS         = \
     $$PWD/../../../interface/FacilityInterface.h \
     $$PWD/../../../interface/OptionInterface.h \
     $$PWD/../../../cpp11addition.h \
+    $$PWD/../../../interface/PathTreeStr.h \
     $$PWD/TransferModel.h \
     $$PWD/interface.h \
     $$PWD/chartarea.h \
@@ -39,6 +40,7 @@ SOURCES += \
     $$PWD/ThemesFactory.cpp \
     $$PWD/TransferModel.cpp \
     $$PWD/interface.cpp \
+    $$PWD/../../../interface/PathTreeStr.cpp \
     $$PWD/../../../cpp11addition.cpp \
     $$PWD/../../../cpp11additionstringtointcpp.cpp
 TARGET          = $$qtLibraryTarget(interface)

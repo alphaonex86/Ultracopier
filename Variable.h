@@ -23,6 +23,13 @@
 /// \brief define time to update the speed detection update ont the interface (in ms)
 #define ULTRACOPIER_TIME_INTERFACE_UPDATE 500
 
+/** \brief minimum interval (ms) between two transfer-list refreshes pushed to ANY interface.
+ * Enforced centrally in Core::getActionOnList for EVERY copy engine + interface: the list
+ * actions are batched and flushed at most this often, so synchronizeItems()->layoutChanged()
+ * (an O(n) QTreeView rebuild) never runs faster than 10fps regardless of how fast the engine
+ * emits. Per-file/overall progress have their own timers; this caps only the structural list. */
+#define ULTRACOPIER_TIME_LIST_UPDATE_MIN_MS 100
+
 /** \brief How many value store to calculate the average value
  * 5*ULTRACOPIER_TIME_INTERFACE_UPDATE = 5*500 to get 2.5s
  * */

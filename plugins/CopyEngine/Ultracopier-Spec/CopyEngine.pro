@@ -19,6 +19,7 @@ HEADERS         += \
     $$PWD/CopyEngineUltracopier-SpecVariable.h \
     $$PWD/TransferThread.h \
     $$PWD/MkPath.h \
+    $$PWD/PathTree.h \
     $$PWD/ListThread.h \
     $$PWD/../../../interface/PluginInterface_CopyEngine.h \
     $$PWD/../../../interface/OptionInterface.h \
@@ -40,6 +41,7 @@ HEADERS         += \
 SOURCES         += \
     $$PWD/TransferThread.cpp \
     $$PWD/MkPath.cpp \
+    $$PWD/PathTree.cpp \
     $$PWD/ListThread.cpp \
     $$PWD/../../../cpp11addition.cpp \
     $$PWD/../../../cpp11additionstringtointcpp.cpp \

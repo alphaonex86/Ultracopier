@@ -23,6 +23,7 @@
 #include "../../../interface/PluginInterface_CopyEngine.h"
 #include "ScanFileOrFolder.h"
 #include "MkPath.h"
+#include "PathTree.h"
 #include "Environment.h"
 #include "DriveManagement.h"
 #ifdef ULTRACOPIER_PLUGIN_KIO
@@ -87,16 +88,15 @@ public:
         QUrl sourceUrl;///< KDE KIO URL for remote sources
         QUrl destinationUrl;///< KDE KIO URL for remote destinations
         #endif
-        #ifdef WIDESTRING
-        std::wstring source;///< Used to set: source for transfer, folder to create, folder to drop
-        std::wstring destination;
-        #else
-        std::string source;///< Used to set: source for transfer, folder to create, folder to drop
-        std::string destination;
-        #endif
+        // The two full path strings were the #1 memory blocker at scale (tens of GB at 50M files).
+        // They are now node ids into ListThread::pathTree; resolve with pathTree.resolve(srcNode)/
+        // (dstNode). In the common (no scan-time-rename) case srcNode==dstNode (one shared node).
+        uint32_t srcNode;///< pathTree node for the source path
+        uint32_t dstNode;///< pathTree node for the destination path
         Ultracopier::CopyMode mode;
         bool isRunning;///< store if the action si running
         bool removed=false;///< tombstone: logically removed, skipped by all scans, dropped at the next compaction
+        uint32_t deferCount=0;///< times this file was put-to-end after a read error; give up past a bounded cap (dying-disk salvage)
         //TTHREAD * transfer; // -> see transferThreadList
     };
     /* Stored by pointer so that erasing/moving an entry shifts cheap 8-byte
@@ -105,6 +105,10 @@ public:
        changes. Removes the O(n^2) per-file shift cost that pegged the list
        thread at 100% CPU in -O0/debug builds. */
     std::vector<std::unique_ptr<ActionToDoTransfer> > actionToDoListTransfer;
+    /* Compact storage for the source+destination of every transfer entry (see PathTree.h): the
+       path STRUCTURE is interned once, each entry holds two 4-byte node ids instead of two full
+       strings. This list is the FLAT, user-reorderable display order; the tree is only storage. */
+    PathTree pathTree;
     /* Removal of a finished transfer used to erase() from this vector, an O(n)
        shift per file -> O(n^2) over a copy and the dominant CPU cost on the
        single-threaded scheduler. Instead an item is tombstoned (removed=true)
@@ -331,7 +335,7 @@ private:
     QObject::killTimer: timers cannot be stopped from another thread
     QObject::startTimer: timers cannot be started from another thread */
 
-    static Ultracopier::ItemOfCopyList actionToDoTransferToItemOfCopyList(const ActionToDoTransfer &actionToDoTransfer);
+    Ultracopier::ItemOfCopyList actionToDoTransferToItemOfCopyList(const ActionToDoTransfer &actionToDoTransfer);//resolves paths via pathTree (no longer static)
     //add file transfer to do
     uint64_t addToTransfer(const INTERNALTYPEPATH& source, const INTERNALTYPEPATH& destination, const Ultracopier::CopyMode& mode, const int64_t sendedsize=-1);
     //generate id number
@@ -383,6 +387,13 @@ private:
     int blockSize;
     #endif
     bool putInPause;
+    /* Safety re-pump: a low-frequency timer (created+started on this thread in run()) that
+       restarts the scheduler if work is pending but nothing is in flight. Belt-and-suspenders
+       against a missed event-driven pump on the put-to-end retry path (a deferred file whose
+       thread reached Idle just after the single pump fired would otherwise hang forever,
+       especially with inodeThreads==1). Gated O(1), so it is a no-op during normal copying. */
+    QTimer *retryScheduler;
+    int safetyStallTicks;///< consecutive safety ticks seeing "no transfer running yet work pending"; act only when it persists (a real stall, not a brief between-files window)
 
     void realByteTransfered();
     int getNumberOfTranferRuning() const;
@@ -406,6 +417,10 @@ private slots:
     void transferPutAtBottom();
     //transfer is finished
     void transferInodeIsClosed();
+    /** \brief safety net: restart the scheduler if transfer work is pending but nothing is
+        in flight (recovers a put-to-end retry whose event-driven pump was missed). No-op
+        during normal copying (gated on numberOfInodeOperation==0). */
+    void safetyReschedule();
     //debug windows if needed
     #ifdef ULTRACOPIER_PLUGIN_DEBUG_WINDOW
     void timedUpdateDebugDialog();

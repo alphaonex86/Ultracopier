@@ -19,19 +19,24 @@
 #include "Environment.h"
 
 #include "../../../interface/FacilityInterface.h"
+#include "../../../interface/PathTreeStr.h"
 
 /// \brief model to store the transfer list
 class TransferModel : public QAbstractTableModel
 {
     Q_OBJECT
 public:
-    /// \brief the transfer item displayed
+    /// \brief the transfer item displayed. The source/destination full paths are NOT stored as
+    /// strings here: at 50M files that is tens of GB of RAM (a second copy of the whole path set,
+    /// on top of the engine's). Instead each holds a 4-byte node id into pathTreeStr; the path is
+    /// resolved on demand for the (viewport-only) display. Same list, same order -- only the
+    /// element representation changes. See PathTreeStr.h.
     struct TransfertItem
     {
         uint64_t id;
-        std::string source;
+        uint32_t srcNode;///< node id into pathTreeStr for the source full path
+        uint32_t dstNode;///< node id into pathTreeStr for the destination full path
         std::string size;
-        std::string destination;
     };
     /// \brief the transfer item with progression
     struct ItemOfCopyListWithMoreInformations
@@ -78,6 +83,7 @@ protected:
        changes. This is what kept the GUI thread from freezing in -O0/debug
        builds where the per-string moves are not inlined. */
     std::vector<std::unique_ptr<TransfertItem> > transfertItemList;///< To have a transfer list for the user
+    PathTreeStr pathTreeStr;///< memory-compact storage for the rows' source/destination full paths (see PathTreeStr.h)
     std::set<uint64_t> startId,stopId;///< To show what is started, what is stopped
     std::unordered_map<uint64_t,ItemOfCopyListWithMoreInformations> internalRunningOperation;///< to have progression and stat
 private:

@@ -371,6 +371,7 @@ int Core::connectCopyEngine(const Ultracopier::CopyMode &mode,bool ignoreMode,co
             newItem.lastConditionalSync.start();
             newItem.nextConditionalSync=new QTimer();
             newItem.nextConditionalSync->setSingleShot(true);
+            connect(newItem.nextConditionalSync,&QTimer::timeout,this,&Core::flushConditionalSync);//UI list-refresh cap
             newItem.copyEngineIsSync=true;
             newItem.canceled=false;
 
@@ -534,6 +535,11 @@ void Core::actionInProgess(const Ultracopier::EngineActionInProgress &action)
         //do sync
         periodicSynchronizationWithIndex(index);
         copyList[index].action=action;
+        // Flush any batched list actions BEFORE the state change so the interface sees the final
+        // list (e.g. the last RemoveItems that empty the view) before it acts on Idle (its
+        // done/auto-close logic checks rowCount==0). Without this the trailing flush could land
+        // after Idle and leave a stale/non-empty list at completion.
+        flushActionList(index);
         if(copyList.at(index).interface!=NULL)
             copyList.at(index).interface->actionInProgess(action);
         if(action==Ultracopier::Idle)
@@ -1046,6 +1052,40 @@ void Core::syncReady()
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"unable to locate the copy engine sender");
 }
 
+// Push the batched transfer-list actions to the interface and restart the cap clock. See
+// getActionOnList(): this is the single point where the (O(n)) interface list refresh happens.
+void Core::flushActionList(const int &index)
+{
+    copyList[index].lastConditionalSync.restart();
+    if(copyList.at(index).nextConditionalSync->isActive())
+        copyList[index].nextConditionalSync->stop();
+    if(copyList.at(index).copyEngineIsSync && copyList.at(index).interface!=NULL
+            && !copyList.at(index).pendingActionList.empty())
+    {
+        copyList.at(index).interface->getActionOnList(copyList.at(index).pendingActionList);
+        copyList[index].pendingActionList.clear();
+    }
+}
+
+// Trailing flush: the deferred nextConditionalSync timer fired; deliver whatever accumulated since
+// the last flush. Find the instance by its timer (the sender), so it works across copyList reorder.
+void Core::flushConditionalSync()
+{
+    QTimer * const t=qobject_cast<QTimer *>(sender());
+    if(t==NULL)
+        return;
+    size_t index=0;
+    while(index<copyList.size())
+    {
+        if(copyList.at(index).nextConditionalSync==t)
+        {
+            flushActionList((int)index);
+            return;
+        }
+        index++;
+    }
+}
+
 void Core::getActionOnList(const std::vector<Ultracopier::ReturnActionOnCopyList> &actionList)
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
@@ -1054,8 +1094,21 @@ void Core::getActionOnList(const std::vector<Ultracopier::ReturnActionOnCopyList
     if(index!=-1)
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start2");
+        // UI list-refresh cap (universal: every copy engine + every interface). synchronizeItems()
+        // on the interface side does an O(n) QTreeView rebuild; never drive it faster than 10fps.
+        // Accumulate the actions and push the batch to the interface at most every
+        // ULTRACOPIER_TIME_LIST_UPDATE_MIN_MS; a single-shot timer guarantees the trailing batch
+        // (incl. the final RemoveItems that empty the list) is delivered. All actions are preserved
+        // and applied in order, so the interface model stays exactly in sync.
         if(copyList.at(index).copyEngineIsSync)
-            copyList.at(index).interface->getActionOnList(actionList);
+        {
+            copyList[index].pendingActionList.insert(copyList[index].pendingActionList.cend(),actionList.cbegin(),actionList.cend());
+            if(!copyList.at(index).lastConditionalSync.isValid()
+                    || copyList.at(index).lastConditionalSync.elapsed()>=ULTRACOPIER_TIME_LIST_UPDATE_MIN_MS)
+                flushActionList(index);
+            else if(!copyList.at(index).nextConditionalSync->isActive())
+                copyList[index].nextConditionalSync->start(ULTRACOPIER_TIME_LIST_UPDATE_MIN_MS-(int)copyList.at(index).lastConditionalSync.elapsed());
+        }
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start3");
         //log to the file and compute the remaining time
         if(log.logTransfer() || copyList.at(index).remainingTimeAlgo==Ultracopier::RemainingTimeAlgo_Logarithmic)

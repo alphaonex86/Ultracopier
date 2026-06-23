@@ -209,6 +209,16 @@ Each transfer window has separate signal connections, avoiding crosstalk.
 
 - **Prefer nested `if`/`else` over `continue`.** Inside loops, do not use guard `continue;` statements to skip iterations -- wrap the rest of the body in `if(...) { ... }` (with `else` for failure logging when needed). Yes, this nests deeply; that is the style here.
 
+## Git history (read-only reference)
+
+- **When you need history, use the canonical repo at `/mnt/data/perso/progs/ultracopier/git/` — READ-ONLY.** It holds the full git history (the working tree under `…/sources/` may not). Use only read-only commands: `git -C /mnt/data/perso/progs/ultracopier/git log`, `git … show <sha>:<path>`, `git … blame`, `git … log -S'<string>'`, `git … log -G'<regex>'`, `git … diff <a>..<b>`. **NEVER** mutate it — no `checkout`/`switch`/`reset`/`stash`/`commit`/`clean`/`rebase`, nothing that touches its worktree or refs.
+- **Current cycle is 3.1.** Tag **`3.1.0.0`** (2026-06-20) marks where 3.1 work started; **`3.0.2.4`** (2026-06-16) is the last stable 3.0 and the async reference point. To see what 3.1 changed vs the stable baseline: `git -C /mnt/data/perso/progs/ultracopier/git diff 3.1.0.0 -- <path>` (or `3.0.2.4`). List tags with `git … tag --sort=version:refname`.
+
+## The async/thread backend is STABLE — do NOT modify it
+
+- The **async (pthread) backend** (`plugins/CopyEngine/Ultracopier-Spec/async/` — `ReadThread`, `WriteThread`, `TransferThreadAsync`) was **perfectly working and stable at version 3.0** and has been **manually tested across ALL cases and ALL features**. Treat it as a **read-only reference implementation**.
+- **Never change async code for a new feature unless the user EXPLICITLY asks for an async change.** New behaviour (e.g. resume-at-offset on media reconnect) is **ported FROM async TO io_uring/IOCP** to reach feature parity — async is the source of truth, not the thing to edit. If a task seems to need an async edit, stop and ask first.
+
 ## Build Portability (required — Ultracopier must ALWAYS build)
 
 Ultracopier ships to a **very large range of OS, compilers and platforms** — Windows XP through Windows 11+,

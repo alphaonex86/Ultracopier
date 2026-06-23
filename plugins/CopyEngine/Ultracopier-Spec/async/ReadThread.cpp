@@ -768,91 +768,15 @@ int64_t ReadThread::getLastGoodPosition() const
     return lastGoodPosition;
 }
 
-/*void ReadThread::reopen()
-{
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] start");
-    if(isInReadLoop)
-    {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] try reopen where read is not finish");
-        return;
-    }
-    stopIt=true;
-    emit internalStartReopen();
-}*/
-
-/// disabled into version 2, see comment into TransferThreadAsync::retryAfterError()
-/* bool ReadThread::internalReopen()
-{
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] start");
-    stopIt=false;
-    #ifdef Q_OS_UNIX
-    if(from>=0)
-    #else
-    if(from!=NULL)
-    #endif
-    {
-        #ifdef Q_OS_UNIX
-        if(::close(from)!=0)
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] unable to close: "+std::to_string(errno));
-        from=-1;
-        #else
-        if(CloseHandle(from)==0)
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] unable to close: "+TransferThread::GetLastErrorStdStr());
-        from=NULL;
-        #endif
-        this->file.clear();
-        isOpen.release();
-    }
-    int64_t temp_size=-1;
-    #ifdef Q_OS_UNIX
-    uint64_t temp_mtime=0;
-    {
-        struct stat st;
-        if(::stat(TransferThread::internalStringTostring(file).c_str(), &st)!=-1)
-        {
-            temp_size=st.st_size;
-            #ifdef Q_OS_MAC
-            temp_mtime=st.st_mtimespec.tv_sec;
-            #else
-            temp_mtime=st.st_mtim.tv_sec;
-            #endif
-        }
-    }
-    if(size_at_open!=temp_size || mtime_at_open!=temp_mtime)
-    #else
-    FILETIME temp_mtime;
-    {
-        LARGE_INTEGER FileSize;
-        GetFileSizeEx(from,&FileSize);
-        temp_size=FileSize.QuadPart;
-        GetFileTime(from,NULL,NULL,&temp_mtime);
-    }
-    if(size_at_open!=temp_size || mtime_at_open.dwLowDateTime!=temp_mtime.dwLowDateTime || mtime_at_open.dwHighDateTime!=temp_mtime.dwHighDateTime)
-    #endif
-    {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] source file have changed since the last open, restart all");
-        //fix this function like the close function
-        if(internalOpen(true))
-        {
-            emit resumeAfterErrorByRestartAll();
-            return true;
-        }
-        else
-            return false;
-    }
-    else
-    {
-        //fix this function like the close function
-        if(internalOpen(false))
-        {
-            emit resumeAfterErrorByRestartAtTheLastPosition();
-            return true;
-        }
-        else
-            return false;
-    }
-    return false;
-}*/
+/* NOTE (cleanup): the disabled reopen()/internalReopen() resume-at-offset functions that used to
+   sit here were REMOVED. They were dead since "version 2" and misleadingly implied the async
+   backend resumes a faulted transfer at the last good position -- it does NOT. The async backend
+   deliberately RESTARTS a faulted file from offset 0 (see TransferThreadAsync::retryAfterError,
+   "Simple mean less bug"), and the old resume path never even had a working destination seek.
+   The real, completed media-reconnect resume-at-offset (size+mtime+ctime gated, with a contiguous
+   write low-water mark) lives ONLY in the io_uring/IOCP pipelined backends
+   (TransferThreadPipelined::resumeAfterErrorAndSeek). Do not re-add resume to async without an
+   explicit request -- async is the stable v3.0 reference. */
 
 //set the write thread
 void ReadThread::setWriteThread(WriteThread * writeThread)

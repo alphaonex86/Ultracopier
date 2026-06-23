@@ -74,8 +74,9 @@ class Core : public QObject
             Ultracopier::CopyType type;
             Ultracopier::TransferListOperation transferListOperation;
             bool haveError;
-            QElapsedTimer lastConditionalSync;
-            QTimer *nextConditionalSync;
+            QElapsedTimer lastConditionalSync;///< time since the last transfer-list flush to the interface (UI list-refresh cap)
+            QTimer *nextConditionalSync;///< single-shot; fires the deferred (trailing) list flush
+            std::vector<Ultracopier::ReturnActionOnCopyList> pendingActionList;///< list actions accumulated since the last flush (batched so the interface refreshes <=10fps)
             bool copyEngineIsSync;
             bool canceled;//to not try groun when is in canceling
 
@@ -120,6 +121,7 @@ class Core : public QObject
         /** \brief update at periodic interval, the synchronization between copy engine and interface, but for specific entry
         \see forUpateInformation */
         void periodicSynchronizationWithIndex(const int &index);
+        void flushActionList(const int &index);///< push the batched pendingActionList to the interface (UI list-refresh cap)
 
         //for the internal management
         unsigned int incrementId();
@@ -204,6 +206,7 @@ class Core : public QObject
         void doneTime(const std::vector<std::pair<uint64_t,uint32_t> > &timeList);
 
         void getActionOnList(const std::vector<Ultracopier::ReturnActionOnCopyList> & actionList);
+        void flushConditionalSync();///< trailing flush of the batched list actions (nextConditionalSync timeout)
         void pushGeneralProgression(const uint64_t &current,const uint64_t &total);
 };
 

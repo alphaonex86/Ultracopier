@@ -244,9 +244,15 @@ int TransferThreadWin::openSourceFile()
     FILETIME ftMod;
     if(GetFileTime(h,nullptr,nullptr,&ftMod))
     {
-        // FILETIME is 100ns ticks since 1601; convert to Unix seconds for mtime_at_open.
+        // FILETIME is 100ns ticks since 1601. Keep FULL precision for the media-reconnect resume
+        // gate (TransferThreadPipelined::resumeAfterErrorAndSeek): seconds + 100ns remainder, so an
+        // in-place rewrite that keeps size and whole-second mtime is still detected. Windows has no
+        // POSIX ctime, so ctime_at_open stays 0 (the gate compares 0==0 and relies on 100ns mtime).
         ULARGE_INTEGER u; u.LowPart=ftMod.dwLowDateTime; u.HighPart=ftMod.dwHighDateTime;
-        mtime_at_open=(uint64_t)((u.QuadPart-116444736000000000ULL)/10000000ULL);
+        uint64_t unixTicks=(u.QuadPart>=116444736000000000ULL)?(u.QuadPart-116444736000000000ULL):0;
+        mtime_at_open=unixTicks/10000000ULL;
+        mtime_nsec_at_open=unixTicks%10000000ULL;   // 100ns units
+        ctime_at_open=0;
     }
     sourceHandle=h;
     return 0;
@@ -289,9 +295,14 @@ int TransferThreadWin::openDestFile(uint64_t startSize)
     }
 
     const std::wstring destPath=iocpFinalPath(destination);
+    // CRITICAL: CREATE_ALWAYS truncates the destination to 0 on every open, which would destroy
+    // the prefix we need to keep on a media-reconnect RESUME. Use OPEN_ALWAYS when startSize>0
+    // (resume: open the existing dest, preserving [0,startSize)); CREATE_ALWAYS otherwise (normal
+    // first transfer: a fresh, truncated destination -- byte-for-byte the old behaviour).
+    const DWORD disposition=(startSize>0)?OPEN_ALWAYS:CREATE_ALWAYS;
     HANDLE h=CreateFileW(destPath.c_str(),GENERIC_WRITE,
                          FILE_SHARE_READ,nullptr,
-                         CREATE_ALWAYS,FILE_FLAG_OVERLAPPED,nullptr);
+                         disposition,FILE_FLAG_OVERLAPPED,nullptr);
     if(h==INVALID_HANDLE_VALUE)
     {
         const DWORD err=GetLastError();
@@ -309,19 +320,34 @@ int TransferThreadWin::openDestFile(uint64_t startSize)
         return -1;
     }
 
-    // Preallocate (analog of ftruncate): set the size up front so the overlapped
-    // out-of-order writes never have to extend the file mid-flight.
+    // RESUME keep-prefix: startSize>0 only on a media-reconnect resume (the verified contiguous
+    // prefix). With OPEN_ALWAYS above, bytes [0,startSize) survive; SetEndOfFile trims any
+    // out-of-order tail written above the prefix back to startSize.
     if(startSize>0)
     {
+        // Guard: the existing destination MUST already contain the whole prefix. If it is shorter
+        // (deleted/truncated externally between attempts), SetEndOfFile would EXTEND it with zeros
+        // below the resume point -> corruption. Fail instead -> the retry restarts from 0.
+        LARGE_INTEGER curSz;
+        if(!GetFileSizeEx(h,&curSz) || (uint64_t)curSz.QuadPart<startSize)
+        {
+            errorString_internal="resume prefix missing/short on destination";
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] "+errorString_internal);
+            CloseHandle(h);
+            return -1;
+        }
         LARGE_INTEGER li; li.QuadPart=(LONGLONG)startSize;
         if(!SetFilePointerEx(h,li,nullptr,FILE_BEGIN) || !SetEndOfFile(h))
         {
             const DWORD err=GetLastError();
             errorString_internal=winErrorString(err);
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] Unable to preallocate: "+errorString_internal);
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] Unable to trim to resume prefix: "+errorString_internal);
             CloseHandle(h);
             return -1;
         }
+        // Make the kept prefix durable before we trust+append to it (the resume contract). Per
+        // RESUME-event (rare), not per-file, so it does not reintroduce a per-file flush cost.
+        FlushFileBuffers(h);
         // Reset the pointer to 0; overlapped I/O uses per-op offsets regardless, but
         // keep the handle's logical pointer tidy.
         LARGE_INTEGER zero; zero.QuadPart=0;
@@ -372,9 +398,14 @@ void TransferThreadWin::doTransferPipeline()
             return; // error already emitted
         }
 
-    readOffset=0;
-    writeOffset=0;
-    transferProgression=0;
+    // Seed ALL offsets from the resume cursor together (0 for a normal/first transfer ->
+    // byte-for-byte the old behaviour). On a media-reconnect resume, resumeFromOffset is the
+    // verified contiguous prefix already on disk, so reads/writes continue from there.
+    readOffset=(int64_t)resumeFromOffset;
+    writeOffset=(int64_t)resumeFromOffset;
+    transferProgression=resumeFromOffset;
+    contiguousWrittenOffset=resumeFromOffset;
+    completedWriteExtents.clear();
 
     int readsInFlight=0;
     int writesInFlight=0;
@@ -561,6 +592,11 @@ void TransferThreadWin::doTransferPipeline()
                 else
                 {
                     transferProgression+=result;
+                    // Fold this completed extent into the contiguous low-water mark, using the LIVE
+                    // fileOffset+result BEFORE the short-write advance below, so out-of-order overlapped
+                    // completions merge correctly and contiguousWrittenOffset stays the true written-
+                    // from-0 prefix (the only safe resume point; transferProgression may sit above a hole).
+                    recordCompletedWrite((uint64_t)pipelineBuffers[bufIdx].fileOffset,(uint64_t)result);
                     // Handle short write
                     if((int)result<pipelineBuffers[bufIdx].bytesUsed)
                     {
@@ -650,6 +686,10 @@ void TransferThreadWin::doTransferPipeline()
            written data stays in the page cache and the kernel flushes it
            normally. A file copy does not need per-file durability. */
         transferProgression=sourceFileSize;
+        // Whole file contiguously written -> resume water-mark equals the file size. (On the ERROR
+        // path leave contiguousWrittenOffset at its true mid-file value so resumeAfterErrorAndSeek()
+        // reads the real safe offset.)
+        contiguousWrittenOffset=(uint64_t)sourceFileSize;
     }
 
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] doTransferPipeline end, transferred: "+std::to_string(transferProgression));

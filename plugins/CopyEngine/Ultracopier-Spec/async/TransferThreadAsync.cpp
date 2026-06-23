@@ -75,6 +75,7 @@ TransferThreadAsync::TransferThreadAsync() :
     native_copy=false;
     transferIsReadyVariable=false;
     sended_state_readStopped=false;
+    sended_state_postOperationStopped=true;//fresh thread: nothing pending -> readyForReuse()==true
     readIsClosedVariable=false;
     writeIsClosedVariable=false;
     readIsOpenVariable=false;
@@ -126,9 +127,14 @@ TransferThreadAsync::TransferThreadAsync() :
     if(!connect(&writeThread,&WriteThread::opened,                  this,					&TransferThreadAsync::write_opened,         Qt::QueuedConnection))
         abort();
 
-    //error management, just try restart from 0
-    if(!connect(&readThread,&ReadThread::resumeAfterErrorByRestartAll,&writeThread,         &WriteThread::flushAndSeekToZero,               Qt::QueuedConnection))
-        abort();
+    // Error management: the async backend deliberately RESTARTS a faulted file from offset 0
+    // (retryAfterError -> flushBuffer + PreOperation). The old resumeAfterErrorByRestartAll ->
+    // flushAndSeekToZero connect was DEAD (the signal only ever fired from the disabled
+    // ReadThread::internalReopen, and there was never a working dest seek-to-lastGoodPosition),
+    // so it is removed to stop it implying async resumes. Resume-at-offset on media reconnect
+    // lives ONLY in the io_uring/IOCP pipelined backends. See ReadThread.h for the full note.
+    //if(!connect(&readThread,&ReadThread::resumeAfterErrorByRestartAll,&writeThread, &WriteThread::flushAndSeekToZero, Qt::QueuedConnection))
+    //    abort();
 
     #ifdef ULTRACOPIER_PLUGIN_DEBUG
     if(!connect(&readThread,&ReadThread::debugInformation,          this,                   &TransferThreadAsync::debugInformation,  Qt::QueuedConnection))
@@ -259,6 +265,7 @@ bool TransferThreadAsync::setFiles(const INTERNALTYPEPATH& source, const int64_t
     checksumProgression=0;
     //transferSize=0;//set by ListThread at currentTransferThread->transferSize=currentActionToDoTransfer.size; very important to do parallel small file
     sended_state_readStopped=false;
+    sended_state_postOperationStopped=false;
     readIsClosedVariable=false;
     writeIsClosedVariable=false;
     readIsOpenVariable=false;
@@ -336,11 +343,12 @@ void TransferThreadAsync::preOperation()
         return;
     }*/
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] before keep date");
-    #ifdef Q_OS_WIN32
+    // A symlink is recreated verbatim (readlink+symlink); its target's date must NOT be read
+    // (readSourceFileDateTime/stat FOLLOWS the link, so a dangling/escaping/absolute target makes
+    // it fail -> errorOnFile -> the entry, and a sibling caught in the error storm, get dropped).
+    // utime() can't set a symlink's own time anyway. Skip date transfer for symlinks on EVERY OS
+    // (Windows already did this; UNIX async/uring were missing the guard).
     doTheDateTransfer=!is_symlink(source);
-    #else
-    doTheDateTransfer=true;
-    #endif
     if(doTheDateTransfer)
     {
         doTheDateTransfer=readSourceFileDateTime(source);
@@ -1015,7 +1023,12 @@ void TransferThreadAsync::checkIfAllIsClosedAndDoOperations()
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"remove because: is_file(source): "+std::to_string(is_file(source))+", source: "+TransferThread::internalStringTostring(source));
             unlink(destination);
         }
-    transfer_stat=TransferStat_Idle;
+    // NOTE: do NOT mark Idle here. Idle (with transferId already 0 from a put-to-end) makes the
+    // thread reusable; if the list thread reuses it (setFiles) during this post-op window, the
+    // emit at the end of this function is mis-attributed to the NEW attempt and tombstones the
+    // requeued file as "done" without copying it -> permanent put-to-end stall. Idle is set once
+    // at the very end, right before postOperationStopped(), so reuse can only happen after the
+    // list thread has processed this completion (matching the normal-completion ordering).
 
     transferSize=readThread.getLastGoodPosition();
 
@@ -1066,7 +1079,11 @@ void TransferThreadAsync::checkIfAllIsClosedAndDoOperations()
     needSkip=false;
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] emit postOperationStopped() transfer_stat=TransferStat_Idle");
     transfer_stat=TransferStat_Idle;
-    emit postOperationStopped();
+    if(!sended_state_postOperationStopped)//emit once per attempt (skip() may have already emitted)
+    {
+        sended_state_postOperationStopped=true;
+        emit postOperationStopped();
+    }
 }
 
 //stop the current copy
@@ -1124,6 +1141,12 @@ void TransferThreadAsync::skip()
                 readThread.stop();
             if(remainDestinationOpen())
                 writeThread.stop();
+            //read/write threads are still closing on the TRANSFER thread; their close events
+            //(read_closed/write_closed) will reach checkIfAllIsClosedAndDoOperations() which emits
+            //postOperationStopped() exactly once. Do NOT fall through to the end-block: re-reading
+            //remainFileOpen() there races those same flags and double-emits (the put-to-end stall).
+            resetExtraVariable();
+            return;
         }
         else // wait nothing, just quit
         {
@@ -1149,7 +1172,11 @@ void TransferThreadAsync::skip()
             readThread.fakeReadIsStopped();
             writeThread.fakeWriteIsStopped();*/
             emit readStopped();
-            emit postOperationStopped();
+            if(!sended_state_postOperationStopped)//emit once per attempt
+            {
+                sended_state_postOperationStopped=true;
+                emit postOperationStopped();
+            }
             transfer_stat=TransferStat_Idle;
             emit pushStat(transfer_stat,transferId);
             return;
@@ -1162,6 +1189,11 @@ void TransferThreadAsync::skip()
                 readThread.stop();
             if(remainDestinationOpen())
                 writeThread.stop();
+            //read/write threads are still closing on the TRANSFER thread; write_closed() does the
+            //destination unlink and checkIfAllIsClosedAndDoOperations() emits postOperationStopped()
+            //exactly once. Do NOT fall through to the end-block: re-reading remainFileOpen() there
+            //races the close flags set by the transfer thread and double-emits (put-to-end stall).
+            return;
         }
         else // wait nothing, just quit
         {
@@ -1197,6 +1229,11 @@ void TransferThreadAsync::skip()
                 readThread.stop();
             if(remainDestinationOpen())
                 writeThread.stop();
+            //read/write threads are still closing on the TRANSFER thread; their close events reach
+            //checkIfAllIsClosedAndDoOperations() which emits postOperationStopped() exactly once. Do
+            //NOT fall through to the end-block: re-reading remainFileOpen() there races the close
+            //flags set by the transfer thread and double-emits (the put-to-end stall).
+            return;
         }
         else // wait nothing, just quit
         {
@@ -1210,11 +1247,24 @@ void TransferThreadAsync::skip()
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] can skip in this state: "+std::to_string(transfer_stat));
         return;
     }
-    //can be reset
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] transfer_stat=TransferStat_Idle");
-    transfer_stat=TransferStat_Idle;
-    //emit to manager with List Thread
-    emit postOperationStopped();
+    //Reached ONLY by the "wait nothing, just quit" branches (no read/write thread was running and
+    //none was stopped) and by the PostOperation case. On these paths NO transfer-thread emit will
+    //ever come (checkIfAllIsClosedAndDoOperations() is driven by read_closed/write_closed, which
+    //only fire for threads that were open), so this end-block is the SOLE emitter and must run.
+    //Because nothing is closing here, remainFileOpen() is read with no concurrent writer -- the
+    //data race that double-emitted (skip here + checkClose on the transfer thread) is gone: every
+    //path that stopped still-open threads now returns above and lets the transfer thread emit once.
+    if(!remainFileOpen())
+    {
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] transfer_stat=TransferStat_Idle");
+        transfer_stat=TransferStat_Idle;
+        //emit once per attempt (checkIfAllIsClosedAndDoOperations() guards the same flag)
+        if(!sended_state_postOperationStopped)
+        {
+            sended_state_postOperationStopped=true;
+            emit postOperationStopped();
+        }
+    }
 }
 
 //return info about the copied size

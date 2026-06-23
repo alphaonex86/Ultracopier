@@ -601,6 +601,20 @@ void Themes::actionInProgess(const Ultracopier::EngineActionInProgress &action)
                 ui->progressBar_all->setMaximum(65535);
                 ui->progressBar_all->setMinimum(0);
             }
+            // Completion: restore the per-file bar to a determinate, complete state. It may have
+            // been left in indeterminate "busy" mode (setRange(0,0)) for an unknown-progress file
+            // (e.g. during a put-to-end flaky retry); an indeterminate QProgressBar self-animates,
+            // so leaving it set would repaint the window forever after the copy is done.
+            if(darkUi)
+            {
+                progressBar_file->setRange(0,65535);
+                progressBar_file->setValue(65535);
+            }
+            else
+            {
+                ui->progressBar_file->setRange(0,65535);
+                ui->progressBar_file->setValue(65535);
+            }
             if(haveStarted && transferModel.rowCount()<=0)
             {
                 if(shutdown && ui->shutdown->isChecked())
@@ -988,10 +1002,20 @@ void Themes::updateCurrentFileInformation()
         }
         else
         {
+            // Unknown progress: a DETERMINATE bar at 0%, NOT the indeterminate "busy" mode. An
+            // indeterminate QProgressBar self-animates (endless repaint -> a pegged CPU core); if
+            // left set when the copy finishes the window spins forever (the Idle reset can lose the
+            // race vs a late unknown-progress update). A determinate bar never animates.
             if(darkUi)
-                progressBar_file->setRange(0,0);
+            {
+                progressBar_file->setRange(0,65535);
+                progressBar_file->setValue(0);
+            }
             else
-                ui->progressBar_file->setRange(0,0);
+            {
+                ui->progressBar_file->setRange(0,65535);
+                ui->progressBar_file->setValue(0);
+            }
         }
     }
     else
@@ -999,6 +1023,12 @@ void Themes::updateCurrentFileInformation()
         ui->from->setText(QStringLiteral(""));
         //ui->to->setText(QStringLiteral(""));
         ui->current_file->setText(QStringLiteral("-"));
+        // No current file -> per-file bar determinate, never left in the indeterminate "busy"
+        // (setRange(0,0)) self-animating state it may have been put in for an unknown-progress file.
+        if(darkUi)
+            progressBar_file->setRange(0,65535);
+        else
+            ui->progressBar_file->setRange(0,65535);
         if(haveStarted && transferModel.rowCount()==0)
         {
             if(darkUi)

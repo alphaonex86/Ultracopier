@@ -57,7 +57,6 @@ CopyEngine::CopyEngine(FacilityInterface * facilityEngine) :
     forcedMode(false),
     checkDiskSpace(false),
     osBufferLimit(0),
-    errorPutAtEnd(0),
     putAtBottom(0)
 {
     listThread=new ListThread(facilityEngine);
@@ -97,7 +96,8 @@ CopyEngine::CopyEngine(FacilityInterface * facilityEngine) :
        copy (listing stays fast: it is mostly appends, no per-tick rebuild churn). The
        structural list view does not need 25fps: overall progress and per-file progress have
        their own timers (ULTRACOPIER_TIME_INTERFACE_UPDATE / _TIME_UPDATE_PROGRESSION), so we
-       pace just this list refresh down to ~6fps for these backends. async keeps 40ms. */
+       pace just this list refresh down to ~6fps for these backends. async keeps 40ms; the
+       universal 10fps cap is enforced in Core::getActionOnList for every engine/interface. */
     timerActionDone.setInterval(160);
     #else
     timerActionDone.setInterval(ULTRACOPIER_PLUGIN_TIME_UPDATE_TRASNFER_LIST);
@@ -827,7 +827,8 @@ void CopyEngine::setFileCollision(int index)
             alwaysDoThisActionForFileExists=FileExists_Overwrite;
         break;
         case 3:
-            alwaysDoThisActionForFileExists=FileExists_OverwriteIfNotSameMdate;
+            // UI label "Overwrite only if not same size and date" (never touch identical)
+            alwaysDoThisActionForFileExists=FileExists_OverwriteIfNotSameSizeAndDate;
         break;
         case 4:
             alwaysDoThisActionForFileExists=FileExists_OverwriteIfNewer;
@@ -842,7 +843,8 @@ void CopyEngine::setFileCollision(int index)
             alwaysDoThisActionForFileExists=FileExists_OverwriteIfNotSameSize;
         break;
         case 8:
-            alwaysDoThisActionForFileExists=FileExists_OverwriteIfNotSameSizeAndDate;
+            // UI label "Overwrite if modification date differs" (date-only)
+            alwaysDoThisActionForFileExists=FileExists_OverwriteIfNotSameMdate;
         break;
         default:
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Error, unknow index, ignored: "+std::to_string(index));

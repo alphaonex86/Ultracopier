@@ -484,7 +484,7 @@ bool TransferThread::destinationExists()
                 }
             }
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] FS access");
-            if(fileExistsAction==FileExists_OverwriteIfNotSameSize || (fileExistsAction==FileExists_NotSet && alwaysDoFileExistsAction==FileExists_OverwriteIfNotSameMdate))
+            if(fileExistsAction==FileExists_OverwriteIfNotSameSize || (fileExistsAction==FileExists_NotSet && alwaysDoFileExistsAction==FileExists_OverwriteIfNotSameSize))
             {
                 if(file_stat_size(source)!=file_stat_size(destination))
                     return false;
@@ -497,7 +497,7 @@ bool TransferThread::destinationExists()
                 }
             }
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] FS access");
-            if(fileExistsAction==FileExists_OverwriteIfNotSameSizeAndDate || (fileExistsAction==FileExists_NotSet && alwaysDoFileExistsAction==FileExists_OverwriteIfNotSameMdate))
+            if(fileExistsAction==FileExists_OverwriteIfNotSameSizeAndDate || (fileExistsAction==FileExists_NotSet && alwaysDoFileExistsAction==FileExists_OverwriteIfNotSameSizeAndDate))
             {
                 const int64_t &sm=readFileMDateTime(source);
                 const int64_t &sd=readFileMDateTime(destination);
@@ -1232,7 +1232,7 @@ bool TransferThread::writeDestinationFilePermissions(const INTERNALTYPEPATH &des
         return false;
     return true;
     #else
-    HANDLE hFile = CreateFileW(destination.c_str(),READ_CONTROL | WRITE_OWNER | WRITE_DAC | ACCESS_SYSTEM_SECURITY,0, NULL, OPEN_EXISTING, FILE_FLAG_BACKUP_SEMANTICS, NULL);
+    HANDLE hFile = CreateFileW(TransferThread::toFinalPath(destination).c_str(),READ_CONTROL | WRITE_OWNER | WRITE_DAC | ACCESS_SYSTEM_SECURITY,0, NULL, OPEN_EXISTING, FILE_FLAG_BACKUP_SEMANTICS, NULL);
     if (hFile == INVALID_HANDLE_VALUE) {
       ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] CreateFile() failed. Error: INVALID_HANDLE_VALUE: "+TransferThread::GetLastErrorStdStr()+" on "+TransferThread::internalStringTostring(destination));
       return false;
@@ -1240,6 +1240,7 @@ bool TransferThread::writeDestinationFilePermissions(const INTERNALTYPEPATH &des
     DWORD lasterror = SetSecurityInfo(hFile, SE_FILE_OBJECT, DACL_SECURITY_INFORMATION , NULL, NULL, dacl, NULL);
     if (lasterror != ERROR_SUCCESS) {
       ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] SetSecurityInfo() failed. Error"+std::to_string(lasterror));
+      CloseHandle(hFile);
       return false;
     }
     CloseHandle(hFile);
