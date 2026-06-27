@@ -14,6 +14,7 @@
 #include <QRegularExpression>
 #include <QMessageBox>
 #include <QDateTime>
+#include <QUrl>
 
 CopyListener::CopyListener(OptionDialog *optionDialog)
 {
@@ -286,22 +287,56 @@ void CopyListener::copyWithoutDestination(std::vector<std::string> sources)
     emit newCopyWithoutDestination(incrementOrderId(),list,stripSeparator(sources));
 }
 
-/* Dedup guard: the clipboard paste can in theory reach us from two mechanisms (the in-process
- * Ctrl+V keyboard hook AND the catchcopy shell extension). The hook swallows Ctrl+V so they
- * normally never both fire, but this is the safety net: if an identical copy/move (same mode,
- * same sources, same destination) arrives within a short window, act on it only once. */
+/* Normalize a source/destination string for the paste-dedup compare. The SAME paste can be
+ * delivered to us twice from two integration paths (KDE/catchcopy AND the in-process Ctrl+V
+ * hook) with DIFFERENT string forms for the same file: one a plain path, the other a percent-
+ * encoded file:// URI, and/or with a trailing slash on the destination. A raw byte compare
+ * missed those and ran the copy TWICE -> a "file exists" collision on a freshly-emptied dest
+ * plus ~2x the time. Strip a file:/file:// scheme (with percent-decoding, via QUrl) and trim
+ * trailing slashes so the two forms compare equal. A plain path is left untouched (only its
+ * trailing slash trimmed), so legitimate distinct copies are unaffected. */
+static std::string normPathForDedup(std::string p)
+{
+    if(p.compare(0,5,"file:")==0)
+    {
+        const QString local=QUrl(QString::fromStdString(p)).toLocalFile();
+        if(!local.isEmpty())
+            p=local.toStdString();
+    }
+    while(p.size()>1 && p.back()=='/')
+        p.pop_back();
+    return p;
+}
+static std::vector<std::string> normListForDedup(const std::vector<std::string> &in)
+{
+    std::vector<std::string> out;
+    out.reserve(in.size());
+    for(const std::string &s : in)
+        out.push_back(normPathForDedup(s));
+    return out;
+}
+
+/* Dedup guard: the clipboard paste can reach us from two mechanisms (the in-process Ctrl+V
+ * keyboard hook AND the catchcopy shell extension / KDE integration). Normally only one fires,
+ * but when both do (or one path retries) the second delivery can lag the first and/or carry a
+ * different string form -- so we compare on the NORMALIZED paths (see normPathForDedup) within
+ * a short window and act on an identical copy/move only once. Window widened to 2s: the second
+ * delivery of a single user action can arrive a beat after the first; an intentional re-copy of
+ * the exact same source->dest within 2s is vanishingly rare and still only drops the duplicate. */
 bool CopyListener::isDuplicatePaste(int mode,const std::vector<std::string> &sources,const std::string &destination)
 {
+    const std::vector<std::string> normSources=normListForDedup(sources);
+    const std::string normDestination=normPathForDedup(destination);
     const qint64 now=QDateTime::currentMSecsSinceEpoch();
-    if(lastPasteDedupTimeMs!=0 && (now-lastPasteDedupTimeMs)<1000
-       && lastPasteDedupMode==mode && lastPasteDedupDestination==destination && lastPasteDedupSources==sources)
+    if(lastPasteDedupTimeMs!=0 && (now-lastPasteDedupTimeMs)<2000
+       && lastPasteDedupMode==mode && lastPasteDedupDestination==normDestination && lastPasteDedupSources==normSources)
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"duplicate copy/move within 1s ignored (hook+catchcopy dedup)");
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"duplicate copy/move ignored (normalized hook+catchcopy dedup)");
         return true;
     }
     lastPasteDedupMode=mode;
-    lastPasteDedupSources=sources;
-    lastPasteDedupDestination=destination;
+    lastPasteDedupSources=normSources;
+    lastPasteDedupDestination=normDestination;
     lastPasteDedupTimeMs=now;
     return false;
 }
