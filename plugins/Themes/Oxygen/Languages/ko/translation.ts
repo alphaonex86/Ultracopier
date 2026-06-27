@@ -25,7 +25,7 @@
         <translation type="unfinished">%1/%2 파일, 크기: %3/%4</translation>
     </message>
     <message>
-        <location line="+248"/>
+        <location line="+253"/>
         <source>Copy list</source>
         <translation type="unfinished">복사 목록</translation>
     </message>
@@ -35,7 +35,7 @@
         <translation type="unfinished">이동 목록</translation>
     </message>
     <message>
-        <location line="+453"/>
+        <location line="+462"/>
         <source>Don&apos;t close if errors are found</source>
         <translation type="unfinished">오류가 발견될 경우 닫지 않음</translation>
     </message>

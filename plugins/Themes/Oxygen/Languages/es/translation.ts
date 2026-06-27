@@ -25,46 +25,46 @@
         <translation>El archivo %1/%2, el tamaño: %3/%4</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="718"/>
+        <location filename="../../interface.cpp" line="723"/>
         <source>Copy list</source>
         <translation>Lista de copia</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="720"/>
+        <location filename="../../interface.cpp" line="725"/>
         <source>Move list</source>
         <translation>Lista de movimiento</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="1173"/>
+        <location filename="../../interface.cpp" line="1187"/>
         <source>Don&apos;t close if errors are found</source>
         <translation>No cierre si se encuentran errores</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="1174"/>
+        <location filename="../../interface.cpp" line="1188"/>
         <source>Never close</source>
         <translation>Nunca cierre</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="1175"/>
+        <location filename="../../interface.cpp" line="1189"/>
         <source>Always close</source>
         <translation>Siempre cerrar</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="1177"/>
+        <location filename="../../interface.cpp" line="1191"/>
         <source>File Name, 0KB</source>
         <translation>Nombre de archivo, 0KB</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="1452"/>
-        <location filename="../../interface.cpp" line="1464"/>
-        <location filename="../../interface.cpp" line="1476"/>
+        <location filename="../../interface.cpp" line="1466"/>
+        <location filename="../../interface.cpp" line="1478"/>
+        <location filename="../../interface.cpp" line="1490"/>
         <source>Select a color</source>
         <translation>Seleccione un color</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="1551"/>
-        <location filename="../../interface.cpp" line="1555"/>
-        <location filename="../../interface.cpp" line="1557"/>
+        <location filename="../../interface.cpp" line="1565"/>
+        <location filename="../../interface.cpp" line="1569"/>
+        <location filename="../../interface.cpp" line="1571"/>
         <source>%1 %2% of %3</source>
         <translation>%1 %2% de %3</translation>
     </message>

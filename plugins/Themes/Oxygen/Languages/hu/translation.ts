@@ -25,46 +25,46 @@
         <translation>Fájl %1/%2, méret: %3/%4</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="718"/>
+        <location filename="../../interface.cpp" line="723"/>
         <source>Copy list</source>
         <translation>Lista másolása</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="720"/>
+        <location filename="../../interface.cpp" line="725"/>
         <source>Move list</source>
         <translation>Lista mozgatása</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="1173"/>
+        <location filename="../../interface.cpp" line="1187"/>
         <source>Don&apos;t close if errors are found</source>
         <translation>Ne zárja be, ha hiba történik</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="1174"/>
+        <location filename="../../interface.cpp" line="1188"/>
         <source>Never close</source>
         <translation>Sose zárja be</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="1175"/>
+        <location filename="../../interface.cpp" line="1189"/>
         <source>Always close</source>
         <translation>Mindig zárja be</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="1177"/>
+        <location filename="../../interface.cpp" line="1191"/>
         <source>File Name, 0KB</source>
         <translation>Fájlnév, 0KB</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="1452"/>
-        <location filename="../../interface.cpp" line="1464"/>
-        <location filename="../../interface.cpp" line="1476"/>
+        <location filename="../../interface.cpp" line="1466"/>
+        <location filename="../../interface.cpp" line="1478"/>
+        <location filename="../../interface.cpp" line="1490"/>
         <source>Select a color</source>
         <translation>Válassz egy színt</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="1551"/>
-        <location filename="../../interface.cpp" line="1555"/>
-        <location filename="../../interface.cpp" line="1557"/>
+        <location filename="../../interface.cpp" line="1565"/>
+        <location filename="../../interface.cpp" line="1569"/>
+        <location filename="../../interface.cpp" line="1571"/>
         <source>%1 %2% of %3</source>
         <translation type="unfinished"></translation>
     </message>
