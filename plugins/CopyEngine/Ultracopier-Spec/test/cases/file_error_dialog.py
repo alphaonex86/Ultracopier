@@ -58,6 +58,24 @@ def _good_files_ok(src: str, copied: str, exclude: set) -> bool:
     return True
 
 
+def _victim_resilient(src: str, copied: str, victim: str) -> bool:
+    """Resilient-backup contract for the UNREADABLE victim: it is ABSENT, or a FAITHFUL PREFIX of the
+    source -- NEVER a full-size wrong-content file passed off as complete. The engine's pure-skip keeps
+    the (possibly 0-byte) destination as a salvage placeholder (finalSkipNoRetry); a 0-byte readfail
+    placeholder is an empty faithful prefix and is accepted, matching how faulty_hdd / opt_delete_partial_
+    files treat the salvage-keep. This is STRICTER than 'absent' for any KEPT file: a kept victim must be
+    a byte-exact prefix, so trailing garbage or a full-size wrong copy still FAILS."""
+    d = os.path.join(copied, victim)
+    if not os.path.exists(d):
+        return True
+    s = os.path.join(src, victim)
+    ssize, dsize = os.path.getsize(s), os.path.getsize(d)
+    if dsize >= ssize:                    # full-size (or larger): only OK if byte-exact (impossible for a
+        return filecmp.cmp(s, d, shallow=False)   # truly unreadable source -> a full-size copy here fails
+    with open(s, "rb") as sf, open(d, "rb") as df:
+        return df.read() == sf.read(dsize)        # partial: kept bytes must match the source prefix
+
+
 def _run(action: str, scenario: str, file_error: int):
     """Build a fresh faulted tree, run async cp with fileError=Ask + the scripted dialog action."""
     src = _tree_with_victim(K.fresh_src_root(f"fed_{action}_src"), DEAD, 800 * 1024 + 7)
@@ -85,21 +103,23 @@ def run(backends=None, memcheck=H.NONE) -> bool:
 
     results = []
 
-    # SKIP on a dead file -> victim ABSENT, every good file still byte-perfect, no hang.
+    # SKIP on a dead file -> the cap=1 large slot is freed (finalSkipNoRetry) so EVERY good file is still
+    # byte-perfect (the next large file is NOT lost), the victim is absent-or-a-faithful-prefix, no crash.
     src, copied, r = _run("skip", "readfail:BADREAD", H.FileError.ASK)
-    skipped = not os.path.exists(os.path.join(copied, DEAD))
+    victim_ok = _victim_resilient(src, copied, DEAD)
     good = _good_files_ok(src, copied, {DEAD})
-    ok = (r.completed and r.stayed_alive and skipped and good and not r.oom_killed and r.mem_errors == 0)
-    print(f"    [Skip   dead ] completed={r.completed} alive={r.stayed_alive} victim_absent={skipped} "
+    ok = (r.completed and r.stayed_alive and victim_ok and good and not r.oom_killed and r.mem_errors == 0)
+    print(f"    [Skip   dead ] completed={r.completed} alive={r.stayed_alive} victim_resilient={victim_ok} "
           f"good_ok={good} mem_err={r.mem_errors} -> {'PASS' if ok else 'FAIL'}")
     results.append(ok)
 
-    # PUT-TO-END on a dead file -> deferred, bounded-retried, finally skipped; rest copied.
+    # PUT-TO-END on a dead file -> deferred, bounded-retried, finally skipped; every good file copied;
+    # victim absent-or-faithful-prefix.
     src, copied, r = _run("puttoend", "readfail:BADREAD", H.FileError.ASK)
-    skipped = not os.path.exists(os.path.join(copied, DEAD))
+    victim_ok = _victim_resilient(src, copied, DEAD)
     good = _good_files_ok(src, copied, {DEAD})
-    ok = (r.completed and r.stayed_alive and skipped and good and not r.oom_killed and r.mem_errors == 0)
-    print(f"    [PutEnd dead ] completed={r.completed} alive={r.stayed_alive} victim_absent={skipped} "
+    ok = (r.completed and r.stayed_alive and victim_ok and good and not r.oom_killed and r.mem_errors == 0)
+    print(f"    [PutEnd dead ] completed={r.completed} alive={r.stayed_alive} victim_resilient={victim_ok} "
           f"good_ok={good} mem_err={r.mem_errors} -> {'PASS' if ok else 'FAIL'}")
     results.append(ok)
 

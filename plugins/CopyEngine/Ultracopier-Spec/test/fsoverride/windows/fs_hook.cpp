@@ -47,12 +47,11 @@
 #ifdef _WIN32
 
 #include <windows.h>
+#include <tlhelp32.h>
 #include <cstdint>
 #include <cstring>
 #include <cstdlib>
 #include <cwchar>
-
-// TODO(build): #include "MinHook.h"  // and link minhook.lib
 
 // =====================================================================
 // Scenario parsing -- mirror of the Linux shim's uc_parse(), wide-char aware.
@@ -64,13 +63,17 @@ enum UcVerb {
     UC_OPENFAIL,     // CreateFileW fails on matching path
     UC_SLOW,         // sleep ms in ReadFile/WriteFile
     UC_SHORTWRITE,   // WriteFile reports fewer bytes written on matching path
-    UC_STATFAIL      // GetFileAttributesEx fails on matching path
+    UC_STATFAIL,     // GetFileAttributesEx fails on matching path
+    UC_WFLIP         // silent 1-byte XOR-0xFF flip at a file offset in a matching dest WriteFile
+                     // (returns the FULL byte count -> the engine believes the write succeeded; the
+                     //  corruption is only visible when #25's checksum-verify RE-READS the dest. This
+                     //  is the exact Windows/IOCP analogue of the Linux fs_preload.c `wflip` verb.)
 };
 
 struct UcRule {
     UcVerb verb = UC_NONE;
     wchar_t arg[512] = {0};   // path substring to match (case-insensitive), or empty
-    long    num = 0;          // numeric arg (ms for slow)
+    long    num = 0;          // numeric arg (ms for slow; ABSOLUTE file offset to flip for wflip)
 };
 
 static const int UC_MAX_RULES = 32;
@@ -82,7 +85,7 @@ static bool      g_parsed = false;
 // match by path. TODO: replace this fixed array with a CRITICAL_SECTION-guarded
 // std::unordered_map<HANDLE,std::wstring> -- handles are not small integers on
 // Windows, so we cannot index by them like the Linux fd table does.
-struct HandlePath { HANDLE h = nullptr; wchar_t path[512] = {0}; };
+struct HandlePath { HANDLE h = nullptr; wchar_t path[512] = {0}; uint64_t written = 0; };
 static const int UC_MAX_HANDLES = 4096;
 static HandlePath g_handles[UC_MAX_HANDLES];
 static CRITICAL_SECTION g_handlesLock;
@@ -116,6 +119,14 @@ static void ucParse()
         else if (!wcscmp(tok, L"slow"))       { r.verb = UC_SLOW;       r.num = wcstol(arg, nullptr, 10); }
         else if (!wcscmp(tok, L"shortwrite")) { r.verb = UC_SHORTWRITE; wcsncpy_s(r.arg, arg, _TRUNCATE); }
         else if (!wcscmp(tok, L"statfail"))   { r.verb = UC_STATFAIL;   wcsncpy_s(r.arg, arg, _TRUNCATE); }
+        else if (!wcscmp(tok, L"wflip"))      { r.verb = UC_WFLIP;
+            // arg is "<path-substr>:<offset>" -- split on the LAST colon (a Windows path may itself
+            // contain ':' as in C:\...). Left part = path substring, right part = absolute file offset.
+            wchar_t argbuf[512]; wcsncpy_s(argbuf, arg, _TRUNCATE);
+            wchar_t *lastc = wcsrchr(argbuf, L':');
+            if (lastc) { *lastc = L'\0'; r.num = wcstol(lastc + 1, nullptr, 10); }
+            wcsncpy_s(r.arg, argbuf, _TRUNCATE);
+        }
         else continue;   // unknown verb: ignore
         g_ruleCount++;
     }
@@ -163,6 +174,7 @@ static void ucRememberHandle(HANDLE h, const wchar_t *path)
         if (g_handles[i].h == nullptr) {
             g_handles[i].h = h;
             wcsncpy_s(g_handles[i].path, path, _TRUNCATE);
+            g_handles[i].written = 0;
             break;
         }
     }
@@ -185,9 +197,31 @@ static void ucForgetHandle(HANDLE h)
         if (g_handles[i].h == h) {
             g_handles[i].h = nullptr;
             g_handles[i].path[0] = L'\0';
+            g_handles[i].written = 0;
             break;
         }
     }
+    LeaveCriticalSection(&g_handlesLock);
+}
+
+// Cumulative bytes written through a handle, for SYNCHRONOUS writes whose position is the implicit
+// file pointer (no OVERLAPPED offset). For the IOCP data plane the writes are OVERLAPPED and carry an
+// explicit offset, so wflip reads ov->Offset directly and this fallback is only used off the hot path.
+static uint64_t ucGetWritten(HANDLE h)
+{
+    EnterCriticalSection(&g_handlesLock);
+    uint64_t v = 0;
+    for (int i = 0; i < UC_MAX_HANDLES; ++i)
+        if (g_handles[i].h == h) { v = g_handles[i].written; break; }
+    LeaveCriticalSection(&g_handlesLock);
+    return v;
+}
+
+static void ucAddWritten(HANDLE h, DWORD len)
+{
+    EnterCriticalSection(&g_handlesLock);
+    for (int i = 0; i < UC_MAX_HANDLES; ++i)
+        if (g_handles[i].h == h) { g_handles[i].written += len; break; }
     LeaveCriticalSection(&g_handlesLock);
 }
 
@@ -264,6 +298,35 @@ static BOOL WINAPI hook_WriteFile(HANDLE h, LPCVOID buf, DWORD len, LPDWORD put,
             // GetQueuedCompletionStatus (hook that too) and rewrite dwNumberOfBytes.
             return real_WriteFile(h, buf, half, put, ov);
         }
+        // wflip: silently corrupt a single byte at an absolute file offset in this dest, returning the
+        // FULL byte count so the engine believes the write succeeded. NO GetQueuedCompletionStatus hook
+        // is needed -- we corrupt the BUFFER before WriteFile, so the kernel's completion correctly
+        // reports success; the flip is only caught by #25's checksum re-read of the dest.
+        const UcRule *wf = ucMatch(UC_WFLIP, path);
+        if (wf) {
+            // The file offset this write lands at: OVERLAPPED (IOCP) carries it explicitly; a sync
+            // write uses the cumulative file pointer fallback.
+            uint64_t base = ov ? (((uint64_t)ov->OffsetHigh << 32) | (uint64_t)ov->Offset)
+                               : ucGetWritten(h);
+            uint64_t target = (uint64_t)wf->num;
+            if (target >= base && target < base + (uint64_t)len) {
+                size_t local = (size_t)(target - base);
+                if (local < (size_t)len) {            // bounds-check BEFORE any pointer write
+                    void *copy = malloc(len);
+                    if (copy) {
+                        memcpy(copy, buf, len);
+                        ((unsigned char *)copy)[local] ^= 0xFF;   // silent 1-byte corruption
+                        BOOL ret = real_WriteFile(h, copy, len, put, ov);
+                        // OVERLAPPED: the kernel reads `copy` asynchronously until the completion fires,
+                        // so we must NOT free it here -- intentionally leak one small block, once, in a
+                        // short-lived test process.
+                        ucAddWritten(h, len);
+                        return ret;
+                    }
+                }
+            }
+            ucAddWritten(h, len);   // not the target write -> just advance the sync fallback counter
+        }
     }
     return real_WriteFile(h, buf, len, put, ov);
 }
@@ -331,24 +394,78 @@ static HookEntry g_hookTable[] = {
     //       NtReadFile / NtWriteFile directly, add ntdll entries here too.
 };
 
+// Self-contained IAT patching (option b): redirect the imported kernel32 thunks (WriteFile etc.) in EVERY
+// loaded module to our detours. No external hooking library (avoids the MinHook vendor/clone step). It
+// catches every call made through an import thunk -- which is how the mingw-built ultracopier.exe (and Qt)
+// reach these APIs -- so the IOCP data-plane WriteFile is intercepted and #25's checksum re-read sees the
+// flip. (Authorised by the user for fault-injection testing on their own test laptop.)
+static void patchOneModule(HMODULE mod)
+{
+    BYTE *base = (BYTE*)mod;
+    IMAGE_DOS_HEADER *dos = (IMAGE_DOS_HEADER*)base;
+    if (!dos || dos->e_magic != IMAGE_DOS_SIGNATURE) return;
+    IMAGE_NT_HEADERS *nt = (IMAGE_NT_HEADERS*)(base + dos->e_lfanew);
+    if (nt->Signature != IMAGE_NT_SIGNATURE) return;
+    DWORD impRVA = nt->OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_IMPORT].VirtualAddress;
+    if (!impRVA) return;
+    const int N = (int)(sizeof(g_hookTable)/sizeof(g_hookTable[0]));
+    for (IMAGE_IMPORT_DESCRIPTOR *imp = (IMAGE_IMPORT_DESCRIPTOR*)(base + impRVA); imp->Name; ++imp) {
+        DWORD origRVA = imp->OriginalFirstThunk ? imp->OriginalFirstThunk : imp->FirstThunk;
+        IMAGE_THUNK_DATA *orig = (IMAGE_THUNK_DATA*)(base + origRVA);
+        IMAGE_THUNK_DATA *iat  = (IMAGE_THUNK_DATA*)(base + imp->FirstThunk);
+        for (; orig->u1.AddressOfData; ++orig, ++iat) {
+            if (IMAGE_SNAP_BY_ORDINAL(orig->u1.Ordinal)) continue;   // imported by ordinal -> no name match
+            IMAGE_IMPORT_BY_NAME *ibn = (IMAGE_IMPORT_BY_NAME*)(base + orig->u1.AddressOfData);
+            for (int k = 0; k < N; ++k) {
+                HookEntry &e = g_hookTable[k];
+                if (!*e.trampoline) continue;                                  // real not resolved
+                if (strcmp((const char*)ibn->Name, e.symbol) != 0) continue;
+                if ((void*)(uintptr_t)iat->u1.Function == e.detour) continue;  // already ours
+                DWORD old = 0;
+                if (VirtualProtect(&iat->u1.Function, sizeof(iat->u1.Function), PAGE_READWRITE, &old)) {
+                    iat->u1.Function = (ULONGLONG)(uintptr_t)e.detour;
+                    VirtualProtect(&iat->u1.Function, sizeof(iat->u1.Function), old, &old);
+                }
+            }
+        }
+    }
+}
+
 static bool installHooks()
 {
-    // TODO(MinHook):
-    //   if (MH_Initialize() != MH_OK) return false;
-    //   for (auto &e : g_hookTable) {
-    //       if (MH_CreateHookApi(e.module, e.symbol, e.detour, e.trampoline) != MH_OK)
-    //           return false;
-    //   }
-    //   return MH_EnableHook(MH_ALL_HOOKS) == MH_OK;
-    (void)g_hookTable;
-    return false;   // not yet wired -- skeleton only
+    if (GetEnvironmentVariableW(L"UC_HOOK_NOOP", nullptr, 0) != 0)
+        return true;   // DIAGNOSTIC: load the DLL but install NO hooks (isolate inject plumbing vs the patch)
+    // Resolve the REAL targets from kernel32 (GetProcAddress follows the API-set forwarder to kernelbase)
+    // so our detours call the genuine function instead of recursing through a patched IAT thunk.
+    HMODULE k32 = GetModuleHandleW(L"kernel32.dll");
+    const int N = (int)(sizeof(g_hookTable)/sizeof(g_hookTable[0]));
+    for (int k = 0; k < N; ++k) {
+        HookEntry &e = g_hookTable[k];
+        if (!*e.trampoline)
+            *e.trampoline = (void*)GetProcAddress(k32, e.symbol);
+    }
+    // Patch ONLY the main module (ultracopier.exe). The IOCP data plane (TransferThreadWin) is compiled
+    // into the all-in-one exe, so its WriteFile/CreateFileW go through the exe's own IAT -- patching that
+    // catches the dest writes WITHOUT touching Qt/system modules (whose I/O we must not perturb) and
+    // WITHOUT CreateToolhelp32Snapshot (which can take the loader lock).
+    patchOneModule(GetModuleHandleW(NULL));
+    return true;
 }
 
 static void removeHooks()
 {
-    // TODO(MinHook):
-    //   MH_DisableHook(MH_ALL_HOOKS);
-    //   MH_Uninitialize();
+    // No-op: the IAT patches live in a short-lived test process that the harness kills, so there is no
+    // need to restore the thunks (and doing it from DLL_PROCESS_DETACH, under the loader lock, is unsafe).
+}
+
+// installHooks() calls CreateToolhelp32Snapshot / Module32Next / GetProcAddress, which can take the
+// LOADER LOCK. DllMain(DLL_PROCESS_ATTACH) already HOLDS that lock, so calling installHooks() directly
+// from DllMain deadlocks the whole process (hang, no crash). Defer it to a worker thread that runs AFTER
+// DllMain returns and the loader lock is released.
+static DWORD WINAPI installHooksThread(LPVOID)
+{
+    installHooks();
+    return 0;
 }
 
 // =====================================================================
@@ -364,7 +481,10 @@ BOOL APIENTRY DllMain(HMODULE, DWORD reason, LPVOID)
             g_handlesLockInit = true;
         }
         ucParse();
-        installHooks();   // returns false until MinHook is wired (TODO)
+        {
+            HANDLE t = CreateThread(NULL, 0, installHooksThread, NULL, 0, NULL);
+            if (t) CloseHandle(t);
+        }
         break;
     case DLL_PROCESS_DETACH:
         removeHooks();

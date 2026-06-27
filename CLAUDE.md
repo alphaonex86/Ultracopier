@@ -218,6 +218,7 @@ Each transfer window has separate signal connections, avoiding crosstalk.
 
 - The **async (pthread) backend** (`plugins/CopyEngine/Ultracopier-Spec/async/` — `ReadThread`, `WriteThread`, `TransferThreadAsync`) was **perfectly working and stable at version 3.0** and has been **manually tested across ALL cases and ALL features**. Treat it as a **read-only reference implementation**.
 - **Never change async code for a new feature unless the user EXPLICITLY asks for an async change.** New behaviour (e.g. resume-at-offset on media reconnect) is **ported FROM async TO io_uring/IOCP** to reach feature parity — async is the source of truth, not the thing to edit. If a task seems to need an async edit, stop and ask first.
+- **You CAN change core code (including async/shared) when it is the ONLY way or the OBVIOUS way to fix a real correctness/data-loss/hang bug** (not a new feature). When you do: make the change minimal + targeted, then gate it HARD — re-run the affected case(s) red→green, the full suite (the `move_destination_error` / `file_error_dialog` skip/completion-race tripwires especially), ASan, and the XP/IOCP cross-builds — and if the fix introduces a new failure, first TRY to fix that, and only revert if that fails.
 
 ## Build Portability (required — Ultracopier must ALWAYS build)
 

@@ -78,6 +78,7 @@ WriteThread::WriteThread()
     writeFullBlocked=false;
     endDetected=false;
     fakeMode=false;
+    destinationPreExisted=false;
     startSize=0;
     bytesWriten=0;
     blockArray.data=nullptr;
@@ -293,6 +294,10 @@ bool WriteThread::internalOpen()
         }
     }
     bool fileWasExists=TransferThread::is_file(file);
+    // Only protect a NON-EMPTY pre-existing dest (real user data). An empty file (0 bytes -- e.g. one a
+    // previous put-to-end attempt created) has nothing to lose and must stay removable so dead-file
+    // cleanup still works (this is the put-to-end retry regression of the first #9 attempt).
+    destinationPreExisted = fileWasExists && (TransferThread::file_stat_size(file)>0);
     #ifdef Q_OS_UNIX
     // The last parameter (0755) does nothing. It is simply accepted for compatibility with the UNIX "open" function.
     // Needed for major build compatibility
@@ -366,7 +371,14 @@ bool WriteThread::internalOpen()
             emit closed();
             return false;
         }
-        if(destTruncate(startSize)!=0)
+        // Data-loss guard: for a FRESH overwrite (startSize==0) do NOT truncate the dest to 0 here --
+        // that destroys the pre-existing destination BEFORE the source is confirmed readable, so a
+        // source that vanishes/errors before the first byte leaves the user with NOTHING (cp/rsync open
+        // the source first and never touch the dest on failure). The dest is opened O_WRONLY|O_CREAT
+        // (no O_TRUNC); writes overwrite from offset 0 and the close path truncates to lastGoodPosition
+        // (bytes actually written), removing any old tail on success. RESUME (startSize>0) still
+        // truncates here to discard bytes past the resume point.
+        if(startSize!=0 && destTruncate(startSize)!=0)
         {
             #ifdef Q_OS_UNIX
             if(::close(to)!=0)
@@ -507,6 +519,14 @@ bool WriteThread::internalOpen()
                              );
         #endif
         emit error();
+        // A failed write-OPEN means the destination is NOT open. Emit closed() too so the transfer
+        // thread sets writeIsClosedVariable (-> remainDestinationOpen()==false). Without it the write
+        // never "closes" (closed() was emitted only on the stopIt branch above), so
+        // checkIfAllIsClosedAndDoOperations() blocks forever on remainFileOpen() and an unwritable /
+        // read-only destination with fileError=Skip HANGS the whole job (move_destination_error).
+        // Queued AFTER error() so write_error() sets writeError before write_closed() runs the
+        // completion check (which then correctly waits for the skip/retry decision via its gate).
+        emit closed();
         #ifdef ULTRACOPIER_PLUGIN_DEBUG
         status=Idle;
         #endif
@@ -582,14 +602,43 @@ std::string WriteThread::errorString() const
     return errorString_internal;
 }
 
-void WriteThread::stop()
+void WriteThread::stop(bool finalNoRetry)
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] stop()");
-    needRemoveTheFile=true;
+    // PURE skip (fileError=Skip, finalNoRetry) KEEPS the readable salvage already written off the bad
+    // sector ("copy every readable byte"); put-to-end / cancel still mark the partial for removal.
+    needRemoveTheFile = !finalNoRetry;
     stopIt=true;
     if(isOpen.available()>0)
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] isOpen.available()>0");
+
+        if(finalNoRetry)
+        {
+            // PURE skip, no put-to-end retry => NO reopen to race, so do NOT pre-close the fd. Wake the
+            // (possibly parked, open-but-idle) write thread and let internalClose() run its NORMAL close --
+            // truncate to lastGoodPosition + close + emit closed() -- which PERSISTS the readable salvage
+            // (needRemoveTheFile is false above) AND completes the inode so the cap=1 large-transfer slot
+            // frees for the next large file (faulty_hdd over_1mib.dat / skip_drops_multichunk /
+            // opt_delete_partial_files). If the destination was NEVER opened (read faulted at byte 0),
+            // internalClose() guards its emit on to>=0 and would hang, so signal closed() explicitly.
+            #ifdef Q_OS_WIN32
+            const bool destWasOpen=(to!=NULL);
+            #else
+            const bool destWasOpen=(to>=0);
+            #endif
+            writeFull.release();
+            pauseMutex.release();
+            pauseMutex.release();
+            #ifdef ULTRACOPIER_PLUGIN_SPEED_SUPPORT
+            waitNewClockForSpeed.release();
+            waitNewClockForSpeed2.release();
+            #endif
+            emit internalStartClose();
+            if(!destWasOpen)
+                emit closed();
+            return;
+        }
 
         #ifdef Q_OS_WIN32
         if(to!=NULL)
@@ -608,6 +657,10 @@ void WriteThread::stop()
             #endif
         }
 
+        // Put-to-end RETRY: pre-close the fd so internalClose() will NOT re-emit closed() and the retry's
+        // reopen (isOpen.acquire) is not raced (transient_sector); emit internalStartClose() to release
+        // isOpen and wake the parked write thread. The inode completes via the eventual successful retry.
+        emit internalStartClose();
         return;
     }
     writeFull.release();
@@ -944,6 +997,11 @@ bool WriteThread::setBlockSize(const int blockSize)
 int64_t WriteThread::getLastGoodPosition() const
 {
     return lastGoodPosition;
+}
+
+bool WriteThread::getDestinationPreExisted() const
+{
+    return destinationPreExisted;
 }
 
 void WriteThread::flushAndSeekToZero()

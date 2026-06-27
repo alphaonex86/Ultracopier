@@ -90,6 +90,7 @@ private slots:
     void init();
     void setDoRightTransfer(bool doRightTransfer);
     void setKeepDate(bool keepDate);
+    void setCoalesceSourceStat(bool coalesceSourceStat);
     void setOsSpecFlags(bool os_spec_flags);
     void setNativeCopy(bool native_copy);
     #ifdef ULTRACOPIER_PLUGIN_RSYNC

@@ -59,7 +59,7 @@
         <translation>Fichier %1/%2, taille: %3/%4</translation>
     </message>
     <message>
-        <location line="+286"/>
+        <location line="+300"/>
         <source>Copy list</source>
         <translation>Liste de copies</translation>
     </message>
@@ -69,7 +69,7 @@
         <translation>Liste de déplacements</translation>
     </message>
     <message>
-        <location line="+501"/>
+        <location line="+517"/>
         <source>Don&apos;t close if errors are found</source>
         <translation>Garder ouvert s&apos;il y a des erreurs</translation>
     </message>

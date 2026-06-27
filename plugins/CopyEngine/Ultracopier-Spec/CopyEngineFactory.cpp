@@ -53,6 +53,7 @@ CopyEngineFactory::CopyEngineFactory() :
 
     connect(ui->doRightTransfer,            &QCheckBox::toggled,                                            this,&CopyEngineFactory::setDoRightTransfer);
     connect(ui->keepDate,                   &QCheckBox::toggled,                                            this,&CopyEngineFactory::setKeepDate);
+    connect(ui->coalesceSourceStat,         &QCheckBox::toggled,                                            this,&CopyEngineFactory::setCoalesceSourceStat);
     connect(ui->native_copy,                   &QCheckBox::toggled,                                            this,&CopyEngineFactory::setNativeCopy);
     #if !defined(Q_OS_WIN32) && !defined(Q_OS_LINUX)
     ui->native_copy->setEnabled(false);
@@ -119,9 +120,10 @@ PluginInterface_CopyEngine * CopyEngineFactory::getInstance()
     connect(this,&CopyEngineFactory::reloadLanguage,realObject,&CopyEngine::newLanguageLoaded);
     realObject->setRightTransfer(ui->doRightTransfer->isChecked());
     realObject->setKeepDate(ui->keepDate->isChecked());
-    // No dedicated checkbox in the UI yet: read the registered option directly
-    // (default "true" from the KeysList above). Add a ui->coalesceSourceStat
-    // QCheckBox + the usual connect/load/save to expose it in the options dialog.
+    // Exposed in the options dialog via ui->coalesceSourceStat (connect + resetOptions load +
+    // setCoalesceSourceStat save). Read the registered option directly here (default "true"),
+    // which the checkbox keeps in sync; this also keeps it correct in a headless/CLI run where
+    // the options dialog never opens.
     realObject->setCoalesceSourceStat(optionsEngine!=NULL ? stringtobool(optionsEngine->getOptionValue("coalesceSourceStat")) : true);
     realObject->setOsSpecFlags(ui->os_spec_flags->isChecked());
     realObject->setNativeCopy(ui->native_copy->isChecked());
@@ -356,6 +358,7 @@ void CopyEngineFactory::resetOptions()
     #endif
     ui->doRightTransfer->setChecked(stringtobool(options->getOptionValue("doRightTransfer")));
     ui->keepDate->setChecked(stringtobool(options->getOptionValue("keepDate")));
+    ui->coalesceSourceStat->setChecked(stringtobool(options->getOptionValue("coalesceSourceStat")));
     ui->os_spec_flags->setChecked(stringtobool(options->getOptionValue("os_spec_flags")));
     ui->native_copy->setChecked(stringtobool(options->getOptionValue("native_copy")));
     #if !defined(Q_OS_WIN32) && !defined(Q_OS_LINUX)
@@ -434,6 +437,12 @@ void CopyEngineFactory::setKeepDate(bool keepDate)
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"the value have changed");
     if(optionsEngine!=NULL)
         optionsEngine->setOptionValue("keepDate",booltostring(keepDate));
+}
+
+void CopyEngineFactory::setCoalesceSourceStat(bool coalesceSourceStat)
+{
+    if(optionsEngine!=NULL)
+        optionsEngine->setOptionValue("coalesceSourceStat",booltostring(coalesceSourceStat));
 }
 
 void CopyEngineFactory::setOsSpecFlags(bool os_spec_flags)

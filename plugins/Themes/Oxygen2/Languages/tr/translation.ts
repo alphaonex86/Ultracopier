@@ -57,46 +57,46 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="840"/>
+        <location filename="../../interface.cpp" line="854"/>
         <source>Copy list</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="842"/>
+        <location filename="../../interface.cpp" line="856"/>
         <source>Move list</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="1343"/>
+        <location filename="../../interface.cpp" line="1373"/>
         <source>Don&apos;t close if errors are found</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="1344"/>
+        <location filename="../../interface.cpp" line="1374"/>
         <source>Never close</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="1345"/>
+        <location filename="../../interface.cpp" line="1375"/>
         <source>Always close</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="1347"/>
+        <location filename="../../interface.cpp" line="1377"/>
         <source>File Name, 0KB</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="1558"/>
-        <location filename="../../interface.cpp" line="1570"/>
-        <location filename="../../interface.cpp" line="1582"/>
+        <location filename="../../interface.cpp" line="1588"/>
+        <location filename="../../interface.cpp" line="1600"/>
+        <location filename="../../interface.cpp" line="1612"/>
         <source>Select a color</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="1670"/>
-        <location filename="../../interface.cpp" line="1681"/>
-        <location filename="../../interface.cpp" line="1690"/>
+        <location filename="../../interface.cpp" line="1700"/>
+        <location filename="../../interface.cpp" line="1711"/>
+        <location filename="../../interface.cpp" line="1720"/>
         <source>%1 %2% of %3 into %4 files</source>
         <translation type="unfinished"></translation>
     </message>

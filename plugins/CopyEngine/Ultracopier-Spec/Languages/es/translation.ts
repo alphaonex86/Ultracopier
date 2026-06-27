@@ -35,69 +35,69 @@
         <translation type="vanished">Compatible solo con Windows</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="929"/>
+        <location filename="../../CopyEngine.cpp" line="931"/>
         <source>Supported only on Windows and Linux</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="1097"/>
-        <location filename="../../CopyEngine.cpp" line="1100"/>
-        <location filename="../../CopyEngine.cpp" line="1105"/>
-        <location filename="../../CopyEngine.cpp" line="1109"/>
+        <location filename="../../CopyEngine.cpp" line="1099"/>
+        <location filename="../../CopyEngine.cpp" line="1102"/>
+        <location filename="../../CopyEngine.cpp" line="1107"/>
+        <location filename="../../CopyEngine.cpp" line="1111"/>
         <source>Ask</source>
         <translation>Pedir</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="1098"/>
-        <location filename="../../CopyEngine.cpp" line="1102"/>
-        <location filename="../../CopyEngine.cpp" line="1106"/>
-        <location filename="../../CopyEngine.cpp" line="1110"/>
+        <location filename="../../CopyEngine.cpp" line="1100"/>
+        <location filename="../../CopyEngine.cpp" line="1104"/>
+        <location filename="../../CopyEngine.cpp" line="1108"/>
+        <location filename="../../CopyEngine.cpp" line="1112"/>
         <source>Skip</source>
         <translation>Omitir</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="1101"/>
+        <location filename="../../CopyEngine.cpp" line="1103"/>
         <source>Merge</source>
         <translation>Unir</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="1103"/>
-        <location filename="../../CopyEngine.cpp" line="1115"/>
+        <location filename="../../CopyEngine.cpp" line="1105"/>
+        <location filename="../../CopyEngine.cpp" line="1117"/>
         <source>Rename</source>
         <translation>Cambiar el nombre</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="1107"/>
+        <location filename="../../CopyEngine.cpp" line="1109"/>
         <source>Put at the end</source>
         <translation>Ponga al final</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="1111"/>
+        <location filename="../../CopyEngine.cpp" line="1113"/>
         <source>Overwrite</source>
         <translation>Sobrescribir</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="1112"/>
+        <location filename="../../CopyEngine.cpp" line="1114"/>
         <source>Overwrite if different</source>
         <translation>Sobrescribir si es diferente</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="1113"/>
+        <location filename="../../CopyEngine.cpp" line="1115"/>
         <source>Overwrite if newer</source>
         <translation>Sobrescribir si nuevo</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="1114"/>
+        <location filename="../../CopyEngine.cpp" line="1116"/>
         <source>Overwrite if older</source>
         <translation>Sobrescribir si es mayor</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="1185"/>
+        <location filename="../../CopyEngine.cpp" line="1187"/>
         <source>Options error</source>
         <translation>error Opciones</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="1185"/>
+        <location filename="../../CopyEngine.cpp" line="1187"/>
         <source>Options engine is not loaded. Unable to access the filters</source>
         <translation>Opciones del motor no está cargado. No es posible acceder a los filtros</translation>
     </message>
@@ -110,75 +110,75 @@
     </message>
     <message>
         <location filename="../../CopyEngineFactory.cpp" line="60"/>
-        <location filename="../../CopyEngineFactory.cpp" line="352"/>
+        <location filename="../../CopyEngineFactory.cpp" line="364"/>
         <source>Supported only on Windows and Linux</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="482"/>
-        <location filename="../../CopyEngineFactory.cpp" line="485"/>
-        <location filename="../../CopyEngineFactory.cpp" line="490"/>
         <location filename="../../CopyEngineFactory.cpp" line="494"/>
+        <location filename="../../CopyEngineFactory.cpp" line="497"/>
+        <location filename="../../CopyEngineFactory.cpp" line="502"/>
+        <location filename="../../CopyEngineFactory.cpp" line="506"/>
         <source>Ask</source>
         <translation>Pedir</translation>
     </message>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="483"/>
-        <location filename="../../CopyEngineFactory.cpp" line="487"/>
-        <location filename="../../CopyEngineFactory.cpp" line="491"/>
         <location filename="../../CopyEngineFactory.cpp" line="495"/>
+        <location filename="../../CopyEngineFactory.cpp" line="499"/>
+        <location filename="../../CopyEngineFactory.cpp" line="503"/>
+        <location filename="../../CopyEngineFactory.cpp" line="507"/>
         <source>Skip</source>
         <translation>Omitir</translation>
     </message>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="486"/>
+        <location filename="../../CopyEngineFactory.cpp" line="498"/>
         <source>Merge</source>
         <translation>Unir</translation>
     </message>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="488"/>
         <location filename="../../CopyEngineFactory.cpp" line="500"/>
+        <location filename="../../CopyEngineFactory.cpp" line="512"/>
         <source>Rename</source>
         <translation>Cambiar el nombre</translation>
     </message>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="492"/>
+        <location filename="../../CopyEngineFactory.cpp" line="504"/>
         <source>Put at the end</source>
         <translation>Ponga al final</translation>
     </message>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="496"/>
+        <location filename="../../CopyEngineFactory.cpp" line="508"/>
         <source>Overwrite</source>
         <translation>Sobrescribir</translation>
     </message>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="497"/>
+        <location filename="../../CopyEngineFactory.cpp" line="509"/>
         <source>Overwrite if different</source>
         <translation>Sobrescribir si es diferente</translation>
     </message>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="498"/>
+        <location filename="../../CopyEngineFactory.cpp" line="510"/>
         <source>Overwrite if newer</source>
         <translation>Sobrescribir si nuevo</translation>
     </message>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="499"/>
+        <location filename="../../CopyEngineFactory.cpp" line="511"/>
         <source>Overwrite if older</source>
         <translation>Sobrescribir si es mayor</translation>
     </message>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="515"/>
-        <location filename="../../CopyEngineFactory.cpp" line="554"/>
+        <location filename="../../CopyEngineFactory.cpp" line="527"/>
+        <location filename="../../CopyEngineFactory.cpp" line="566"/>
         <source>Options error</source>
         <translation>error Opciones</translation>
     </message>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="515"/>
+        <location filename="../../CopyEngineFactory.cpp" line="527"/>
         <source>Options engine is not loaded. Unable to access the filters</source>
         <translation>Opciones del motor no está cargado. No es posible acceder a los filtros</translation>
     </message>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="554"/>
+        <location filename="../../CopyEngineFactory.cpp" line="566"/>
         <source>Options engine is not loaded, can&apos;t access to the filters</source>
         <translation>Opciones del motor no está cargado, no se puede acceder a los filtros</translation>
     </message>
@@ -214,12 +214,12 @@
 <context>
     <name>FileErrorDialog</name>
     <message>
-        <location filename="../../FileErrorDialog.cpp" line="92"/>
+        <location filename="../../FileErrorDialog.cpp" line="104"/>
         <source>Error on folder</source>
         <translation>Error en la carpeta</translation>
     </message>
     <message>
-        <location filename="../../FileErrorDialog.cpp" line="95"/>
+        <location filename="../../FileErrorDialog.cpp" line="107"/>
         <source>Folder name</source>
         <translation>Nombre de la carpeta</translation>
     </message>
@@ -672,46 +672,46 @@
 <context>
     <name>TransferThreadAsync</name>
     <message>
-        <location filename="../../async/TransferThreadAsync.cpp" line="358"/>
+        <location filename="../../async/TransferThreadAsync.cpp" line="366"/>
         <source>Wrong modification date or unable to get it, you can disable time transfer to do it</source>
         <translation>Fecha de modificación incorrecta o incapaz de obtenerla, puede desactivar la transferencia de tiempo para hacerlo</translation>
     </message>
     <message>
-        <location filename="../../async/TransferThreadAsync.cpp" line="454"/>
-        <location filename="../../async/TransferThreadAsync.cpp" line="472"/>
+        <location filename="../../async/TransferThreadAsync.cpp" line="462"/>
+        <location filename="../../async/TransferThreadAsync.cpp" line="480"/>
         <source>Unable to create the destination folder: </source>
         <translation>No se puede crear la carpeta de destino: </translation>
     </message>
     <message>
-        <location filename="../../async/TransferThreadAsync.cpp" line="457"/>
-        <location filename="../../async/TransferThreadAsync.cpp" line="474"/>
+        <location filename="../../async/TransferThreadAsync.cpp" line="465"/>
+        <location filename="../../async/TransferThreadAsync.cpp" line="482"/>
         <source>Unable to create the destination folder, errno: %1</source>
         <translation>No se puede crear la carpeta de destino, errno: %1</translation>
     </message>
     <message>
-        <location filename="../../async/TransferThreadAsync.cpp" line="880"/>
+        <location filename="../../async/TransferThreadAsync.cpp" line="888"/>
         <source>Checksum: unable to allocate xxh3 state</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../async/TransferThreadAsync.cpp" line="895"/>
-        <location filename="../../async/TransferThreadAsync.cpp" line="913"/>
+        <location filename="../../async/TransferThreadAsync.cpp" line="903"/>
+        <location filename="../../async/TransferThreadAsync.cpp" line="921"/>
         <source>Checksum: unable to re-open source: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../async/TransferThreadAsync.cpp" line="904"/>
-        <location filename="../../async/TransferThreadAsync.cpp" line="922"/>
+        <location filename="../../async/TransferThreadAsync.cpp" line="912"/>
+        <location filename="../../async/TransferThreadAsync.cpp" line="930"/>
         <source>Checksum: unable to re-open destination: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../async/TransferThreadAsync.cpp" line="985"/>
+        <location filename="../../async/TransferThreadAsync.cpp" line="993"/>
         <source>Checksum: read error during verify</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../async/TransferThreadAsync.cpp" line="993"/>
+        <location filename="../../async/TransferThreadAsync.cpp" line="1001"/>
         <source>Checksum mismatch (xxh3-64): </source>
         <translation type="unfinished"></translation>
     </message>
@@ -719,39 +719,39 @@
 <context>
     <name>TransferThreadPipelined</name>
     <message>
-        <location filename="../../pipeline/TransferThreadPipelined.cpp" line="214"/>
+        <location filename="../../pipeline/TransferThreadPipelined.cpp" line="245"/>
         <source>Wrong modification date or unable to get it, you can disable time transfer to do it</source>
         <translation type="unfinished">Fecha de modificación incorrecta o incapaz de obtenerla, puede desactivar la transferencia de tiempo para hacerlo</translation>
     </message>
     <message>
-        <location filename="../../pipeline/TransferThreadPipelined.cpp" line="412"/>
+        <location filename="../../pipeline/TransferThreadPipelined.cpp" line="443"/>
         <source>Unable to create the destination folder, errno: %1</source>
         <translation type="unfinished">No se puede crear la carpeta de destino, errno: %1</translation>
     </message>
     <message>
-        <location filename="../../pipeline/TransferThreadPipelined.cpp" line="582"/>
+        <location filename="../../pipeline/TransferThreadPipelined.cpp" line="617"/>
         <source>Checksum: unable to allocate xxh3 state</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../pipeline/TransferThreadPipelined.cpp" line="597"/>
-        <location filename="../../pipeline/TransferThreadPipelined.cpp" line="615"/>
+        <location filename="../../pipeline/TransferThreadPipelined.cpp" line="632"/>
+        <location filename="../../pipeline/TransferThreadPipelined.cpp" line="650"/>
         <source>Checksum: unable to re-open source: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../pipeline/TransferThreadPipelined.cpp" line="606"/>
-        <location filename="../../pipeline/TransferThreadPipelined.cpp" line="624"/>
+        <location filename="../../pipeline/TransferThreadPipelined.cpp" line="641"/>
+        <location filename="../../pipeline/TransferThreadPipelined.cpp" line="659"/>
         <source>Checksum: unable to re-open destination: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../pipeline/TransferThreadPipelined.cpp" line="687"/>
+        <location filename="../../pipeline/TransferThreadPipelined.cpp" line="722"/>
         <source>Checksum: read error during verify</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../pipeline/TransferThreadPipelined.cpp" line="695"/>
+        <location filename="../../pipeline/TransferThreadPipelined.cpp" line="730"/>
         <source>Checksum mismatch (xxh3-64): </source>
         <translation type="unfinished"></translation>
     </message>
@@ -759,7 +759,7 @@
 <context>
     <name>TransferThreadUring</name>
     <message>
-        <location filename="../../uring/TransferThreadUring.cpp" line="205"/>
+        <location filename="../../uring/TransferThreadUring.cpp" line="224"/>
         <source>Unable to create the destination folder, errno: %1</source>
         <translation type="unfinished">No se puede crear la carpeta de destino, errno: %1</translation>
     </message>
@@ -771,7 +771,7 @@
 <context>
     <name>TransferThreadWin</name>
     <message>
-        <location filename="../../win-iocp/TransferThreadWin.cpp" line="265"/>
+        <location filename="../../win-iocp/TransferThreadWin.cpp" line="271"/>
         <source>Unable to create the destination folder, errno: %1</source>
         <translation type="unfinished">No se puede crear la carpeta de destino, errno: %1</translation>
     </message>

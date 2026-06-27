@@ -79,7 +79,11 @@ CopyEngine::CopyEngine(FacilityInterface * facilityEngine) :
     followTheStrictOrder            = false;
     ignoreBlackList                 = false;
     deletePartiallyTransferredFiles = true;
+#if defined(ULTRACOPIER_PLUGIN_IO_URING) || defined(ULTRACOPIER_PLUGIN_WINIOCP)
+    inodeThreads                    = 1;  // async backends are single-threaded (see CLAUDE.md)
+#else
     inodeThreads                    = 16;
+#endif
     parallelizeIfSmallerThan        = 128;//KB; converted to bytes (x1024) before being sent to ListThread
     os_spec_flags                   = true; //were uninitialised but applied to listThread in connectTheSignalsSlots()
     native_copy                     = false;//before the factory's setters run -> indeterminate bool propagated
@@ -970,10 +974,18 @@ void CopyEngine::setDeletePartiallyTransferredFiles(const bool &deletePartiallyT
 
 void CopyEngine::setInodeThreads(const int &inodeThreads)
 {
+#if defined(ULTRACOPIER_PLUGIN_IO_URING) || defined(ULTRACOPIER_PLUGIN_WINIOCP)
+    // io_uring / IOCP are ASYNC: I/O concurrency comes from async submission (SQE batching / overlapped
+    // completion ports), NOT from worker threads. They MUST run single-threaded -- multithreading buys
+    // no throughput and only complicates the data-plane race debugging (see CLAUDE.md). Force 1.
+    (void)inodeThreads;
+    this->inodeThreads=1;
+#else
     this->inodeThreads=inodeThreads;
+#endif
     if(uiIsInstalled)
-        ui->inodeThreads->setValue(inodeThreads);
-    emit send_setInodeThreads(inodeThreads);
+        ui->inodeThreads->setValue(this->inodeThreads);
+    emit send_setInodeThreads(this->inodeThreads);
 }
 
 void CopyEngine::setParallelizeIfSmallerThan(const int &parallelizeIfSmallerThan)
@@ -995,7 +1007,11 @@ void CopyEngine::setRenameTheOriginalDestination(const bool &renameTheOriginalDe
 
 void CopyEngine::inodeThreadsFinished()
 {
+#if defined(ULTRACOPIER_PLUGIN_IO_URING) || defined(ULTRACOPIER_PLUGIN_WINIOCP)
+    this->inodeThreads=1;   // async backends: single-threaded, ignore the spinbox (see CLAUDE.md)
+#else
     this->inodeThreads=ui->inodeThreads->value();
+#endif
     emit send_setInodeThreads(inodeThreads);
 }
 

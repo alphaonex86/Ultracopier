@@ -9,8 +9,9 @@
 
 std::string ExtraSocket::pathSocket(const std::string &name)
 {
+    std::string socketName;
 #ifdef Q_OS_UNIX
-    return name+"-"+std::to_string(getuid());
+    socketName=name+"-"+std::to_string(getuid());
 #else
     QString userName;
 
@@ -37,8 +38,19 @@ std::string ExtraSocket::pathSocket(const std::string &name)
         userName=tempArray.toHex();
     }
     delete userNameW;
-    return name+"-"+userName.toStdString();
+    socketName=name+"-"+userName.toStdString();
 #endif
+    // Test-isolation hook (NOT a feature, NOT an #ifdef): when the optional environment
+    // variable ULTRACOPIER_SOCKET_SUFFIX is set, append it so an isolated test instance
+    // binds its own socket (e.g. "ultracopier-1000-test") and never hijacks the user's real
+    // single-instance / CLI-forward socket (their file-manager copy/paste keeps working
+    // while the test suite runs). The variable is UNSET for every real user, so the shipping
+    // binary stays byte-for-byte identical to today. qgetenv() (not qEnvironmentVariable,
+    // which is Qt 5.10+) keeps this compiling on Qt 5.6.3 / mingw 4.9.2 too.
+    const QByteArray socketSuffix=qgetenv("ULTRACOPIER_SOCKET_SUFFIX");
+    if(!socketSuffix.isEmpty())
+        socketName+="-"+socketSuffix.toStdString();
+    return socketName;
 }
 
 // Dump UTF16 (little endian)

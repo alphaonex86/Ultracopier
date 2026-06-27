@@ -70,6 +70,11 @@ public:
     std::atomic<uint64_t>			transferId;
     /// \brief to store the transfer size
     uint64_t			transferSize;
+    /// \brief set by the error policy when fileError=Skip (a PURE skip, no put-to-end retry) BEFORE
+    /// calling skip(): tells the async backend to signal the destination closed() even though stop()
+    /// pre-closed the fd, so the inode's close handshake finishes and frees the cap=1 large-transfer
+    /// slot for the next large file (skip_drops_multichunk / faulty_hdd over_1mib.dat). Reset per setFiles().
+    bool			finalSkipNoRetry=false;
 
     //not copied size, ...
     #ifdef Q_OS_WIN32

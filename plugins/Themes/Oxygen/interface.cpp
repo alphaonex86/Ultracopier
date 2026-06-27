@@ -520,7 +520,7 @@ void Themes::actionInProgess(const Ultracopier::EngineActionInProgress &action)
                     default:
                     break;
                 }
-                stat = status_stopped;
+stat = status_stopped;
                 if(durationStarted)
                 {
                     Ultracopier::TimeDecomposition time=facilityEngine->secondsToTimeDecomposition(
@@ -531,10 +531,12 @@ void Themes::actionInProgess(const Ultracopier::EngineActionInProgress &action)
                                                     QString::fromStdString(facilityEngine->translateText("Completed in %1")).arg(
                                                         QString::number(time.hour)+QStringLiteral(":")+
                                                         QString::number(time.minute).rightJustified(2,'0')+
-                                                        QStringLiteral(":")+
                                                         QString::number(time.second).rightJustified(2,'0')
                                                         )+QStringLiteral("</body></html>"));
                 }
+                // Reset the cached From/To labels so the next transfer starts fresh.
+                lastFrom.clear();
+                lastTo.clear();
             }
         break;
         default:
@@ -574,7 +576,10 @@ void Themes::newFolderListing(const std::string &path)
         newPath=newPath.mid(0,32)+QStringLiteral("...")+newPath.mid(newPath.size()-32,32);
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
     if(action==Ultracopier::Listing)
+    {
         ui->from->setText(newPath);
+        lastFrom=newPath;
+    }
 }
 
 void Themes::detectedSpeed(const uint64_t &speed)//in byte per seconds
@@ -775,10 +780,12 @@ void Themes::updateCurrentFileInformation()
         if(newPath.size()>(64+3))
             newPath=newPath.mid(0,32)+QStringLiteral("...")+newPath.mid(newPath.size()-32,32);
         ui->from->setText(newPath);
+        lastFrom=newPath;
         newPath=QString::fromStdString(transfertItem.to);
         if(newPath.size()>(64+3))
             newPath=newPath.mid(0,32)+QStringLiteral("...")+newPath.mid(newPath.size()-32,32);
         ui->to->setText(newPath);
+        lastTo=newPath;
         ui->current_file->setText(QString::fromStdString(transfertItem.current_file));
         if(transfertItem.progressBar_read!=-1)
         {
@@ -820,8 +827,15 @@ void Themes::updateCurrentFileInformation()
     }
     else
     {
-        ui->from->setText(QStringLiteral(""));
-        ui->to->setText(QStringLiteral(""));
+        // Keep the last non-empty From/To visible when no current file is being processed
+        // (e.g. between two small files faster than the UI tick). On the very first tick
+        // before any item has been seen, lastFrom is still empty -> the labels stay blank
+        // (the original behaviour). The Idle handler in actionInProgess() clears the labels
+        // when the whole copy ends, so they do not linger after completion.
+        if(lastFrom.isEmpty())
+            ui->from->setText(QStringLiteral(""));
+        if(lastTo.isEmpty())
+            ui->to->setText(QStringLiteral(""));
         ui->current_file->setText(QStringLiteral("-"));
         // No current file -> the per-file bar must be determinate, never left in the
         // indeterminate "busy" mode (setRange(0,0)) it may have been put in for an

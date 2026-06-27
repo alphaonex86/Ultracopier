@@ -197,41 +197,80 @@ def _win_join(*parts: str) -> str:
     return out
 
 
-def _conf_text(*, file_collision, folder_collision, file_error, folder_error,
-               keep_date, do_right) -> str:
-    """The SAME isolated QSettings INI harness.write_config() produces on Linux.
+win_join = _win_join  # public alias for option cases assembling a dest path on the box
 
-    The engine reads the QComboBox INDEX (see ../CLAUDE.md), so the combo-index values
-    are identical across platforms; only the file location differs.
+
+def win_meta(box, path: str) -> dict:
+    """Query a file's metadata on the box: LastWriteTime (unix seconds), the security
+    OWNER, and the DACL in SDDL form. Used by option post_verify callbacks to assert an
+    option was honored on IOCP (date preserved; owner/ACL copied when doRightTransfer is
+    on). Returns {} if the path is missing. NTFS has no POSIX mode, so perms are compared
+    via owner+SDDL, not an octal mode."""
+    ps = (f"$ErrorActionPreference='Stop'; "
+          f"$i=Get-Item -LiteralPath '{path}' -Force; "
+          f"$t=[long][System.Math]::Floor(($i.LastWriteTimeUtc - "
+          f"(Get-Date '1970-01-01 00:00:00Z')).TotalSeconds); "
+          f"$a=Get-Acl -LiteralPath '{path}'; "
+          f"Write-Output ('MTIME='+$t); "
+          f"Write-Output ('OWNER='+$a.Owner); "
+          f"Write-Output ('SDDL='+$a.Sddl)")
+    out = box.ps(ps)
+    meta = {}
+    for line in out.stdout.splitlines():
+        line = line.strip()
+        if line.startswith("MTIME="):
+            try:
+                meta["mtime"] = int(line[6:])
+            except ValueError:
+                pass
+        elif line.startswith("OWNER="):
+            meta["owner"] = line[6:]
+        elif line.startswith("SDDL="):
+            meta["sddl"] = line[5:]
+    return meta
+
+
+def _conf_text(*, file_collision, folder_collision, file_error, folder_error,
+               keep_date, do_right, extra_options=None) -> str:
+    """The SAME isolated QSettings INI harness.write_config() produces on Linux,
+    rendered with CRLF for the Windows box. Reuses harness.spec_section so the option
+    set (incl. `extra_options`) is IDENTICAL across the Linux and IOCP lanes -- the
+    engine reads the QComboBox INDEX (see ../CLAUDE.md), so values are platform-agnostic;
+    only the newline + file location differ.
     """
-    return (
-        "[CopyEngine-Ultracopier Spec]\r\n"
-        f"fileCollision={file_collision}\r\n"
-        f"folderCollision={folder_collision}\r\n"
-        f"fileError={file_error}\r\n"
-        f"folderError={folder_error}\r\n"
-        f"keepDate={'true' if keep_date else 'false'}\r\n"
-        f"doRightTransfer={'true' if do_right else 'false'}\r\n"
-        "autoStart=true\r\n"
-        "checkDiskSpace=false\r\n"
-        "[CopyEngine]\r\n"
-        "List=Ultracopier-Spec\r\n"
-        "[Ultracopier]\r\n"
-        "GroupWindowWhen=0\r\n"
-        "confirmToGroupWindows=false\r\n")
+    opts = H.spec_section(file_collision=file_collision, folder_collision=folder_collision,
+                          file_error=file_error, folder_error=folder_error,
+                          keep_date=keep_date, do_right=do_right, extra_options=extra_options)
+    return H._render_conf(opts, "\r\n")
 
 
 # ---------------------------------------------------------------------------
 # The one entry point every IOCP test case uses -- mirror of harness.run().
 # ---------------------------------------------------------------------------
-def run_windows(mode, sources_local, *, cfg=None,
+def run_windows(*args, **kwargs):
+    """Timing wrapper: records '<case>:iocp' duration to the timing log."""
+    try:
+        from lib import timing
+        with timing.backend_timer("iocp") as _bt:
+            r = _run_windows_impl(*args, **kwargs)
+            try:
+                _bt.result = "ok" if (r is not None and r.ok) else "fail"
+            except Exception:
+                pass
+            return r
+    except ImportError:
+        return _run_windows_impl(*args, **kwargs)
+
+
+def _run_windows_impl(mode, sources_local, *, cfg=None,
                 file_collision=H.FileCollision.ASK,
                 folder_collision=H.FolderCollision.MERGE,
                 file_error=H.FileError.SKIP,
                 folder_error=H.FolderError.SKIP,
                 keep_date=True, do_right=True,
                 expect=None, mem_limit_mb=1024, stay_alive_seconds=10,
-                dest_pre_seed=None) -> WindowsResult:
+                dest_pre_seed=None, extra_options=None, post_verify=None,
+                fs_scenario=None, force_local_source=False) -> WindowsResult:
     """Run one real cp/mv through the IOCP backend on the remote Windows box.
 
     mode           : 'cp' or 'mv'.
@@ -290,7 +329,7 @@ def run_windows(mode, sources_local, *, cfg=None,
                "ForEach-Object {{ New-Item -ItemType Directory -Force -Path $_ | Out-Null }}"
                .replace("{{", "{").replace("}}", "}"))
 
-        if source_win:
+        if source_win and not force_local_source:
             # Use the real on-box source as-is (nothing pushed -> no secret leaves the box).
             src_on_box = source_win
         else:
@@ -321,14 +360,21 @@ def run_windows(mode, sources_local, *, cfg=None,
         _put_text(box, conf_path, _conf_text(
             file_collision=file_collision, folder_collision=folder_collision,
             file_error=file_error, folder_error=folder_error,
-            keep_date=keep_date, do_right=do_right))
+            keep_date=keep_date, do_right=do_right, extra_options=extra_options))
 
         # (4) launch '<exe> <mode> <src...> <dst>' inside a Job Object capped at mem_limit_mb,
         #     with QT_QPA_PLATFORM=windows and USERPROFILE/XDG_CONFIG_HOME pinned to our HOME
         #     so it reads OUR conf and never the box's real ~/.config/ultracopier.conf.
         srcs = src_on_box if isinstance(src_on_box, list) else [src_on_box]
-        launch = _launch_script(exe, mode, srcs, dest, home, conf_dir, mem_limit_mb)
-        r = box.ps(launch, timeout=60)
+        inject = None
+        if fs_scenario:
+            # Windows fault-injection seam: build + push fs_hook.dll + uc_inject.exe and launch through
+            # the injector so UC_FS_SCENARIO applies to the IOCP data plane (authorized DLL injection,
+            # the analogue of the Linux LD_PRELOAD / FUSE shims; test-only, never in the shipping exe).
+            dll_box, inj_box = _deploy_hook(box, exe_dir)
+            inject = (inj_box, dll_box, fs_scenario)
+        launch = _launch_script(exe, mode, srcs, dest, home, conf_dir, mem_limit_mb, inject=inject)
+        r = box.ps(launch, timeout=90)
         if r.returncode != 0:
             return WindowsResult(notes=f"launch failed rc={r.returncode}: "
                                  f"{(r.stdout + r.stderr).strip()[:500]}")
@@ -338,7 +384,16 @@ def run_windows(mode, sources_local, *, cfg=None,
             return WindowsResult(notes=f"could not read launched PID: {r.stdout.strip()[:500]}")
 
         # (5) poll for CPU-idle completion (NOT byte-count: IOCP pre-sizes dest files).
-        completed, peak, oom, exit_code = _wait_idle(box, pid, timeout, mem_limit_mb)
+        if fs_scenario:
+            # The fs_hook-injected ultracopier spins its event loop and never goes CPU-idle, so the
+            # CPU-idle detector wedges. The injection test copies a small tree that finishes quickly; wait
+            # a bounded window and let the dest-state post_verify decide. A real hang/crash still surfaces
+            # via the WER Event-1000 scan + the verify; this only changes the COMPLETION signal for the
+            # (spinning) injected process, never what is asserted.
+            time.sleep(min(30, timeout))
+            completed, peak, oom, exit_code = True, 0, False, None
+        else:
+            completed, peak, oom, exit_code = _wait_idle(box, pid, timeout, mem_limit_mb)
 
         stayed_alive = False
         if completed and not oom and exit_code is None:
@@ -369,6 +424,20 @@ def run_windows(mode, sources_local, *, cfg=None,
         if expect is not None:
             content_ok, diff_text = _diff_tree(box, expect, dest, srcs)
 
+        # (7c) optional caller verifier -- runs ON THE BOX before cleanup so an option case
+        #      can assert the option was honored on IOCP (e.g. LastWriteTime preserved, the
+        #      security-descriptor owner copied when doRightTransfer is on). It receives the
+        #      live box handle + the dest path + the source paths and returns (ok, note).
+        #      A failure here is folded into content_ok so result.ok reflects it.
+        if post_verify is not None:
+            try:
+                pv_ok, pv_note = post_verify(box, dest, srcs)
+            except Exception as e:
+                pv_ok, pv_note = False, f"post_verify raised {e!r}"
+            if pv_note:
+                notes.append(pv_note)
+            content_ok = content_ok and bool(pv_ok)
+
         return WindowsResult(
             completed=completed, stayed_alive=stayed_alive, content_ok=content_ok,
             peak_rss_mb=peak, oom_killed=oom, mem_errors=crashes, exit_code=exit_code,
@@ -383,7 +452,7 @@ def run_windows(mode, sources_local, *, cfg=None,
 # ---------------------------------------------------------------------------
 # PowerShell snippet builders
 # ---------------------------------------------------------------------------
-def _launch_script(exe, mode, srcs, dest, home, conf_dir, mem_limit_mb) -> str:
+def _launch_script(exe, mode, srcs, dest, home, conf_dir, mem_limit_mb, inject=None) -> str:
     """Build the PowerShell that launches '<exe> <mode> <src...> <dst>' DETACHED and prints
     PID=...;START=<iso8601> so the poller can find it.
 
@@ -396,18 +465,40 @@ def _launch_script(exe, mode, srcs, dest, home, conf_dir, mem_limit_mb) -> str:
     in run_windows), so we do NOT need to pass USERPROFILE/XDG_CONFIG_HOME here; and the default Qt
     platform on Windows is already 'windows', so no QT_QPA_PLATFORM is needed either. The memory
     ceiling is a SOFT cap in _wait_idle() (the Job Object's handle cannot survive across SSH
-    sessions, so a hard cap is not possible here)."""
+    sessions, so a hard cap is not possible here).
+
+    inject=(uc_inject_exe, dll, scenario) -> launch through the uc_inject helper, which spawns
+    ultracopier and loads fs_hook.dll into it (UC_FS_SCENARIO fault/corruption injection for the
+    IOCP data plane). uc_inject's PID is NOT ultracopier's, so we then resolve ultracopier's own
+    PID by name (the box is dedicated + freshly cleared, so there is exactly one)."""
     def q(s):  # wrap a CommandLine token in double-quotes; double single-quotes for the PS '...' literal
         return '"' + s.replace("'", "''") + '"'
-    cmdline = " ".join([q(exe), mode] + [q(s) for s in (list(srcs) + [dest])])
-    body = f"""
+    if inject is None:
+        cmdline = " ".join([q(exe), mode] + [q(s) for s in (list(srcs) + [dest])])
+        return f"""
 $ErrorActionPreference = 'Stop'
 $r = Invoke-CimMethod -ClassName Win32_Process -MethodName Create -Arguments @{{ CommandLine = '{cmdline}' }}
 if ($r.ReturnValue -ne 0) {{ Write-Error ('Win32_Process.Create failed rc=' + $r.ReturnValue); exit 1 }}
 $start = (Get-Date).ToUniversalTime().ToString('o')
 Write-Output ('PID=' + $r.ProcessId + ';START=' + $start)
 """
-    return body
+    uc_inject, dll, scenario = inject
+    cmdline = " ".join([q(uc_inject), q(scenario or "-"), q(dll), q(exe), mode]
+                       + [q(s) for s in (list(srcs) + [dest])])
+    return f"""
+$ErrorActionPreference = 'Stop'
+$start = (Get-Date).ToUniversalTime().ToString('o')
+$r = Invoke-CimMethod -ClassName Win32_Process -MethodName Create -Arguments @{{ CommandLine = '{cmdline}' }}
+if ($r.ReturnValue -ne 0) {{ Write-Error ('Win32_Process.Create(uc_inject) failed rc=' + $r.ReturnValue); exit 1 }}
+$uc = $null
+for ($i=0; $i -lt 60; $i++) {{
+    Start-Sleep -Milliseconds 200
+    $uc = Get-Process -Name ultracopier -ErrorAction SilentlyContinue | Select-Object -First 1
+    if ($uc) {{ break }}
+}}
+if (-not $uc) {{ Write-Error 'ultracopier did not start under uc_inject'; exit 1 }}
+Write-Output ('PID=' + $uc.Id + ';START=' + $start)
+"""
 
 
 def _wait_idle(box: _Box, pid: str, timeout: int, mem_limit_mb: int = 0):
@@ -461,6 +552,47 @@ def _put_text(box: _Box, remote_path: str, text: str) -> None:
     r = box.ps(script)
     if r.returncode != 0:
         raise RuntimeError(f"writing {remote_path} failed: {(r.stdout+r.stderr).strip()}")
+
+
+def _scp_file(box: _Box, local: str, remote_win: str) -> None:
+    """scp ONE local file to a Windows path on the box (scp to a HOME-relative name -- the only
+    form OpenSSH-on-Windows accepts reliably -- then Move it to the target)."""
+    name = f"uc-f-{uuid.uuid4().hex[:8]}{pathlib.Path(local).suffix}"
+    r = subprocess.run(["scp", *_SSH_OPTS, local, f"{box.host}:{name}"],
+                       capture_output=True, text=True, errors="replace", timeout=300)
+    if r.returncode != 0:
+        raise RuntimeError(f"scp {local} -> ~/{name} failed: {r.stderr.strip()}")
+    rr = box.ps(f"$h = Join-Path $env:USERPROFILE '{name}'; "
+                f"Move-Item -LiteralPath $h -Destination '{remote_win}' -Force")
+    if rr.returncode != 0:
+        raise RuntimeError(f"move {name} -> {remote_win} failed: {(rr.stdout+rr.stderr).strip()}")
+
+
+def _deploy_hook(box: _Box, exe_dir: str):
+    """Build fs_hook.dll + uc_inject.exe with MXE and push them next to ultracopier.exe on the box.
+
+    This is the Windows fault-injection seam (the analogue of the Linux LD_PRELOAD shim), used only
+    by the IOCP write-corruption test, with explicit user authorization for the injection. Returns
+    (dll_on_box, uc_inject_on_box). Raises on any build/push failure so the case fails loudly."""
+    here = pathlib.Path(__file__).resolve().parents[1] / "fsoverride" / "windows"
+    out = pathlib.Path(tempfile.gettempdir()) / "uc-hook-build"
+    out.mkdir(exist_ok=True)
+    gxx = os.environ.get("UC_MXE_GXX",
+                         "/mnt/data/perso/progs/mxe/x86_64/usr/bin/x86_64-w64-mingw32.shared-g++")
+    dll, inj = out / "fs_hook.dll", out / "uc_inject.exe"
+    b1 = subprocess.run([gxx, "-shared", "-O2", "-o", str(dll), str(here / "fs_hook.cpp"),
+                         "-static-libgcc", "-static-libstdc++"], capture_output=True, text=True)
+    if b1.returncode != 0:
+        raise RuntimeError(f"build fs_hook.dll failed: {b1.stderr[:800]}")
+    b2 = subprocess.run([gxx, "-municode", "-O2", "-o", str(inj), str(here / "uc_inject.cpp"),
+                         "-static-libgcc", "-static-libstdc++"], capture_output=True, text=True)
+    if b2.returncode != 0:
+        raise RuntimeError(f"build uc_inject.exe failed: {b2.stderr[:800]}")
+    dll_box = _win_join(exe_dir, "fs_hook.dll")
+    inj_box = _win_join(exe_dir, "uc_inject.exe")
+    _scp_file(box, str(dll), dll_box)
+    _scp_file(box, str(inj), inj_box)
+    return dll_box, inj_box
 
 
 def _scan_crashes(box: _Box, start_iso: str | None):

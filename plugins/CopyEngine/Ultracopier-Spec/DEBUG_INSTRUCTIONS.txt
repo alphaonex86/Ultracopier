@@ -1,0 +1,75 @@
+# Debugging ultracopier on Windows
+
+The debug build with full DWARF symbols is deployed to:
+```
+C:\source\uc\ultracopier.exe   (116 MB, debug + symbols)
+```
+
+## How to run it
+
+Use the launcher script that captures stdout/stderr and collects crash dumps:
+```cmd
+C:\source\uc\run_debug.bat cp C:\source\realtek_sdk C:\cc-test\source
+```
+
+The script:
+1. Clears the crash dump folder.
+2. Launches ultracopier with your arguments.
+3. Captures stdout/stderr to `C:\source\uc\stdout.log` and `stderr.log`.
+4. After exit, checks for a crash dump in `C:\source\uc\crash_dumps\`.
+
+## If it crashes
+
+A full memory dump is automatically saved to:
+```
+C:\source\uc\crash_dumps\ultracopier.exe.<PID>.dmp
+```
+
+### Option A: WinDbg (recommended, GUI)
+
+1. Install **WinDbg** from the Microsoft Store: https://aka.ms/windbg
+2. Launch WinDbg.
+3. **File → Open Crash Dump** → select the `.dmp` file.
+4. Run this command in the WinDbg command line:
+   ```
+   !analyze -v
+   ```
+   This will show the exception, faulting module, and full backtrace.
+5. To get just the backtrace:
+   ```
+   ~*k        (all threads, backtrace)
+   ~0k        (thread 0 backtrace)
+   ```
+
+### Option B: cdb (command-line debugger)
+
+Install the **Windows SDK** (includes cdb.exe):
+```
+https://developer.microsoft.com/en-us/windows/downloads/windows-sdk/
+```
+
+Then run:
+```cmd
+cd "C:\Program Files (x86)\Windows Kits\10\Debuggers\x64\"
+cdb -z C:\source\uc\crash_dumps\ultracopier.exe.<PID>.dmp -c "!analyze -v; q"
+```
+
+### Option C: Live debugging with WinDbg
+
+Attach WinDbg to the running process BEFORE it crashes:
+1. Launch ultracopier normally.
+2. Launch WinDbg → **File → Attach to Process** → select `ultracopier.exe`.
+3. WinDbg will catch any crash and show the backtrace live.
+
+## Debug logs
+
+The debug build also writes detailed logs to:
+```
+%USERPROFILE%\.config\ultracopier\log.html
+```
+
+This log shows every state transition, error, and engine event — useful for diagnosing hangs.
+
+## Symbols
+
+The binary has embedded DWARF symbols (MinGW format). WinDbg understands DWARF since Windows 10 1607. If WinDbg cannot read the symbols, install the **WinDbg Preview** from the Microsoft Store (latest version has full DWARF support).

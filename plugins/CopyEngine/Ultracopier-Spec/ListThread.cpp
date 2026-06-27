@@ -140,6 +140,10 @@ ListThread::~ListThread()
     waitCancel.acquire();
     quit();
     wait();
+    // ListThread's own write-collision list/mutex (allocated in the ctor) are never shared to a
+    // transfer thread (each thread gets its own in createTransferThread), so free them here.
+    delete writeFileList;       writeFileList=nullptr;
+    delete writeFileListMutex;  writeFileListMutex=nullptr;
 }
 
 #ifndef ULTRACOPIER_PLUGIN_ACTIONLIST_COMPACT_THRESHOLD
@@ -229,6 +233,14 @@ void ListThread::transferInodeIsClosed()
         putAtBottomAfterError.erase(temp_transfer_thread);
         doNewActions_inode_manipulation();
         doNewActions_start_transfer();
+        // A put-to-end attempt drains through THIS early-return path, which bypassed the all-lists-empty
+        // updateTheStatus() of the normal-completion path below. If the reschedule above queued no
+        // further work (the deferred file finally copied -- or was given up -- and nothing else is
+        // pending), the job is DONE but no Idle was ever emitted: the engine's progress timers keep
+        // ticking and the copy never signals completion (the transient_sector put-to-end-recovery hang).
+        // Mirror the normal path's completion check here (idempotent: only fires when truly empty).
+        if(actionToDoListTransferEmpty() && actionToDoListInode.empty() && actionToDoListInode_afterTheTransfer.empty())
+            updateTheStatus();
         return;
     }
     bool isFound=false;
@@ -574,7 +586,22 @@ void ListThread::checkIfReadyToCancel()
             //need wait a clean stop (and then destination remove)
             if(transferThreadList.at(index)->getStat()!=TransferStat_Idle)
                 return;
+            // Join the transfer thread (delete -> ~TransferThreadAsync stops+waits read+write threads)
+            // BEFORE freeing the per-thread write-collision list/mutex it allocated: when the transfer
+            // thread first reports Idle the WriteThread can STILL be inside internalClose()->
+            // resumeNotStarted() locking writeFileListMutex, so freeing it before the join is a
+            // use-after-free (ASan-confirmed). Each transfer thread owns its own pair (createTransferThread),
+            // so freeing after the join is safe (not shared, no double-free).
+            #if defined(ULTRACOPIER_PLUGIN_IO_URING) || defined(ULTRACOPIER_PLUGIN_WINIOCP)
+            auto * const doomedWriteFileList=transferThreadList.at(index)->writeFileList;
+            auto * const doomedWriteFileListMutex=transferThreadList.at(index)->writeFileListMutex;
+            #else
+            auto * const doomedWriteFileList=transferThreadList.at(index)->writeThread.writeFileList;
+            auto * const doomedWriteFileListMutex=transferThreadList.at(index)->writeThread.writeFileListMutex;
+            #endif
             delete transferThreadList.at(index);//->deleteLayer();
+            delete doomedWriteFileList;
+            delete doomedWriteFileListMutex;
             transferThreadList[index]=NULL;
             transferThreadList.erase(transferThreadList.cbegin()+index);
             loop_size=transferThreadList.size();
@@ -1487,7 +1514,19 @@ void ListThread::deleteTransferThread()
             if(transferThreadList.at(index)->getStat()==TransferStat_Idle && transferThreadList.at(index)->transferId==0)
             {
                 transferThreadList.at(index)->stop();
+                // Join (delete -> ~TransferThreadAsync waits the threads) BEFORE freeing the per-thread
+                // write-collision list/mutex -- freeing before the join is a use-after-free (the
+                // WriteThread may still lock writeFileListMutex in internalClose()->resumeNotStarted()).
+                #if defined(ULTRACOPIER_PLUGIN_IO_URING) || defined(ULTRACOPIER_PLUGIN_WINIOCP)
+                auto * const doomedWriteFileList=transferThreadList.at(index)->writeFileList;
+                auto * const doomedWriteFileListMutex=transferThreadList.at(index)->writeFileListMutex;
+                #else
+                auto * const doomedWriteFileList=transferThreadList.at(index)->writeThread.writeFileList;
+                auto * const doomedWriteFileListMutex=transferThreadList.at(index)->writeThread.writeFileListMutex;
+                #endif
                 delete transferThreadList.at(index);//->deleteLayer();
+                delete doomedWriteFileList;
+                delete doomedWriteFileListMutex;
                 transferThreadList[index]=NULL;
                 transferThreadList.erase(transferThreadList.cbegin()+index);
                 loop_size--;

@@ -98,6 +98,16 @@ TransferThreadAsync::TransferThreadAsync() :
         abort();
     if(!connect(this,&TransferThread::internalStartPostOperation,	this,					&TransferThreadAsync::postOperation,         Qt::QueuedConnection))
         abort();
+    // async readyForReuse() == sended_state_postOperationStopped. The explicit emission points
+    // set it, but the SHARED collision-SKIP path (TransferThread::destinationExists) emits
+    // postOperationStopped() DIRECTLY without touching this async-only flag -> with a single
+    // transfer thread (inodeThreads=1) the lone thread then never becomes readyForReuse() and the
+    // scheduler stalls, silently dropping EVERY later file in the job. Mark the flag reactively on
+    // ANY postOperationStopped emission (DirectConnection: runs synchronously on this thread,
+    // before the queued ListThread re-pump reads readyForReuse()).
+    if(!connect(this,&TransferThread::postOperationStopped,this,
+                [this](){sended_state_postOperationStopped=true;},Qt::DirectConnection))
+        abort();
     if(!connect(this,&TransferThread::internalTryStartTheTransfer,	this,					&TransferThreadAsync::internalStartTheTransfer,      Qt::QueuedConnection))
         abort();
 
@@ -271,6 +281,7 @@ bool TransferThreadAsync::setFiles(const INTERNALTYPEPATH& source, const int64_t
     readIsOpenVariable=false;
     writeIsOpenVariable=false;
     realMove=false;
+    finalSkipNoRetry=false;//fresh transfer: not a pure-skip until the error policy sets it
     return true;
 }
 
@@ -281,6 +292,15 @@ void TransferThreadAsync::resetExtraVariable()
     readIsOpenVariable=false;
     writeIsOpenVariable=false;
     TransferThread::resetExtraVariable();
+}
+
+bool TransferThreadAsync::destinationIsOursToRemove() const
+{
+    // Safe to remove the destination ONLY if it is OURS: it did NOT pre-exist with non-empty user
+    // content (we created it -> cleanup fine) OR we actually wrote bytes into it (our partial). Never
+    // remove the user's untouched pre-existing destination on a 0-byte overwrite whose source
+    // failed -- that is the OVERWRITE+source-vanish data loss (#9).
+    return !writeThread.getDestinationPreExisted() || writeThread.getLastGoodPosition()>0;
 }
 
 bool TransferThreadAsync::remainFileOpen() const
@@ -336,12 +356,24 @@ void TransferThreadAsync::preOperation()
         return;
     }
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] after destination exists");
-    /*Why this code?
+    // Data-loss guard: a FAILED rename of the existing destination to its backup (checkAlwaysRename,
+    // fileCollision=RENAME + renameTheOriginalDestination=true) sets readError, but destinationExists()
+    // returned false (it returns false whenever readError is set), so WITHOUT this guard preOperation
+    // continues, ifCanStartTransfer() clears readError, and the transfer OVERWRITES the original
+    // destination -- whose backup was never made because the rename failed -> the user's only copy is
+    // lost. errorOnFile() already fired inside checkAlwaysRename(); return here (keeping readError) so
+    // the file is handled by the error policy (skip / put-to-end) and the original is left intact.
     if(readError)
     {
-        readError=false;
+        // The backup-rename failed in destinationExists()/checkAlwaysRename BEFORE openWrite() ran, so
+        // the destination was never opened and writeIsClosedVariable is still false -> remainDestinationOpen()
+        // would stay true and the error policy's skip would loop in its "stop the threads" branch
+        // (which resets needSkip via resetExtraVariable) forever -> the copy window never finishes
+        // (collision_rename_fail hang). The write truly never opened (no fd to close), so mark it closed;
+        // the skip then takes the "nothing open" branch and the file completes. (The read is closed here.)
+        writeIsClosedVariable=true;
         return;
-    }*/
+    }
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] before keep date");
     // A symlink is recreated verbatim (readlink+symlink); its target's date must NOT be read
     // (readSourceFileDateTime/stat FOLLOWS the link, so a dangling/escaping/absolute target makes
@@ -369,8 +401,12 @@ void TransferThreadAsync::preOperation()
         }
     }
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] before perm");
+    // Mirror the date guard above: do NOT transfer metadata through a symlink. readSourceFilePermissions
+    // (stat) FOLLOWS the link, and writeDestinationFilePermissions' chmod/chown then operate on the TARGET
+    // file, not the link -- at best a no-op re-apply, at worst a spurious post-op failure on a dangling /
+    // un-chmod-able dest target. A symlink's own mode is immaterial on Linux (chmod has no symlink form).
     if(doRightTransfer)
-        havePermission=readSourceFilePermissions(source);
+        havePermission = !is_symlink(source) && readSourceFilePermissions(source);
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] after perm");
     transfer_stat=TransferStat_WaitForTheTransfer;
     ifCanStartTransfer();
@@ -638,7 +674,7 @@ void TransferThreadAsync::ifCanStartTransfer()
                 else if (S_ISREG(p_statbuf.st_mode))
                     isFileOrSymlink=true;
             }
-            if(isFileOrSymlink)
+            if(isFileOrSymlink && destinationIsOursToRemove())
                 if(!unlink(destination))
                 {
                     const int terr=errno;
@@ -846,7 +882,7 @@ void TransferThreadAsync::ifCanStartTransfer()
         if(stopIt)
         {
             if(!source.empty())
-                if(exists(source) && source!=destination)
+                if(exists(source) && source!=destination && destinationIsOursToRemove())
                     unlink(destination);
             resetExtraVariable();
             return;//and reset?
@@ -1017,7 +1053,13 @@ void TransferThreadAsync::checkIfAllIsClosedAndDoOperations()
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] remainFileOpen()");
         return;
     }
-    if(!source.empty() && needRemove && (stopIt || needSkip))
+    // Data-loss guard: never remove the user's PRE-EXISTING destination when we wrote nothing into it
+    // (an OVERWRITE whose source vanished/errored before the first byte) -- see destinationIsOursToRemove().
+    // DYING-DISK guard: on a PURE skip (fileError=Skip, finalSkipNoRetry) the partial destination is the
+    // readable PREFIX salvaged off a bad sector -- KEEP it ("copy every readable byte"); deleting it would
+    // silently lose the only bytes we could read (opt_delete_partial_files). faulty_hdd accepts a faithful
+    // prefix, so keeping it is safe there too. (Cancel / non-skip teardown still removes its partial.)
+    if(!source.empty() && needRemove && (stopIt || needSkip) && destinationIsOursToRemove() && !finalSkipNoRetry)
         if(is_file(source) && source!=destination)
         {
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"remove because: is_file(source): "+std::to_string(is_file(source))+", source: "+TransferThread::internalStringTostring(source));
@@ -1045,31 +1087,57 @@ void TransferThreadAsync::checkIfAllIsClosedAndDoOperations()
         if(!stopIt && !needSkip && !checksumOk)
         {
             fileContentError=true;
+            // The destination we wrote is content-corrupt (xxh3 != source). REMOVE it so a full-size but
+            // WRONG file can't be mistaken for a complete copy. Gated by destinationIsOursToRemove() (the
+            // #9 invariant: never delete a user's PRE-EXISTING dest); for a MOVE the source is kept (the
+            // copyFailed gate below includes fileContentError), so nothing is lost. Unlike a read-fault
+            // skip's readable-PREFIX salvage (kept), a checksum-failed dest is wrong bytes, not salvage.
+            if(!source.empty() && destinationIsOursToRemove() && source!=destination)
+                unlink(destination);
             transfer_stat=TransferStat_PostTransfer;
             return;
         }
     }
 
-    if(mode==Ultracopier::Move && !realMove)
-    {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] remove mode==Ultracopier::Move && !realMove: "+
-                                 TransferThread::internalStringTostring(source));
-        if(exists(destination))
-            if(!unlink(source))
-                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] move and unable to remove: "+
-                                         TransferThread::internalStringTostring(source)+std::string(" ")+
-                         #ifdef Q_OS_WIN32
-                                         GetLastErrorStdStr()
-                         #else
-                                         strerror(errno)
-                         #endif
-                                         );
-    }
     transfer_stat=TransferStat_PostTransfer;
     emit pushStat(transfer_stat,transferId);
     transfer_stat=TransferStat_PostOperation;
     emit pushStat(transfer_stat,transferId);
-    doFilePostOperation();
+    // Apply destination date/permissions BEFORE removing the source on a MOVE. doFilePostOperation()
+    // returns false on a CRITICAL post-op failure (with keepDate=true a failed date-set is escalated to
+    // an error -> errorOnFile + return false). In the OLD order the source was unlink()'d FIRST, so such
+    // a failure destroyed the user's only copy and left the destination with wrong/absent metadata.
+    // Run it first and treat a critical failure like copyFailed -> keep the source so the user can retry.
+    // (Without keepDate the date-set is best-effort and returns true, so a clean move still removes the source.)
+    const bool postOpOk = doFilePostOperation();
+
+    if(mode==Ultracopier::Move && !realMove)
+    {
+        // CRITICAL: only remove the source if the copy actually succeeded AND the post-operation
+        // (date/permissions) succeeded. A skip / stop / read / write / checksum error OR a critical
+        // post-op failure means the move did not fully complete; removing the source would silently
+        // lose user data (move = copy + delete; if any step failed, the delete must NOT happen).
+        const bool copyFailed = stopIt || needSkip || readError || writeError || fileContentError || !postOpOk;
+        if(!copyFailed)
+        {
+            if(exists(destination) && is_file(source) && source!=destination)
+                if(!unlink(source))
+                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] move and unable to remove: "+
+                                             TransferThread::internalStringTostring(source)+std::string(" ")+
+                             #ifdef Q_OS_WIN32
+                                             GetLastErrorStdStr()
+                             #else
+                                             strerror(errno)
+                             #endif
+                                             );
+            else
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] move: destination missing or source==destination, refusing to remove source: "+
+                                         TransferThread::internalStringTostring(source));
+        }
+        else
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] move: copy failed (stopIt/needSkip/readError/writeError/fileContentError/postOpFailed), keeping source: "+
+                                     TransferThread::internalStringTostring(source));
+    }
 
     source.clear();
     destination.clear();
@@ -1140,7 +1208,7 @@ void TransferThreadAsync::skip()
             if(remainSourceOpen())
                 readThread.stop();
             if(remainDestinationOpen())
-                writeThread.stop();
+                writeThread.stop(finalSkipNoRetry);
             //read/write threads are still closing on the TRANSFER thread; their close events
             //(read_closed/write_closed) will reach checkIfAllIsClosedAndDoOperations() which emits
             //postOperationStopped() exactly once. Do NOT fall through to the end-block: re-reading
@@ -1188,7 +1256,7 @@ void TransferThreadAsync::skip()
             if(remainSourceOpen())
                 readThread.stop();
             if(remainDestinationOpen())
-                writeThread.stop();
+                writeThread.stop(finalSkipNoRetry);
             //read/write threads are still closing on the TRANSFER thread; write_closed() does the
             //destination unlink and checkIfAllIsClosedAndDoOperations() emits postOperationStopped()
             //exactly once. Do NOT fall through to the end-block: re-reading remainFileOpen() there
@@ -1202,7 +1270,7 @@ void TransferThreadAsync::skip()
             emit internalStartPostOperation();
         }
         if(!source.empty() && needRemove)
-            if(exists(source) && source!=destination)
+            if(exists(source) && source!=destination && destinationIsOursToRemove())
                 unlink(destination);
         break;
     case TransferStat_PostTransfer:
@@ -1228,7 +1296,7 @@ void TransferThreadAsync::skip()
             if(remainSourceOpen())
                 readThread.stop();
             if(remainDestinationOpen())
-                writeThread.stop();
+                writeThread.stop(finalSkipNoRetry);
             //read/write threads are still closing on the TRANSFER thread; their close events reach
             //checkIfAllIsClosedAndDoOperations() which emits postOperationStopped() exactly once. Do
             //NOT fall through to the end-block: re-reading remainFileOpen() there races the close
@@ -1661,10 +1729,10 @@ void TransferThreadAsync::write_closed()
     writeIsClosedVariable=true;
     if(stopIt && needRemove && source!=destination)
     {
-        if(is_file(source))
+        if(is_file(source) && destinationIsOursToRemove())
             unlink(destination);
         else
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"["+std::to_string(id)+("] try destroy the destination when the source don't exists"));
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"["+std::to_string(id)+("] try destroy the destination when the source don't exists or it pre-existed untouched"));
     }
     checkIfAllIsClosedAndDoOperations();
 }

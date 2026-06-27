@@ -53,8 +53,9 @@ public:
     void openWrite(const INTERNALTYPEPATH &file,const uint64_t &startSize);
     /// \brief to return the error string
     std::string errorString() const;
-    /// \brief to stop all
-    void stop();
+    /// \brief to stop all (finalNoRetry: pure skip with no put-to-end retry -> signal closed() so the
+    /// inode's close handshake can finish even though the fd was pre-closed; see WriteThread::stop())
+    void stop(bool finalNoRetry=false);
     /// \brief to write data
     bool write(char *data, const unsigned int size);
     #ifdef ULTRACOPIER_PLUGIN_DEBUG
@@ -81,6 +82,10 @@ public:
     bool setBlockSize(const int blockSize);
     /// \brief get the last good position
     int64_t getLastGoodPosition() const;
+    /// \brief did the destination already exist with NON-EMPTY content when opened (a real
+    /// pre-existing file with data to lose)? Used by the transfer thread to NEVER truncate/unlink the
+    /// user's pre-existing destination on a 0-byte overwrite whose source vanished/errored (data loss).
+    bool getDestinationPreExisted() const;
     /// \brief buffer is empty
     bool bufferIsEmpty();
     #ifdef ULTRACOPIER_PLUGIN_SPEED_SUPPORT
@@ -158,6 +163,9 @@ private:
     uint64_t             startSize;
     bool                fakeMode;
     bool                needRemoveTheFile;
+    bool                destinationPreExisted;  ///< dest existed with NON-EMPTY content at open: it is
+                                                ///< the user's data, never truncate/unlink it on a
+                                                ///< 0-byte overwrite whose source failed (data loss)
     bool                deletePartiallyTransferredFiles;
     #ifdef ULTRACOPIER_PLUGIN_SPEED_SUPPORT
     volatile int        multiForBigSpeed;           ///< Multiple for count the number of block needed

@@ -76,12 +76,19 @@ TransferThread::~TransferThread()
     #ifndef Q_OS_UNIX
     if(PSecurityD!=NULL)
     {
-        free(PSecurityD);
+        // PSecurityD is allocated by GetSecurityInfo() (see readSourceFileDateTime/permissions),
+        // which uses LocalAlloc -> it MUST be released with LocalFree, NOT the CRT free(). Freeing a
+        // LocalAlloc/process-heap block on the msvcrt CRT heap corrupts the heap; the damage surfaces
+        // probabilistically later as STATUS_HEAP_CORRUPTION (0xC0000374 / an AV inside RtlpFreeHeap),
+        // typically at cancel/teardown when checkIfReadyToCancel() deletes the idle transfer threads
+        // and a subsequent free() walks the poisoned free-list. dacl points INSIDE this same buffer,
+        // so it is freed by this single LocalFree and must never be released separately.
+        LocalFree(PSecurityD);
         PSecurityD=NULL;
     }
     if(dacl!=NULL)
     {
-        //free(dacl);
+        //dacl points inside PSecurityD: freed by the LocalFree above, never separately
         dacl=NULL;
     }
     #endif
@@ -671,7 +678,12 @@ bool TransferThread::checkAlwaysRename()
             destination=newDestination;
         else
         {
-            if(rename(destination.c_str(),newDestination.c_str())!=0)
+            // TransferThread::rename() returns BOOL (true == success: it wraps ::rename()==0 /
+            // MoveFileExW != 0). The old `!=0` check used libc semantics and so treated a
+            // SUCCESSFUL rename (true == 1) as a failure -> it entered the error branch, set
+            // readError, and the incoming source file was never copied (silent data loss:
+            // dest kept only the renamed backup). Enter the error branch only on real failure.
+            if(!rename(destination.c_str(),newDestination.c_str()))
             {
                 if(!is_file(destination))
                 {
@@ -1246,12 +1258,16 @@ bool TransferThread::writeDestinationFilePermissions(const INTERNALTYPEPATH &des
     CloseHandle(hFile);
     if(PSecurityD!=NULL)
     {
-        //free(PSecurityD);//crash on some NAS, it's why is commented, http://forum-ultracopier.first-world.info/viewtopic.php?f=8&t=903&p=3689#p3689
+        // Release the GetSecurityInfo() buffer with LocalFree, its real allocator. The old free()
+        // here corrupted the heap (the "crash on some NAS" report: forum-ultracopier .../t=903) because
+        // PSecurityD is LocalAlloc'd, not malloc'd. Merely NULLing it (the previous workaround) leaked
+        // one security descriptor per file -> GBs at the 50M-file scale. dacl points inside this buffer.
+        LocalFree(PSecurityD);
         PSecurityD=NULL;
     }
     if(dacl!=NULL)
     {
-        //free(dacl);
+        //dacl points inside PSecurityD: freed by the LocalFree above, never separately
         dacl=NULL;
     }
     return true;
@@ -1618,7 +1634,24 @@ std::string TransferThread::toFinalPath(std::string path)
 
 bool TransferThread::unlink(const std::wstring &path)
 {
-    return DeleteFileW(TransferThread::toFinalPath(path).c_str()) || RemoveDirectoryW(TransferThread::toFinalPath(path).c_str());
+    // Windows: a file we just finished writing (and closed every handle to) can still be transiently
+    // held open by an AV scanner / the search indexer, so DeleteFileW fails with ERROR_SHARING_VIOLATION
+    // / ERROR_ACCESS_DENIED for a short window. Without a retry this made #25's content-corrupt-destination
+    // removal FLAKY on the IOCP backend (the corrupt file was kept ~2/3 of the time -- a full-size WRONG
+    // file mistaken for a complete copy). Retry briefly (up to ~500ms). Linux has no such issue (it unlinks
+    // open files; that path uses the char overload below).
+    const std::wstring fp = TransferThread::toFinalPath(path);
+    for(int attempt=0; ; ++attempt)
+    {
+        if(DeleteFileW(fp.c_str()) || RemoveDirectoryW(fp.c_str()))
+            return true;
+        const DWORD e = GetLastError();
+        if(e==ERROR_FILE_NOT_FOUND || e==ERROR_PATH_NOT_FOUND)
+            return true;   // already gone -> success
+        if(attempt>=20 || (e!=ERROR_SHARING_VIOLATION && e!=ERROR_ACCESS_DENIED))
+            return false;  // a non-transient error, or we ran out of retries
+        Sleep(25);
+    }
 }
 
 std::string TransferThread::GetLastErrorStdStr()

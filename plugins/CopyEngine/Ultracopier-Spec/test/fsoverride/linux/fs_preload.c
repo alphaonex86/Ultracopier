@@ -113,6 +113,8 @@
 #include <pthread.h>
 #include <sys/stat.h>
 #include <sys/types.h>
+#include <utime.h>
+#include <sys/time.h>
 
 /* ------------------------------------------------------------------ */
 /* Scenario parsing (parsed once, lazily, on first interposed call).   */
@@ -127,13 +129,22 @@ enum uc_verb {
     UC_OPENFAIL,     /* open fails EACCES on matching path         */
     UC_SLOW,         /* sleep ms in read/write                     */
     UC_SHORTWRITE,   /* write returns fewer bytes on matching path */
+    UC_WFLIP,        /* write SILENTLY bit-flips the byte at <off> but returns the FULL count --
+                      * a content corruption the dest looks complete after; the checksum-verify
+                      * re-read must catch it (and the engine remove the corrupt dest). */
     UC_STATFAIL,     /* stat family fails EACCES on matching path  */
     UC_READFAIL,     /* read fails EIO on matching path            */
     UC_EIO_AFTER,    /* read fails EIO after N cumulative bytes/fd  */
     UC_FLAKY,        /* first N read attempts/path fail EIO        */
     UC_GONE,         /* open fails ENOENT (stat OK): removed-after-listing */
     UC_DISCONNECT,   /* SOURCE media: read OK to <offset>, then EIO for <n> attempts, then OK */
-    UC_WDISCONNECT   /* DEST media: write OK to <offset>, then EIO for <n> attempts, then OK */
+    UC_WDISCONNECT,  /* DEST media: write OK to <offset>, then EIO for <n> attempts, then OK */
+    UC_DATEFAIL,     /* ONLY the date-set (utimensat/futimens/utime[s]) fails EPERM; data writes OK */
+    UC_STATMUT,      /* stat of a matching path returns a MUTATED size/mtime after the Nth call */
+    UC_SHORTREAD,    /* read() on matching path returns at most <n> bytes (default 64KiB): forces */
+                     /* the engine's short-read REFILL path; data is identical, just chunked     */
+    UC_ENOSPC        /* write() on matching path succeeds to <bytes> cumulative, then fails ENOSPC: */
+                     /* models the destination filling up partway through a file (dest-full)       */
 };
 
 struct uc_rule {
@@ -184,6 +195,59 @@ struct uc_flaky {
 static struct uc_flaky  g_flaky[UC_MAX_FLAKY];
 static pthread_mutex_t   g_flaky_mtx = PTHREAD_MUTEX_INITIALIZER;
 
+/* STAT-ACCOUNTING (independent of UC_FS_SCENARIO, like read-accounting): set
+ * UC_FS_STATLOG_MATCH=<substr> and UC_FS_STATLOG_PATH=<file>; every stat/lstat/statx of a
+ * path containing <substr> increments a counter flushed (decimal) to <file>. Lets a coalesce
+ * test tell, objectively, whether the engine RE-STATs the source: coalesceSourceStat on =>
+ * fewer source stats than off. Counted on entry (the engine "asked"), regardless of result. */
+static long long       g_stat_count      = 0;
+static long long       g_stat_last_flush = 0;
+static pthread_mutex_t g_stat_mtx        = PTHREAD_MUTEX_INITIALIZER;
+static const char     *g_statlog_match   = NULL;   /* resolved lazily in uc_parse() */
+static int             g_statlog_on      = 0;
+
+/* Per-substr call counter (used by statmut to fire from the Nth call). Same fixed-table
+ * shape as g_flaky; keyed by the matched substring so close()+reopen() keep one count. */
+#define UC_MAX_COUNTER 64
+struct uc_counter {
+    char substr[UC_MAX_ARG];
+    long long count;
+    int  used;
+};
+static struct uc_counter g_counters[UC_MAX_COUNTER];
+static pthread_mutex_t    g_counter_mtx = PTHREAD_MUTEX_INITIALIZER;
+
+/* Increment and return the new call-count for `substr` (lazily created). On table
+ * overflow returns a huge number so statmut still fires (fail-toward-mutating). */
+static long long uc_path_count(const char *substr)
+{
+    long long c = 1LL << 60;
+    pthread_mutex_lock(&g_counter_mtx);
+    struct uc_counter *slot = NULL;
+    for (int i = 0; i < UC_MAX_COUNTER; i++)
+        if (g_counters[i].used && strcmp(g_counters[i].substr, substr) == 0) {
+            slot = &g_counters[i];
+            break;
+        }
+    if (slot == NULL)
+        for (int i = 0; i < UC_MAX_COUNTER; i++)
+            if (!g_counters[i].used) {
+                slot = &g_counters[i];
+                slot->used = 1;
+                size_t len = strlen(substr);
+                if (len > UC_MAX_ARG - 1)
+                    len = UC_MAX_ARG - 1;
+                memcpy(slot->substr, substr, len);
+                slot->substr[len] = '\0';
+                slot->count = 0;
+                break;
+            }
+    if (slot != NULL)
+        c = ++slot->count;
+    pthread_mutex_unlock(&g_counter_mtx);
+    return c;
+}
+
 static void uc_parse(void)
 {
     if (g_parsed)
@@ -192,6 +256,9 @@ static void uc_parse(void)
     /* Read-accounting is independent of UC_FS_SCENARIO: set even when no fault is injected. */
     g_readlog_match = getenv("UC_FS_READLOG_MATCH");
     g_readlog_on = (g_readlog_match != NULL && g_readlog_match[0] != '\0');
+    /* Stat-accounting, likewise independent of UC_FS_SCENARIO. */
+    g_statlog_match = getenv("UC_FS_STATLOG_MATCH");
+    g_statlog_on = (g_statlog_match != NULL && g_statlog_match[0] != '\0');
     const char *s = getenv("UC_FS_SCENARIO");
     if (s == NULL || s[0] == '\0')
         return;   /* pure pass-through */
@@ -234,6 +301,15 @@ static void uc_parse(void)
         } else if (strcmp(tok, "shortwrite") == 0) {
             r->verb = UC_SHORTWRITE;
             strncpy(r->arg, arg, UC_MAX_ARG - 1);
+        } else if (strcmp(tok, "wflip") == 0) {
+            /* arg is "<substr>:<off>"; split on the LAST colon (see eio_after). */
+            r->verb = UC_WFLIP;
+            char *lastcolon = strrchr(arg, ':');
+            if (lastcolon != NULL) {
+                *lastcolon = '\0';
+                r->num = strtoll(lastcolon + 1, NULL, 10);
+            }
+            strncpy(r->arg, arg, UC_MAX_ARG - 1);
         } else if (strcmp(tok, "statfail") == 0) {
             r->verb = UC_STATFAIL;
             strncpy(r->arg, arg, UC_MAX_ARG - 1);
@@ -259,6 +335,20 @@ static void uc_parse(void)
                 r->num = strtol(lastcolon + 1, NULL, 10);
             }
             strncpy(r->arg, arg, UC_MAX_ARG - 1);
+        } else if (strcmp(tok, "datefail") == 0) {
+            r->verb = UC_DATEFAIL;
+            strncpy(r->arg, arg, UC_MAX_ARG - 1);
+        } else if (strcmp(tok, "statmut") == 0) {
+            /* arg is "<substr>:<n>"; split on the LAST colon (see eio_after). The
+             * mutation fires from call number (n+1) onward, so n=1 leaves the FIRST
+             * stat (the scan's, which coalesce caches) intact and mutates the rest. */
+            r->verb = UC_STATMUT;
+            char *lastcolon = strrchr(arg, ':');
+            if (lastcolon != NULL) {
+                *lastcolon = '\0';
+                r->num = strtol(lastcolon + 1, NULL, 10);
+            }
+            strncpy(r->arg, arg, UC_MAX_ARG - 1);
         } else if (strcmp(tok, "disconnect") == 0 || strcmp(tok, "wdisconnect") == 0) {
             /* arg is "<substr>:<offset>:<retries>" -- a recoverable MID-FILE fault that
              * models a media disconnect at <offset> bytes which reconnects after <retries>
@@ -274,6 +364,33 @@ static void uc_parse(void)
                     *c1 = '\0';
                     r->num = strtol(c1 + 1, NULL, 10);
                 }
+            }
+            strncpy(r->arg, arg, UC_MAX_ARG - 1);
+        } else if (strcmp(tok, "shortread") == 0) {
+            /* arg is "<substr>[:<n>]" -- read() on the matched path returns at most <n> bytes
+             * (default 64 KiB). Split on the LAST colon for the optional <n> ONLY if it is a
+             * pure-decimal field (so a path-substr containing ':' but no count still works). */
+            r->verb = UC_SHORTREAD;
+            r->num = 65536;
+            char *lastcolon = strrchr(arg, ':');
+            if (lastcolon != NULL) {
+                char *p = lastcolon + 1, *end = NULL;
+                long v = strtol(p, &end, 10);
+                if (*p != '\0' && end != NULL && *end == '\0') {   /* trailing field is all digits */
+                    *lastcolon = '\0';
+                    r->num = v;
+                }
+            }
+            strncpy(r->arg, arg, UC_MAX_ARG - 1);
+        } else if (strcmp(tok, "enospc") == 0) {
+            /* arg is "<substr>:<bytes>" -- write() on the matched path succeeds until <bytes>
+             * cumulative have been written, then fails ENOSPC (models the dest filling up
+             * partway). Split on the LAST colon (see eio_after); num=bytes. */
+            r->verb = UC_ENOSPC;
+            char *lastcolon = strrchr(arg, ':');
+            if (lastcolon != NULL) {
+                *lastcolon = '\0';
+                r->num = strtol(lastcolon + 1, NULL, 10);
             }
             strncpy(r->arg, arg, UC_MAX_ARG - 1);
         } else {
@@ -344,6 +461,77 @@ static void uc_readlog_write(void)
 
 __attribute__((destructor))
 static void uc_readlog_dump(void) { uc_readlog_write(); }
+
+/* Flush g_stat_count to UC_FS_STATLOG_PATH (O_TRUNC) via the REAL libc symbols. Same
+ * periodic-flush rationale as uc_readlog_write (pkill SIGTERM skips destructors). */
+static void uc_statlog_write(void)
+{
+    if (!g_statlog_on)
+        return;
+    const char *path = getenv("UC_FS_STATLOG_PATH");
+    if (path == NULL || path[0] == '\0')
+        return;
+    int (*real_open_p)(const char *, int, ...) =
+        (int (*)(const char *, int, ...))dlsym(RTLD_NEXT, "open");
+    ssize_t (*real_write_p)(int, const void *, size_t) =
+        (ssize_t (*)(int, const void *, size_t))dlsym(RTLD_NEXT, "write");
+    int (*real_close_p)(int) = (int (*)(int))dlsym(RTLD_NEXT, "close");
+    if (real_open_p == NULL || real_write_p == NULL)
+        return;
+    int fd = real_open_p(path, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+    if (fd >= 0) {
+        char buf[32];
+        int n = snprintf(buf, sizeof(buf), "%lld\n", g_stat_count);
+        if (n > 0)
+            (void)real_write_p(fd, buf, (size_t)n);
+        if (real_close_p != NULL)
+            real_close_p(fd);
+    }
+}
+
+__attribute__((destructor))
+static void uc_statlog_dump(void) { uc_statlog_write(); }
+
+/* Count one stat of `path` (on entry) when stat-accounting is on and the path matches.
+ * Flushes every 16 counts so the value survives the SIGTERM kill. */
+static void uc_account_stat(const char *path)
+{
+    uc_parse();   /* uc_account_stat runs BEFORE uc_match in the stat wrappers, so it must
+                   * trigger the lazy parse itself or it would miss the first matching stat. */
+    if (!g_statlog_on || path == NULL || g_statlog_match == NULL)
+        return;
+    if (strstr(path, g_statlog_match) != NULL) {
+        pthread_mutex_lock(&g_stat_mtx);
+        g_stat_count++;
+        /* Flush on EVERY increment: the count is small (hundreds), and pkill's SIGTERM skips
+         * the destructor, so a coarse periodic flush would QUANTIZE the final value and mask a
+         * small coalesce delta (the exact reason on==off appeared at a 16-flush granularity). */
+        g_stat_last_flush = g_stat_count;
+        uc_statlog_write();
+        pthread_mutex_unlock(&g_stat_mtx);
+    }
+}
+
+/* statmut: if a statmut rule matches `path` AND this is at least its (num+1)th stat call,
+ * return 1 (caller should mutate the returned size/mtime). Increments the per-path counter. */
+static int uc_statmut_should(const char *path)
+{
+    const struct uc_rule *r = uc_match(UC_STATMUT, path);
+    if (r == NULL)
+        return 0;
+    long long c = uc_path_count(r->arg);
+    return (c > r->num) ? 1 : 0;
+}
+
+/* Apply the statmut mutation to a struct stat: grow the size and bump the mtime so the
+ * "source changed while cached" condition is unambiguous to the test. */
+static void uc_statmut_apply(struct stat *st)
+{
+    if (st == NULL)
+        return;
+    st->st_size = st->st_size * 2 + 4096;   /* clearly different from the cached size */
+    st->st_mtime += 100000;                 /* clearly newer */
+}
 
 static void uc_sleep_ms(long ms)
 {
@@ -645,6 +833,9 @@ ssize_t read(int fd, void *buf, size_t count)
             return -1;                      /* errno already EIO */
         if (dec > 0)
             count = do_count;               /* clamp to the bad-sector boundary */
+        const struct uc_rule *sr = uc_match(UC_SHORTREAD, path);
+        if (sr != NULL && sr->num > 0 && (long long)count > sr->num)
+            count = (size_t)sr->num;        /* force a short read -> engine refill path */
     }
     ssize_t n = real_read(fd, buf, count);
     if (n > 0)
@@ -679,6 +870,28 @@ static int uc_write_fault(const char *path, size_t count, long long cum_before,
     return 0;
 }
 
+/* Shared DEST-full (ENOSPC) decision for write()/pwrite(). `cum_before` is the bytes already
+ * written before this call (per-fd counter for write(), the explicit offset for pwrite()).
+ * Returns -1 (caller fails ENOSPC -- already at/over the cap), 1 with a reduced *do_count (write
+ * only the bytes that still fit; the NEXT call then fails ENOSPC), or 0 (proceed with full count). */
+static int uc_enospc_fault(const char *path, size_t count, long long cum_before, size_t *do_count)
+{
+    const struct uc_rule *ns = uc_match(UC_ENOSPC, path);
+    if (ns != NULL) {
+        long long cap = ns->num;
+        if (cum_before >= cap) {
+            errno = ENOSPC;
+            return -1;
+        }
+        long long room = cap - cum_before;
+        if ((long long)count > room) {
+            *do_count = (size_t)room;
+            return 1;
+        }
+    }
+    return 0;
+}
+
 ssize_t write(int fd, const void *buf, size_t count)
 {
     UC_REAL(write);
@@ -691,6 +904,12 @@ ssize_t write(int fd, const void *buf, size_t count)
             errno = EIO;
             return -1;
         }
+        size_t es_count = count;
+        int es = uc_enospc_fault(path, count, uc_fd_nwritten(fd), &es_count);
+        if (es < 0)
+            return -1;                      /* errno ENOSPC: destination full */
+        if (es > 0)
+            count = es_count;               /* write only what still fits; next call fails ENOSPC */
         size_t do_count = count;
         int dec = uc_write_fault(path, count, uc_fd_nwritten(fd), &do_count);
         if (dec < 0)
@@ -706,6 +925,22 @@ ssize_t write(int fd, const void *buf, size_t count)
             if (w > 0)
                 uc_fd_nwritten_add(fd, (long long)w);
             return w;
+        }
+        const struct uc_rule *wf = uc_match(UC_WFLIP, path);
+        if (wf != NULL && count > 0) {
+            long long base = uc_fd_nwritten(fd);
+            if (wf->num >= base && wf->num < base + (long long)count) {
+                char *tmp = malloc(count);
+                if (tmp != NULL) {
+                    memcpy(tmp, buf, count);
+                    tmp[(size_t)(wf->num - base)] ^= 0xFF;   /* SILENT 1-byte corruption */
+                    ssize_t w = real_write(fd, tmp, count);
+                    free(tmp);
+                    if (w > 0)
+                        uc_fd_nwritten_add(fd, (long long)w);
+                    return (w < 0) ? w : (ssize_t)count;     /* report the FULL count */
+                }
+            }
         }
     }
     ssize_t w = real_write(fd, buf, count);
@@ -729,6 +964,9 @@ ssize_t pread(int fd, void *buf, size_t count, off_t offset)
             return -1;                      /* errno already EIO */
         if (dec > 0)
             count = do_count;               /* clamp to the bad-sector boundary */
+        const struct uc_rule *sr = uc_match(UC_SHORTREAD, path);
+        if (sr != NULL && sr->num > 0 && (long long)count > sr->num)
+            count = (size_t)sr->num;        /* force a short read -> engine refill path */
     }
     ssize_t n = real_pread(fd, buf, count, offset);
     uc_account_read(path, n);
@@ -747,7 +985,13 @@ ssize_t pwrite(int fd, const void *buf, size_t count, off_t offset)
             errno = EIO;
             return -1;
         }
-        /* pwrite is positioned: the cumulative-so-far for wdisconnect is the OFFSET. */
+        /* pwrite is positioned: the cumulative-so-far for wdisconnect/enospc is the OFFSET. */
+        size_t es_count = count;
+        int es = uc_enospc_fault(path, count, (long long)offset, &es_count);
+        if (es < 0)
+            return -1;                      /* errno ENOSPC: destination full */
+        if (es > 0)
+            count = es_count;               /* write only what still fits; next call fails ENOSPC */
         size_t do_count = count;
         int dec = uc_write_fault(path, count, (long long)offset, &do_count);
         if (dec < 0)
@@ -760,6 +1004,18 @@ ssize_t pwrite(int fd, const void *buf, size_t count, off_t offset)
             if (half < 1)
                 half = 1;
             return real_pwrite(fd, buf, half, offset);
+        }
+        const struct uc_rule *wf = uc_match(UC_WFLIP, path);
+        if (wf != NULL && count > 0 && wf->num >= (long long)offset
+            && wf->num < (long long)offset + (long long)count) {
+            char *tmp = malloc(count);
+            if (tmp != NULL) {
+                memcpy(tmp, buf, count);
+                tmp[(size_t)(wf->num - (long long)offset)] ^= 0xFF;   /* SILENT 1-byte corruption */
+                ssize_t w = real_pwrite(fd, tmp, count, offset);
+                free(tmp);
+                return (w < 0) ? w : (ssize_t)count;                  /* report the FULL count */
+            }
         }
     }
     return real_pwrite(fd, buf, count, offset);
@@ -777,27 +1033,36 @@ ssize_t pwrite(int fd, const void *buf, size_t count, off_t offset)
 int stat(const char *pathname, struct stat *statbuf)
 {
     UC_REAL(stat);
+    uc_account_stat(pathname);
     if (uc_match(UC_STATFAIL, pathname) != NULL) {
         errno = EACCES;
         return -1;
     }
-    return real_stat(pathname, statbuf);
+    int rc = real_stat(pathname, statbuf);
+    if (rc == 0 && uc_statmut_should(pathname))
+        uc_statmut_apply(statbuf);
+    return rc;
 }
 
 int lstat(const char *pathname, struct stat *statbuf)
 {
     UC_REAL(lstat);
+    uc_account_stat(pathname);
     if (uc_match(UC_STATFAIL, pathname) != NULL) {
         errno = EACCES;
         return -1;
     }
-    return real_lstat(pathname, statbuf);
+    int rc = real_lstat(pathname, statbuf);
+    if (rc == 0 && uc_statmut_should(pathname))
+        uc_statmut_apply(statbuf);
+    return rc;
 }
 
 int fstat(int fd, struct stat *statbuf)
 {
     UC_REAL(fstat);
     const char *path = uc_fd_path(fd);
+    uc_account_stat(path);
     if (path != NULL && uc_match(UC_STATFAIL, path) != NULL) {
         errno = EACCES;
         return -1;
@@ -808,38 +1073,51 @@ int fstat(int fd, struct stat *statbuf)
 int fstatat(int dirfd, const char *pathname, struct stat *statbuf, int flags)
 {
     UC_REAL(fstatat);
+    uc_account_stat(pathname);
     if (uc_match(UC_STATFAIL, pathname) != NULL) {
         errno = EACCES;
         return -1;
     }
-    return real_fstatat(dirfd, pathname, statbuf, flags);
+    int rc = real_fstatat(dirfd, pathname, statbuf, flags);
+    if (rc == 0 && uc_statmut_should(pathname))
+        uc_statmut_apply(statbuf);
+    return rc;
 }
 
 /* Older-glibc ABI symbols. `ver` is the stat struct version (_STAT_VER). */
 int __xstat(int ver, const char *pathname, struct stat *statbuf)
 {
     UC_REAL(__xstat);
+    uc_account_stat(pathname);
     if (uc_match(UC_STATFAIL, pathname) != NULL) {
         errno = EACCES;
         return -1;
     }
-    return real___xstat(ver, pathname, statbuf);
+    int rc = real___xstat(ver, pathname, statbuf);
+    if (rc == 0 && uc_statmut_should(pathname))
+        uc_statmut_apply(statbuf);
+    return rc;
 }
 
 int __lxstat(int ver, const char *pathname, struct stat *statbuf)
 {
     UC_REAL(__lxstat);
+    uc_account_stat(pathname);
     if (uc_match(UC_STATFAIL, pathname) != NULL) {
         errno = EACCES;
         return -1;
     }
-    return real___lxstat(ver, pathname, statbuf);
+    int rc = real___lxstat(ver, pathname, statbuf);
+    if (rc == 0 && uc_statmut_should(pathname))
+        uc_statmut_apply(statbuf);
+    return rc;
 }
 
 int __fxstat(int ver, int fd, struct stat *statbuf)
 {
     UC_REAL(__fxstat);
     const char *path = uc_fd_path(fd);
+    uc_account_stat(path);
     if (path != NULL && uc_match(UC_STATFAIL, path) != NULL) {
         errno = EACCES;
         return -1;
@@ -850,11 +1128,15 @@ int __fxstat(int ver, int fd, struct stat *statbuf)
 int __fxstatat(int ver, int dirfd, const char *pathname, struct stat *statbuf, int flags)
 {
     UC_REAL(__fxstatat);
+    uc_account_stat(pathname);
     if (uc_match(UC_STATFAIL, pathname) != NULL) {
         errno = EACCES;
         return -1;
     }
-    return real___fxstatat(ver, dirfd, pathname, statbuf, flags);
+    int rc = real___fxstatat(ver, dirfd, pathname, statbuf, flags);
+    if (rc == 0 && uc_statmut_should(pathname))
+        uc_statmut_apply(statbuf);
+    return rc;
 }
 
 /* statx(2): the modern path Qt/glibc may use for metadata. */
@@ -862,11 +1144,83 @@ int statx(int dirfd, const char *pathname, int flags, unsigned int mask,
           struct statx *statxbuf)
 {
     UC_REAL(statx);
+    uc_account_stat(pathname);
     if (uc_match(UC_STATFAIL, pathname) != NULL) {
         errno = EACCES;
         return -1;
     }
-    return real_statx(dirfd, pathname, flags, mask, statxbuf);
+    int rc = real_statx(dirfd, pathname, flags, mask, statxbuf);
+    if (rc == 0 && uc_statmut_should(pathname)) {
+        statxbuf->stx_size = statxbuf->stx_size * 2 + 4096;
+        statxbuf->stx_mtime.tv_sec += 100000;
+    }
+    return rc;
+}
+
+/* The *64 / LFS variants. ultracopier builds with _FILE_OFFSET_BITS=64
+ * (CopyEngine.pro), so its stat()/lstat()/fstat() calls -- and Qt's QFileSystemEngine --
+ * bind to these GLIBC_2.33 symbols, NOT the plain stat/__xstat above. The stat verbs
+ * (statfail/statlog/statmut) MUST interpose them too, or they silently never fire (this is
+ * exactly why the source-stat count came back empty). Confirmed via `nm -D ultracopier`:
+ * it imports stat64/lstat64/fstat64@GLIBC_2.33. */
+int stat64(const char *pathname, struct stat64 *statbuf)
+{
+    UC_REAL(stat64);
+    uc_account_stat(pathname);
+    if (uc_match(UC_STATFAIL, pathname) != NULL) {
+        errno = EACCES;
+        return -1;
+    }
+    int rc = real_stat64(pathname, statbuf);
+    if (rc == 0 && uc_statmut_should(pathname)) {
+        statbuf->st_size = statbuf->st_size * 2 + 4096;
+        statbuf->st_mtime += 100000;
+    }
+    return rc;
+}
+
+int lstat64(const char *pathname, struct stat64 *statbuf)
+{
+    UC_REAL(lstat64);
+    uc_account_stat(pathname);
+    if (uc_match(UC_STATFAIL, pathname) != NULL) {
+        errno = EACCES;
+        return -1;
+    }
+    int rc = real_lstat64(pathname, statbuf);
+    if (rc == 0 && uc_statmut_should(pathname)) {
+        statbuf->st_size = statbuf->st_size * 2 + 4096;
+        statbuf->st_mtime += 100000;
+    }
+    return rc;
+}
+
+int fstat64(int fd, struct stat64 *statbuf)
+{
+    UC_REAL(fstat64);
+    const char *path = uc_fd_path(fd);
+    uc_account_stat(path);
+    if (path != NULL && uc_match(UC_STATFAIL, path) != NULL) {
+        errno = EACCES;
+        return -1;
+    }
+    return real_fstat64(fd, statbuf);
+}
+
+int fstatat64(int dirfd, const char *pathname, struct stat64 *statbuf, int flags)
+{
+    UC_REAL(fstatat64);
+    uc_account_stat(pathname);
+    if (uc_match(UC_STATFAIL, pathname) != NULL) {
+        errno = EACCES;
+        return -1;
+    }
+    int rc = real_fstatat64(dirfd, pathname, statbuf, flags);
+    if (rc == 0 && uc_statmut_should(pathname)) {
+        statbuf->st_size = statbuf->st_size * 2 + 4096;
+        statbuf->st_mtime += 100000;
+    }
+    return rc;
 }
 
 /* ------------------------------------------------------------------ */
@@ -921,11 +1275,61 @@ ssize_t readlink(const char *pathname, char *buf, size_t bufsiz)
 int utimensat(int dirfd, const char *pathname, const struct timespec times[2], int flags)
 {
     UC_REAL(utimensat);
+    if (uc_match(UC_DATEFAIL, pathname) != NULL) {
+        errno = EPERM;          /* ONLY the date-set fails; the data write already succeeded */
+        return -1;
+    }
     if (uc_match(UC_EFAIL, pathname) != NULL) {
         errno = EIO;
         return -1;
     }
     return real_utimensat(dirfd, pathname, times, flags);
+}
+
+/* futimens(): the pipelined backends (io_uring/IOCP) set the date on the STILL-OPEN
+ * destination fd via futimens -- which is libc, so datefail reaches them too. */
+int futimens(int fd, const struct timespec times[2])
+{
+    UC_REAL(futimens);
+    const char *path = uc_fd_path(fd);
+    if (path != NULL && uc_match(UC_DATEFAIL, path) != NULL) {
+        errno = EPERM;
+        return -1;
+    }
+    if (path != NULL && uc_match(UC_EFAIL, path) != NULL) {
+        errno = EIO;
+        return -1;
+    }
+    return real_futimens(fd, times);
+}
+
+/* utime()/utimes(): the async backend's MkPath date-set path uses utime(). */
+int utime(const char *pathname, const struct utimbuf *times)
+{
+    UC_REAL(utime);
+    if (uc_match(UC_DATEFAIL, pathname) != NULL) {
+        errno = EPERM;
+        return -1;
+    }
+    if (uc_match(UC_EFAIL, pathname) != NULL) {
+        errno = EIO;
+        return -1;
+    }
+    return real_utime(pathname, times);
+}
+
+int utimes(const char *pathname, const struct timeval times[2])
+{
+    UC_REAL(utimes);
+    if (uc_match(UC_DATEFAIL, pathname) != NULL) {
+        errno = EPERM;
+        return -1;
+    }
+    if (uc_match(UC_EFAIL, pathname) != NULL) {
+        errno = EIO;
+        return -1;
+    }
+    return real_utimes(pathname, times);
 }
 
 int chmod(const char *pathname, mode_t mode)

@@ -90,6 +90,167 @@ def read_file(path: str) -> bytes:
     return pathlib.Path(path).read_bytes()
 
 
+# ---------------------------------------------------------------------------
+# Metadata verification (perms + dates + symlink-ness), NOT just content.
+#
+# `diff -rq --no-dereference` (what Result.content_ok uses) checks file CONTENT and
+# symlink TARGETS but is blind to permission bits and timestamps -- so metadata
+# corruption (wrong mode, lost/garbled date) is invisible to it. These helpers close
+# that gap for the per-option cases (doRightTransfer -> perms; the date-always-copied
+# invariant; keepDate fault behaviour).
+#
+# IMPORTANT semantics (verified against the engine + the 3.0 baseline, see
+# project_keepdate_semantics): the file DATE is ALWAYS copied for a regular file on all
+# backends; `keepDate` only escalates a date *failure* to an error. So `mtime` should
+# match the source by default regardless of keepDate. Permissions are copied ONLY when
+# doRightTransfer is on; with it off the dest gets the process umask default.
+# ---------------------------------------------------------------------------
+MTIME_TOL_S = 2  # async uses second-granularity utimbuf; allow a small slop
+
+
+def stat_meta(path: str) -> dict:
+    """lstat-based metadata snapshot (does NOT follow symlinks)."""
+    st = os.lstat(path)
+    import stat as _stat
+    m = {
+        "mode": st.st_mode & 0o7777,
+        "mtime": int(st.st_mtime),
+        "mtime_ns": st.st_mtime_ns,
+        "size": st.st_size,
+        "is_symlink": _stat.S_ISLNK(st.st_mode),
+        "is_dir": _stat.S_ISDIR(st.st_mode),
+        "uid": st.st_uid,
+        "gid": st.st_gid,
+    }
+    m["link_target"] = os.readlink(path) if m["is_symlink"] else None
+    return m
+
+
+def meta_mismatch(src: str, dst: str, *, check_mode=False, check_mtime=False,
+                  expect_mode=None, mtime_tol_s=MTIME_TOL_S):
+    """Return a human string describing the FIRST metadata mismatch between two paths,
+    or None if they match under the requested checks. Symlinks: mode is never compared
+    (lchmod is unportable); mtime is never compared (utime can't set a symlink's own
+    time, and the engine intentionally skips date transfer for symlinks)."""
+    s = stat_meta(src)
+    d = stat_meta(dst)
+    if s["is_symlink"] != d["is_symlink"]:
+        return f"symlink-ness differs: src={s['is_symlink']} dst={d['is_symlink']}"
+    if s["is_symlink"]:
+        if s["link_target"] != d["link_target"]:
+            return f"symlink target differs: src={s['link_target']!r} dst={d['link_target']!r}"
+        return None
+    if check_mode:
+        want = s["mode"] if expect_mode is None else expect_mode
+        if d["mode"] != want:
+            return f"mode differs: dst={oct(d['mode'])} want={oct(want)} (src={oct(s['mode'])})"
+    if check_mtime and not s["is_dir"]:
+        if abs(d["mtime"] - s["mtime"]) > mtime_tol_s:
+            return f"mtime differs: src={s['mtime']} dst={d['mtime']} (tol={mtime_tol_s}s)"
+    return None
+
+
+def verify_tree_meta(src_root: str, dst_root: str, *, check_mode=False,
+                     check_mtime=False, expect_mode=None) -> list:
+    """Walk src_root and compare each corresponding entry under dst_root. Returns a
+    list of '<relpath>: <reason>' strings (empty == all good). Missing dst entries are
+    reported too. Content correctness stays the harness's job (diff -rq); this is purely
+    the metadata overlay."""
+    problems = []
+    for dirpath, dirnames, filenames in os.walk(src_root, followlinks=False):
+        rel = os.path.relpath(dirpath, src_root)
+        for name in list(dirnames) + filenames:
+            srel = os.path.normpath(os.path.join(rel, name))
+            sp = os.path.join(src_root, srel)
+            dp = os.path.join(dst_root, srel)
+            if not (os.path.exists(dp) or os.path.islink(dp)):
+                problems.append(f"{srel}: MISSING in destination")
+            else:
+                why = meta_mismatch(sp, dp, check_mode=check_mode, check_mtime=check_mtime,
+                                    expect_mode=expect_mode)
+                if why:
+                    problems.append(f"{srel}: {why}")
+    return problems
+
+
+def make_meta_tree(root: str) -> dict:
+    """Create a small source tree with DISTINCTIVE perms + an OLD mtime on every entry,
+    plus a symlink and a nested dir, so per-option metadata transfer is observable.
+    Returns {relpath: mode} for the regular files (the modes a doRightTransfer=true copy
+    must reproduce). All files get mtime 2001-02-03 04:05:06 UTC (981173106)."""
+    import shutil as _sh
+    if os.path.exists(root):
+        _sh.rmtree(root)
+    os.makedirs(os.path.join(root, "sub"), exist_ok=True)
+    old = 981173106
+    files = {
+        "exec.sh": 0o755,
+        "secret.dat": 0o600,
+        "group.txt": 0o640,
+        "odd.bin": 0o741,
+        "sub/nested.dat": 0o604,
+    }
+    for rel, mode in files.items():
+        p = os.path.join(root, rel)
+        with open(p, "wb") as fh:
+            fh.write(b"meta-" + rel.encode() + b"-" + b"Z" * 200)
+        os.chmod(p, mode)
+    # a relative symlink (its OWN metadata is not transferred; target must round-trip)
+    link = os.path.join(root, "link_to_exec")
+    if os.path.lexists(link):
+        os.unlink(link)
+    os.symlink("exec.sh", link)
+    # set the old mtime on files + dirs (deepest first so dir mtimes stick)
+    for rel in list(files) + ["sub", "."]:
+        p = os.path.join(root, rel)
+        try:
+            os.utime(p, (old, old), follow_symlinks=True)
+        except OSError:
+            pass
+    return files
+
+
+def windows_host_configured() -> bool:
+    """True iff config.ini has a [windows] host -> the IOCP lane can actually run."""
+    cfg = H.load_config()
+    return cfg.has_section("windows") and bool(cfg.get("windows", "host", fallback="").strip())
+
+
+def for_option_backends(backends, linux_one, iocp_one=None) -> bool:
+    """Like for_backends, but ALSO drives IOCP so an option case can assert the option is
+    honored on async/thread + io_uring + IOCP (the user's explicit requirement). For
+    async/io_uring it calls linux_one(backend) -> bool. For IOCP it calls iocp_one() ->
+    bool (which should run via winlane.run_windows and verify the option on the box). If
+    iocp_one is None the option genuinely does not apply on Windows (POSIX-only) and IOCP
+    is recorded as SKIP=PASS; a wired iocp_one self-skips (PASS) when no [windows] host is
+    configured. Never weaken: a wired option must really run on the laptop when available."""
+    backends = backends or DEFAULT_BACKENDS
+    ok = True
+    for b in backends:
+        if b == H.IOCP:
+            if iocp_one is None:
+                print(f"    [{b}] SKIP (option is POSIX-only; not applicable on IOCP/NTFS)")
+            else:
+                try:
+                    res = iocp_one()
+                except Exception as e:
+                    print(f"    [{b}] EXCEPTION: {e!r}")
+                    ok = False
+                else:
+                    print(f"    [{b}] {'PASS' if res else 'FAIL'}")
+                    ok = ok and bool(res)
+        else:
+            try:
+                res = linux_one(b)
+            except Exception as e:
+                print(f"    [{b}] EXCEPTION: {e!r}")
+                ok = False
+            else:
+                print(f"    [{b}] {'PASS' if res else 'FAIL'}")
+                ok = ok and bool(res)
+    return ok
+
+
 def for_backends(backends, fn) -> bool:
     """Run fn(backend) for each backend; return True only if all return True.
     Prints a per-backend line so individual cases are debuggable on their own.

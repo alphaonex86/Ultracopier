@@ -145,6 +145,12 @@ protected:
     /// transferChecksum). Returns true when they match. Mirrors async runChecksumVerify().
     bool runChecksumVerify();
 
+    /// \brief true when the destination is OURS to delete (we created it, or it was empty), i.e. NOT a
+    /// user's pre-existing file. Mirrors TransferThreadAsync::destinationIsOursToRemove() (the #9
+    /// invariant). Used by the #25 corrupt-dest cleanup so a checksum-failed copy never deletes a
+    /// user's pre-existing destination. Backed by destinationPreExisted, captured in preOperation().
+    bool destinationIsOursToRemove() const;
+
     /// \brief fold a just-COMPLETED destination write extent [off, off+len) into the
     /// contiguous-from-0 low-water mark. MUST be called once per write completion with the
     /// LIVE (post-short-write-advance) fileOffset+result, never the logical chunk size --
@@ -177,6 +183,10 @@ protected:
     bool readIsOpenVariable;
     bool writeIsOpenVariable;
     bool realMove;
+    /// \brief did the destination PRE-EXIST with non-empty content before we touched it? Captured in
+    /// preOperation() on the first leg only (resumeFromOffset==0; a resume prefix is OURS, not the
+    /// user's). Backs destinationIsOursToRemove() for the #25 corrupt-dest cleanup.
+    bool destinationPreExisted=false;
 
     volatile bool putInPause;
 

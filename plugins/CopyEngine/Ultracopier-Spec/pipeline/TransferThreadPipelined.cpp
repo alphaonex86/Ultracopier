@@ -214,6 +214,13 @@ void TransferThreadPipelined::preOperation()
     // Close any previously open files
     closeFiles();
 
+    // #9/#25 invariant: record whether the destination PRE-EXISTED with content BEFORE any
+    // truncate/overwrite, on the first leg only (resumeFromOffset>0 means the existing dest is OUR
+    // resume prefix, not the user's file). destinationIsOursToRemove() reads this so the #25
+    // corrupt-dest cleanup never deletes a user's pre-existing destination.
+    if(resumeFromOffset==0)
+        destinationPreExisted = is_file(destination) && TransferThread::file_stat_size(destination)>0;
+
     if(isSame())
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] is same");
@@ -229,6 +236,14 @@ void TransferThreadPipelined::preOperation()
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] destination exists");
         return;
     }
+    // Data-loss guard (mirrors the async fix): a FAILED rename of the existing destination to its
+    // backup (checkAlwaysRename, fileCollision=RENAME + renameTheOriginalDestination=true) sets
+    // readError, but destinationExists() returns false whenever readError is set -- so without this
+    // guard preOperation continues and OVERWRITES the original destination, whose backup was never
+    // made because the rename failed -> the user's only copy is lost. errorOnFile() already fired in
+    // checkAlwaysRename(); return so the error policy keeps the original intact.
+    if(readError)
+        return;
 
     // A symlink/junction is recreated verbatim (readlink+symlink / trySymlinkCopy), not followed,
     // so its target's date must NOT be read here: readSourceFileDateTime/stat FOLLOWS the link, and a
@@ -246,12 +261,21 @@ void TransferThreadPipelined::preOperation()
             return;
         }
     }
+    // Mirror the date guard above: never transfer metadata through a symlink. readSourceFilePermissions
+    // (stat) FOLLOWS the link and writeDestinationFilePermissions' chmod/chown then hit the TARGET, not the
+    // link (no-op re-apply at best, spurious post-op failure on a dangling/un-chmod-able dest target).
     if(doRightTransfer)
-        havePermission=readSourceFilePermissions(source);
+        havePermission = !is_symlink(source) && readSourceFilePermissions(source);
 
     transfer_stat=TransferStat_WaitForTheTransfer;
     ifCanStartTransfer();
     emit preOperationStopped();
+}
+
+bool TransferThreadPipelined::destinationIsOursToRemove() const
+{
+    // OURS iff the destination did NOT pre-exist with content (we created it, or it was empty).
+    return !destinationPreExisted;
 }
 
 void TransferThreadPipelined::postOperation()
@@ -334,7 +358,13 @@ bool TransferThreadPipelined::tryNativeCopy()
             emit errorOnFile(source,strError);
             return true;
         }
-        int dst_fd=::open(dstPath.c_str(),O_WRONLY|O_CREAT|O_TRUNC,0755);
+        // #9: a fresh OVERWRITE of a user's pre-existing destination must NOT truncate it up-front --
+        // a read/write error partway through copy_file_range would otherwise have already destroyed the
+        // OLD data. Open WITHOUT O_TRUNC for a pre-existing dest and ftruncate to the bytes actually
+        // written on SUCCESS instead (mirrors the async WriteThread #9 fix). A resume leg keeps O_TRUNC
+        // (the existing dest is our own partial prefix to discard); but the native path never resumes.
+        const int trunc_flag=(destinationPreExisted && resumeFromOffset==0)?0:O_TRUNC;
+        int dst_fd=::open(dstPath.c_str(),O_WRONLY|O_CREAT|trunc_flag,0755);
         if(dst_fd<0)
         {
             const int terr=errno;
@@ -354,7 +384,10 @@ bool TransferThreadPipelined::tryNativeCopy()
             {
                 ::close(src_fd);
                 ::close(dst_fd);
-                if(stopIt && needRemove)
+                // #9: on cancel, only remove the destination if it is OURS (never a user's pre-existing
+                // dest). Mirrors the skip-path guard. (NB: the native O_TRUNC above already destroyed a
+                // pre-existing dest -- the truncate-skip for the native path is separate follow-up work.)
+                if(stopIt && needRemove && destinationIsOursToRemove())
                     unlink(destination);
                 resetExtraVariable();
                 return true;
@@ -385,6 +418,18 @@ bool TransferThreadPipelined::tryNativeCopy()
             setProgression(copied,total);
         }
         ::close(src_fd);
+        // #9: now that the full new content is written, trim any leftover OLD tail (no-op when O_TRUNC
+        // was used or when the new file is >= the old size). Only on SUCCESS -- a mid-copy failure keeps
+        // the OLD bytes so the error policy can skip/retry without having destroyed the user's data.
+        if(ftruncate(dst_fd,(off_t)copied)<0)
+        {
+            const int terr=errno;
+            ::close(dst_fd);
+            readError=false;
+            writeError=true;
+            emit errorOnFile(destination,strerror(terr));
+            return true;
+        }
         if(::close(dst_fd)<0)
         {
             const int terr=errno;
@@ -404,7 +449,7 @@ bool TransferThreadPipelined::tryNativeCopy()
     {
         if(stopIt)
         {
-            if(!source.empty())
+            if(!source.empty() && destinationIsOursToRemove())   // #9: keep a user's pre-existing dest on cancel
                 if(exists(source) && source!=destination)
                     unlink(destination);
             resetExtraVariable();
@@ -557,7 +602,7 @@ void TransferThreadPipelined::ifCanStartTransfer()
         else if(stopIt)
         {
             // Cleanup on stop
-            if(!source.empty() && needRemove)
+            if(!source.empty() && needRemove && destinationIsOursToRemove())   // #9: keep a user's pre-existing dest on cancel
                 if(exists(source) && source!=destination)
                     unlink(destination);
             return;
@@ -575,7 +620,7 @@ void TransferThreadPipelined::ifCanStartTransfer()
                                  " "+strError+"("+std::to_string(terr)+")");
         if(stopIt)
         {
-            if(!source.empty())
+            if(!source.empty() && destinationIsOursToRemove())   // #9: keep a user's pre-existing dest on cancel
                 if(exists(source) && source!=destination)
                     unlink(destination);
             resetExtraVariable();
@@ -746,7 +791,10 @@ void TransferThreadPipelined::checkIfAllIsClosedAndDoOperations()
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] remainFileOpen()");
         return;
     }
-    if(!source.empty() && needRemove && (stopIt || needSkip))
+    // #9 source-vanish guard: only remove the destination if it is OURS (we created it / it was empty).
+    // A user's PRE-EXISTING non-empty dest (an OVERWRITE whose source vanished before the first byte)
+    // must NOT be deleted -- cp/rsync leave it untouched. (iouring_source_vanish)
+    if(!source.empty() && needRemove && (stopIt || needSkip) && destinationIsOursToRemove())
         if(is_file(source) && source!=destination)
             unlink(destination);
 
@@ -766,24 +814,47 @@ void TransferThreadPipelined::checkIfAllIsClosedAndDoOperations()
         if(!stopIt && !needSkip && !checksumOk)
         {
             fileContentError=true;
+            // Remove the content-corrupt destination so a full-size WRONG file can't be mistaken for a
+            // complete copy (gated by destinationIsOursToRemove() -- never delete a user's pre-existing
+            // dest; a MOVE keeps the source via the copyFailed gate below). Mirrors TransferThreadAsync.
+            if(!source.empty() && destinationIsOursToRemove() && source!=destination)
+                unlink(destination);
             transfer_stat=TransferStat_PostTransfer;
             return;
         }
     }
 
-    if(mode==Ultracopier::Move && !realMove)
-    {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] remove mode==Ultracopier::Move && !realMove");
-        if(exists(destination))
-            if(!unlink(source))
-                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] move and unable to remove: "+
-                                         TransferThread::internalStringTostring(source)+" "+strerror(errno));
-    }
     transfer_stat=TransferStat_PostTransfer;
     emit pushStat(transfer_stat,transferId);
     transfer_stat=TransferStat_PostOperation;
     emit pushStat(transfer_stat,transferId);
-    doFilePostOperation();
+    // Apply destination date/permissions BEFORE removing the source on a MOVE (mirrors async). With
+    // keepDate=true a failed date-set is escalated (doFilePostOperation returns false); in the old
+    // order the source was unlink()'d first, so that failure destroyed the user's only copy. Run the
+    // post-op first and treat a critical failure like copyFailed -> keep the source for retry.
+    const bool postOpOk = doFilePostOperation();
+
+    if(mode==Ultracopier::Move && !realMove)
+    {
+        // CRITICAL: only remove the source if the copy actually succeeded AND the post-operation
+        // (date/permissions) succeeded. A skip / stop / read / write / checksum error OR a critical
+        // post-op failure means the move did not fully complete; removing the source would silently
+        // lose user data (move = copy + delete; if any step failed, the delete must NOT happen).
+        const bool copyFailed = stopIt || needSkip || readError || writeError || fileContentError || !postOpOk;
+        if(!copyFailed)
+        {
+            if(exists(destination) && is_file(source) && source!=destination)
+            {
+                if(!unlink(source))
+                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] move and unable to remove: "+
+                                             TransferThread::internalStringTostring(source)+" "+strerror(errno));
+            }
+            else
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] move: destination missing or source==destination, refusing to remove source");
+        }
+        else
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] move: copy failed (stopIt/needSkip/readError/writeError/fileContentError/postOpFailed), keeping source");
+    }
 
     source.clear();
     destination.clear();
@@ -858,7 +929,10 @@ void TransferThreadPipelined::skip()
         }
         pauseMutex.release();
         closeFiles();
-        if(!source.empty() && needRemove)
+        // #9 source-vanish guard (mirrors line ~778): on a skip, only remove the destination if it is
+        // OURS. A user's pre-existing non-empty dest (an OVERWRITE whose source vanished before the first
+        // byte -- exists(source) is a stat that still succeeds) must NOT be deleted. (iouring_source_vanish)
+        if(!source.empty() && needRemove && destinationIsOursToRemove())
             if(exists(source) && source!=destination)
                 unlink(destination);
         break;

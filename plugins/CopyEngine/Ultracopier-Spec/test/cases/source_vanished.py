@@ -84,7 +84,14 @@ def _run_async_gone() -> bool:
     base = os.path.basename(src)
     dest = K.fresh_dest("vanish_async_dest")
     copied = os.path.join(dest, base)
-    K.with_scenario("gone:VANISH")
+    # Match ONLY the source victim's read-open, via its FULL source path. The bare "gone:VANISH"
+    # substring ALSO matched the DEST copy's write-open (.../vanish_async_dest/<base>/<victim>, which
+    # also contains "VANISH") -- the #9-trap -- so it injected a SECOND, unintended fault on the
+    # destination. That is a different, harsher "both source AND dest open() fail" scenario than this
+    # case's stated intent (a vanished SOURCE, exactly what the io_uring lane does by really deleting
+    # the source). The source path .../vanish_async_src/<victim> is NOT a substring of the dest path
+    # .../vanish_async_dest/vanish_async_src/<victim>, so this hits the source read-open only.
+    K.with_scenario(f"gone:{os.path.join(src, VICTIM_NAME)}")
     r = H.run(H.ASYNC, "cp", [src], dest,
               file_collision=H.FileCollision.OVERWRITE,
               folder_collision=H.FolderCollision.MERGE,

@@ -166,6 +166,9 @@ private:
     bool remainFileOpen() const;
     bool remainSourceOpen() const;
     bool remainDestinationOpen() const;
+    /// \brief true iff the destination is OURS to remove on a skip/stop/error (we created it or wrote
+    /// bytes); false for the user's untouched non-empty pre-existing dest (removing it = #9 data loss).
+    bool destinationIsOursToRemove() const;
     void resetExtraVariable();
     void ifCanStartTransfer();
     void checkIfAllIsClosedAndDoOperations();

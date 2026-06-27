@@ -267,6 +267,9 @@ void CopyEngine::errorOnFile(INTERNALTYPEPATH fileInfo, std::string errorString,
     switch(tempFileErrorAction)
     {
         case FileError_Skip:
+            // PURE skip, no put-to-end retry -> let the async close handshake finish a write that never
+            // opened / was pre-closed, so it frees the cap=1 large slot (skip_drops_multichunk).
+            thread->finalSkipNoRetry=true;
             thread->skip();
         return;
         case FileError_Retry:
@@ -374,6 +377,10 @@ void CopyEngine::errorOnFile(INTERNALTYPEPATH fileInfo, std::string errorString,
             switch(newAction)
             {
                 case FileError_Skip:
+                    // PURE skip from the dialog -> same as the headless FileError_Skip above: mark it a
+                    // final no-retry skip so the async close handshake frees the cap=1 large slot. Without
+                    // this the next large file is LOST after a multichunk read-fault skip (file_error_dialog).
+                    thread->finalSkipNoRetry=true;
                     thread->skip();
                 break;
                 case FileError_Retry:

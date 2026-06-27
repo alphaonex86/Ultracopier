@@ -63,14 +63,27 @@ ignored. When the variable is **unset or empty the layer is a pure pass-through*
 | `openfail:<substr>`   | `open`/`open64`/`openat`/`mkdir` of a path containing `<substr>` fails `EACCES`.         | path       |
 | `slow:<ms>`           | every `read`/`write`/`pread`/`pwrite` sleeps `<ms>` ms before the real call.             | global     |
 | `shortwrite:<substr>` | `write`/`pwrite` to a path containing `<substr>` returns ~half the bytes (>=1).          | path       |
+| `wflip:<substr>:<off>` | `write`/`pwrite` to a matching path SILENTLY bit-flips the byte at cumulative offset `<off>` but returns the FULL count — a CONTENT corruption (the dest looks complete). With `checksum` on, the verify re-read must DETECT it and the engine REMOVE the corrupt dest (`cases/write_corruption_async.py`, the #25 fix). ASYNC/libc only; io_uring uses the writable FUSE `UC_FUSE_WFAULT`. | path + offset |
 | `statfail:<substr>`   | `stat`/`lstat`/`fstat`/`statx`/`readlink` of a matching path fails `EACCES`.             | path       |
 | `readfail:<substr>`   | `read`/`pread` of a path containing `<substr>` fails `EIO` (whole SOURCE file unreadable). | path     |
 | `eio_after:<substr>:<bytes>` | `read`/`pread` of a matching fd succeed until `<bytes>` cumulative bytes, then fail `EIO` (bad sector PARTWAY through a SOURCE file; the readable prefix is delivered first). | path + per-fd counter |
 | `flaky:<substr>:<n>`  | the first `<n>` read attempts on a matching SOURCE path fail `EIO`, then succeed (a transient/recoverable sector). Budget tracked PER PATH, so close()+reopen()+retry keeps draining it. | path + per-path counter |
+| `datefail:<substr>`   | ONLY the date-set (`utimensat`/`futimens`/`utime`/`utimes`) on a matching path fails `EPERM`; the data `write`s SUCCEED. Isolates the `keepDate` failure path: with `keepDate=true` the file errors out ("Unable to change the date"), with `keepDate=false` the copy proceeds (best-effort). Reaches async (`utime`) and io_uring (`futimens` on the open destFd); IOCP uses `SetFileTime` (Windows hook). | path |
+| `statmut:<substr>:<n>`| `stat`/`lstat`/`statx` of a matching SOURCE path returns a MUTATED `st_size` (`*2+4096`) and bumped `st_mtime` from the **(n+1)th** call onward (calls `1..n` are real). With `n=1` the scan's first stat is genuine and is what `coalesceSourceStat` caches; a later RE-stat (cache miss) would see the mutated values. Models "source data changed while cached". | path + per-path counter |
 
 Path matching is a plain substring test (case-insensitive on Windows). For the
-two-number verbs (`eio_after`, `flaky`) the count is split off the **last** colon, so a
-path-substr may itself contain `:`.
+multi-field verbs (`eio_after`, `flaky`, `statmut`, `disconnect`, `wdisconnect`) the
+trailing number(s) are split off the **last** colon(s), so a path-substr may itself contain `:`.
+
+### Accounting (independent of `UC_FS_SCENARIO`)
+
+Two objective counters, each enabled by its own env pair and flushed periodically (so the
+value survives the harness's `pkill` SIGTERM, which skips `atexit`/destructors):
+
+| Env pair | Counts |
+|----------|--------|
+| `UC_FS_READLOG_MATCH=<substr>` + `UC_FS_READLOG_PATH=<file>` | total BYTES successfully `read`/`pread` from matching paths (resume-vs-restart: total ≈ size if resumed, size+prefix if restarted). |
+| `UC_FS_STATLOG_MATCH=<substr>` + `UC_FS_STATLOG_PATH=<file>` | number of `stat`/`lstat`/`statx`/`fstat` CALLS on matching paths (lower with `coalesceSourceStat` on than off — the objective proof the cache is honored). |
 
 ### Examples
 

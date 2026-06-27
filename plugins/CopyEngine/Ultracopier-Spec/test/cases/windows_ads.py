@@ -74,7 +74,7 @@ def run(backends=None, memcheck=H.NONE) -> bool:
         folder_error=H.FolderError.SKIP,
         keep_date=True,
         do_right=True,
-        expect_dir=None,  # we'll verify manually
+        # (run_windows has no expect= here; ADS correctness is verified manually below)
         mem_limit_mb=1024,
         stay_alive_seconds=10,
     )

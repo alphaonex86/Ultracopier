@@ -204,6 +204,8 @@ private:
     /// \brief the custom transfer model
     TransferModel transferModel;
     bool m_havePause;
+    QString lastFrom; ///< last non-empty From path, kept visible when no current file is being processed (small files finish faster than the UI tick)
+    QString lastTo; ///< last non-empty To path, kept visible when no current file is being processed
 
     static QIcon player_play,player_pause,tempExitIcon,editDelete,skinIcon,editFind,documentOpen,documentSave,listAdd;
     static bool iconLoaded;

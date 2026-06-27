@@ -382,14 +382,42 @@
        <string>Performance</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout">
-       <item row="0" column="0">
-        <widget class="QLabel" name="label_21">
+       <item row="4" column="0">
+        <widget class="QLabel" name="label_14">
          <property name="text">
-          <string>Inode threads</string>
+          <string>Buffer for different device</string>
          </property>
         </widget>
        </item>
-       <item row="7" column="1">
+       <item row="5" column="0">
+        <widget class="QLabel" name="label_15">
+         <property name="text">
+          <string>OS Flags</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="0">
+        <widget class="QLabel" name="label_11">
+         <property name="text">
+          <string>Buffer for same device</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="0">
+        <widget class="QLabel" name="label_10">
+         <property name="text">
+          <string>Disable parallel transfer when are different devices</string>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="1">
+        <widget class="QCheckBox" name="os_spec_flags">
+         <property name="text">
+          <string/>
+         </property>
+        </widget>
+       </item>
+       <item row="8" column="1">
         <spacer name="verticalSpacer">
          <property name="orientation">
           <enum>Qt::Orientation::Vertical</enum>
@@ -415,6 +443,13 @@
          </property>
         </widget>
        </item>
+       <item row="1" column="1">
+        <widget class="QCheckBox" name="buffer">
+         <property name="toolTip">
+          <string>Uncheck this under Windows create problem</string>
+         </property>
+        </widget>
+       </item>
        <item row="3" column="1">
         <widget class="QSpinBox" name="bufferSameDevice">
          <property name="suffix">
@@ -431,7 +466,30 @@
          </property>
         </widget>
        </item>
-       <item row="6" column="0" colspan="2">
+       <item row="4" column="1">
+        <widget class="QSpinBox" name="bufferOtherDevice">
+         <property name="suffix">
+          <string>MB</string>
+         </property>
+         <property name="minimum">
+          <number>1</number>
+         </property>
+         <property name="maximum">
+          <number>1024</number>
+         </property>
+         <property name="value">
+          <number>100</number>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="0">
+        <widget class="QLabel" name="label_21">
+         <property name="text">
+          <string>Inode threads</string>
+         </property>
+        </widget>
+       </item>
+       <item row="7" column="0" colspan="2">
         <widget class="QGroupBox" name="groupBox">
          <property name="title">
           <string>Ultimate</string>
@@ -454,20 +512,6 @@
          </layout>
         </widget>
        </item>
-       <item row="4" column="0">
-        <widget class="QLabel" name="label_14">
-         <property name="text">
-          <string>Buffer for different device</string>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="1">
-        <widget class="QCheckBox" name="buffer">
-         <property name="toolTip">
-          <string>Uncheck this under Windows create problem</string>
-         </property>
-        </widget>
-       </item>
        <item row="2" column="1">
         <widget class="QCheckBox" name="followTheStrictOrder"/>
        </item>
@@ -478,47 +522,20 @@
          </property>
         </widget>
        </item>
-       <item row="5" column="0">
-        <widget class="QLabel" name="label_15">
-         <property name="text">
-          <string>OS Flags</string>
-         </property>
-        </widget>
-       </item>
-       <item row="4" column="1">
-        <widget class="QSpinBox" name="bufferOtherDevice">
-         <property name="suffix">
-          <string>MB</string>
-         </property>
-         <property name="minimum">
-          <number>1</number>
-         </property>
-         <property name="maximum">
-          <number>1024</number>
-         </property>
-         <property name="value">
-          <number>100</number>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="0">
-        <widget class="QLabel" name="label_10">
-         <property name="text">
-          <string>Disable parallel transfer when are different devices</string>
-         </property>
-        </widget>
-       </item>
-       <item row="3" column="0">
-        <widget class="QLabel" name="label_11">
-         <property name="text">
-          <string>Buffer for same device</string>
-         </property>
-        </widget>
-       </item>
-       <item row="5" column="1">
-        <widget class="QCheckBox" name="os_spec_flags">
+       <item row="6" column="1">
+        <widget class="QCheckBox" name="coalesceSourceStat">
          <property name="text">
           <string/>
+         </property>
+        </widget>
+       </item>
+       <item row="6" column="0">
+        <widget class="QLabel" name="cacheSourceStat">
+         <property name="toolTip">
+          <string>Cache to have less disk access but can generate problem if the source change, disable if you wish data integrity</string>
+         </property>
+         <property name="text">
+          <string>Cache source stat</string>
          </property>
         </widget>
        </item>

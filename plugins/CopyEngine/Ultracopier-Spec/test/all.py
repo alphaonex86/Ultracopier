@@ -39,11 +39,44 @@ def discover():
 def parse_args(argv):
     ap = argparse.ArgumentParser(description="Ultracopier-Spec test suite")
     ap.add_argument("cases", nargs="*", help="case module names to run (default: all)")
-    ap.add_argument("--backend", default="async,io_uring",
-                    help="comma list of backends: async,io_uring,iocp")
+    ap.add_argument("--backend", default=None,
+                    help="comma list of backends: async,io_uring,iocp "
+                         "(default: async,io_uring; or just async under --quick)")
     ap.add_argument("--memcheck", default="none",
                     choices=list(_MEMCHECK), help="memory checker")
+    ap.add_argument("--quick", action="store_true",
+                    help="FAST inner-loop gate: run only cases whose last recorded whole-case "
+                         "time is <= --quick-max (plus any case with no recorded time yet), on "
+                         "the async backend only. Iterate here until green, THEN run the full "
+                         "suite (see ./CLAUDE.md). Uses the timing log written by lib/timing.py.")
+    ap.add_argument("--quick-max", type=float, default=60.0,
+                    help="max recorded whole-case seconds to count as 'quick' (default 60)")
     return ap.parse_args(argv)
+
+
+def _latest_case_durations(log_path):
+    """{case_name: latest recorded WHOLE-CASE duration in seconds} from the timing log.
+    The log is append-only chronological, so the last row per case wins (reflects current
+    behaviour). Per-backend rows (label 'case:backend') are ignored -- we want the whole-case
+    total. Best-effort: a missing/garbled log yields {}."""
+    out = {}
+    try:
+        for line in pathlib.Path(log_path).read_text(errors="ignore").splitlines():
+            if not line or line.startswith("#") or "\t" not in line:
+                continue
+            parts = line.split("\t")
+            if len(parts) < 3:
+                continue
+            dur, label = parts[1].strip(), parts[2].strip()
+            if ":" in label:          # per-backend sub-row, not the whole-case total
+                continue
+            try:
+                out[label] = float(dur)
+            except ValueError:
+                pass
+    except OSError:
+        pass
+    return out
 
 
 def main(argv):
@@ -56,7 +89,22 @@ def main(argv):
         print(f"available: {', '.join(available)}")
         return 2
 
-    req_backends = [b.strip() for b in args.backend.split(",") if b.strip()]
+    from lib import timing
+    # --quick: fast inner loop -> async only + only cases recorded as fast (or never timed yet).
+    if args.quick:
+        durs = _latest_case_durations(timing.TIMING_LOG)
+        quick = [c for c in selected if c not in durs or durs[c] <= args.quick_max]
+        slow = [c for c in selected if c in durs and durs[c] > args.quick_max]
+        if slow:
+            print(f"[quick] skipping {len(slow)} slow case(s) (> {args.quick_max:.0f}s): "
+                  + ", ".join(f"{c}({durs[c]:.0f}s)" for c in slow))
+        print(f"[quick] running {len(quick)} fast case(s) on async only "
+              "-- iterate here until green, then run the full suite")
+        selected = quick
+
+    backend_spec = args.backend if args.backend is not None else ("async" if args.quick
+                                                                   else "async,io_uring")
+    req_backends = [b.strip() for b in backend_spec.split(",") if b.strip()]
     bad = [b for b in req_backends if b not in _BACKENDS]
     if bad:
         print(f"unknown backend(s): {', '.join(bad)} (valid: {', '.join(_BACKENDS)})")
@@ -64,17 +112,23 @@ def main(argv):
     backends = [_BACKENDS[b] for b in req_backends]
     memcheck = _MEMCHECK[args.memcheck]
 
+    import datetime as _dt
+    timing.suite_header(backends, selected)
     results = {}
     for name in selected:
-        print(f"==> {name}  (backends={','.join(backends)}, memcheck={args.memcheck})")
+        print(f"==> {name}  (backends={','.join(backends)}, memcheck={args.memcheck})  "
+              f"[start {_dt.datetime.now().isoformat(timespec='seconds')}]")
         mod = importlib.import_module(f"cases.{name}")
+        timing.set_case(name)
         t0 = time.time()
         try:
             ok = bool(mod.run(backends=backends, memcheck=memcheck))
         except Exception as e:
             print(f"    EXCEPTION: {e!r}")
             ok = False
-        results[name] = (ok, time.time() - t0)
+        dt = time.time() - t0
+        timing.record(name, t0, dt, "PASS" if ok else "FAIL")
+        results[name] = (ok, dt)
 
     # PASS/FAIL table
     width = max((len(n) for n in results), default=4)
