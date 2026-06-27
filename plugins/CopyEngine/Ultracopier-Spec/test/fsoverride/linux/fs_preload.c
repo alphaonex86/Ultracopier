@@ -128,6 +128,9 @@ enum uc_verb {
     UC_EFAIL,        /* write fails EIO on matching path           */
     UC_OPENFAIL,     /* open fails EACCES on matching path         */
     UC_SLOW,         /* sleep ms in read/write                     */
+    UC_SLOWWRITE,    /* sleep ms in write/pwrite ONLY -> the dest lags the source read (I/O-order control) */
+    UC_DELAYOPEN,    /* sleep ms before open() of a matching path -> control open ORDERING (I/O-order control:
+                      * e.g. delay the SOURCE open so the dest write opens first, deterministically) */
     UC_SHORTWRITE,   /* write returns fewer bytes on matching path */
     UC_WFLIP,        /* write SILENTLY bit-flips the byte at <off> but returns the FULL count --
                       * a content corruption the dest looks complete after; the checksum-verify
@@ -298,6 +301,17 @@ static void uc_parse(void)
         } else if (strcmp(tok, "slow") == 0) {
             r->verb = UC_SLOW;
             r->num = strtol(arg, NULL, 10);
+        } else if (strcmp(tok, "slowwrite") == 0) {   /* I/O-order control: write-only lag */
+            r->verb = UC_SLOWWRITE;
+            r->num = strtol(arg, NULL, 10);
+        } else if (strcmp(tok, "delayopen") == 0) {   /* I/O-order control: "<substr>:<ms>" delay an open */
+            r->verb = UC_DELAYOPEN;
+            char *lastcolon = strrchr(arg, ':');
+            if (lastcolon != NULL) {
+                *lastcolon = '\0';
+                r->num = strtol(lastcolon + 1, NULL, 10);
+            }
+            strncpy(r->arg, arg, UC_MAX_ARG - 1);
         } else if (strcmp(tok, "shortwrite") == 0) {
             r->verb = UC_SHORTWRITE;
             strncpy(r->arg, arg, UC_MAX_ARG - 1);
@@ -426,6 +440,16 @@ static const struct uc_rule *uc_slow(void)
     return NULL;
 }
 
+/* The first 'slowwrite' rule (I/O-order control; path-independent, applied in write/pwrite ONLY), or NULL. */
+static const struct uc_rule *uc_slowwrite(void)
+{
+    uc_parse();
+    for (int i = 0; i < g_rule_count; i++)
+        if (g_rules[i].verb == UC_SLOWWRITE)
+            return &g_rules[i];
+    return NULL;
+}
+
 static long long g_readlog_last_flush = 0;   /* total at last on-disk flush */
 
 /* Write the current g_src_read_total to UC_FS_READLOG_PATH (O_TRUNC), via the REAL libc
@@ -541,6 +565,33 @@ static void uc_sleep_ms(long ms)
     ts.tv_sec  = ms / 1000;
     ts.tv_nsec = (ms % 1000) * 1000000L;
     nanosleep(&ts, NULL);
+}
+
+/* I/O-order control: if a delayopen rule matches, sleep its <ms> BEFORE the real open() runs. The arg
+ * selects WHICH opens: "r" = READ-opens only (O_RDONLY -> the SOURCE), "w" = WRITE-opens only
+ * (O_WRONLY/O_RDWR/O_CREAT -> the DESTINATION), anything else = a path-substring match. Lets a test
+ * deterministically order opens (e.g. "delayopen:r:10" = "first write open, after 10ms the read open"). */
+static void uc_maybe_delay_open(const char *path, int flags)
+{
+    if (path == NULL)
+        return;
+    uc_parse();
+    const int is_write = (flags & (O_WRONLY | O_RDWR | O_CREAT)) != 0;
+    for (int i = 0; i < g_rule_count; i++)
+    {
+        if (g_rules[i].verb != UC_DELAYOPEN)
+            continue;
+        const char *a = g_rules[i].arg;
+        int match;
+        if (strcmp(a, "r") == 0)        match = !is_write;                 /* read-opens (source) */
+        else if (strcmp(a, "w") == 0)   match = is_write;                  /* write-opens (dest) */
+        else                            match = (strstr(path, a) != NULL); /* path-substring */
+        if (match)
+        {
+            uc_sleep_ms(g_rules[i].num);
+            return;
+        }
+    }
 }
 
 static void uc_remember_fd(int fd, const char *path)
@@ -668,6 +719,7 @@ int open(const char *pathname, int flags, ...)
     if (flags & O_CREAT) {
         va_list ap; va_start(ap, flags); mode = (mode_t)va_arg(ap, int); va_end(ap);
     }
+    uc_maybe_delay_open(pathname, flags);   /* I/O-order control: deterministic open ordering */
     if (uc_match(UC_OPENFAIL, pathname) != NULL) {
         errno = EACCES;
         return -1;
@@ -689,6 +741,7 @@ int open64(const char *pathname, int flags, ...)
     if (flags & O_CREAT) {
         va_list ap; va_start(ap, flags); mode = (mode_t)va_arg(ap, int); va_end(ap);
     }
+    uc_maybe_delay_open(pathname, flags);   /* I/O-order control: deterministic open ordering */
     if (uc_match(UC_OPENFAIL, pathname) != NULL) {
         errno = EACCES;
         return -1;
@@ -710,6 +763,7 @@ int openat(int dirfd, const char *pathname, int flags, ...)
     if (flags & O_CREAT) {
         va_list ap; va_start(ap, flags); mode = (mode_t)va_arg(ap, int); va_end(ap);
     }
+    uc_maybe_delay_open(pathname, flags);   /* I/O-order control: deterministic open ordering */
     if (uc_match(UC_OPENFAIL, pathname) != NULL) {
         errno = EACCES;
         return -1;
@@ -899,6 +953,9 @@ ssize_t write(int fd, const void *buf, size_t count)
     const struct uc_rule *slow = uc_slow();
     if (slow != NULL)
         uc_sleep_ms(slow->num);
+    const struct uc_rule *sloww = uc_slowwrite();   /* I/O-order control: write-only lag fills the buffer */
+    if (sloww != NULL)
+        uc_sleep_ms(sloww->num);
     if (path != NULL) {
         if (uc_match(UC_EFAIL, path) != NULL) {
             errno = EIO;

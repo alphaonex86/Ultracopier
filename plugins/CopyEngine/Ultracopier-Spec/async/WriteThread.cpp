@@ -45,6 +45,19 @@ static inline bool IsWindows8OrGreater()
 #  endif
 #endif
 
+// --- BEGIN #23 read-salvage TRACE (revertible; compiled out unless -DUC_RSD_TRACE -> ZERO shipping
+// perf/size impact; grep "#23 read-salvage"). Writes "<event> <path>" lines to $UC_RSD_TRACE_PATH so a
+// test can see EXACTLY which open/close/unlink path a read-fault skip takes, without gdb on a fast race. ---
+#ifdef UC_RSD_TRACE
+#include <cstdio>
+#include <cstdlib>
+#define UC_RSD(ev,p) do{ const char*pa=getenv("UC_RSD_TRACE_PATH"); FILE*f=fopen(pa?pa:"/tmp/uc_rsd.log","a"); \
+    if(f){ fprintf(f,"WT %s %s\n",(ev),TransferThread::internalStringTostring(p).c_str()); fclose(f);} }while(0)
+#else
+#define UC_RSD(ev,p) do{}while(0)
+#endif
+// --- END #23 read-salvage TRACE ---
+
 unsigned int WriteThread::numberOfBlock=ULTRACOPIER_PLUGIN_DEFAULT_PARALLEL_NUMBER_OF_BLOCK;
 
 WriteThread::WriteThread()
@@ -60,6 +73,7 @@ WriteThread::WriteThread()
     #endif
     putInPause                      = false;
     needRemoveTheFile               = false;
+    salvageBufferedOnClose          = false;   // #23 read-salvage-drain (revertible)
     start();
 
     #ifdef Q_OS_UNIX
@@ -176,9 +190,11 @@ bool WriteThread::internalOpen()
 {
     //do a bug
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] internalOpen destination: "+TransferThread::internalStringTostring(file));
+    UC_RSD("ow-enter", file);   // #23 read-salvage trace
     if(stopIt)
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] close because stopIt is at true");
+        UC_RSD("ow-bail179-entry-stopit", file);   // #23 read-salvage trace: Case B (stopIt set before open)
         emit closed();
         return false;
     }
@@ -325,11 +341,13 @@ bool WriteThread::internalOpen()
         ::DeviceIoControl(to,FSCTL_SET_SPARSE,NULL,0,NULL,0,&sparseBytesReturned,NULL);
         #endif
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] after the open");
+        UC_RSD("ow-opened", file);   // #23 read-salvage trace: ::open succeeded, fd created
         {
             QMutexLocker lock_mutex(&accessList);
             if(!theBlockList.empty())
             {
                 ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] General file corruption detected");
+                UC_RSD("ow-bail330-buffer-nonempty-at-open", file);   // #23 read-salvage trace
                 stopIt=true;
                 #ifdef Q_OS_UNIX
                 if(::close(to)!=0)
@@ -480,6 +498,7 @@ bool WriteThread::internalOpen()
         }
         isOpen.acquire();
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] emit opened()");
+        UC_RSD("ow-success", file);   // #23 read-salvage trace: open fully succeeded -> write loop will run
         emit opened();
         #ifdef ULTRACOPIER_PLUGIN_DEBUG
         status=Idle;
@@ -574,6 +593,7 @@ void WriteThread::openWriteInternal(const INTERNALTYPEPATH &file, const uint64_t
     stopIt=false;
     fakeMode=false;
     lastGoodPosition=0;
+    salvageBufferedOnClose=false;   // #23 read-salvage-drain (revertible): reset per file
     this->file=file;
     this->startSize=startSize;
     endDetected=false;
@@ -608,6 +628,12 @@ void WriteThread::stop(bool finalNoRetry)
     // PURE skip (fileError=Skip, finalNoRetry) KEEPS the readable salvage already written off the bad
     // sector ("copy every readable byte"); put-to-end / cancel still mark the partial for removal.
     needRemoveTheFile = !finalNoRetry;
+    // --- BEGIN #23 read-salvage-drain (revertible) ---
+    // A PURE read-fault skip keeps the buffered read-ahead so internalClose() drains it into the kept
+    // partial (max salvage off a dying disk). put-to-end / cancel (finalNoRetry=false) do not salvage.
+    salvageBufferedOnClose = finalNoRetry;
+    UC_RSD(finalNoRetry?"stop-finalNoRetry(salvage)":"stop-retry/cancel", file);   // #23 read-salvage trace
+    // --- END #23 read-salvage-drain ---
     stopIt=true;
     if(isOpen.available()>0)
     {
@@ -828,6 +854,7 @@ void WriteThread::internalCloseSlot()
 void WriteThread::internalClose(bool emitSignal)
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] close for file: "+TransferThread::internalStringTostring(file));
+    UC_RSD("close-enter", file);   // #23 read-salvage trace: internalClose reached (the drain path)
     /// \note never send signal here, because it's called by the destructor
     #ifdef ULTRACOPIER_PLUGIN_DEBUG
     status=Close;
@@ -846,6 +873,42 @@ void WriteThread::internalClose(bool emitSignal)
             if(!needRemoveTheFile)
             {
                 ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] !needRemoveTheFile: "+TransferThread::internalStringTostring(file));
+                // --- BEGIN #23 read-salvage-drain (revertible -- grep "#23 read-salvage") ---
+                // Pure read-fault skip: skip() kept theBlockList (did not flushBuffer); drain the buffered
+                // read-ahead (already-read good bytes that out-paced the write) so the kept partial = ALL
+                // readable bytes, not just the lagging write position. Gated to OUR fresh dest
+                // (!destinationPreExisted); seek() first to stay consistent with lastGoodPosition. Other
+                // close paths leave salvageBufferedOnClose==false -> strict no-op.
+                if(salvageBufferedOnClose)
+                {
+                    QMutexLocker lock_mutex(&accessList);
+                    UC_RSD("close-drain-begin", file);
+                    bool drainOk = !destinationPreExisted && seek((int64_t)lastGoodPosition);
+                    while(!theBlockList.empty())
+                    {
+                        DataBlock blk=theBlockList.front();
+                        theBlockList.pop();
+                        if(drainOk && blk.data!=NULL && blk.size>0)
+                        {
+                            #ifdef Q_OS_WIN32
+                            DWORD wr=0;
+                            if(WriteFile(to,blk.data,blk.size,&wr,NULL) && wr==blk.size)
+                                lastGoodPosition+=wr;
+                            else
+                                drainOk=false;
+                            #else
+                            const ssize_t wr=::write(to,blk.data,blk.size);
+                            if(wr==(ssize_t)blk.size)
+                                lastGoodPosition+=(uint64_t)wr;
+                            else
+                                drainOk=false;
+                            #endif
+                        }
+                        if(blk.data!=NULL)
+                            free(blk.data);
+                    }
+                }
+                // --- END #23 read-salvage-drain ---
                 if(startSize!=lastGoodPosition)
                     if(destTruncate(lastGoodPosition)!=0)
                     {

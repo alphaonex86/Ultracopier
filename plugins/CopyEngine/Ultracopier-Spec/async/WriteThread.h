@@ -166,6 +166,9 @@ private:
     bool                destinationPreExisted;  ///< dest existed with NON-EMPTY content at open: it is
                                                 ///< the user's data, never truncate/unlink it on a
                                                 ///< 0-byte overwrite whose source failed (data loss)
+    bool                salvageBufferedOnClose; ///< #23 read-salvage-drain (revertible -- grep "#23 read-salvage"):
+                                                ///< a PURE read-fault skip kept theBlockList (skip() did NOT
+                                                ///< flushBuffer); internalClose drains it into the kept partial.
     bool                deletePartiallyTransferredFiles;
     #ifdef ULTRACOPIER_PLUGIN_SPEED_SUPPORT
     volatile int        multiForBigSpeed;           ///< Multiple for count the number of block needed

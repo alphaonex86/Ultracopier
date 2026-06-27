@@ -137,10 +137,14 @@ def binary_for(backend: str, cfg: configparser.ConfigParser, asan=False) -> str:
     # the Makefile is missing) has no SOURCES+=<hook>, so the hook silently never compiles (the
     # window_close hook bug). Key the dir on the hook set so qmake regenerates with the hook.
     extra_hooks = [h for h in os.environ.get("UC_EXTRA_HOOKS", "").split(os.pathsep) if h]
+    # UC_BUILD_DEFINES (space-separated, e.g. "UC_RSD_TRACE") -> DEFINES+= for diagnostic/instrumented
+    # builds. Keyed into the build dir below so an instrumented build never overwrites the normal one.
+    extra_defs = [d for d in os.environ.get("UC_BUILD_DEFINES", "").split() if d]
     hook_tag = ""
-    if extra_hooks:
+    if extra_hooks or extra_defs:
         import hashlib
-        hook_tag = "-h" + hashlib.sha1(":".join(sorted(extra_hooks)).encode()).hexdigest()[:8]
+        hook_tag = "-h" + hashlib.sha1((":".join(sorted(extra_hooks)) + "|" +
+                                        ":".join(sorted(extra_defs))).encode()).hexdigest()[:8]
     bdir = SOURCES / "build" / f"test-{backend}{'-asan' if asan else ''}{hook_tag}"
     binpath = bdir / "ultracopier"
     bdir.mkdir(parents=True, exist_ok=True)
@@ -156,6 +160,8 @@ def binary_for(backend: str, cfg: configparser.ConfigParser, asan=False) -> str:
     # via a Qt startup routine or an override-factory). The shipping binary never compiles them.
     for h in extra_hooks:
         flags.append(f"SOURCES+={h}")
+    for d in extra_defs:
+        flags.append(f"DEFINES+={d}")
     env = dict(os.environ)
     if backend == ASYNC:
         # Force the async backend even on a liburing box: hide liburing from pkg-config.

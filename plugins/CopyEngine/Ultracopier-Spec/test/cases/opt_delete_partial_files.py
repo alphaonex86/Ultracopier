@@ -15,6 +15,13 @@ internalOpen on stopIt), so the prefix is never written. Persisting it is a NEW 
 feature; this case no longer asserts that (artifact) salvage-keep. The data-loss this fix actually
 eliminates -- losing a *clean* large sibling because a bad file wedged the cap=1 slot -- is covered green
 by skip_drops_multichunk and faulty_hdd.
+
+UPDATE 2026-06-27: the read-salvage drain IS NOW IMPLEMENTED (async, engine markers "#23 read-salvage") and
+the full-prefix salvage is asserted by cases/read_salvage_drain.py, which forces the deterministic
+write-opens-first path via the shim I/O-order control (slow/slowwrite/delayopen). THIS case stays focused on
+the resilient-backup of the SIBLINGS: it does not force that ordering, so the bad file's partial here is
+timing-dependent and intentionally not asserted. (The earlier "bails in internalOpen on stopIt" guess above
+was wrong -- the real path is ow-opened then a write_closed-handler unlink; see the memory note.)
 """
 import os
 import sys

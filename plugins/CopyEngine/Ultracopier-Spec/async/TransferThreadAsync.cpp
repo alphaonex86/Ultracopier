@@ -8,6 +8,17 @@
 #include <dirent.h>
 #include "xxhash.h"
 
+// --- BEGIN #23 read-salvage TRACE (revertible; compiled out unless -DUC_RSD_TRACE -> ZERO shipping
+// impact; grep "#23 read-salvage"). Logs which dest-removal path a read-fault skip takes. ---
+#ifdef UC_RSD_TRACE
+#include <cstdlib>
+#define UC_RSD(ev,p) do{ const char*pa=getenv("UC_RSD_TRACE_PATH"); FILE*f=fopen(pa?pa:"/tmp/uc_rsd.log","a"); \
+    if(f){ fprintf(f,"TT %s %s\n",(ev),TransferThread::internalStringTostring(p).c_str()); fclose(f);} }while(0)
+#else
+#define UC_RSD(ev,p) do{}while(0)
+#endif
+// --- END #23 read-salvage TRACE ---
+
 #ifdef Q_OS_WIN32
 #include <accctrl.h>
 #include <aclapi.h>
@@ -881,9 +892,17 @@ void TransferThreadAsync::ifCanStartTransfer()
         #endif
         if(stopIt)
         {
+            // --- BEGIN #23 read-salvage-drain (revertible -- grep "#23 read-salvage") ---
+            // A PURE read-fault skip (finalSkipNoRetry) KEEPS the readable partial off the dying sector
+            // (the WriteThread drained the salvage). Other stop/error paths still remove their partial.
             if(!source.empty())
                 if(exists(source) && source!=destination && destinationIsOursToRemove())
-                    unlink(destination);
+                {
+                    UC_RSD(finalSkipNoRetry?"tt886-KEEP(salvage)":"tt886-unlink", destination);
+                    if(!finalSkipNoRetry)
+                        unlink(destination);
+                }
+            // --- END #23 read-salvage-drain ---
             resetExtraVariable();
             return;//and reset?
         }
@@ -1271,7 +1290,10 @@ void TransferThreadAsync::skip()
         }
         if(!source.empty() && needRemove)
             if(exists(source) && source!=destination && destinationIsOursToRemove())
+            {
+                UC_RSD("tt1293-unlink", destination);   // #23 read-salvage trace
                 unlink(destination);
+            }
         break;
     case TransferStat_PostTransfer:
         if(needSkip)
@@ -1730,7 +1752,15 @@ void TransferThreadAsync::write_closed()
     if(stopIt && needRemove && source!=destination)
     {
         if(is_file(source) && destinationIsOursToRemove())
-            unlink(destination);
+        {
+            // --- BEGIN #23 read-salvage-drain (revertible -- grep "#23 read-salvage") ---
+            // A PURE read-fault skip (finalSkipNoRetry) KEEPS the readable partial the WriteThread drained
+            // off the dying sector. Other stop/error teardowns still remove their partial.
+            UC_RSD(finalSkipNoRetry?"tt1752-KEEP(salvage)":"tt1752-unlink", destination);
+            if(!finalSkipNoRetry)
+                unlink(destination);
+            // --- END #23 read-salvage-drain ---
+        }
         else
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"["+std::to_string(id)+("] try destroy the destination when the source don't exists or it pre-existed untouched"));
     }
