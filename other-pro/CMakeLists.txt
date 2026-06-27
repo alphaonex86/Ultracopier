@@ -64,6 +64,8 @@ set(PROJECT_SOURCES
     ../plugins/CopyEngine/Ultracopier-Spec/ScanFileOrFolder.cpp
     ../plugins/CopyEngine/Ultracopier-Spec/TransferThread.cpp
     ../plugins/CopyEngine/Ultracopier-Spec/ListThread.cpp
+    ../plugins/CopyEngine/Ultracopier-Spec/PathTree.cpp
+    ../interface/PathTreeStr.cpp
     ../plugins/CopyEngine/Ultracopier-Spec/async/TransferThreadAsync.cpp
     ../plugins/CopyEngine/Ultracopier-Spec/ListThreadActions.cpp
     ../plugins/CopyEngine/Ultracopier-Spec/ListThreadStat.cpp

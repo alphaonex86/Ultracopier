@@ -107,12 +107,16 @@ set(PROJECT_SOURCES
     plugins/CopyEngine/Ultracopier-Spec/ScanFileOrFolder.cpp
     plugins/CopyEngine/Ultracopier-Spec/TransferThread.cpp
     plugins/CopyEngine/Ultracopier-Spec/ListThread.cpp
+    plugins/CopyEngine/Ultracopier-Spec/PathTree.cpp
+    interface/PathTreeStr.cpp
     plugins/CopyEngine/Ultracopier-Spec/ListThreadActions.cpp
     plugins/CopyEngine/Ultracopier-Spec/ListThreadMedia.cpp
     plugins/CopyEngine/Ultracopier-Spec/ListThreadNew.cpp
     plugins/CopyEngine/Ultracopier-Spec/ListThreadOptions.cpp
     plugins/CopyEngine/Ultracopier-Spec/ListThreadScan.cpp
     plugins/CopyEngine/Ultracopier-Spec/ListThreadStat.cpp
+    plugins/CopyEngine/Ultracopier-Spec/ListThreadListChange.cpp
+    plugins/CopyEngine/Ultracopier-Spec/ListThread_InodeAction.cpp
     plugins/CopyEngine/Ultracopier-Spec/async/ReadThread.cpp
     plugins/CopyEngine/Ultracopier-Spec/async/WriteThread.cpp
     plugins/Listener/catchcopy/listener.cpp
