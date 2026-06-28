@@ -1078,7 +1078,12 @@ void TransferThreadAsync::checkIfAllIsClosedAndDoOperations()
     // readable PREFIX salvaged off a bad sector -- KEEP it ("copy every readable byte"); deleting it would
     // silently lose the only bytes we could read (opt_delete_partial_files). faulty_hdd accepts a faithful
     // prefix, so keeping it is safe there too. (Cancel / non-skip teardown still removes its partial.)
-    if(!source.empty() && needRemove && (stopIt || needSkip) && destinationIsOursToRemove() && !finalSkipNoRetry)
+    // BUT an EMPTY (0-byte) skip-dest salvaged NOTHING: it is a phantom that misrepresents an un-openable
+    // source (a VANISHED source -- open() ENOENT, so zero bytes read) as a 0-byte copy. Remove it even on a
+    // pure skip; only a NON-empty prefix is worth keeping (source_vanished). file_stat_size<=0 catches both
+    // 0-byte and already-gone.
+    if(!source.empty() && needRemove && (stopIt || needSkip) && destinationIsOursToRemove()
+            && (!finalSkipNoRetry || TransferThread::file_stat_size(destination)<=0))
         if(is_file(source) && source!=destination)
         {
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"remove because: is_file(source): "+std::to_string(is_file(source))+", source: "+TransferThread::internalStringTostring(source));
