@@ -4,6 +4,7 @@
 
 #include <QFileDialog>
 #include <QList>
+#include <QThread>
 #include <QDebug>
 #include <cmath>
 #include <QStorageInfo>
@@ -267,7 +268,15 @@ void CopyEngineFactory::setResources(OptionInterface * options,const std::string
         KeysList.push_back(std::pair<std::string, std::string>("renameTheOriginalDestination","false"));
         KeysList.push_back(std::pair<std::string, std::string>("checkDiskSpace","true"));
         KeysList.push_back(std::pair<std::string, std::string>("defaultDestinationFolder",""));
+#if defined(ULTRACOPIER_PLUGIN_IO_URING) || defined(ULTRACOPIER_PLUGIN_WINIOCP)
+        // io_uring/IOCP are now multi-threaded (each inode thread runs its OWN ring on DISTINCT files
+        // -> no shared data-plane race; mirrors the proven async N-thread model). Default to the CPU
+        // count, capped at 16 to bound per-thread ring+buffer memory under the RSS budget. Separate
+        // build from async, so this cannot change the async binary's default (16).
+        KeysList.push_back(std::pair<std::string, std::string>("inodeThreads",std::to_string(qBound(1,QThread::idealThreadCount(),16))));
+#else
         KeysList.push_back(std::pair<std::string, std::string>("inodeThreads",std::to_string(16)));
+#endif
         KeysList.push_back(std::pair<std::string, std::string>("bufferSameDevice",std::to_string(300)));
         KeysList.push_back(std::pair<std::string, std::string>("bufferOtherDevice",std::to_string(50)));
         #ifdef Q_OS_WIN32

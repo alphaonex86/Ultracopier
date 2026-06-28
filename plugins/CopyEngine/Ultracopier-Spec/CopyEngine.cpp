@@ -4,6 +4,7 @@
 
 #include <QFileDialog>
 #include <QMessageBox>
+#include <QThread>
 #include <cmath>
 #ifdef ULTRACOPIER_PLUGIN_DEBUG
 #include <sys/stat.h>
@@ -80,7 +81,11 @@ CopyEngine::CopyEngine(FacilityInterface * facilityEngine) :
     ignoreBlackList                 = false;
     deletePartiallyTransferredFiles = true;
 #if defined(ULTRACOPIER_PLUGIN_IO_URING) || defined(ULTRACOPIER_PLUGIN_WINIOCP)
-    inodeThreads                    = 1;  // async backends are single-threaded (see CLAUDE.md)
+    // io_uring/IOCP are now multi-threaded (each inode thread runs its OWN ring/completion-port on
+    // DISTINCT files -> no shared data-plane race; mirrors the async N-thread model). Default to CPU
+    // count capped at 16. This ctor value is the headless-no-optionsEngine fallback; normally the
+    // "inodeThreads" option (same default) overrides it at getInstance().
+    inodeThreads                    = qBound(1,QThread::idealThreadCount(),16);
 #else
     inodeThreads                    = 16;
 #endif
@@ -974,15 +979,11 @@ void CopyEngine::setDeletePartiallyTransferredFiles(const bool &deletePartiallyT
 
 void CopyEngine::setInodeThreads(const int &inodeThreads)
 {
-#if defined(ULTRACOPIER_PLUGIN_IO_URING) || defined(ULTRACOPIER_PLUGIN_WINIOCP)
-    // io_uring / IOCP are ASYNC: I/O concurrency comes from async submission (SQE batching / overlapped
-    // completion ports), NOT from worker threads. They MUST run single-threaded -- multithreading buys
-    // no throughput and only complicates the data-plane race debugging (see CLAUDE.md). Force 1.
-    (void)inodeThreads;
-    this->inodeThreads=1;
-#else
+    // All backends honour the configured inode-thread count. io_uring/IOCP used to be forced to 1;
+    // they are now multi-threaded (each thread its OWN ring on DISTINCT files), defaulting to the CPU
+    // count (capped 16) via the "inodeThreads" option. The test harness can still pin 1 through the
+    // conf key -- the FUSE data-plane-fault cases (iouring_dest_full, reconnect_resume_uring, ...) rely on that.
     this->inodeThreads=inodeThreads;
-#endif
     if(uiIsInstalled)
         ui->inodeThreads->setValue(this->inodeThreads);
     emit send_setInodeThreads(this->inodeThreads);
@@ -1007,11 +1008,8 @@ void CopyEngine::setRenameTheOriginalDestination(const bool &renameTheOriginalDe
 
 void CopyEngine::inodeThreadsFinished()
 {
-#if defined(ULTRACOPIER_PLUGIN_IO_URING) || defined(ULTRACOPIER_PLUGIN_WINIOCP)
-    this->inodeThreads=1;   // async backends: single-threaded, ignore the spinbox (see CLAUDE.md)
-#else
+    // All backends honour the spinbox now (io_uring/IOCP were previously forced to 1).
     this->inodeThreads=ui->inodeThreads->value();
-#endif
     emit send_setInodeThreads(inodeThreads);
 }
 
