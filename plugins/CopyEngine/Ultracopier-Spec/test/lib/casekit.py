@@ -210,6 +210,66 @@ def make_meta_tree(root: str) -> dict:
     return files
 
 
+def make_optrace_tree(root: str) -> tuple:
+    """Create a representative source tree for the operation-decomposition tests (ops_integrity /
+    ops_dependency): nested dirs, several small files, a 0-byte file and a MULTI-CHUNK file (so the
+    write path emits several extents), plus a symlink. Returns (files, dirs):
+      files: {relpath: size}   -- every regular file and the exact byte count it must write
+      dirs : [relpath, ...]    -- every directory that must be mkdir'd on the destination
+    Deterministic content (no randomness) so the trace is reproducible."""
+    import shutil as _sh
+    if os.path.exists(root):
+        _sh.rmtree(root)
+    dirs = ["sub", "sub/deep", "sub2"]
+    for d in dirs:
+        os.makedirs(os.path.join(root, d), exist_ok=True)
+    files = {
+        "a.txt": 6,
+        "empty.dat": 0,
+        "big.dat": 300 * 1024,          # multi-chunk: several 64 KiB write extents
+        "sub/b.txt": 14,
+        "sub/deep/c.txt": 21,
+        "sub2/d.txt": 9,
+    }
+    payload = {
+        "a.txt": b"hello\n",
+        "empty.dat": b"",
+        "big.dat": bytes(300 * 1024),
+        "sub/b.txt": b"world of files",
+        "sub/deep/c.txt": b"deeply nested content",
+        "sub2/d.txt": b"sibling d",
+    }
+    for rel, data in payload.items():
+        with open(os.path.join(root, rel), "wb") as fh:
+            fh.write(data)
+    # a relative symlink (target must round-trip; its own metadata is not transferred)
+    link = os.path.join(root, "sub", "link_to_a")
+    if os.path.lexists(link):
+        os.unlink(link)
+    os.symlink("../a.txt", link)
+    return files, dirs
+
+
+def run_traced(backend, mode, src, dest, files, dirs, **run_kwargs):
+    """Run one cp/mv under the OPS-TRACE (LD_PRELOAD shim logs every basic FS op) and return
+    (Result, optrace.Trace, expected_files, expected_dirs). `files`/`dirs` are the source-relative
+    outputs of make_optrace_tree; they are mapped to their destination paths (dest/<basename(src)>/rel).
+    The trace is written to a throwaway file; UC_FS_OPTRACE_PATH is set only around the run."""
+    import tempfile
+    from lib import optrace as OT
+    trace = tempfile.mktemp(prefix="uc-optrace-", suffix=".txt")
+    os.environ["UC_FS_OPTRACE_PATH"] = trace
+    try:
+        r = H.run(backend, mode, [src], dest, fs_preload=fs_so(), **run_kwargs)
+    finally:
+        os.environ.pop("UC_FS_OPTRACE_PATH", None)
+    copied = copied_root(dest, src)
+    expected_files = {os.path.join(copied, rel): size for rel, size in files.items()}
+    expected_dirs = [copied] + [os.path.join(copied, d) for d in dirs]
+    t = OT.Trace(trace, dest, src)
+    return r, t, expected_files, expected_dirs
+
+
 def windows_host_configured() -> bool:
     """True iff config.ini has a [windows] host -> the IOCP lane can actually run."""
     cfg = H.load_config()

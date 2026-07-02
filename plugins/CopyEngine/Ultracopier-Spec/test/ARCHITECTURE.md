@@ -196,10 +196,32 @@ The returned **`Result`** dataclass is the upward evidence packet:
     --track-origins=yes` (writes `valgrind.log`), or an **ASan** build selected via
     `memcheck=sanitize` with `ASAN_OPTIONS=...:log_path=.../asan`. (valgrind and the
     systemd cap are mutually exclusive in the wrapper logic.)
-- **Completion detection is CPU-idle based,** not a code signal: the harness polls
-  `/proc/<pid>/stat` utime+stime every 2 s; when CPU stops growing for ~8 s the copy is
-  declared finished (robust to IOCP file pre-sizing and to the engine sitting idle in the
-  tray). Peak RSS is sampled throughout from `/proc/<pid>/status`.
+- **Completion detection is engine-signal based and LOAD-IMMUNE** (directive: the engine and
+  the tests must work at ANY system load), not a code signal. Every 2 s the harness samples
+  `/proc/<pid>/stat` (utime+stime + scheduler state), `/proc/<pid>/io` (wchar+rchar) and — only
+  when already process-quiet — a destination-tree fingerprint:
+  - **completed** = ~10 MEASURED seconds (30 under fault injection) of: near-zero CPU delta,
+    < 256 KiB written, destination fingerprint stable, **and state `S` (sleeping)** — a done
+    tray app sleeps in its event loop; a merely STARVED engine shows `R`/`D` and must never be
+    declared finished (that false-complete + pkill truncated a mid-job pump under a real load
+    event). Idle accumulates in **measured** wall-time, so a STRETCHED poll interval (the monitor
+    itself starved by load) still counts: `utime+stime`/`wchar`/`rchar` are CUMULATIVE, so `quiet`
+    holding across a long gap proves the engine did ~0 work for the *whole* gap — stronger idle
+    evidence, not weaker. (An earlier `dt>6 ⇒ reset idle` rule discarded it and so never
+    accumulated idle on a sustainedly-loaded box, false-failing a DONE copy at the 1800 s ceiling —
+    the exact "block under load" the directive forbids; any real activity in the gap moves a
+    cumulative counter and registers as not-quiet, so a hidden active blip can't be mistaken for
+    idle.) There is no "must have run ≥ N CPU ticks" gate — a genuinely tiny copy that finishes
+    almost instantly is correctly recognised the moment it goes quiet + dest-stable.
+  - **hung** = a NO-PROGRESS watchdog, not a wall-clock cap: no signal advanced (bytes
+    written/read, CPU work, destination change, or `R`/`D` state) for 90 s (×2 fault injection,
+    ×3 valgrind/ASan) ⇒ FAIL with `HUNG:` evidence + truthful engine liveness. A
+    starved-but-progressing copy can therefore never false-fail, while a genuinely stuck engine
+    (dialog block = semaphore sleep with no I/O) fails FASTER than the old fixed 180 s cap.
+    `copy_timeout_seconds` (1800) survives only as an absolute ceiling backstop.
+  - The engine pid is acquired lifecycle-anchored (poll while the launcher is alive — spawn can
+    take arbitrarily long on a starved box), replacing a fixed 20 s deadline that false-failed.
+  Peak RSS is sampled throughout from `/proc/<pid>/status`.
 - **Stay-alive assertion:** after completion the process must remain alive for
   `stay_alive_seconds` (default 10). Surviving this window proves there was **no
   teardown/exit crash** — important because there is deliberately no "exit after copy"

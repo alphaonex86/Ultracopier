@@ -56,9 +56,17 @@ NONE, VALGRIND, SANITIZE = "none", "valgrind", "sanitize"
 BUFFER_BUDGET_MB = 256        # I/O buffers must stay under this ceiling (hard rule)
 MEM_MARGIN = 1.20             # +20% error margin on the computed cap
 STAY_ALIVE_SECONDS = 10       # the copy must outlive completion this long (no teardown crash)
-COPY_TIMEOUT_SECONDS = 180    # hung-copy guard: a small-data test that runs longer is HUNG
-                              # (e.g. infinite error-retry, or stalled on a dialog) -> FAIL fast
-                              # with evidence, never let one stuck case hang the whole suite.
+# LOAD-IMMUNITY (directive: the engine AND the tests must work at ANY system load): hung-vs-slow
+# is decided by a NO-PROGRESS watchdog on the ENGINE'S OWN signals (bytes written/read, visible
+# CPU work, destination tree changing), NEVER by total wall time. A starved-but-progressing copy
+# must never false-fail (the old fixed 180s total cap did exactly that at load ~52: append_midcopy
+# hit 182.5s with BOTH content checks green); a genuinely stuck one (dialog block = semaphore
+# sleep, a stalled pump) advances no signal and now fails FASTER than the old cap, with evidence.
+NO_PROGRESS_TIMEOUT_SECONDS = 90   # engine showed NO progress signal for this long == HUNG
+                                   # (x2 under fault injection, x3 under valgrind/ASan)
+COPY_TIMEOUT_SECONDS = 1800   # ABSOLUTE ceiling only (backstop so a pathological spinner --
+                              # progress signals ticking forever without finishing -- can still
+                              # never wedge the whole suite). NOT the hung detector any more.
 
 
 @dataclasses.dataclass
@@ -384,6 +392,33 @@ def _io_bytes(pid: int) -> int:
     return -1
 
 
+def _proc_state(pid: int) -> str:
+    """Scheduler state letter from /proc/pid/stat: 'S' sleeping (event loop, nothing to do),
+    'R' runnable (wants CPU -- a STARVED engine, not an idle one), 'D' uninterruptible I/O wait,
+    'Z' zombie. THE discriminator load-immunity needs: an engine that is cpu-quiet because it is
+    DONE sleeps in S; one that is cpu-quiet because the box starves it shows R/D -- treating R/D
+    as 'idle' is how the pristine harness false-completed and truncated a starved mid-job pump.
+    Parsed after the LAST ')' (comm may contain anything)."""
+    try:
+        return open(f"/proc/{pid}/stat").read().rpartition(")")[2].split()[0]
+    except (OSError, IndexError):
+        return "?"
+
+
+def _rchar_bytes(pid: int) -> int:
+    """rchar from /proc/pid/io: total bytes the process has READ. Needed by the no-progress
+    watchdog: genuinely-progressing WRITE-SILENT phases (the post-copy checksum verify re-reads
+    both files; a big-file read burst) advance rchar while wchar sits still -- without counting
+    reads, a slow loaded box could false-flag those phases as hung."""
+    try:
+        for ln in open(f"/proc/{pid}/io"):
+            if ln.startswith("rchar:"):
+                return int(ln.split()[1])
+    except (OSError, ValueError):
+        pass
+    return -1
+
+
 # ---------------------------------------------------------------------------
 # The one entry point every test case uses.
 # ---------------------------------------------------------------------------
@@ -543,17 +578,37 @@ def _run_impl(backend: str, mode: str, sources, dest, *, cfg=None,
         th = threading.Thread(target=_remove, daemon=True)
         th.start(); remove_threads.append(th)
 
-    # Find the real ultracopier pid (systemd-run/valgrind wrap it).
-    pid = _wait_for_pid()
+    # The real ultracopier pid (systemd-run/valgrind wrap it) is acquired INSIDE the monitor loop:
+    # under load the systemd-run -> D-Bus -> exec chain can take arbitrarily long, and the old
+    # fixed 20s _wait_for_pid deadline false-failed (completed=False alive=False) while the spawn
+    # was merely slow. The loop polls for the pid while the LAUNCHER is alive instead.
+    pid = None
     peak = 0; oom = False; completed = False; exit_code = None
     started = time.time()   # epoch -> kernel-log evidence window
 
     # Mid-copy "append": fire extra cp/mv invocations that the running single-instance forwards
     # and appends to the live transfer list. NOT cgroup-wrapped (they just forward and exit).
+    # Either delay-based ({'delay': s}) or, robust at ANY load, event-based
+    # ({'when_dest_exists': <abs dest path>, 'min_size': bytes} -- the same trigger remove_after
+    # has): fire only once that destination file exists/has grown, PROOF the primary instance is
+    # up (single-instance socket listening) and mid-copy -- a fixed delay can fire before the
+    # socket exists on a starved box (forward lost) or after a fast copy already finished.
     append_threads = []
     for spec in (append_after or []):
         def _fire(spec=spec):
-            time.sleep(spec.get("delay", 1))
+            trig = spec.get("when_dest_exists")
+            if trig is not None:
+                t1 = time.time()
+                need = spec.get("min_size", 1)
+                while time.time() - t1 < timeout:
+                    try:
+                        if os.path.getsize(trig) >= need:
+                            break
+                    except OSError:
+                        pass
+                    time.sleep(0.005)
+            else:
+                time.sleep(spec.get("delay", 1))
             extra = [binpath, spec.get("mode", mode)] + list(spec["sources"]) + [dest]
             subprocess.run(extra, env=env, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
         th = threading.Thread(target=_fire, daemon=True)
@@ -566,10 +621,39 @@ def _run_impl(backend: str, mode: str, sources, dest, *, cfg=None,
     io_delta_limit = 1024 * 1024 if fault_injection else 256 * 1024   # 1 MiB vs 256 KiB
     idle_threshold = 30 if fault_injection else 10                    # seconds
 
-    last_cpu, last_io, idle_for, t0 = -1, -1, 0, time.time()
+    # NO-PROGRESS watchdog window (the hung detector -- see NO_PROGRESS_TIMEOUT_SECONDS): scaled
+    # for fault-injection pauses and for valgrind/ASan slowdown, NEVER for load (load-immune by
+    # construction: a starved engine still advances its signals, just slower).
+    no_progress_window = NO_PROGRESS_TIMEOUT_SECONDS * (2 if fault_injection else 1)
+    if memcheck != NONE:
+        no_progress_window *= 3
+    hung_reason = None
+    last_cpu, last_io, last_rd = -1, -1, -1
+    idle_for = 0.0
+    t0 = time.time()
     last_dest_fp = None
-    while time.time() - t0 < timeout:
-        rss = _rss_mb(pid) if pid else 0
+    last_progress_ts = time.time()   # re-armed when the engine pid first appears
+    last_sample_ts = None            # previous metric-sample timestamp -> MEASURED dt
+    while True:
+        now = time.time()
+        if now - t0 > timeout:
+            hung_reason = f"absolute ceiling {timeout}s exceeded"
+            break
+        if pid is None:
+            # Spawn still pending (can take arbitrarily long on a starved box): keep polling for
+            # the engine while the LAUNCHER is alive; only its death without an engine pid is a
+            # real failure. Replaces the old fixed-deadline _wait_for_pid (false-failed under load).
+            if proc.poll() is not None:
+                exit_code = proc.poll()
+                break
+            pids = _test_ultracopier_pids()
+            if pids:
+                pid = pids[0]
+                last_progress_ts = time.time()   # arm the watchdog from engine birth
+            else:
+                time.sleep(0.3)
+                continue
+        rss = _rss_mb(pid)
         peak = max(peak, rss)
         # Soft RSS cap: portable enforcement (works without systemd-run) + a belt for the
         # cgroup. Exceeding the budget IS a failure (a memory problem), not a crash.
@@ -578,15 +662,33 @@ def _run_impl(backend: str, mode: str, sources, dest, *, cfg=None,
         if rss > mem_limit_mb and memcheck != VALGRIND:
             oom = True
             break
-        alive = (pid and pathlib.Path(f"/proc/{pid}").exists())
-        if not alive:
+        if not pathlib.Path(f"/proc/{pid}").exists():
+            # the engine was seen and has now REALLY exited (crash or kill) -- distinct from the
+            # pid-not-yet-known state above, which keeps waiting instead of failing.
             exit_code = proc.poll()
             oom = oom or _was_oom(proc, exit_code) or _dmesg_oom(started)
             break
-        cpu = _cpu_ticks(pid) if pid else -1
-        io = _io_bytes(pid) if pid else -1
+        cpu = _cpu_ticks(pid)
+        io = _io_bytes(pid)
+        rd = _rchar_bytes(pid)
+        state = _proc_state(pid)
+        if state == "T":
+            # Externally FROZEN (SIGSTOP / ptrace stop) -- neither working, nor idle-done, nor
+            # hung-on-its-own. Real CPU/memory load NEVER produces 'T' (a starved-runnable task is
+            # 'R', an I/O-blocked one 'D', an idle-done one 'S'); only an external stop does. Pause
+            # BOTH clocks and skip the poll: a frozen process makes no progress (so completion must
+            # not advance) yet it is not stuck on its own logic (so it must not count toward the hung
+            # watchdog). It is bounded solely by the absolute ceiling. This keeps a SIGSTOP-cycled
+            # copy (a torture model of extreme starvation) from either false-completing OR false-hanging.
+            last_progress_ts = now
+            last_sample_ts = now
+            time.sleep(2)
+            continue
         cpu_delta = (cpu - last_cpu) if (cpu >= 0 and last_cpu >= 0) else 1 << 30
         io_delta = (io - last_io) if (io >= 0 and last_io >= 0) else 1 << 30
+        rd_delta = (rd - last_rd) if (rd >= 0 and last_rd >= 0) else 1 << 30
+        dt = (now - last_sample_ts) if last_sample_ts is not None else 0.0
+        last_sample_ts = now
         # "process_quiet" = near-idle CPU AND < io_delta_limit written this interval. A real
         # transfer of a LARGE file writes MB/s; but a copy of TINY files (each < io_delta_limit)
         # also looks process-quiet even while actively progressing -- so process-idle ALONE
@@ -596,21 +698,62 @@ def _run_impl(backend: str, mode: str, sources, dest, *, cfg=None,
         # The dest walk is done ONLY when already process-quiet, so it stays off the hot
         # active-copy path. Real incompleteness still surfaces -- a stalled engine goes dest-
         # stable + idle -> completed, and the content diff then catches the missing files.
-        process_quiet = (cpu_delta <= 3 and io_delta < io_delta_limit)
+        # state=='S' is REQUIRED for quiet: a done tray app SLEEPS in its event loop; an engine
+        # that is cpu-quiet only because the box STARVES it shows R (runnable, waiting for CPU)
+        # or D (blocked on I/O) -- counting those as idle is exactly how a starved mid-job pump
+        # got false-completed + pkill-truncated ('later file DROPPED') during a real load event.
+        process_quiet = (cpu_delta <= 3 and io_delta < io_delta_limit and state == "S")
+        dest_changed = False
         if process_quiet:
             dest_fp = _dest_fingerprint(dest)
             quiet = (last_dest_fp is not None and dest_fp == last_dest_fp)
+            dest_changed = (last_dest_fp is not None and dest_fp != last_dest_fp)
             last_dest_fp = dest_fp
         else:
             quiet = False
             last_dest_fp = None
-        idle_for = idle_for + 2 if quiet else 0
-        last_cpu, last_io = cpu, io
-        if idle_for >= idle_threshold:          # ~idle_threshold seconds near-idle+dest-stable == truly finished (resident in tray)
+        # PROGRESS = any engine signal advancing: bytes written, bytes read (the checksum verify
+        # and read bursts write nothing), visible CPU work (the scan phase does neither rchar nor
+        # wchar -- getdents/stat are unaccounted -- but burns CPU), or the destination changing.
+        # A sleeping-hung engine (dialog block = semaphore wait; a stalled pump) advances NONE of
+        # these, so it trips the watchdog far faster than the old 180s cap; a merely-starved one
+        # keeps advancing them and never false-fails.
+        # R/D also counts as progress for the WATCHDOG (not for completion!): a starved-runnable
+        # engine can accrue ~0 CPU ticks per poll at extreme load yet is NOT hung -- it will run;
+        # whereas a dialog-blocked/stalled engine sleeps (S) with no io -> trips the watchdog.
+        if io_delta > 0 or rd_delta > 0 or cpu_delta > 3 or dest_changed or state in ("R", "D"):
+            last_progress_ts = now
+        elif now - last_progress_ts > no_progress_window:
+            hung_reason = (f"no engine progress for {int(now - last_progress_ts)}s "
+                           f"(window {int(no_progress_window)}s)")
+            break
+        # Idle accumulates in MEASURED time (a hardcoded '+2 per poll' would miscount stretched
+        # polls). A STRETCHED interval (dt >> the nominal 2s -- the MONITOR itself was starved by
+        # load) is NOT discarded: cpu/io/rchar are CUMULATIVE counters, so 'quiet' (cpu_delta<=3
+        # AND wchar<limit AND state S) holding ACROSS a long gap proves the engine did ~0 work for
+        # the WHOLE gap -- STRONGER evidence of idle-done, not weaker. (An earlier 'dt>6 -> reset'
+        # rule discarded it and so NEVER accumulated idle on a sustainedly-loaded box, false-
+        # failing a DONE copy at the 1800s ceiling -- the exact "block under load" the directive
+        # forbids. Root-caused: the negative test running concurrently with the full suite hit the
+        # ceiling; the same copy on a quiet box completed at 25s.) Any real activity during the gap
+        # moves a cumulative counter -- cpu for scan/checksum hashing, wchar for a write, or the
+        # dest fingerprint for a newly-appeared file -- so it registers as NOT quiet and resets
+        # idle; a hidden active blip therefore cannot be mistaken for idleness.
+        if quiet:
+            idle_for += dt if dt > 0 else 2.0
+        else:
+            idle_for = 0.0
+        last_cpu, last_io, last_rd = cpu, io, rd
+        if idle_for >= idle_threshold:
+            # ~idle_threshold MEASURED seconds near-idle (state S) + dest-stable == truly finished
+            # (resident in tray). Completion (10s) always precedes the 90s watchdog for a done engine.
             completed = True
             break
         time.sleep(2)
 
+    # Truthful liveness at loop exit (evidence quality): the old code only evaluated liveness when
+    # completed, so a watchdog/ceiling exit misreported a LIVE starved process as alive=False.
+    engine_alive_at_exit = bool(pid and pathlib.Path(f"/proc/{pid}").exists())
     stayed_alive = False
     if completed:
         # 3. it must still be alive `stay` seconds later (proves no teardown crash)...
@@ -636,13 +779,17 @@ def _run_impl(backend: str, mode: str, sources, dest, *, cfg=None,
     #    not stay alive / did not complete), pull the relevant kernel-log lines (OOM-kill of
     #    ultracopier, ATA bus resets, EXT4/I-O errors) and surface them as proof, with peak RSS.
     notes = f"peak_rss={peak}MB cap={mem_limit_mb}MB hard_cgroup_cap={hard_capped}"
+    if hung_reason:
+        notes += f"\nHUNG: {hung_reason}; engine_alive_at_exit={engine_alive_at_exit}"
     problem = (oom or not completed or (completed and not stayed_alive)
                or (exit_code not in (None, 0)))
     if problem:
         ev = _kernel_evidence(started)
         notes += "\n" + ev
-        print(f"    [{backend}] PROBLEM ({'OOM/over-cap' if oom else 'crash/incomplete'}); "
-              f"peak_rss={peak}MB/{mem_limit_mb}MB exit_code={exit_code}. KERNEL EVIDENCE:")
+        kind = 'OOM/over-cap' if oom else ('HUNG: ' + hung_reason if hung_reason else 'crash/incomplete')
+        print(f"    [{backend}] PROBLEM ({kind}); "
+              f"peak_rss={peak}MB/{mem_limit_mb}MB exit_code={exit_code} "
+              f"engine_alive_at_exit={engine_alive_at_exit}. KERNEL EVIDENCE:")
         # Print stderr if available
         try:
             with open(stderr_path, "r", errors="replace") as f:

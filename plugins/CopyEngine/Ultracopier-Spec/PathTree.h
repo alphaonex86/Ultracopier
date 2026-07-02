@@ -57,6 +57,11 @@ public:
     /// \brief just the leaf component (the file name) of a node. O(1).
     const INTERNALTYPEPATH &name(uint32_t node) const;
 
+    /// \brief the parent node id of `node`, or ROOT_SENTINEL for a first (root) component. O(1).
+    /// Read-only; used by the io_uring/IOCP op-decomposition shadow scheduler to derive an entry's
+    /// destination-parent directory. Behaviour-neutral (the async backend compiles but never calls it).
+    uint32_t parentOf(uint32_t node) const { return nodes[node].parent; }
+
     size_t nodeCount() const;///< for tests/metrics
 private:
     struct PathNode {

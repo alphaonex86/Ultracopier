@@ -42,11 +42,19 @@ def run(backends=None, memcheck=H.NONE) -> bool:
     def one(backend):
         K.with_scenario("")
         dest = K.fresh_dest("append_dest")
+        # EVENT-BASED append trigger (load-immune): fire the second invocation once the FIRST
+        # chunk file has started landing in the destination -- proof the primary instance is up
+        # (single-instance socket listening) and mid-copy (29 more 8MiB chunks to go). The old
+        # fixed 2s delay could fire before the socket existed on a starved box (forward lost) or
+        # after a fast box already finished (append no longer mid-flight) -- timing-dependent
+        # coverage either way. 'large' builds d0/chunk_0000.dat first in name order.
+        first_chunk = os.path.join(dest, os.path.basename(src_main), "d0", "chunk_0000.dat")
         r = H.run(backend, "cp", [src_main], dest,
                   file_collision=H.FileCollision.ASK,
                   folder_collision=H.FolderCollision.MERGE,
                   expect_dir=src_main, memcheck=memcheck,
-                  append_after=[{"delay": 2, "sources": [src_extra], "mode": "cp"}])
+                  append_after=[{"when_dest_exists": first_chunk, "min_size": 1,
+                                 "sources": [src_extra], "mode": "cp"}])
 
         # the late-appended tree must have landed byte-for-byte under dest/<basename(extra)>
         copied_extra = os.path.join(dest, extra_base)

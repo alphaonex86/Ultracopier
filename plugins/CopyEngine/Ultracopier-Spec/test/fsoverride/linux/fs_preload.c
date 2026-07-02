@@ -113,6 +113,7 @@
 #include <pthread.h>
 #include <sys/stat.h>
 #include <sys/types.h>
+#include <sys/syscall.h>   /* SYS_gettid, for the OPS-TRACE tid column */
 #include <utime.h>
 #include <sys/time.h>
 
@@ -220,6 +221,35 @@ struct uc_counter {
 static struct uc_counter g_counters[UC_MAX_COUNTER];
 static pthread_mutex_t    g_counter_mtx = PTHREAD_MUTEX_INITIALIZER;
 
+/* OPS-TRACE (independent of UC_FS_SCENARIO, like read/stat accounting): set UC_FS_OPTRACE_PATH=<file>
+ * to append one line per basic FS operation the engine performs, so a test can verify Ultracopier
+ * decomposes each copy into the RIGHT basic ops (no duplicate/forgotten op) in a valid ORDER (open
+ * before write, no data op after close, file/folder date after close, ...). See test/lib/optrace.py.
+ *
+ * Line format (TAB-separated):  <seq>\t<tid>\t<verb>\t<path>\t<a1>\t<a2>\n
+ *   verb  a1        a2
+ *   OPEN  fd        flags (decimal; Python decodes O_CREAT/O_ACCMODE)
+ *   CLOSE fd        -
+ *   READ  offset    bytes (actual)      -- SOURCE read (async data plane + all scan reads)
+ *   WRITE offset    bytes (actual)      -- DEST write  (async data plane only; io_uring/IOCP bypass libc)
+ *   MKDIR rc        mode                -- rc: 0 created, -1 failed (e.g. EEXIST on a merge)
+ *   CHMOD mode      rc
+ *   UTIME rc        -                   -- set-date on a file OR folder (utimensat/futimens/utime[s])
+ *   TRUNC len       rc                  -- (f)truncate: dest pre-size/trim
+ *   UNLINK rc       -                   RENAME rc  -    SYMLINK rc  -
+ * Only paths we can attribute are logged (an unremembered fd is skipped). Data ops are logged AFTER
+ * the real call with the ACTUAL byte count; the offset is the per-fd cumulative-before cursor (== the
+ * true file offset for the sequential copy path), or the explicit offset for p{read,write}.
+ *
+ * Thread-safety: one process-wide append fd (O_APPEND) opened lazily via the REAL libc symbols (so we
+ * never re-enter our own wrappers or log our own writes), guarded by g_optrace_mtx together with the
+ * monotonic seq counter. Written line-at-a-time; O_APPEND keeps concurrent writers from interleaving. */
+static const char     *g_optrace_path = NULL;
+static int             g_optrace_on   = 0;
+static int             g_optrace_fd   = -1;
+static long long       g_optrace_seq  = 0;
+static pthread_mutex_t g_optrace_mtx  = PTHREAD_MUTEX_INITIALIZER;
+
 /* Increment and return the new call-count for `substr` (lazily created). On table
  * overflow returns a huge number so statmut still fires (fail-toward-mutating). */
 static long long uc_path_count(const char *substr)
@@ -262,6 +292,9 @@ static void uc_parse(void)
     /* Stat-accounting, likewise independent of UC_FS_SCENARIO. */
     g_statlog_match = getenv("UC_FS_STATLOG_MATCH");
     g_statlog_on = (g_statlog_match != NULL && g_statlog_match[0] != '\0');
+    /* OPS-TRACE, likewise independent of UC_FS_SCENARIO. */
+    g_optrace_path = getenv("UC_FS_OPTRACE_PATH");
+    g_optrace_on = (g_optrace_path != NULL && g_optrace_path[0] != '\0');
     const char *s = getenv("UC_FS_SCENARIO");
     if (s == NULL || s[0] == '\0')
         return;   /* pure pass-through */
@@ -516,6 +549,42 @@ static void uc_statlog_write(void)
 __attribute__((destructor))
 static void uc_statlog_dump(void) { uc_statlog_write(); }
 
+/* Append one OPS-TRACE line for a basic FS op. `path` may be NULL (then nothing is logged: an op we
+ * cannot attribute to a file is useless to the validator). Uses the REAL libc symbols so it never
+ * re-enters our wrappers (no recursion, and our own log writes never appear in the trace). The append
+ * fd + seq counter are guarded by g_optrace_mtx. Best-effort: any failure is silently ignored. */
+static void uc_optrace(const char *verb, const char *path, long long a1, long long a2)
+{
+    if (!g_optrace_on || path == NULL)
+        return;
+    pthread_mutex_lock(&g_optrace_mtx);
+    if (g_optrace_fd < 0) {
+        int (*real_open_p)(const char *, int, ...) =
+            (int (*)(const char *, int, ...))dlsym(RTLD_NEXT, "open");
+        if (real_open_p != NULL)
+            g_optrace_fd = real_open_p(g_optrace_path, O_WRONLY | O_CREAT | O_APPEND, 0644);
+        if (g_optrace_fd < 0) {
+            pthread_mutex_unlock(&g_optrace_mtx);
+            return;
+        }
+    }
+    ssize_t (*real_write_p)(int, const void *, size_t) =
+        (ssize_t (*)(int, const void *, size_t))dlsym(RTLD_NEXT, "write");
+    if (real_write_p != NULL) {
+        long long seq = ++g_optrace_seq;
+        long tid = (long)syscall(SYS_gettid);
+        char line[UC_MAX_ARG + 128];
+        int n = snprintf(line, sizeof(line), "%lld\t%ld\t%s\t%s\t%lld\t%lld\n",
+                         seq, tid, verb, path, a1, a2);
+        if (n > 0) {
+            if (n > (int)sizeof(line))
+                n = (int)sizeof(line);
+            (void)real_write_p(g_optrace_fd, line, (size_t)n);
+        }
+    }
+    pthread_mutex_unlock(&g_optrace_mtx);
+}
+
 /* Count one stat of `path` (on entry) when stat-accounting is on and the path matches.
  * Flushes every 16 counts so the value survives the SIGTERM kill. */
 static void uc_account_stat(const char *path)
@@ -729,8 +798,10 @@ int open(const char *pathname, int flags, ...)
         return -1;
     }
     int fd = real_open(pathname, flags, mode);
-    if (fd >= 0)
+    if (fd >= 0) {
         uc_remember_fd(fd, pathname);
+        uc_optrace("OPEN", pathname, fd, flags);
+    }
     return fd;
 }
 
@@ -751,8 +822,10 @@ int open64(const char *pathname, int flags, ...)
         return -1;
     }
     int fd = real_open64(pathname, flags, mode);
-    if (fd >= 0)
+    if (fd >= 0) {
         uc_remember_fd(fd, pathname);
+        uc_optrace("OPEN", pathname, fd, flags);
+    }
     return fd;
 }
 
@@ -773,14 +846,17 @@ int openat(int dirfd, const char *pathname, int flags, ...)
         return -1;
     }
     int fd = real_openat(dirfd, pathname, flags, mode);
-    if (fd >= 0)
+    if (fd >= 0) {
         uc_remember_fd(fd, pathname);
+        uc_optrace("OPEN", pathname, fd, flags);
+    }
     return fd;
 }
 
 int close(int fd)
 {
     UC_REAL(close);
+    uc_optrace("CLOSE", uc_fd_path(fd), fd, 0);   /* log with the path BEFORE we forget the fd */
     uc_forget_fd(fd);
     return real_close(fd);
 }
@@ -880,9 +956,10 @@ ssize_t read(int fd, void *buf, size_t count)
     if (slow != NULL)
         uc_sleep_ms(slow->num);
     const char *path = uc_fd_path(fd);
+    long long roff = uc_fd_nread(fd);       /* file offset BEFORE this read (== cumulative-so-far) */
     if (path != NULL) {
         size_t do_count = count;
-        int dec = uc_read_fault(path, count, uc_fd_nread(fd), &do_count);
+        int dec = uc_read_fault(path, count, roff, &do_count);
         if (dec < 0)
             return -1;                      /* errno already EIO */
         if (dec > 0)
@@ -895,6 +972,8 @@ ssize_t read(int fd, void *buf, size_t count)
     if (n > 0)
         uc_fd_nread_add(fd, (long long)n);  /* advance the per-fd cursor */
     uc_account_read(path, n);
+    if (n > 0)
+        uc_optrace("READ", path, roff, (long long)n);
     return n;
 }
 
@@ -978,9 +1057,12 @@ ssize_t write(int fd, const void *buf, size_t count)
             size_t half = count / 2;
             if (half < 1)
                 half = 1;
+            long long woff = uc_fd_nwritten(fd);
             ssize_t w = real_write(fd, buf, half);
-            if (w > 0)
+            if (w > 0) {
                 uc_fd_nwritten_add(fd, (long long)w);
+                uc_optrace("WRITE", path, woff, (long long)w);
+            }
             return w;
         }
         const struct uc_rule *wf = uc_match(UC_WFLIP, path);
@@ -993,16 +1075,21 @@ ssize_t write(int fd, const void *buf, size_t count)
                     tmp[(size_t)(wf->num - base)] ^= 0xFF;   /* SILENT 1-byte corruption */
                     ssize_t w = real_write(fd, tmp, count);
                     free(tmp);
-                    if (w > 0)
+                    if (w > 0) {
                         uc_fd_nwritten_add(fd, (long long)w);
+                        uc_optrace("WRITE", path, base, (long long)count);
+                    }
                     return (w < 0) ? w : (ssize_t)count;     /* report the FULL count */
                 }
             }
         }
     }
+    long long woff = uc_fd_nwritten(fd);
     ssize_t w = real_write(fd, buf, count);
-    if (w > 0)
+    if (w > 0) {
         uc_fd_nwritten_add(fd, (long long)w);
+        uc_optrace("WRITE", path, woff, (long long)w);
+    }
     return w;
 }
 
@@ -1027,6 +1114,8 @@ ssize_t pread(int fd, void *buf, size_t count, off_t offset)
     }
     ssize_t n = real_pread(fd, buf, count, offset);
     uc_account_read(path, n);
+    if (n > 0)
+        uc_optrace("READ", path, (long long)offset, (long long)n);
     return n;
 }
 
@@ -1071,11 +1160,16 @@ ssize_t pwrite(int fd, const void *buf, size_t count, off_t offset)
                 tmp[(size_t)(wf->num - (long long)offset)] ^= 0xFF;   /* SILENT 1-byte corruption */
                 ssize_t w = real_pwrite(fd, tmp, count, offset);
                 free(tmp);
+                if (w > 0)
+                    uc_optrace("WRITE", path, (long long)offset, (long long)count);
                 return (w < 0) ? w : (ssize_t)count;                  /* report the FULL count */
             }
         }
     }
-    return real_pwrite(fd, buf, count, offset);
+    ssize_t w = real_pwrite(fd, buf, count, offset);
+    if (w > 0)
+        uc_optrace("WRITE", path, (long long)offset, (long long)w);
+    return w;
 }
 
 /* ------------------------------------------------------------------ */
@@ -1294,25 +1388,59 @@ int mkdir(const char *pathname, mode_t mode)
         errno = EACCES;
         return -1;
     }
-    return real_mkdir(pathname, mode);
+    int rc = real_mkdir(pathname, mode);
+    uc_optrace("MKDIR", pathname, rc, (long long)mode);
+    return rc;
 }
 
 int unlink(const char *pathname)
 {
     UC_REAL(unlink);
-    return real_unlink(pathname);
+    int rc = real_unlink(pathname);
+    uc_optrace("UNLINK", pathname, rc, 0);
+    return rc;
+}
+
+int rmdir(const char *pathname)
+{
+    UC_REAL(rmdir);
+    int rc = real_rmdir(pathname);
+    uc_optrace("RMDIR", pathname, rc, 0);
+    return rc;
 }
 
 int rename(const char *oldpath, const char *newpath)
 {
     UC_REAL(rename);
-    return real_rename(oldpath, newpath);
+    int rc = real_rename(oldpath, newpath);
+    uc_optrace("RENAME", newpath, rc, 0);   /* logged on the DEST side (the path that appears) */
+    return rc;
 }
 
 int symlink(const char *target, const char *linkpath)
 {
     UC_REAL(symlink);
-    return real_symlink(target, linkpath);
+    int rc = real_symlink(target, linkpath);
+    uc_optrace("SYMLINK", linkpath, rc, 0);
+    return rc;
+}
+
+/* (f)truncate: dest pre-size / trim (e.g. destTruncate, corrupt-dest cleanup). Interposed so the
+ * op trace sees the resize; pass-through otherwise. */
+int truncate(const char *pathname, off_t length)
+{
+    UC_REAL(truncate);
+    int rc = real_truncate(pathname, length);
+    uc_optrace("TRUNC", pathname, (long long)length, rc);
+    return rc;
+}
+
+int ftruncate(int fd, off_t length)
+{
+    UC_REAL(ftruncate);
+    int rc = real_ftruncate(fd, length);
+    uc_optrace("TRUNC", uc_fd_path(fd), (long long)length, rc);
+    return rc;
 }
 
 ssize_t readlink(const char *pathname, char *buf, size_t bufsiz)
@@ -1340,7 +1468,9 @@ int utimensat(int dirfd, const char *pathname, const struct timespec times[2], i
         errno = EIO;
         return -1;
     }
-    return real_utimensat(dirfd, pathname, times, flags);
+    int rc = real_utimensat(dirfd, pathname, times, flags);
+    uc_optrace("UTIME", pathname, rc, 0);
+    return rc;
 }
 
 /* futimens(): the pipelined backends (io_uring/IOCP) set the date on the STILL-OPEN
@@ -1357,7 +1487,9 @@ int futimens(int fd, const struct timespec times[2])
         errno = EIO;
         return -1;
     }
-    return real_futimens(fd, times);
+    int rc = real_futimens(fd, times);
+    uc_optrace("UTIME", path, rc, 0);
+    return rc;
 }
 
 /* utime()/utimes(): the async backend's MkPath date-set path uses utime(). */
@@ -1372,7 +1504,9 @@ int utime(const char *pathname, const struct utimbuf *times)
         errno = EIO;
         return -1;
     }
-    return real_utime(pathname, times);
+    int rc = real_utime(pathname, times);
+    uc_optrace("UTIME", pathname, rc, 0);
+    return rc;
 }
 
 int utimes(const char *pathname, const struct timeval times[2])
@@ -1386,7 +1520,9 @@ int utimes(const char *pathname, const struct timeval times[2])
         errno = EIO;
         return -1;
     }
-    return real_utimes(pathname, times);
+    int rc = real_utimes(pathname, times);
+    uc_optrace("UTIME", pathname, rc, 0);
+    return rc;
 }
 
 int chmod(const char *pathname, mode_t mode)
@@ -1396,5 +1532,48 @@ int chmod(const char *pathname, mode_t mode)
         errno = EIO;
         return -1;
     }
-    return real_chmod(pathname, mode);
+    int rc = real_chmod(pathname, mode);
+    uc_optrace("CHMOD", pathname, (long long)mode, rc);
+    return rc;
+}
+
+/* fallocate(): the io_uring/IOCP backends preallocate a fresh destination's full extent to reduce
+ * fragmentation. io_uring calls the libc fallocate() (its ring reads/writes bypass libc, but this
+ * metadata op does not), so the OPS-TRACE sees it -- letting preallocate.py assert preallocation
+ * engaged for large files and is size-gated away from small ones. Pure pass-through + log. */
+/* Trace a fallocate on `fd`. io_uring opens the destination via the ring (io_uring_prep_openat), NOT
+ * our open() wrapper, so the fd is absent from g_fdtab -- resolve its REAL path from /proc/self/fd/<fd>
+ * (the ring fd is a normal kernel fd) so the preallocation is still attributable to a file. */
+static void uc_falloc_trace(int fd, long long len, int rc)
+{
+    const char *p = uc_fd_path(fd);
+    char procbuf[UC_MAX_ARG];
+    if (p == NULL) {
+        char link[64];
+        snprintf(link, sizeof(link), "/proc/self/fd/%d", fd);
+        ssize_t (*real_readlink_p)(const char *, char *, size_t) =
+            (ssize_t (*)(const char *, char *, size_t))dlsym(RTLD_NEXT, "readlink");
+        ssize_t n = (real_readlink_p != NULL) ? real_readlink_p(link, procbuf, sizeof(procbuf) - 1) : -1;
+        if (n > 0) { procbuf[n] = '\0'; p = procbuf; }
+    }
+    uc_optrace("FALLOC", p, len, rc);
+}
+
+int fallocate(int fd, int mode, off_t offset, off_t len)
+{
+    UC_REAL(fallocate);
+    int rc = real_fallocate(fd, mode, offset, len);
+    uc_falloc_trace(fd, (long long)len, rc);
+    return rc;
+}
+
+/* fallocate64: ultracopier builds with _FILE_OFFSET_BITS=64, so its fallocate() binds to
+ * fallocate64@GLIBC_2.10 (confirmed via `nm -D ultracopier`), NOT the plain fallocate above -- we MUST
+ * interpose it too or the preallocation is invisible (same reason the stat verbs interpose stat64). */
+int fallocate64(int fd, int mode, off64_t offset, off64_t len)
+{
+    UC_REAL(fallocate64);
+    int rc = real_fallocate64(fd, mode, offset, len);
+    uc_falloc_trace(fd, (long long)len, rc);
+    return rc;
 }

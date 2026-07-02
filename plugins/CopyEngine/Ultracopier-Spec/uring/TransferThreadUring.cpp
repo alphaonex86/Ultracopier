@@ -164,9 +164,14 @@ int TransferThreadUring::openSourceFile()
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] "+errorString_internal);
             return -1;
         }
-        const bool isOpenCqe=(io_uring_cqe_get_data64(cqe)==OP_OPEN_TAG);
+        const uint64_t data=io_uring_cqe_get_data64(cqe);
+        const bool isOpenCqe=(data==OP_OPEN_TAG);
         if(isOpenCqe)
             fd=cqe->res;
+        else if((data&OP_MASK)==OP_CLOSE_TAG && cqe->res<0)
+            // a swept fire-and-forget close CQE from the previous file (closeFiles no longer waits): keep
+            // its log-only error diagnostic, the one signal that change would otherwise drop.
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] unable to close "+((data&IDX_MASK)==0?"source":"dest")+": "+std::string(strerror(-cqe->res)));
         io_uring_cqe_seen(&ring,cqe);
         if(isOpenCqe)
             break;
@@ -272,9 +277,14 @@ int TransferThreadUring::openDestFile(uint64_t startSize)
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] "+errorString_internal);
             return -1;
         }
-        const bool isOpenCqe=(io_uring_cqe_get_data64(cqe)==OP_OPEN_TAG);
+        const uint64_t data=io_uring_cqe_get_data64(cqe);
+        const bool isOpenCqe=(data==OP_OPEN_TAG);
         if(isOpenCqe)
             fd=cqe->res;
+        else if((data&OP_MASK)==OP_CLOSE_TAG && cqe->res<0)
+            // a swept fire-and-forget close CQE from the previous file (closeFiles no longer waits): keep
+            // its log-only error diagnostic, the one signal that change would otherwise drop.
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] unable to close "+((data&IDX_MASK)==0?"source":"dest")+": "+std::string(strerror(-cqe->res)));
         io_uring_cqe_seen(&ring,cqe);
         if(isOpenCqe)
             break;
@@ -326,6 +336,21 @@ int TransferThreadUring::openDestFile(uint64_t startSize)
         ::close(fd);
         return -1;
     }
+    // Best-effort persistent PREALLOCATION of a FRESH destination (reduce fragmentation): reserve the
+    // file's full extent up front so the out-of-order pipelined writes land in CONTIGUOUS blocks instead
+    // of growing the file piecemeal. FALLOC_FL_KEEP_SIZE reserves the BLOCKS WITHOUT changing st_size, so
+    // an interrupted/cancelled copy keeps today's partial-size semantics — the resume-prefix guard above,
+    // the #25 corrupt-dest cleanup, the checksum verify, and dest-full/ENOSPC handling are ALL unchanged.
+    // FRESH file only (startSize==0 ⇔ resumeFromOffset==0) so it never touches a resume prefix. Ignore
+    // EVERY failure: EOPNOTSUPP (FAT / many network FS) or ENOSPC (a full dest — the real ENOSPC still
+    // surfaces at write time) etc. — preallocation is an OPTIMIZATION ONLY, never a copy-fail path. (Raw
+    // fallocate, NOT posix_fallocate: the latter silently zero-writes the whole file on an unsupported FS,
+    // O(filesize) data I/O. io_uring is Linux-only so fallocate is always present.)
+    if(startSize==0 && sourceFileSize>=PREALLOCATE_MIN_SIZE)
+    {
+        if(fallocate(fd,FALLOC_FL_KEEP_SIZE,(off_t)0,(off_t)sourceFileSize)!=0)
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] preallocate skipped (fragmentation-only, harmless): "+std::string(strerror(errno)));
+    }
     if(startSize>0)
     {
         // Make the kept prefix durable before we trust+append to it (the resume contract). This
@@ -335,17 +360,12 @@ int TransferThreadUring::openDestFile(uint64_t startSize)
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] resume fdatasync failed: "+std::string(strerror(errno)));
     }
 
-    // Seek to 0
-    if(lseek(fd,0,SEEK_SET)!=0)
-    {
-        int t=errno;
-        errorString_internal=strerror(t);
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] Unable to seek: "+errorString_internal);
-        ::close(fd);
-        return -1;
-    }
-
     // Store internally and report success; the base class no longer captures the fd.
+    // NB: no lseek(fd,0) here — every destination I/O is an io_uring_prep_write at an EXPLICIT
+    // pipelineBuffers[bufIdx].fileOffset, futimens/close take the fd directly, and there is no
+    // positional read()/write() on destFd anywhere (verified). The file position is never read, so the
+    // former seek-to-0 was a dead blocking syscall (and a pointless failure path) on every file — a
+    // measurable cost on the small-file critical path. Removed.
     destFd=fd;
     return 0;
 }
@@ -399,23 +419,17 @@ void TransferThreadUring::closeFiles()
 
     if(pending>0)
     {
+        // FIRE-AND-FORGET close: SUBMIT the close SQEs (MANDATORY — the kernel executes a submitted
+        // close(2) whenever it runs it, but an UN-submitted close SQE for the LAST file before this pooled
+        // worker goes idle would never be flushed and would LEAK the fd: io_uring_queue_exit does NOT close
+        // prepped-but-unsubmitted fds) but do NOT block-wait for their CQEs. The close result carries ZERO
+        // integrity/flow-control logic here — closeFiles() is void and a close error was only ever LOGGED —
+        // so dropping the wait merely removes one blocking io_uring_enter(GETEVENTS) syscall per file on the
+        // small-file critical path. The <=2 unreaped close CQEs are swept (and, if they errored, logged) by
+        // the next file's open discard-drains, or consumed by doTransferPipeline's io_uring_cq_advance, or
+        // dropped at io_uring_queue_exit; they stay far below the CQ ceiling (2*RING_DEPTH) and can never be
+        // mistaken for another op ((data&OP_MASK)==OP_CLOSE_TAG, distinct from OPEN/READ/WRITE).
         io_uring_submit(&ring);
-        for(int i=0;i<pending;i++)
-        {
-            struct io_uring_cqe *cqe;
-            int ret=io_uring_wait_cqe(&ring,&cqe);
-            if(ret<0)
-            {
-                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] io_uring_wait_cqe for close failed: "+std::string(strerror(-ret)));
-                continue;
-            }
-            if(cqe->res<0)
-            {
-                uint64_t idx=io_uring_cqe_get_data64(cqe)&IDX_MASK;
-                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] unable to close "+(idx==0?"source":"dest")+": "+std::string(strerror(-cqe->res)));
-            }
-            io_uring_cqe_seen(&ring,cqe);
-        }
     }
 }
 

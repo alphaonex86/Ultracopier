@@ -96,6 +96,11 @@ def _one_run(backend: str, delay_s: int) -> bool:
     env = dict(os.environ)
     env.update(HOME=str(home),
                QT_QPA_PLATFORM="offscreen", DISPLAY="",   # never reach a real X display
+               # Per-UID TEST socket suffix: without it this instance binds the REAL user
+               # socket -- it could swallow a genuine Dolphin/CLI paste (the historical
+               # test-socket-isolation incident) and the harness's test-instance reaper
+               # would not recognise it.
+               ULTRACOPIER_SOCKET_SUFFIX=H.TEST_SOCKET_SUFFIX,
                XDG_CONFIG_HOME=str(home / ".config"))
 
     argv = [binpath, "cp", src, dest]

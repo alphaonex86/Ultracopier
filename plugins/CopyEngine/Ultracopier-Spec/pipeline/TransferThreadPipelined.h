@@ -173,6 +173,14 @@ protected:
     /// file (setFiles) and on every restart path so a stale value can't trim an unrelated dest.
     uint64_t resumeFromOffset;
 
+    /// \brief A FRESH destination file whose size is >= this gets a best-effort PREALLOCATION (reserve
+    /// its full extent up front: io_uring fallocate(FALLOC_FL_KEEP_SIZE) / IOCP SetEndOfFile) so the
+    /// out-of-order pipelined writes land contiguously instead of growing the file piecemeal. Files
+    /// SMALLER than this are skipped: they don't fragment, and preallocating them would only add
+    /// syscalls to the very small-file path the pipelining is trying to speed up. io_uring/IOCP only
+    /// (async is untouched). 1 MiB — below it a file is almost always laid out contiguously anyway.
+    static constexpr uint64_t PREALLOCATE_MIN_SIZE=1024*1024;
+
     unsigned int blockSize;
     bool os_spec_flags;
     bool bufferEnabled;

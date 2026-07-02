@@ -39,6 +39,7 @@ import os, sys, time, subprocess
 binp, src, dest, home, size = sys.argv[1:6]
 subprocess.run(["mount","-t","tmpfs","-o","size="+size,"tmpfs",dest], check=True)
 env = dict(os.environ, HOME=home, QT_QPA_PLATFORM="offscreen", DISPLAY="",
+           ULTRACOPIER_SOCKET_SUFFIX="test",
            XDG_CONFIG_HOME=os.path.join(home,".config"))
 def dbytes():
     t=0

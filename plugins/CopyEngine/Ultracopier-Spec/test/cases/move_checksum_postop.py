@@ -15,8 +15,15 @@ the data write already succeeded). Two runs:
   * datefail OFF -> REQUIRED: clean move, source REMOVED (regression guard so the fix didn't break the
     normal move).
 
-ASYNC only (the datefail verb is a libc utimensat interpose; io_uring/IOCP set the date via their own
-syscalls -- a separate port + verification).
+The DATEFAIL sub-run is **ASYNC-only** by necessity: the io_uring backend opens the dest fd
+via io_uring_prep_openat (through the ring -- TransferThreadUring::openDestFile), so the
+LD_PRELOAD shim never records that fd's path (uc_fd_path -> NULL) and its futimens datefail
+guard cannot fire -- the on-handle date-set genuinely SUCCEEDS, the source is correctly
+removed, and asserting preservation there would be a FALSE alarm (the shim fundamentally
+cannot fault a ring-opened fd -- the same limitation as the io_uring data plane; a REAL
+io_uring/IOCP on-handle date-fault needs a FUSE utimens-EPERM mount / fs_hook verb, tracked
+separately). io_uring therefore runs only the CLEAN sub-run here (proving the move +
+on-handle date-set + source-removal path works end to end). IOCP: laptop lane, separate.
 """
 import os
 import sys
@@ -33,7 +40,7 @@ from lib import casekit as K
 PAYLOAD = (b"move-checksum-postop-payload-bytes\n" * 64)   # real multi-line content for the checksum
 
 
-def _one(datefail: bool) -> bool:
+def _one(backend: str, datefail: bool) -> bool:
     # Source on /tmp -> different filesystem than the scratch dest -> realMove=false (copy+delete).
     src_dir = pathlib.Path(tempfile.mkdtemp(prefix="uc-mvchk-src-", dir="/tmp"))
     src_file = src_dir / "ledger.bin"
@@ -42,10 +49,10 @@ def _one(datefail: bool) -> bool:
     dest_file = pathlib.Path(dest, "ledger.bin")
 
     if datefail:
-        K.with_scenario("datefail:ledger.bin")   # the DEST date-set (utimensat) fails EPERM
+        K.with_scenario("datefail:ledger.bin")   # the DEST date-set (utimensat/futimens) fails EPERM
     else:
         K.with_scenario("")
-    r = H.run(H.ASYNC, "mv", [str(src_file)], dest,
+    r = H.run(backend, "mv", [str(src_file)], dest,
               file_collision=H.FileCollision.OVERWRITE,
               folder_collision=H.FolderCollision.MERGE,
               file_error=H.FileError.SKIP,
@@ -61,7 +68,7 @@ def _one(datefail: bool) -> bool:
         # REQUIRED: a critical (keepDate) post-op failure keeps the source.
         ok = (r.completed and r.stayed_alive and dest_ok and src_exists
               and src_file.read_bytes() == PAYLOAD and not r.oom_killed and r.mem_errors == 0)
-        print(f"      [datefail] source_preserved={src_exists} dest_ok={dest_ok} "
+        print(f"      [{backend} datefail] source_preserved={src_exists} dest_ok={dest_ok} "
               f"completed={r.completed} mem_err={r.mem_errors}")
         if not src_exists:
             print("        DATA LOSS: source deleted despite a keepDate date-set failure on the MOVE")
@@ -69,7 +76,7 @@ def _one(datefail: bool) -> bool:
         # REQUIRED: a clean move removes the source (the fix must NOT keep the source on success).
         ok = (r.completed and r.stayed_alive and dest_ok and not src_exists
               and not r.oom_killed and r.mem_errors == 0)
-        print(f"      [clean]    source_removed={not src_exists} dest_ok={dest_ok} "
+        print(f"      [{backend} clean]    source_removed={not src_exists} dest_ok={dest_ok} "
               f"completed={r.completed} mem_err={r.mem_errors}")
         if src_exists:
             print("        REGRESSION: clean move did NOT remove the source")
@@ -78,9 +85,16 @@ def _one(datefail: bool) -> bool:
 
 
 def run(backends=None, memcheck=H.NONE) -> bool:
-    a = _one(datefail=True)
-    b = _one(datefail=False)
-    ok = a and b
+    def one(backend):
+        # datefail is meaningful only where the shim can fault the date-set: on async the
+        # dest is opened via libc (uc_fd_path knows it) so futimens/utimensat datefail fires;
+        # on io_uring the dest fd is ring-opened (invisible to the shim) so the fault can't
+        # engage -- run only the clean sub-run there (see the module docstring).
+        clean = _one(backend, datefail=False)
+        if backend == H.ASYNC:
+            return _one(backend, datefail=True) and clean
+        return clean
+    ok = K.for_backends(backends, one)
     print(f"    [move_checksum_postop] {'PASS' if ok else 'FAIL'}")
     return ok
 

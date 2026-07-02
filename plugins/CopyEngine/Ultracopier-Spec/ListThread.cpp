@@ -64,6 +64,13 @@ ListThread::ListThread(FacilityInterface * facilityInterface) :
     debug_pos=0;
     debug_total=0;
     #endif
+    #if (defined(ULTRACOPIER_PLUGIN_IO_URING) || defined(ULTRACOPIER_PLUGIN_WINIOCP)) && defined(ULTRACOPIER_PLUGIN_DEBUG)
+    opShadowSched=nullptr;
+    opShadowActive=false;
+    opShadowViolations=0;
+    opShadowChecks=0;
+    opShadowSummaryLogged=false;
+    #endif
     moveToThread(this);
     start(HighPriority);
     this->facilityInterface=facilityInterface;
@@ -144,6 +151,13 @@ ListThread::~ListThread()
     // transfer thread (each thread gets its own in createTransferThread), so free them here.
     delete writeFileList;       writeFileList=nullptr;
     delete writeFileListMutex;  writeFileListMutex=nullptr;
+    #if (defined(ULTRACOPIER_PLUGIN_IO_URING) || defined(ULTRACOPIER_PLUGIN_WINIOCP)) && defined(ULTRACOPIER_PLUGIN_DEBUG)
+    if(opShadowSched!=nullptr && !opShadowSummaryLogged)
+        ULTRACOPIER_DEBUGCONSOLE(opShadowViolations==0?Ultracopier::DebugLevel_Notice:Ultracopier::DebugLevel_Critical,
+            QStringLiteral("OPSHADOW summary: nodes=%1 checks=%2 violations=%3").arg(opShadowSched->opCount())
+            .arg(opShadowChecks).arg(opShadowViolations).toStdString());
+    delete opShadowSched; opShadowSched=nullptr;
+    #endif
 }
 
 #ifndef ULTRACOPIER_PLUGIN_ACTIONLIST_COMPACT_THRESHOLD
@@ -290,6 +304,9 @@ void ListThread::transferInodeIsClosed()
                 temp_transfer_thread->haveStartTime=false;
             }
             tombstoneActionToDoTransferAt(int_for_internal_loop);
+            #if (defined(ULTRACOPIER_PLUGIN_IO_URING) || defined(ULTRACOPIER_PLUGIN_WINIOCP)) && defined(ULTRACOPIER_PLUGIN_DEBUG)
+            opShadowCompleteFile(temp_transfer_thread->transferId);// STAGE 1b.0 shadow observer hook 1
+            #endif
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("actionToDoListTransfer.size(): %1, actionToDoListInode: %2, actionToDoListInode_afterTheTransfer: %3").arg(actionToDoListTransfer.size()).arg(actionToDoListInode.size()).arg(actionToDoListInode_afterTheTransfer.size()).toStdString());
             if(actionToDoListTransferEmpty() && actionToDoListInode.empty() && actionToDoListInode_afterTheTransfer.empty())
                 updateTheStatus();
@@ -482,8 +499,195 @@ void ListThread::fileTransferWithInode(const INTERNALTYPEPATH &sourceFileInfo,co
     #endif
 }
 
+#if (defined(ULTRACOPIER_PLUGIN_IO_URING) || defined(ULTRACOPIER_PLUGIN_WINIOCP)) && defined(ULTRACOPIER_PLUGIN_DEBUG)
+// STAGE 1b.0 shadow observer -- see pipeline/STAGE_1B0_INTEGRATION.md and the member declarations in
+// ListThread.h. Built ONCE from the fully-populated lists (called from autoStartAndCheckSpace, right
+// after the scan finishes and before any dispatch), then fed purely by the existing dispatch/finish
+// call sites. Read-only: it only counts/logs; it never changes what those call sites do.
+void ListThread::opShadowBuild()
+{
+    if(opShadowSched!=nullptr)
+        return; // built once per job
+    // The shadow observer is a SINGLE-INODE-THREAD linearization proof. Its three hooks fire at
+    // different lifecycle points (mkdir/setMetaDir at action-DISPATCH, file at transferInodeIsClosed
+    // signal-processing), which coincide with the physical FS-op order ONLY when ONE inode thread owns
+    // the whole op stream. With N inode threads the hook-firing order decouples from physical op
+    // completion across threads, so the DAG check would see spurious `unmet` (a NON-violation) and the
+    // Idle summary could race the last deferred SyncDate hooks -- meaningless noise, not a real ordering
+    // bug. (The multi-thread engine's correctness is gated by content-diff + ops_dependency.py; each
+    // file's open<data<close chain is thread-local and proven HERE at 1 thread; cross-file edges are
+    // structural -- mkdir-before-open via mkdir-p-on-ENOENT, folder-date via SyncDate deferral.) So the
+    // observer engages ONLY at inodeThreads==1 and skips HONESTLY otherwise -- it must never emit a false
+    // OPSHADOW_VIOLATION in a debug multi-thread copy. The shadow test pins inodeThreads=1 to run it.
+    if(inodeThreads!=1)
+    {
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("OPSHADOW skipped: single-inode-thread linearization check, but inodeThreads=%1 (>1)").arg(inodeThreads).toStdString());
+        return;
+    }
+    // First cut covers only a plain-Copy job whose queued inode actions are all MkPath/SyncDate (no
+    // Move/rsync folder lifecycle, which this model does not yet represent), AND keepDate||doRightTransfer
+    // (else addToMkPath skips a non-empty dir's action -- ListThread.cpp:663 -- while addToKeepAttributePath
+    // still queues its SyncDate unconditionally, which would make that dir's setMetaDirOp/openOp(children)
+    // never satisfiable -> a FALSE violation on a shape this shadow does not yet cover). If the shape
+    // doesn't match, opShadowActive stays false and every hook below silently declines to check.
+    bool shapeOk=(mode==Ultracopier::Copy) && (keepDate || doRightTransfer);
+    for(size_t i=0;i<actionToDoListInode.size() && shapeOk;i++)
+    {
+        const ActionType t=actionToDoListInode.at(i).type;
+        if(t!=ActionType_MkPath && t!=ActionType_SyncDate)
+            shapeOk=false;
+    }
+    for(size_t i=0;i<actionToDoListTransfer.size() && shapeOk;i++)
+        if(actionToDoListTransfer.at(i)->mode!=Ultracopier::Copy)
+            shapeOk=false;
+    if(!shapeOk)
+        return;
+
+    // Build the MODELED-dir path set FIRST (every dir the scanner actually recursed into and queued
+    // an MkPath/SyncDate action for). This is the boundary between "the subtree ultracopier manages"
+    // and "pre-existing filesystem" (the user's chosen dest base and everything above it, and every
+    // ancestor above THAT up to the filesystem root) -- PathTree interns the FULL absolute destination
+    // path, so an unbounded ancestor climb would otherwise walk through dozens of pre-existing path
+    // components (e.g. /mnt/data/...) that no action ever creates/completes, permanently stalling their
+    // (never-satisfiable) mkdirOp and producing a FALSE violation on every dir at the top of the
+    // scanned subtree. Matching by STRING (never re-intern at run time -- see the design doc).
+    std::unordered_set<INTERNALTYPEPATH> modeledDirPaths;
+    for(size_t i=0;i<actionToDoListInode.size();i++)
+    {
+        const ActionToDoInode &a=actionToDoListInode.at(i);
+        if(a.type==ActionType_MkPath || a.type==ActionType_SyncDate)
+            modeledDirPaths.insert(a.destination);
+    }
+
+    std::vector<ucpipe::FsNode> nodes;
+    std::unordered_map<uint32_t,int> pathTreeNodeToFs; // PathTree dir-node id -> FsNode index
+
+    for(size_t i=0;i<actionToDoListTransfer.size();i++)
+    {
+        const ActionToDoTransfer &a=*actionToDoListTransfer.at(i);
+        if(a.removed)
+            continue;
+        // Climb from the file's immediate destination parent toward the root, creating any
+        // not-yet-seen MODELED ancestor dir FsNode along the way (root-ward first, so `parent`
+        // indices always reference an already-pushed node). Stops -- WITHOUT creating a node for the
+        // stopping point -- at PathTree::ROOT_SENTINEL, at an already-interned node (shared with a
+        // prior file/dir), or at the first ancestor that is NOT in modeledDirPaths (the pre-existing
+        // boundary); either way the last MODELED node on the chain gets parent=-1.
+        std::vector<uint32_t> chain;
+        uint32_t cur=pathTree.parentOf(a.dstNode);
+        while(cur!=PathTree::ROOT_SENTINEL && pathTreeNodeToFs.find(cur)==pathTreeNodeToFs.cend())
+        {
+            if(modeledDirPaths.find(pathTree.resolve(cur))==modeledDirPaths.cend())
+                break; // pre-existing / out-of-model boundary -- do not include this node or go higher
+            chain.push_back(cur);
+            cur=pathTree.parentOf(cur);
+        }
+        const bool curKnown=(cur!=PathTree::ROOT_SENTINEL && pathTreeNodeToFs.find(cur)!=pathTreeNodeToFs.cend());
+        int parentIdx=curKnown?pathTreeNodeToFs.at(cur):-1;
+        for(size_t ci=chain.size();ci>0;ci--)
+        {
+            const uint32_t ptNode=chain[ci-1];
+            ucpipe::FsNode dn; dn.isDir=true; dn.parent=parentIdx; dn.size=0; dn.engineId=0;
+            nodes.push_back(dn);
+            const int idx=(int)nodes.size()-1;
+            pathTreeNodeToFs[ptNode]=idx;
+            parentIdx=idx;
+        }
+        ucpipe::FsNode fn; fn.isDir=false; fn.parent=parentIdx; fn.size=a.size; fn.engineId=a.id;
+        nodes.push_back(fn);
+        opShadowFileNode[a.id]=(int)nodes.size()-1;
+    }
+
+    // Match each MkPath/SyncDate action's destination STRING to the resolved path of a dir FsNode we
+    // already built from the files (never re-intern at run time: intern()'s final-component semantics
+    // differ from an already-interned directory -- see pipeline/STAGE_1B0_INTEGRATION.md).
+    std::unordered_map<INTERNALTYPEPATH,uint32_t> resolvedToPtNode;
+    for(std::unordered_map<uint32_t,int>::const_iterator it=pathTreeNodeToFs.cbegin();it!=pathTreeNodeToFs.cend();++it)
+        resolvedToPtNode[pathTree.resolve(it->first)]=it->first;
+
+    for(size_t i=0;i<actionToDoListInode.size();i++)
+    {
+        const ActionToDoInode &a=actionToDoListInode.at(i);
+        std::unordered_map<INTERNALTYPEPATH,uint32_t>::const_iterator found=resolvedToPtNode.find(a.destination);
+        if(found==resolvedToPtNode.cend())
+            continue; // an empty dir (no file under it) -- not modeled in this first cut
+        const int fsIdx=pathTreeNodeToFs.at(found->second);
+        if(a.type==ActionType_MkPath || a.type==ActionType_SyncDate)
+            opShadowDirNode[a.id]=fsIdx;
+    }
+
+    opShadowSched=new ucpipe::OpScheduler(nodes);
+    opShadowActive=true;
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("OPSHADOW built: nodes=%1 files=%2 dirs-matched=%3")
+        .arg(nodes.size()).arg(opShadowFileNode.size()).arg(opShadowDirNode.size()).toStdString());
+}
+
+void ListThread::opShadowCompleteFile(uint64_t engineId)
+{
+    if(!opShadowActive || opShadowSched==nullptr)
+        return;
+    std::unordered_map<uint64_t,int>::const_iterator it=opShadowFileNode.find(engineId);
+    if(it==opShadowFileNode.cend())
+        return;
+    const int nd=it->second;
+    const int ids[4]={opShadowSched->openOp(nd),opShadowSched->dataOp(nd),opShadowSched->closeOp(nd),opShadowSched->setMetaFileOp(nd)};
+    for(int i=0;i<4;i++)
+    {
+        opShadowChecks++;
+        if(opShadowSched->op(ids[i]).unmet!=0)
+        {
+            opShadowViolations++;
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,QStringLiteral("OPSHADOW_VIOLATION: file op %1 (node %2, engineId %3) unmet=%4 at completion")
+                .arg(i).arg(nd).arg(engineId).arg(opShadowSched->op(ids[i]).unmet).toStdString());
+        }
+        opShadowSched->complete(ids[i]);
+    }
+}
+
+void ListThread::opShadowCompleteMkdir(uint64_t actionId)
+{
+    if(!opShadowActive || opShadowSched==nullptr)
+        return;
+    std::unordered_map<uint64_t,int>::const_iterator it=opShadowDirNode.find(actionId);
+    if(it==opShadowDirNode.cend())
+        return;
+    const int nd=it->second;
+    const int mkOp=opShadowSched->mkdirOp(nd);
+    opShadowChecks++;
+    if(opShadowSched->op(mkOp).unmet!=0)
+    {
+        opShadowViolations++;
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,QStringLiteral("OPSHADOW_VIOLATION: mkdir (node %1, actionId %2) unmet=%3 at dispatch")
+            .arg(nd).arg(actionId).arg(opShadowSched->op(mkOp).unmet).toStdString());
+    }
+    opShadowSched->complete(mkOp);
+}
+
+void ListThread::opShadowCompleteSetMetaDir(uint64_t actionId)
+{
+    if(!opShadowActive || opShadowSched==nullptr)
+        return;
+    std::unordered_map<uint64_t,int>::const_iterator it=opShadowDirNode.find(actionId);
+    if(it==opShadowDirNode.cend())
+        return;
+    const int nd=it->second;
+    const int smOp=opShadowSched->setMetaDirOp(nd);
+    opShadowChecks++;
+    if(opShadowSched->op(smOp).unmet!=0)
+    {
+        opShadowViolations++;
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,QStringLiteral("OPSHADOW_VIOLATION: setMetaDir (node %1, actionId %2) unmet=%3 at dispatch")
+            .arg(nd).arg(actionId).arg(opShadowSched->op(smOp).unmet).toStdString());
+    }
+    opShadowSched->complete(smOp);
+}
+#endif
+
 void ListThread::autoStartAndCheckSpace()
 {
+    #if (defined(ULTRACOPIER_PLUGIN_IO_URING) || defined(ULTRACOPIER_PLUGIN_WINIOCP)) && defined(ULTRACOPIER_PLUGIN_DEBUG)
+    opShadowBuild();
+    #endif
     if(needMoreSpace())
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"Need more space");
@@ -641,6 +845,18 @@ void ListThread::updateTheStatus()
         updateTheStatus_action_in_progress=Ultracopier::Copying;
     else
         updateTheStatus_action_in_progress=Ultracopier::Idle;
+    #if (defined(ULTRACOPIER_PLUGIN_IO_URING) || defined(ULTRACOPIER_PLUGIN_WINIOCP)) && defined(ULTRACOPIER_PLUGIN_DEBUG)
+    // Log the OPSHADOW summary as soon as the job goes Idle (not just the dtor): pkill/SIGTERM, the
+    // mandated way to end a test run, does not run C++ destructors, so a test reading this log needs
+    // the summary written WHILE the process is still alive.
+    if(updateTheStatus_action_in_progress==Ultracopier::Idle && opShadowSched!=nullptr && !opShadowSummaryLogged)
+    {
+        opShadowSummaryLogged=true;
+        ULTRACOPIER_DEBUGCONSOLE(opShadowViolations==0?Ultracopier::DebugLevel_Notice:Ultracopier::DebugLevel_Critical,
+            QStringLiteral("OPSHADOW summary: nodes=%1 checks=%2 violations=%3").arg(opShadowSched->opCount())
+            .arg(opShadowChecks).arg(opShadowViolations).toStdString());
+    }
+    #endif
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"emit actionInProgess("+std::to_string(updateTheStatus_action_in_progress)+")");
     emit actionInProgess(updateTheStatus_action_in_progress);
 }

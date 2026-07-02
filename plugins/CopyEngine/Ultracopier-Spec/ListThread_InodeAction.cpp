@@ -22,6 +22,9 @@ switch(currentActionToDoInode.type)
                                  ", destination: "+TransferThread::internalStringTostring(currentActionToDoInode.destination));
         mkPathQueue.addPath(currentActionToDoInode.source,currentActionToDoInode.destination,currentActionToDoInode.type);
         currentActionToDoInode.isRunning=true;
+        #if (defined(ULTRACOPIER_PLUGIN_IO_URING) || defined(ULTRACOPIER_PLUGIN_WINIOCP)) && defined(ULTRACOPIER_PLUGIN_DEBUG)
+        opShadowCompleteMkdir(currentActionToDoInode.id);// STAGE 1b.0 shadow observer hook 2
+        #endif
         numberOfInodeOperation++;
         if(numberOfInodeOperation>=inodeThreads)
             return;
@@ -68,6 +71,9 @@ switch(currentActionToDoInode.type)
                                      ", destination: "+TransferThread::internalStringTostring(currentActionToDoInode.destination));
             mkPathQueue.addPath(currentActionToDoInode.source,currentActionToDoInode.destination,currentActionToDoInode.type);
             currentActionToDoInode.isRunning=true;
+            #if (defined(ULTRACOPIER_PLUGIN_IO_URING) || defined(ULTRACOPIER_PLUGIN_WINIOCP)) && defined(ULTRACOPIER_PLUGIN_DEBUG)
+            opShadowCompleteSetMetaDir(currentActionToDoInode.id);// STAGE 1b.0 shadow observer hook 3
+            #endif
             numberOfInodeOperation++;
             if(numberOfInodeOperation>=inodeThreads)
                 return;

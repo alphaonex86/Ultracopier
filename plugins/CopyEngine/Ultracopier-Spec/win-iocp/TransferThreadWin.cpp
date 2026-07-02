@@ -300,9 +300,14 @@ int TransferThreadWin::openDestFile(uint64_t startSize)
     // (resume: open the existing dest, preserving [0,startSize)); CREATE_ALWAYS otherwise (normal
     // first transfer: a fresh, truncated destination -- byte-for-byte the old behaviour).
     const DWORD disposition=(startSize>0)?OPEN_ALWAYS:CREATE_ALWAYS;
+    DWORD destFlags=FILE_FLAG_OVERLAPPED;
+    if(os_spec_flags)
+        destFlags|=FILE_FLAG_SEQUENTIAL_SCAN;   // mirror the source hint: the dest is a whole-file
+                                                // sequential write, so let the cache manager optimise
+                                                // write-behind for it (same os_spec_flags gate as source).
     HANDLE h=CreateFileW(destPath.c_str(),GENERIC_WRITE,
                          FILE_SHARE_READ,nullptr,
-                         disposition,FILE_FLAG_OVERLAPPED,nullptr);
+                         disposition,destFlags,nullptr);
     if(h==INVALID_HANDLE_VALUE)
     {
         const DWORD err=GetLastError();
@@ -352,6 +357,25 @@ int TransferThreadWin::openDestFile(uint64_t startSize)
         // keep the handle's logical pointer tidy.
         LARGE_INTEGER zero; zero.QuadPart=0;
         SetFilePointerEx(h,zero,nullptr,FILE_BEGIN);
+    }
+    else if(sourceFileSize>=PREALLOCATE_MIN_SIZE)
+    {
+        // Best-effort PREALLOCATION of a FRESH large destination (reduce fragmentation): reserve the
+        // full extent's worth of CONTIGUOUS clusters up front so the out-of-order pipelined writes land
+        // contiguously instead of growing the file piecemeal. Use FileAllocationInfo, NOT SetEndOfFile:
+        // it reserves the ALLOCATION size WITHOUT moving the logical end-of-file, so st_size still grows
+        // only with real writes -- matching io_uring's fallocate(FALLOC_FL_KEEP_SIZE). THIS IS THE
+        // DATA-SAFETY-CRITICAL CHOICE: SetEndOfFile would set st_size==sourceFileSize immediately, so a
+        // HARD crash / power-loss / kill (which bypasses the graceful destinationIsOursToRemove() unlink)
+        // would leave a FULL-size, zero-tailed file that a later size-only collision policy
+        // (fileCollision "overwrite if not same size", idx 7) would silently SKIP as already-complete =
+        // silent data corruption. FileAllocationInfo instead leaves an interrupted copy SHORT (st_size <
+        // source), so that policy correctly RE-COPIES it (and it also avoids the VDL zero-fill cost).
+        // FRESH file only (startSize==0), size-gated, best-effort (ignore failure; ENOSPC still surfaces
+        // at write time). NOT SetFileValidData (privileged + leaks stale on-disk bytes).
+        FILE_ALLOCATION_INFO fai;
+        fai.AllocationSize.QuadPart=(LONGLONG)sourceFileSize;
+        SetFileInformationByHandle(h,FileAllocationInfo,&fai,sizeof(fai));
     }
 
     destHandle=h;

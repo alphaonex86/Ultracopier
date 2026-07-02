@@ -54,6 +54,7 @@ fp = subprocess.Popen([fuse, mnt, "-f", "-s"],
                       stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 time.sleep(1.5)
 env = dict(os.environ, HOME=home, QT_QPA_PLATFORM="offscreen", DISPLAY="",
+           ULTRACOPIER_SOCKET_SUFFIX="test",
            XDG_CONFIG_HOME=os.path.join(home, ".config"))
 def db():
     t = 0

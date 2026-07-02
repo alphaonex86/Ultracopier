@@ -41,6 +41,11 @@ typedef TransferThreadUring TransferThreadImpl;
 #include "async/TransferThreadAsync.h"
 typedef TransferThreadAsync TransferThreadImpl;
 #endif
+#if (defined(ULTRACOPIER_PLUGIN_IO_URING) || defined(ULTRACOPIER_PLUGIN_WINIOCP)) && defined(ULTRACOPIER_PLUGIN_DEBUG)
+// STAGE 1b.0 shadow observer (see pipeline/STAGE_1B0_INTEGRATION.md): DEBUG-only + pipelined-backend-only,
+// so this never reaches the async TU nor a NODEBUG release build.
+#include "pipeline/OpScheduler.h"
+#endif
 
 /// \brief Define the list thread, and management to the action to do
 class ListThread : public QThread
@@ -266,6 +271,30 @@ private:
     uint64_t debug_pos;
     uint64_t debug_total;
     std::vector<std::string> debug_threadWas;
+    #endif
+    #if (defined(ULTRACOPIER_PLUGIN_IO_URING) || defined(ULTRACOPIER_PLUGIN_WINIOCP)) && defined(ULTRACOPIER_PLUGIN_DEBUG)
+    // STAGE 1b.0 shadow observer (pipeline/STAGE_1B0_INTEGRATION.md): a DEBUG-only, READ-ONLY consistency
+    // check that the engine's real op-emission order is a valid topological linearization of the
+    // pipeline/OpScheduler.h op DAG. It NEVER drives dispatch -- built once from the fully-populated
+    // lists and fed purely by the EXISTING dispatch/finish call sites -- so behaviour/output/diff are
+    // completely unaffected; it only LOGS a violation (never aborts) if the invariant is ever broken.
+    // First cut covers only a plain-Copy, no-fault, no-collision, no-reorder job; opShadowActive is
+    // false (silently declines to check) outside that shape, so it never false-alarms on paths it
+    // does not yet model (put-to-end, skip, resume, collision, reorder, Move).
+    ucpipe::OpScheduler        *opShadowSched;         ///< null until opShadowBuild() runs once
+    std::unordered_map<uint64_t,int> opShadowFileNode; ///< file engineId (ActionToDoTransfer.id) -> FsNode index
+    std::unordered_map<uint64_t,int> opShadowDirNode;  ///< MkPath/SyncDate action id -> FsNode index
+    bool                        opShadowActive;        ///< true only for the plain-Copy shape this covers
+    uint64_t                    opShadowViolations;     ///< count of invariant misses (0 == fully consistent)
+    uint64_t                    opShadowChecks;         ///< count of hook calls that actually ran a check (non-vacuous proof)
+    bool                        opShadowSummaryLogged;  ///< fire the OPSHADOW summary line exactly once, at job-Idle
+                                                         ///< (not just the dtor -- pkill/SIGTERM, the mandated way to end
+                                                         ///< a test run, does not run destructors, so the test needs the
+                                                         ///< summary on-disk WHILE the process is still alive)
+    void opShadowBuild();                              ///< build the model once (called from autoStartAndCheckSpace)
+    void opShadowCompleteFile(uint64_t engineId);       ///< hook 1: a file transfer finished (transferInodeIsClosed)
+    void opShadowCompleteMkdir(uint64_t actionId);      ///< hook 2: an ActionType_MkPath action launched
+    void opShadowCompleteSetMetaDir(uint64_t actionId); ///< hook 3: an ActionType_SyncDate action launched
     #endif
     //can't be static into WriteThread, linked by instance then by ListThread
     #if defined(ULTRACOPIER_PLUGIN_IO_URING) || defined(ULTRACOPIER_PLUGIN_WINIOCP)
