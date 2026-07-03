@@ -56,12 +56,35 @@ def _scratch_root() -> pathlib.Path:
     return p
 
 
+def _force_rmtree(path):
+    """rmtree robust against HOSTILE-MODE leftovers (e.g. an unenterable mode-644 directory a
+    previous run's engine left at the dest -- seen when a dir/file TYPE-mismatch collision gets
+    the source FILE's permissions stamped onto a kept dest DIRECTORY): chmod the blocker and its
+    parent to 0755 and retry, instead of failing the NEXT run's setup with PermissionError."""
+    def _fix(p):
+        try:
+            os.chmod(os.path.dirname(p), 0o755)
+        except OSError:
+            pass
+        try:
+            os.chmod(p, 0o755)
+        except OSError:
+            pass
+    def onexc(func, p, exc):
+        _fix(p)
+        func(p)          # retry once; a second failure propagates (real problem, surface it)
+    try:
+        shutil.rmtree(path, onexc=onexc)          # Python >= 3.12
+    except TypeError:
+        shutil.rmtree(path, onerror=lambda f, p, e: (_fix(p), f(p)))
+
+
 def fresh_dest(name: str) -> str:
     """Return a wiped, freshly-created scratch destination directory (absolute)."""
     dest = _scratch_root() / name
     if dest.exists() or dest.is_symlink():
         if dest.is_dir() and not dest.is_symlink():
-            shutil.rmtree(dest)
+            _force_rmtree(dest)
         else:
             dest.unlink()
     dest.mkdir(parents=True, exist_ok=True)

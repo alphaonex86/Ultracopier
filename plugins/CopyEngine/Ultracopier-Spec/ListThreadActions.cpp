@@ -67,6 +67,14 @@ bool ListThread::skipInternal(const uint64_t &id)
         if(transferThreadList.at(index)->transferId==id)
         {
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"skip one transfer: "+std::to_string(id));
+            // An interactive skip/remove of a RUNNING transfer is FINAL: no put-to-end retry will
+            // ever requeue it. Mark it a pure skip (same as the fileError=Skip policy paths in
+            // CopyEngine-collision-and-error.cpp) so WriteThread::stop() completes the close
+            // handshake (closed() is emitted) instead of the put-to-end teardown that suppresses
+            // it while waiting for a retry that never comes -- without this the write side never
+            // "closes", postOperationStopped() never fires, the thread stays counted as running
+            // and the whole scheduler wedges (finding-skip-running-hangs).
+            transferThreadList.at(index)->finalSkipNoRetry=true;
             transferThreadList.at(index)->skip();
             return true;
         }

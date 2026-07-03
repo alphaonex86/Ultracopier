@@ -270,7 +270,7 @@ def _run_windows_impl(mode, sources_local, *, cfg=None,
                 keep_date=True, do_right=True,
                 expect=None, mem_limit_mb=1024, stay_alive_seconds=10,
                 dest_pre_seed=None, extra_options=None, post_verify=None,
-                fs_scenario=None, force_local_source=False) -> WindowsResult:
+                fs_scenario=None, force_local_source=False, source_on_box=None) -> WindowsResult:
     """Run one real cp/mv through the IOCP backend on the remote Windows box.
 
     mode           : 'cp' or 'mv'.
@@ -329,8 +329,16 @@ def _run_windows_impl(mode, sources_local, *, cfg=None,
                "ForEach-Object {{ New-Item -ItemType Directory -Force -Path $_ | Out-Null }}"
                .replace("{{", "{").replace("}}", "}"))
 
-        if source_win and not force_local_source:
+        if source_on_box:
+            # The CASE already staged (or owns) this on-box tree and explicitly points us at it
+            # (windows_crash_detection pushes its own tree first). Never inferred from config.
+            src_on_box = source_on_box
+        elif source_win and not force_local_source and mode == "cp":
             # Use the real on-box source as-is (nothing pushed -> no secret leaves the box).
+            # ONLY for cp: a MOVE per-file DELETES its source, so pointing it at the user's
+            # real [paths] SOURCEWINDOWS tree is data destruction, not a test (this exact
+            # hole moved-away/destroyed C:\source incl. the deployed runtime, 2026-07-02).
+            # mv ALWAYS stages a local throwaway tree, whatever the config says.
             src_on_box = source_win
         else:
             # Push the local synthetic tree via tar (see _Box.push): the archive extracts

@@ -1,0 +1,14 @@
+# ThreadSanitizer suppressions for the TSan lane (harness --memcheck tsan).
+#
+# RULE (CLAUDE.md "never weaken a check"): ONLY third-party-internal noise may live here.
+# NEVER add a suppression for a race between two frames of OUR code -- our races get FIXED.
+#
+# glib eventfd wakeup: g_wakeup_signal()/g_wakeup_acknowledge() write/read an eventfd that
+# glib itself created on another thread. The eventfd IS the synchronization primitive; TSan's
+# fd-based happens-before tracking misattributes it as a data race on the fd's shadow cell
+# ("#0 write <libtsan> #1 <libglib> ..."). Classic false positive; every Qt-on-glib app hits
+# it. Suppressing by CALLING LIBRARY keeps any our-code-vs-our-code race fully reported.
+called_from_lib:libglib-2.0.so
+# Qt event-dispatcher internals on top of that same glib wakeup (QEventDispatcherGlib posting
+# across threads); pure libQt6Core-internal accesses -- our frames never appear in these.
+race:libQt6Core.so.6

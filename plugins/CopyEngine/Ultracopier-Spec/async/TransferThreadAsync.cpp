@@ -893,13 +893,21 @@ void TransferThreadAsync::ifCanStartTransfer()
         if(stopIt)
         {
             // --- BEGIN #23 read-salvage-drain (revertible -- grep "#23 read-salvage") ---
-            // A PURE read-fault skip (finalSkipNoRetry) KEEPS the readable partial off the dying sector
-            // (the WriteThread drained the salvage). Other stop/error paths still remove their partial.
-            if(!source.empty())
+            // A PURE FAULT skip (finalSkipNoRetry after a read/write error) KEEPS the readable partial
+            // off the dying sector (the WriteThread drained the salvage). A CLEAN interactive skip
+            // (no error) removes its partial like 3.0. Other stop/error paths still remove theirs.
+            // #9 DATA-LOSS GUARD: a same-drive MOVE (realMove) that reaches here did a rename() that
+            // FAILED (a successful rename skips this !successFull block; an EXDEV rename fell back to
+            // the copy pipeline with realMove=false and returned earlier). A failed rename is ATOMIC:
+            // it left NO partial of ours -- the destination is either the user's UNTOUCHED pre-existing
+            // file (Overwrite collision) or absent. destinationIsOursToRemove() here reads STALE
+            // writeThread state (never opened for a realMove), so it cannot be trusted; unlinking would
+            // delete the user's untouched destination. Never unlink on a realMove.
+            if(!realMove && !source.empty())
                 if(exists(source) && source!=destination && destinationIsOursToRemove())
                 {
-                    UC_RSD(finalSkipNoRetry?"tt886-KEEP(salvage)":"tt886-unlink", destination);
-                    if(!finalSkipNoRetry)
+                    UC_RSD((finalSkipNoRetry&&(readError||writeError))?"tt886-KEEP(salvage)":"tt886-unlink", destination);
+                    if(!finalSkipNoRetry || !(readError||writeError))
                         unlink(destination);
                 }
             // --- END #23 read-salvage-drain ---
@@ -1082,8 +1090,12 @@ void TransferThreadAsync::checkIfAllIsClosedAndDoOperations()
     // source (a VANISHED source -- open() ENOENT, so zero bytes read) as a 0-byte copy. Remove it even on a
     // pure skip; only a NON-empty prefix is worth keeping (source_vanished). file_stat_size<=0 catches both
     // 0-byte and already-gone.
-    if(!source.empty() && needRemove && (stopIt || needSkip) && destinationIsOursToRemove()
-            && (!finalSkipNoRetry || TransferThread::file_stat_size(destination)<=0))
+    // #9 realMove guard: a same-drive MOVE reaching here did a SUCCESSFUL rename() (line ~928 calls
+    // this on realMove success), so the destination IS the moved file -- never a partial of ours.
+    // destinationIsOursToRemove() reads stale writeThread state for a realMove and must not be trusted;
+    // a concurrent skip/cancel (stopIt/needSkip) must NOT delete the successfully-moved destination.
+    if(!realMove && !source.empty() && needRemove && (stopIt || needSkip) && destinationIsOursToRemove()
+            && (!finalSkipNoRetry || !(readError||writeError) || TransferThread::file_stat_size(destination)<=0))
         if(is_file(source) && source!=destination)
         {
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"remove because: is_file(source): "+std::to_string(is_file(source))+", source: "+TransferThread::internalStringTostring(source));
@@ -1759,10 +1771,12 @@ void TransferThreadAsync::write_closed()
         if(is_file(source) && destinationIsOursToRemove())
         {
             // --- BEGIN #23 read-salvage-drain (revertible -- grep "#23 read-salvage") ---
-            // A PURE read-fault skip (finalSkipNoRetry) KEEPS the readable partial the WriteThread drained
-            // off the dying sector. Other stop/error teardowns still remove their partial.
-            UC_RSD(finalSkipNoRetry?"tt1752-KEEP(salvage)":"tt1752-unlink", destination);
-            if(!finalSkipNoRetry)
+            // A PURE FAULT skip (finalSkipNoRetry after a read/write error) KEEPS the readable partial
+            // the WriteThread drained off the dying sector. A CLEAN interactive skip (no error; the
+            // user's skip/remove button, also finalSkipNoRetry so the close handshake completes)
+            // removes its partial like 3.0 did. Other stop/error teardowns still remove theirs.
+            UC_RSD((finalSkipNoRetry&&(readError||writeError))?"tt1752-KEEP(salvage)":"tt1752-unlink", destination);
+            if(!finalSkipNoRetry || !(readError||writeError))
                 unlink(destination);
             // --- END #23 read-salvage-drain ---
         }

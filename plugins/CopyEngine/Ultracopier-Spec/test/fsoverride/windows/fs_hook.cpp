@@ -12,7 +12,7 @@
  *   Linux libc          Win32 equivalent we hook              rule(s) that fire
  *   ----------------    ----------------------------------    -----------------------
  *   open/open64/openat  CreateFileW (+ CreateFileA fallback)  openfail
- *   read/pread          ReadFile / ReadFileEx                 slow
+ *   read/pread          ReadFile / ReadFileEx                 slow, readfail, eio_after
  *   write/pwrite        WriteFile / WriteFileEx               efail, slow, shortwrite
  *   utimensat           SetFileTime                           efail
  *   (fs control/ioctl)  DeviceIoControl                       efail (e.g. sparse/trim)
@@ -64,7 +64,13 @@ enum UcVerb {
     UC_SLOW,         // sleep ms in ReadFile/WriteFile
     UC_SHORTWRITE,   // WriteFile reports fewer bytes written on matching path
     UC_STATFAIL,     // GetFileAttributesEx fails on matching path
-    UC_WFLIP         // silent 1-byte XOR-0xFF flip at a file offset in a matching dest WriteFile
+    UC_WFLIP,        // silent 1-byte XOR-0xFF flip at a file offset in a matching dest WriteFile
+    UC_READFAIL,     // ReadFile of a matching (source) path fails ERROR_IO_DEVICE -- whole-file bad sector
+    UC_EIO_AFTER     // ReadFile succeeds until <num> cumulative bytes for the handle, then fails -- bad
+                     // sector partway in. (Whole-file readfail fails the ReadFile CALL, so it surfaces
+                     // on BOTH sync and an OVERLAPPED submit -- a failed submit that does not set
+                     // ERROR_IO_PENDING is a synchronous IOCP error. This is the Windows/IOCP analogue of
+                     // the Linux fs_preload.c readfail/eio_after used by faulty_hdd.)
                      // (returns the FULL byte count -> the engine believes the write succeeded; the
                      //  corruption is only visible when #25's checksum-verify RE-READS the dest. This
                      //  is the exact Windows/IOCP analogue of the Linux fs_preload.c `wflip` verb.)
@@ -85,7 +91,7 @@ static bool      g_parsed = false;
 // match by path. TODO: replace this fixed array with a CRITICAL_SECTION-guarded
 // std::unordered_map<HANDLE,std::wstring> -- handles are not small integers on
 // Windows, so we cannot index by them like the Linux fd table does.
-struct HandlePath { HANDLE h = nullptr; wchar_t path[512] = {0}; uint64_t written = 0; };
+struct HandlePath { HANDLE h = nullptr; wchar_t path[512] = {0}; uint64_t written = 0; uint64_t nread = 0; };
 static const int UC_MAX_HANDLES = 4096;
 static HandlePath g_handles[UC_MAX_HANDLES];
 static CRITICAL_SECTION g_handlesLock;
@@ -119,6 +125,11 @@ static void ucParse()
         else if (!wcscmp(tok, L"slow"))       { r.verb = UC_SLOW;       r.num = wcstol(arg, nullptr, 10); }
         else if (!wcscmp(tok, L"shortwrite")) { r.verb = UC_SHORTWRITE; wcsncpy_s(r.arg, arg, _TRUNCATE); }
         else if (!wcscmp(tok, L"statfail"))   { r.verb = UC_STATFAIL;   wcsncpy_s(r.arg, arg, _TRUNCATE); }
+        else if (!wcscmp(tok, L"readfail"))   { r.verb = UC_READFAIL;   wcsncpy_s(r.arg, arg, _TRUNCATE); }
+        else if (!wcscmp(tok, L"eio_after"))  { r.verb = UC_EIO_AFTER;  /* arg is "<substr>:<bytes>" -- split on the LAST colon */
+                                                { wchar_t *lc = wcsrchr(arg, L':');
+                                                  if (lc) { *lc = L'\0'; r.num = wcstoll(lc + 1, nullptr, 10); }
+                                                  wcsncpy_s(r.arg, arg, _TRUNCATE); } }
         else if (!wcscmp(tok, L"wflip"))      { r.verb = UC_WFLIP;
             // arg is "<path-substr>:<offset>" -- split on the LAST colon (a Windows path may itself
             // contain ':' as in C:\...). Left part = path substring, right part = absolute file offset.
@@ -186,8 +197,36 @@ static const wchar_t *ucHandlePath(HANDLE h)
     // Caller must hold no lock; returns a pointer valid until the handle is freed.
     for (int i = 0; i < UC_MAX_HANDLES; ++i)
         if (g_handles[i].h == h)
-            return g_handles[i].path;
-    return nullptr;
+            return g_handles[i].path[0] ? g_handles[i].path : nullptr;
+    // Unknown handle: the file was opened BEFORE our CreateFileW hook was installed (the DLL is
+    // injected into an already-running ultracopier, so its source/dest handles predate the hook).
+    // Resolve the path LIVE from the handle and remember it, so the read/write fault verbs still
+    // match (this is what made the IOCP read/write fault lane actually fire). Non-file handles
+    // (pipes/sockets/console -> GetFinalPathNameByHandleW fails) are remembered with an EMPTY path
+    // so we resolve each distinct handle at most once and never perturb their I/O.
+    wchar_t buf[512];
+    DWORD n = GetFinalPathNameByHandleW(h, buf, (DWORD)(sizeof(buf)/sizeof(buf[0])), FILE_NAME_NORMALIZED | VOLUME_NAME_DOS);
+    const bool ok = (n > 0 && n < (DWORD)(sizeof(buf)/sizeof(buf[0])));
+    EnterCriticalSection(&g_handlesLock);
+    // re-check under lock (another thread may have just recorded it)
+    for (int i = 0; i < UC_MAX_HANDLES; ++i)
+        if (g_handles[i].h == h) {
+            LeaveCriticalSection(&g_handlesLock);
+            return g_handles[i].path[0] ? g_handles[i].path : nullptr;
+        }
+    for (int i = 0; i < UC_MAX_HANDLES; ++i)
+        if (g_handles[i].h == nullptr) {
+            g_handles[i].h = h;
+            if (ok) wcsncpy_s(g_handles[i].path, buf, _TRUNCATE);
+            else    g_handles[i].path[0] = L'\0';   // sentinel: known non-file handle, never re-resolve
+            g_handles[i].written = 0;
+            g_handles[i].nread = 0;
+            const wchar_t *r = g_handles[i].path[0] ? g_handles[i].path : nullptr;
+            LeaveCriticalSection(&g_handlesLock);
+            return r;
+        }
+    LeaveCriticalSection(&g_handlesLock);
+    return ok ? nullptr : nullptr;   // table full (should not happen): fail open, no fault
 }
 
 static void ucForgetHandle(HANDLE h)
@@ -222,6 +261,24 @@ static void ucAddWritten(HANDLE h, DWORD len)
     EnterCriticalSection(&g_handlesLock);
     for (int i = 0; i < UC_MAX_HANDLES; ++i)
         if (g_handles[i].h == h) { g_handles[i].written += len; break; }
+    LeaveCriticalSection(&g_handlesLock);
+}
+
+static uint64_t ucGetRead(HANDLE h)
+{
+    EnterCriticalSection(&g_handlesLock);
+    uint64_t v = 0;
+    for (int i = 0; i < UC_MAX_HANDLES; ++i)
+        if (g_handles[i].h == h) { v = g_handles[i].nread; break; }
+    LeaveCriticalSection(&g_handlesLock);
+    return v;
+}
+
+static void ucAddRead(HANDLE h, DWORD len)
+{
+    EnterCriticalSection(&g_handlesLock);
+    for (int i = 0; i < UC_MAX_HANDLES; ++i)
+        if (g_handles[i].h == h) { g_handles[i].nread += len; break; }
     LeaveCriticalSection(&g_handlesLock);
 }
 
@@ -270,10 +327,37 @@ static BOOL WINAPI hook_ReadFile(HANDLE h, LPVOID buf, DWORD len, LPDWORD got, L
     const UcRule *slow = ucSlow();
     if (slow)
         Sleep((DWORD)slow->num);
-    // NOTE: for OVERLAPPED (IOCP) reads the byte count is reported via the
-    // completion packet (GetQueuedCompletionStatus), not *got. Slowing the
-    // submit call is still observable as back-pressure; failing a read mid-IOCP
-    // would require also faulting the completion -- see TODO below.
+    const wchar_t *path = ucHandlePath(h);
+    if (path) {
+        // Whole-file bad sector: fail the ReadFile CALL. A failed submit that does NOT set
+        // ERROR_IO_PENDING is a synchronous error for an OVERLAPPED handle too, so this reaches
+        // the IOCP read path (unlike shortwrite/count-tweaks that live in the completion packet).
+        if (ucMatch(UC_READFAIL, path)) {
+            SetLastError(ERROR_IO_DEVICE);   // ~ EIO
+            if (got) *got = 0;
+            return FALSE;
+        }
+        // Bad sector partway in: reads up to <num> bytes into the file succeed, past it they fail.
+        // IOCP reads are OVERLAPPED (real_ReadFile returns FALSE/ERROR_IO_PENDING and the bytes are
+        // delivered asynchronously via the completion port), so the "count synchronously-completed
+        // bytes" path below never advances for them -- keying eio_after off ucGetRead() would NEVER
+        // fire on the IOCP data plane. When an OVERLAPPED with an explicit file offset is supplied,
+        // key the fault off THAT offset (fail any read that STARTS at/after the threshold); fall back
+        // to the cumulative-byte counter only for synchronous (ov==NULL) reads.
+        const UcRule *ea = ucMatch(UC_EIO_AFTER, path);
+        if (ea) {
+            const uint64_t at = ov ? (((uint64_t)ov->OffsetHigh << 32) | (uint64_t)ov->Offset)
+                                   : ucGetRead(h);
+            if (at >= (uint64_t)ea->num) {
+                SetLastError(ERROR_IO_DEVICE);
+                if (got) *got = 0;
+                return FALSE;
+            }
+        }
+        BOOL ok = real_ReadFile(h, buf, len, got, ov);
+        if (ok && got) ucAddRead(h, *got);   // count only synchronously-completed bytes (ov==NULL path)
+        return ok;
+    }
     return real_ReadFile(h, buf, len, got, ov);
 }
 

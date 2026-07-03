@@ -147,8 +147,12 @@ enum uc_verb {
     UC_STATMUT,      /* stat of a matching path returns a MUTATED size/mtime after the Nth call */
     UC_SHORTREAD,    /* read() on matching path returns at most <n> bytes (default 64KiB): forces */
                      /* the engine's short-read REFILL path; data is identical, just chunked     */
-    UC_ENOSPC        /* write() on matching path succeeds to <bytes> cumulative, then fails ENOSPC: */
+    UC_ENOSPC,       /* write() on matching path succeeds to <bytes> cumulative, then fails ENOSPC: */
                      /* models the destination filling up partway through a file (dest-full)       */
+    UC_RENAMEFAIL    /* rename() to a matching DEST path BLOCKS ~250ms then fails EACCES (non-EXDEV, */
+                     /* so no copy-pipeline fallback): models a same-drive move whose atomic rename */
+                     /* hangs on a stuck mount long enough for an interactive skip/cancel to land -- */
+                     /* the #9 realMove data-loss reproducer (dest must survive untouched)          */
 };
 
 struct uc_rule {
@@ -362,6 +366,9 @@ static void uc_parse(void)
             strncpy(r->arg, arg, UC_MAX_ARG - 1);
         } else if (strcmp(tok, "readfail") == 0) {
             r->verb = UC_READFAIL;
+            strncpy(r->arg, arg, UC_MAX_ARG - 1);
+        } else if (strcmp(tok, "renamefail") == 0) {
+            r->verb = UC_RENAMEFAIL;
             strncpy(r->arg, arg, UC_MAX_ARG - 1);
         } else if (strcmp(tok, "eio_after") == 0) {
             /* arg is "<substr>:<bytes>"; split on the LAST colon so a path-substr
@@ -1412,6 +1419,16 @@ int rmdir(const char *pathname)
 int rename(const char *oldpath, const char *newpath)
 {
     UC_REAL(rename);
+    /* renamefail: block briefly (so a concurrent interactive skip/cancel lands mid-rename) then fail
+     * EACCES -- a NON-EXDEV error, so the engine does NOT fall back to the copy pipeline; it stays a
+     * realMove and reaches the site-C/A teardown with stopIt set. The #9 data-loss reproducer. */
+    if (uc_match(UC_RENAMEFAIL, newpath) != NULL) {
+        uc_sleep_ms(800);   /* wide window: the transfer thread is BLOCKED in rename() long enough for a
+                             * skip/cancel to land while transfer_stat==Transfer (the site-C path) */
+        errno = EACCES;
+        uc_optrace("RENAME", newpath, -1, 0);
+        return -1;
+    }
     int rc = real_rename(oldpath, newpath);
     uc_optrace("RENAME", newpath, rc, 0);   /* logged on the DEST side (the path that appears) */
     return rc;

@@ -61,3 +61,6 @@ CMakeLists.txt.user*
 
 
 .claude/
+
+# Test runtime staging data
+winlane_stage/

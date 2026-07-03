@@ -62,6 +62,14 @@ def run(backends=None, memcheck=H.NONE) -> bool:
         return True
 
     def one(backend):
+        # mem_limit_mb MUST exceed the file size here: cgroup v2 charges PAGE CACHE to the scope,
+        # so a >4 GiB buffered copy under the default computed cap (~380 MB) wedges the async
+        # write() in kernel dirty-page reclaim (D-state, ~0 MB/s -- root-caused 2026-07-02: 99 MiB/s
+        # for 5 s, then a dead stall; the SAME copy un-capped finishes in 2 s at 813 MiB/s, so the
+        # engine has NO 2^31/2^32 bug). io_uring tolerates a tiny cap (~69 MB/s) -- that asymmetry
+        # is documented as finding-async-large-file-stall (kernel interaction, operator's call).
+        # 6 GiB keeps a real ceiling (a leak of file-sized buffers into RSS would still trip it)
+        # without triggering the writeback stall.
         src = K.fresh_src_root(f"g4_{backend}_src")
         shutil.rmtree(src, ignore_errors=True)           # fresh_src_root returns a path, does not create/wipe
         os.makedirs(src, exist_ok=True)
@@ -72,6 +80,7 @@ def run(backends=None, memcheck=H.NONE) -> bool:
             r = H.run(backend, "cp", [src], dest,
                       file_collision=H.FileCollision.OVERWRITE,
                       folder_collision=H.FolderCollision.MERGE,
+                      mem_limit_mb=6144,                    # > file size: see the cgroup note above
                       expect_dir=None, memcheck=memcheck)   # cmp below is the content gate
             dp = os.path.join(dest, os.path.basename(src), VICTIM)
             problems = []

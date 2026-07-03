@@ -40,6 +40,9 @@ from lib import casekit as K
 
 def run(backends=None, memcheck=H.NONE) -> bool:
     """Run on Windows laptop only. Skip on Linux."""
+    if backends is not None and H.IOCP not in backends:
+        print("      [windows-crash] skip (IOCP-only; drives the Windows laptop)")
+        return True
     cfg = H.load_config()
     host = cfg.get('windows', 'host', fallback='')
     if not host:
@@ -76,8 +79,11 @@ def run(backends=None, memcheck=H.NONE) -> bool:
     # Record start time for event log filtering
     started = time.time()
 
-    # Run the copy via winlane
-    r = winlane.run_windows('cp', [remote_src, remote_dest],
+    # Run the copy via winlane. source_on_box: we pushed the tree above (box.push extracts
+    # <src> as <remote_src>\crash_src); never rely on [paths] SOURCEWINDOWS -- that override
+    # silently replaced the staged tree (and is now cp-only + explicit).
+    r = winlane.run_windows('cp', [str(src)],
+                             source_on_box=remote_src + '\\crash_src',
                              expect=None, stay_alive_seconds=15)
     print(f'      [windows-crash] completed={r.completed} alive={r.stayed_alive} '
           f'content={r.content_ok} mem_err={r.mem_errors}')

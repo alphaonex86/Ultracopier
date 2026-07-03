@@ -21,6 +21,14 @@
  *                                      claim the file complete. (Flip is buf[i]^0xFF, deterministic and
  *                                      idempotent across re-writes, so a retry re-corrupts identically.)
  *
+ *   WRITE failure (dest-side, LOUD -- media disconnect/reconnect on the ring data plane):
+ *     UC_FUSE_WFAIL=<substr>:<off>:<n> writes to a path containing <substr> at/after byte <off>
+ *                                      fail EIO for the first <n> faulted attempts (USB target
+ *                                      unplugged), then succeed (replugged). PER-PATH budget,
+ *                                      exact mirror of the read-side UC_FUSE_FAULT -- gives
+ *                                      io_uring/IOCP the dest-side analog of media_reconnect's
+ *                                      wdisconnect (which is libc-shim-only, async-only).
+ *
  * Build: cc -O2 -Wall $(pkg-config --cflags fuse3) fuse_fault.c -o build/fuse_fault $(pkg-config --libs fuse3)
  * Run:   ./build/fuse_fault <mountpoint> -f -s   (foreground, single-threaded)
  */
@@ -40,6 +48,7 @@
 static char g_backing[4096];
 static char g_fault_sub[512];   static long long g_fault_off=0;   static long g_fault_n=0;
 static char g_wfault_sub[512];  static long long g_wfault_off=-1;
+static char g_wfail_sub[512];   static long long g_wfail_off=0;   static long g_wfail_n=0;
 static char g_openfail_sub[512];   /* open() of a matching path -> ENOENT, but getattr still succeeds:
                                     * a TOCTOU source-vanish (listed at scan, gone at transfer-open) that
                                     * reaches the io_uring openat, which the libc shim's `gone` cannot. */
@@ -52,6 +61,22 @@ static pthread_mutex_t g_mtx=PTHREAD_MUTEX_INITIALIZER;
 static struct { int used; char key[512]; long remaining; } g_budget[MAXF];
 
 static void backpath(char *out,size_t n,const char *path){ snprintf(out,n,"%s%s",g_backing,path); }
+
+/* per-path remaining WRITE-fault budget (mirror of g_budget for UC_FUSE_WFAIL) */
+static struct { int used; char key[512]; long remaining; } g_wbudget[MAXF];
+
+static int wfail_should_fail(const char *path)
+{
+    if(g_wfail_sub[0]=='\0' || strstr(path,g_wfail_sub)==NULL) return 0;
+    int fail=0; pthread_mutex_lock(&g_mtx);
+    int slot=-1;
+    for(int i=0;i<MAXF;i++) if(g_wbudget[i].used && strcmp(g_wbudget[i].key,g_wfail_sub)==0){slot=i;break;}
+    if(slot<0) for(int i=0;i<MAXF;i++) if(!g_wbudget[i].used){slot=i;g_wbudget[i].used=1;
+        strncpy(g_wbudget[i].key,g_wfail_sub,sizeof(g_wbudget[i].key)-1);g_wbudget[i].remaining=g_wfail_n;break;}
+    if(slot>=0 && g_wbudget[slot].remaining>0){g_wbudget[slot].remaining--;fail=1;}
+    pthread_mutex_unlock(&g_mtx);
+    return fail;
+}
 
 static int should_fail(const char *path)
 {
@@ -103,6 +128,8 @@ static int ff_read(const char *path,char *buf,size_t size,off_t off,struct fuse_
     account(path,r); return (int)r;
 }
 static int ff_write(const char *path,const char *buf,size_t size,off_t off,struct fuse_file_info *fi){
+    /* LOUD dest fault: EIO at/after the disconnect offset while the budget lasts (then succeed) */
+    if(off+(off_t)size>(off_t)g_wfail_off && wfail_should_fail(path)) return -EIO;
     if(g_wfault_sub[0] && g_wfault_off>=0 && strstr(path,g_wfault_sub)
        && off<=g_wfault_off && off+(off_t)size>(off_t)g_wfault_off){
         /* SILENT corruption: flip the byte at g_wfault_off, return the FULL count. The flip is
@@ -182,6 +209,14 @@ int main(int argc,char *argv[])
     }
     const char *wf=getenv("UC_FUSE_WFAULT");
     if(wf) split_last(wf,g_wfault_sub,sizeof(g_wfault_sub),&g_wfault_off);
+    const char *wfl=getenv("UC_FUSE_WFAIL");
+    if(wfl){ /* <substr>:<off>:<n> -- same shape as UC_FUSE_FAULT */
+        char tmp[1024]; strncpy(tmp,wfl,sizeof(tmp)-1); tmp[sizeof(tmp)-1]='\0';
+        char *c2=strrchr(tmp,':');
+        if(c2){*c2='\0'; g_wfail_n=strtol(c2+1,NULL,10);
+            char *c1=strrchr(tmp,':'); if(c1){*c1='\0'; g_wfail_off=strtoll(c1+1,NULL,10);}}
+        strncpy(g_wfail_sub,tmp,sizeof(g_wfail_sub)-1);
+    }
     const char *of=getenv("UC_FUSE_OPENFAIL"); if(of) strncpy(g_openfail_sub,of,sizeof(g_openfail_sub)-1);
     const char *lm=getenv("UC_FUSE_READLOG_MATCH"); if(lm) strncpy(g_log_match,lm,sizeof(g_log_match)-1);
     const char *lp=getenv("UC_FUSE_READLOG_PATH");  if(lp) strncpy(g_log_path,lp,sizeof(g_log_path)-1);

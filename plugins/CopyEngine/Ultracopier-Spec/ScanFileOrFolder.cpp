@@ -702,6 +702,17 @@ void ScanFileOrFolder::listFolder(INTERNALTYPEPATH source,INTERNALTYPEPATH desti
         }
     } while(fileErrorAction==FileError_Retry);
 
+    // DATA-SAFETY: consume this folder's read-error action here so a Skip cannot LEAK to a
+    // sibling. fileErrorAction is a shared member; on a folder-read error (opendir EACCES on an
+    // unreadable dir) with folderError=Skip it becomes FileError_Skip and entryList stays empty
+    // (this dir is correctly not recursed). Without this reset the NEXT sibling folder's
+    // listFolder() hits the `if(fileErrorAction==FileError_Skip) return;` guard at the top and is
+    // dropped WITHOUT being read -- silently losing a readable subtree because ONE sibling dir was
+    // unreadable (the exact dying-disk / permission salvage failure this tool must avoid; sibling
+    // FILES survived because the file branch never consults fileErrorAction). No-op on the common
+    // error-free path (already NotSet), so async behaviour is unchanged for a clean copy.
+    fileErrorAction=FileError_NotSet;
+
     if(copyListOrder)
         std::sort(entryList.begin(), entryList.end(), [](TransferThread::dirent_uc a, TransferThread::dirent_uc b) {
                 return a.d_name<b.d_name;

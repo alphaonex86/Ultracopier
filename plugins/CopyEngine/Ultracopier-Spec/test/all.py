@@ -25,7 +25,7 @@ from lib import harness as H
 CASES_DIR = TEST_DIR / "cases"
 
 _BACKENDS = {"async": H.ASYNC, "io_uring": H.IO_URING, "iocp": H.IOCP}
-_MEMCHECK = {"none": H.NONE, "valgrind": H.VALGRIND, "sanitize": H.SANITIZE}
+_MEMCHECK = {"none": H.NONE, "valgrind": H.VALGRIND, "sanitize": H.SANITIZE, "tsan": H.TSAN}
 
 
 def discover():

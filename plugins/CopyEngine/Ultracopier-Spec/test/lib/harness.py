@@ -50,7 +50,7 @@ class FolderError:
     ASK = 0; SKIP = 1
 
 # ---- memory checkers --------------------------------------------------------
-NONE, VALGRIND, SANITIZE = "none", "valgrind", "sanitize"
+NONE, VALGRIND, SANITIZE, TSAN = "none", "valgrind", "sanitize", "tsan"
 
 # ---- computed memory budget (NOT a fixed 1 GB) ------------------------------
 BUFFER_BUDGET_MB = 256        # I/O buffers must stay under this ceiling (hard rule)
@@ -133,10 +133,12 @@ def load_config() -> configparser.ConfigParser:
 # ---------------------------------------------------------------------------
 # Building / locating the per-backend binary (nodebug so DebugModel never inflates RAM)
 # ---------------------------------------------------------------------------
-def binary_for(backend: str, cfg: configparser.ConfigParser, asan=False) -> str:
+def binary_for(backend: str, cfg: configparser.ConfigParser, asan=False, tsan=False) -> str:
     key = {ASYNC: "async", IO_URING: "io_uring"}.get(backend)
     if asan:
         key = "async_asan"
+    elif tsan and key:
+        key = f"{key}_tsan"
     pre = cfg.get("binaries", key, fallback="") if key else ""
     if pre and os.path.exists(pre):
         return pre
@@ -153,7 +155,7 @@ def binary_for(backend: str, cfg: configparser.ConfigParser, asan=False) -> str:
         import hashlib
         hook_tag = "-h" + hashlib.sha1((":".join(sorted(extra_hooks)) + "|" +
                                         ":".join(sorted(extra_defs))).encode()).hexdigest()[:8]
-    bdir = SOURCES / "build" / f"test-{backend}{'-asan' if asan else ''}{hook_tag}"
+    bdir = SOURCES / "build" / f"test-{backend}{'-asan' if asan else ''}{'-tsan' if tsan else ''}{hook_tag}"
     binpath = bdir / "ultracopier"
     bdir.mkdir(parents=True, exist_ok=True)
     # FileErrorDialogHook.cpp (test-only, under test/hooks/) subclasses FileErrorDialog and installs
@@ -179,6 +181,11 @@ def binary_for(backend: str, cfg: configparser.ConfigParser, asan=False) -> str:
     if asan:
         flags += ['QMAKE_CXXFLAGS+=-fsanitize=address -fno-omit-frame-pointer -g',
                   'QMAKE_LFLAGS+=-fsanitize=address']
+    elif tsan:
+        # ThreadSanitizer: a SEPARATE binary (TSan+ASan cannot combine). -g so race reports carry
+        # our source paths (the error filter keys on them, like the ASan lane).
+        flags += ['QMAKE_CXXFLAGS+=-fsanitize=thread -fno-omit-frame-pointer -g',
+                  'QMAKE_LFLAGS+=-fsanitize=thread']
     # qmake only when the Makefile is missing (it just (re)generates build rules), but ALWAYS run
     # make: it is incremental -- a near-instant no-op when nothing changed, and it rebuilds when an
     # engine source is edited. The previous "return the binary if it already exists" CACHED a stale
@@ -487,7 +494,7 @@ def _run_impl(backend: str, mode: str, sources, dest, *, cfg=None,
     # transfer-list bloat, a leak, or unbounded read-ahead) trips the cap and is caught.
     if mem_limit_mb is None:
         mem_limit_mb = compute_mem_cap_mb(sources, dest, backend, cfg)
-    binpath = binary_for(backend, cfg, asan=(memcheck == SANITIZE))
+    binpath = binary_for(backend, cfg, asan=(memcheck == SANITIZE), tsan=(memcheck == TSAN))
 
     home = pathlib.Path(tempfile.mkdtemp(prefix="uc-test-home-"))
     write_config(home, file_collision=file_collision, folder_collision=folder_collision,
@@ -521,10 +528,32 @@ def _run_impl(backend: str, mode: str, sources, dest, *, cfg=None,
                 pass
             if libasan:
                 preload = f"{libasan}:{fs_preload}"
+        elif memcheck == TSAN:
+            # Same runtime-first rule as ASan: libtsan must precede any non-instrumented .so in
+            # LD_PRELOAD or TSan aborts at startup -- keeps the shim usable under the TSan lane.
+            libtsan = ""
+            try:
+                for cand in ("libtsan.so", "libtsan.so.2", "libtsan.so.0"):
+                    p = subprocess.run(["gcc", "-print-file-name=" + cand],
+                                       capture_output=True, text=True).stdout.strip()
+                    if p and p != cand and os.path.exists(p):
+                        libtsan = p
+                        break
+            except OSError:
+                pass
+            if libtsan:
+                preload = f"{libtsan}:{fs_preload}"
         env["LD_PRELOAD"] = preload + ":" + env.get("LD_PRELOAD", "")
         env["UC_FS_SCENARIO"] = env.get("UC_FS_SCENARIO", "")
     if memcheck == SANITIZE:
         env["ASAN_OPTIONS"] = "detect_leaks=1:halt_on_error=0:log_path=" + str(home / "asan")
+    if memcheck == TSAN:
+        # halt_on_error=0: report every race, never kill the copy mid-test. Qt legitimately leaves
+        # its global threadpool threads alive at exit -> thread-leak reports are pure noise here.
+        supp = pathlib.Path(__file__).resolve().parent / "tsan.supp"
+        env["TSAN_OPTIONS"] = ("halt_on_error=0:report_thread_leaks=0:second_deadlock_stack=1:"
+                               f"suppressions={supp}:"
+                               "log_path=" + str(home / "tsan"))
 
     argv = [binpath, mode] + list(sources) + [dest]
     vg_log = home / "valgrind.log"
@@ -536,7 +565,7 @@ def _run_impl(backend: str, mode: str, sources, dest, *, cfg=None,
     # kill it at startup (not a real OOM). systemd-run --scope -pMemoryMax caps *RSS* and
     # the kernel OOM-kills + logs the evidence on overshoot. If systemd-run is missing we do
     # NOT fake it with ulimit -v -- the soft RSS monitor in the loop below enforces the cap.
-    hard_capped = (shutil.which("systemd-run") is not None and memcheck != VALGRIND)
+    hard_capped = (shutil.which("systemd-run") is not None and memcheck not in (VALGRIND, TSAN))
     if hard_capped:
         argv = ["systemd-run", "--user", "--scope", "-q",
                 f"-pMemoryMax={mem_limit_mb}M", "-pMemorySwapMax=0"] + argv
@@ -659,7 +688,7 @@ def _run_impl(backend: str, mode: str, sources, dest, *, cfg=None,
         # cgroup. Exceeding the budget IS a failure (a memory problem), not a crash.
         # Under valgrind the sampled RSS is valgrind's shadow-memory overhead (many GB), NOT ours,
         # so the cap is meaningless there -- valgrind's own leak/error report gates memory instead.
-        if rss > mem_limit_mb and memcheck != VALGRIND:
+        if rss > mem_limit_mb and memcheck not in (VALGRIND, TSAN):
             oom = True
             break
         if not pathlib.Path(f"/proc/{pid}").exists():
@@ -702,7 +731,13 @@ def _run_impl(backend: str, mode: str, sources, dest, *, cfg=None,
         # that is cpu-quiet only because the box STARVES it shows R (runnable, waiting for CPU)
         # or D (blocked on I/O) -- counting those as idle is exactly how a starved mid-job pump
         # got false-completed + pkill-truncated ('later file DROPPED') during a real load event.
-        process_quiet = (cpu_delta <= 3 and io_delta < io_delta_limit and state == "S")
+        # TSan's runtime does periodic housekeeping (~18 ticks every ~8s measured idle) --
+        # with the normal <=3 threshold those bursts reset the idle accumulator forever and a
+        # DONE copy never completes. 30 ticks/2s passes the idle bursts while a real TSan-slowed
+        # copy still burns far more (same limit used for the watchdog progress test below, so a
+        # genuinely hung TSan engine is still caught).
+        cpu_quiet_limit = 30 if memcheck == TSAN else 3
+        process_quiet = (cpu_delta <= cpu_quiet_limit and io_delta < io_delta_limit and state == "S")
         dest_changed = False
         if process_quiet:
             dest_fp = _dest_fingerprint(dest)
@@ -721,7 +756,7 @@ def _run_impl(backend: str, mode: str, sources, dest, *, cfg=None,
         # R/D also counts as progress for the WATCHDOG (not for completion!): a starved-runnable
         # engine can accrue ~0 CPU ticks per poll at extreme load yet is NOT hung -- it will run;
         # whereas a dialog-blocked/stalled engine sleeps (S) with no io -> trips the watchdog.
-        if io_delta > 0 or rd_delta > 0 or cpu_delta > 3 or dest_changed or state in ("R", "D"):
+        if io_delta > 0 or rd_delta > 0 or cpu_delta > cpu_quiet_limit or dest_changed or state in ("R", "D"):
             last_progress_ts = now
         elif now - last_progress_ts > no_progress_window:
             hung_reason = (f"no engine progress for {int(now - last_progress_ts)}s "
@@ -773,7 +808,8 @@ def _run_impl(backend: str, mode: str, sources, dest, *, cfg=None,
     if expect_dir is not None:
         content_ok, diff_text = _diff(expect_dir, _copied_tree(dest, sources))
     mem_errors = _valgrind_errors(vg_log) if memcheck == VALGRIND else (
-        _asan_errors(home) if memcheck == SANITIZE else 0)
+        _asan_errors(home) if memcheck == SANITIZE else (
+            _tsan_errors(home) if memcheck == TSAN else 0))
 
     # 6. EVIDENCE: when anything went wrong (OOM / over the RSS cap / abnormal exit / did
     #    not stay alive / did not complete), pull the relevant kernel-log lines (OOM-kill of
@@ -899,6 +935,20 @@ def _valgrind_errors(log):
         if err.search(blk) and ours.search(blk):
             real += 1
     return real
+
+
+def _tsan_errors(home):
+    """Count ThreadSanitizer reports whose stacks touch OUR code (same filter philosophy as
+    _asan_errors/_valgrind_errors: Qt/glib-internal races are logged for reading but not counted)."""
+    n = 0
+    for f in pathlib.Path(home).glob("tsan*"):
+        t = f.read_text(errors="ignore")
+        for block in t.split("=================="):
+            if "WARNING: ThreadSanitizer:" in block and (
+                    "Ultracopier-Spec" in block or "TransferThread" in block
+                    or "ListThread" in block):
+                n += 1
+    return n
 
 
 def _asan_errors(home):

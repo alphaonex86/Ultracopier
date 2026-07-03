@@ -39,11 +39,21 @@ _HASH_A = hashlib.sha256(GOOD_A).hexdigest()
 _HASH_B = hashlib.sha256(GOOD_B).hexdigest()
 
 
+# "0000_lead.bin" sorts FIRST so, with inodeThreads=1 (serial copy in scan order), the engine spends
+# ~half a second copying it BEFORE it reaches victim.dat -- long enough for the fs_hook.dll injection
+# (spawn -> CreateRemoteThread(LoadLibraryW) -> installHooks, a few hundred ms) to be in place. Without
+# it the 1 MiB victim's mid-file write at FLIP_OFFSET happens in the first ~100 ms and races the
+# injection, so the wflip never lands (the byte is never flipped -> false "SEAM WRONG").
+LEAD_NAME = "0000_lead.bin"
+LEAD_SIZE = 48 * 1024 * 1024
+
+
 def _make_src():
     src = pathlib.Path(K.fresh_src_root("wcorrupt_iocp_src"))
     if src.exists():
         shutil.rmtree(src)
     src.mkdir(parents=True)
+    (src / LEAD_NAME).write_bytes(bytes((i * 37) & 0xFF for i in range(LEAD_SIZE)))
     (src / "victim.dat").write_bytes(bytes([VIC_BYTE]) * VIC_SIZE)
     (src / "good_a.dat").write_bytes(GOOD_A)
     (src / "good_b.dat").write_bytes(GOOD_B)
@@ -97,7 +107,7 @@ def _run(ck, expect_victim, mem):
         "cp", [str(src)],
         file_collision=H.FileCollision.OVERWRITE,
         folder_collision=H.FolderCollision.MERGE,
-        extra_options={"checksum": ck, "checksumOnlyOnError": "false"},
+        extra_options={"checksum": ck, "checksumOnlyOnError": "false", "inodeThreads": "1"},
         fs_scenario=f"wflip:victim:{FLIP_OFFSET}",
         force_local_source=True,   # MUST copy OUR synthetic victim, not config's real SOURCEWINDOWS tree
         post_verify=lambda box, dest, srcs: _verify(box, dest, srcs, expect_victim=expect_victim),

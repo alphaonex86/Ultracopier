@@ -30,6 +30,9 @@ LARGE = 524288   # > parallelizeIfSmallerThan (128 KiB) -> uses the single large
 
 
 def run(backends=None, memcheck=H.NONE) -> bool:
+    if backends is not None and H.IOCP not in backends:
+        print("    [skip] iocp_source_vanish is IOCP-only (drives the Windows laptop)")
+        return True
     cfg = H.load_config()
     host = cfg.get("windows", "host", fallback="").strip()
     exe = cfg.get("windows", "exe", fallback="").strip()
