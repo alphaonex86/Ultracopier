@@ -59,6 +59,17 @@ class CopyListener : public QObject
          \see newMove()
         */
         void copyCanceled(const uint32_t & orderId);
+        /** \brief the transfer was REFUSED before it started, so nothing was and will be transferred
+         \param orderId id used when it have send the copy
+         *
+         * Sent by Core when no loaded copy engine can handle the protocols of this transfer (e.g.
+         * "sftp://..." on a build without KIO). The listener client -- a patched file manager -- is
+         * told with transferRefused() so it can do the copy ITSELF instead of losing it. A CLI order
+         * has no client to tell, so the user gets the warning directly.
+         \see newCopy()
+         \see newMove()
+        */
+        void copyRefused(const uint32_t & orderId);
         /** \brief try listen, to get copy/move from external source (mainly the file manager)
          \see close()
         */
@@ -115,6 +126,8 @@ class CopyListener : public QObject
         bool last_have_plugin,last_inWaitOfReply;
         void sendState(bool force=false);
         std::vector<std::string> stripSeparator(std::vector<std::string> sources);
+        /// \brief the distinct protocols (URL schemes) of these sources/destination, "file" for local paths
+        static std::vector<std::string> protocolsOf(const std::vector<std::string> &paths);
         OptionDialog *optionDialog;
         bool stopIt;
         std::regex stripSeparatorRegex;

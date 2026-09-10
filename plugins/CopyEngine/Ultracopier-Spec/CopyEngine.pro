@@ -157,8 +157,22 @@ contains(DEFINES, ULTRACOPIER_PLUGIN_WINIOCP) {
                $$PWD/async/TransferThreadAsync.cpp
 }
 
+# KDE KIO support -- see the twin block in ultracopier.pro (they MUST stay in sync). KF6 ships
+# CMake config files and usually NO pkg-config module, so pkg-config is used only when the module
+# is really there; otherwise the standard KF6 layout is used (override with KF6_INCLUDE_PATH /
+# KF6_LIB_PATH on the qmake command line).
 contains(DEFINES, ULTRACOPIER_PLUGIN_KIO) {
-    CONFIG += link_pkgconfig
-    PKGCONFIG += KF6KIOCore
     SOURCES += $$PWD/ListThreadKio.cpp
+    packagesExist(KF6KIOCore) {
+        CONFIG += link_pkgconfig
+        PKGCONFIG += KF6KIOCore
+    } else {
+        isEmpty(KF6_INCLUDE_PATH): KF6_INCLUDE_PATH = /usr/include/KF6
+        INCLUDEPATH += $$KF6_INCLUDE_PATH \
+                       $$KF6_INCLUDE_PATH/KIOCore \
+                       $$KF6_INCLUDE_PATH/KIO \
+                       $$KF6_INCLUDE_PATH/KCoreAddons
+        !isEmpty(KF6_LIB_PATH): LIBS += -L$$KF6_LIB_PATH
+        LIBS += -lKF6KIOCore -lKF6CoreAddons
+    }
 }

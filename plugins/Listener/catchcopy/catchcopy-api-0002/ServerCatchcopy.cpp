@@ -938,7 +938,12 @@ void ServerCatchcopy::reply(const uint32_t &client,const uint32_t &orderId,const
                 }
                 out << returnListQt;
                 out.device()->seek(0);
-                out << block.size();
+                /* (quint32), NOT block.size(): under Qt6 QByteArray::size() is a qsizetype, so
+                 * "out << block.size()" wrote EIGHT bytes over the four-byte placeholder above and
+                 * smashed the orderId field right after it -- every reply a Qt6 build sent was
+                 * unparsable. The clients (catchcopy explorer plugin, the patched file managers)
+                 * read a 4-byte big-endian size, so it must stay 4 bytes. */
+                out << (quint32)block.size();
                 do
                 {
                     QByteArray blockToSend;
@@ -1018,6 +1023,32 @@ void ServerCatchcopy::copyFinished(const uint32_t &client,const uint32_t &orderI
 void ServerCatchcopy::copyCanceled(const uint32_t &client,const uint32_t &orderId)
 {
     reply(client,orderId,1007,"canceled");
+}
+
+/* Reply code 5004: Ultracopier will NOT do this transfer (an unsupported protocol, no compatible
+ * copy engine), so the client must do it with its own engine. Distinct from 1006 "finished with
+ * error(s)" on purpose: 1006 means we DID transfer and something went wrong -- redoing it there
+ * would duplicate work -- while 5004 means nothing was touched at all. A client too old to know
+ * 5004 just reports an unknown reply, exactly as before. */
+void ServerCatchcopy::copyRefused(const uint32_t &client,const uint32_t &orderId)
+{
+    reply(client,orderId,5004,"transfer refused");
+}
+
+void ServerCatchcopy::copyRefused(const uint32_t &globalOrderId)
+{
+    int index=0;
+    while(index<LinkGlobalToLocalClientList.size())
+    {
+        if(LinkGlobalToLocalClientList.at(index).globalOrderId==globalOrderId)
+        {
+            copyRefused(LinkGlobalToLocalClientList.at(index).idClient,LinkGlobalToLocalClientList.at(index).orderId);
+            LinkGlobalToLocalClientList.removeAt(index);
+            orderList.removeOne(globalOrderId);
+            return;
+        }
+        index++;
+    }
 }
 
 void ServerCatchcopy::unknowOrder(const uint32_t &client,const uint32_t &orderId)

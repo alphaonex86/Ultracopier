@@ -139,6 +139,10 @@ class ServerCatchcopy : public QObject
         void copyFinished(const uint32_t &globalOrderId,const bool &withError);
         /// \brief send copy cancel by global is order
         void copyCanceled(const uint32_t &globalOrderId);
+        /// \brief tell the client we REFUSED the transfer: it must do it itself
+        void copyRefused(const uint32_t &client,const uint32_t &orderId);
+        /// \brief send the transfer refusal by global order id
+        void copyRefused(const uint32_t &globalOrderId);
         /// \brief send the unknow order
         void unknowOrder(const uint32_t &client,const uint32_t &orderId);
     signals:

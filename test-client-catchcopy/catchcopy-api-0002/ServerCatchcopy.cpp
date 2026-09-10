@@ -588,7 +588,9 @@ void ServerCatchcopy::reply(quint32 client,quint32 orderId,quint32 returnCode,QS
 				out << returnCode;
 				out << returnList;
 				out.device()->seek(0);
-				out << block.size();
+				/* (quint32), NOT block.size(): Qt6 qsizetype would write 8 bytes over the 4-byte
+				 * placeholder and smash the orderId. The wire format is a 4-byte big-endian size. */
+				out << (quint32)block.size();
 				emit dataSend(client,orderId,returnCode,block);
 				emit dataSend(client,orderId,returnCode,returnList);
 				do

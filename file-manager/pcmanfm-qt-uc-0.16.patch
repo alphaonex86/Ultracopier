@@ -31,10 +31,10 @@ diff -Naur pcmanfm-qt-0.16.0/pcmanfm/desktopwindow.cpp pcmanfm-qt-0.16.0-uc/pcma
  
  #include <QLayout>
  #include <QDebug>
-@@ -1422,13 +1423,55 @@
+@@ -1422,13 +1423,100 @@
  
  // slots for file operations
- 
++
 +void sendRawOrderList(const QStringList & order, QLocalSocket &socket, int idNextOrder)
 +{
 +    QByteArray block;
@@ -44,7 +44,11 @@ diff -Naur pcmanfm-qt-0.16.0/pcmanfm/desktopwindow.cpp pcmanfm-qt-0.16.0-uc/pcma
 +    out << idNextOrder;
 +    out << order;
 +    out.device()->seek(0);
-+    out << block.size();
++    /* (quint32), NOT block.size(): the wire format is a 4-byte big-endian size. Under Qt5
++     * QByteArray::size() is an int and happens to be right, but under Qt6 it is a qsizetype and
++     * would write EIGHT bytes over the four-byte placeholder above -- smashing the order id right
++     * after it, so Ultracopier could not parse the order at all (silently no copy). */
++    out << (quint32)block.size();
 +    do //cut string list and send it as block of 32KB
 +    {
 +        QByteArray blockToSend;
@@ -56,6 +60,41 @@ diff -Naur pcmanfm-qt-0.16.0/pcmanfm/desktopwindow.cpp pcmanfm-qt-0.16.0-uc/pcma
 +    while(block.size());
 +}
 +
++/* Did Ultracopier REFUSE the order we just sent (reply code 5004)? It answers a cp/mv order only
++ * when the transfer FINISHES, so waiting for that reply would block until the whole copy is done.
++ * All we need to know now is whether it took the job, so we send a cheap "server name?" query right
++ * after the order and wait for ITS reply: the socket is FIFO and Ultracopier answers in the order it
++ * receives, so once the name reply is in, a refusal of the order has necessarily been written too.
++ * Only an explicit refusal returns true -- no answer, or a server that died, counts as accepted, so
++ * a lost reply can never make us copy the same files a second time. */
++bool ultracopierRefusedOrder(QLocalSocket &socket, quint32 orderId)
++{
++    const quint32 barrierOrderId=orderId+1;
++    sendRawOrderList(QStringList() << QString::fromLatin1("server") << QString::fromLatin1("name?"), socket, barrierOrderId);
++    QByteArray buffer;
++    while(socket.state()==QLocalSocket::ConnectedState)
++    {
++        if(socket.bytesAvailable()<=0 && !socket.waitForReadyRead(2000))
++            return false;
++        buffer+=socket.readAll();
++        while(buffer.size()>=(int)(3*sizeof(quint32)))
++        {
++            QDataStream in(buffer);
++            in.setVersion(QDataStream::Qt_4_4);
++            quint32 frameSize=0,replyOrderId=0,returnCode=0;
++            in >> frameSize >> replyOrderId >> returnCode;
++            if(frameSize<3*sizeof(quint32) || (quint32)buffer.size()<frameSize)
++                break;//the frame is not complete yet
++            buffer.remove(0,frameSize);
++            if(replyOrderId==orderId && returnCode==5004)
++                return true;//refused: nothing was transferred, we have to do it ourselves
++            if(replyOrderId==barrierOrderId)
++                return false;//the barrier is back and no refusal came: Ultracopier took the job
++        }
++    }
++    return false;
++}
+ 
  void DesktopWindow::onCutActivated() {
      if(desktopHideItems_) {
          return;
@@ -65,6 +104,7 @@ diff -Naur pcmanfm-qt-0.16.0/pcmanfm/desktopwindow.cpp pcmanfm-qt-0.16.0-uc/pcma
 -        Fm::cutFilesToClipboard(paths);
 +        QClipboard* clipboard = QApplication::clipboard();
 +        const QMimeData* data = clipboard->mimeData();
++        bool ultracopierTookIt=false;
 +        QLocalSocket socket;
 +        socket.connectToServer(QString::fromStdString("advanced-copier-"+std::to_string(getuid())));
 +        socket.waitForConnected();
@@ -81,20 +121,26 @@ diff -Naur pcmanfm-qt-0.16.0/pcmanfm/desktopwindow.cpp pcmanfm-qt-0.16.0-uc/pcma
 +            l << QString::fromLatin1(path().toString().get());
 +            sendRawOrderList(l, socket, 2);
 +            socket.waitForBytesWritten();
++            /* Ultracopier can REFUSE the job (an unsupported protocol like sftp://) and then
++             * transfers nothing at all: fall back to our own copy instead of losing the paste. */
++            ultracopierTookIt=!ultracopierRefusedOrder(socket, 2);
 +            socket.close();
++            if(ultracopierTookIt && isCut)
++                clipboard->clear(QClipboard::Clipboard);
 +        }
-+        else
++        if(!ultracopierTookIt)
 +            Fm::cutFilesToClipboard(paths);
      }
  }
  
-@@ -1438,7 +1481,27 @@
+@@ -1438,7 +1481,33 @@
      }
      auto paths = selectedFilePaths();
      if(!paths.empty()) {
 -        Fm::copyFilesToClipboard(paths);
 +        QClipboard* clipboard = QApplication::clipboard();
 +        const QMimeData* data = clipboard->mimeData();
++        bool ultracopierTookIt=false;
 +        QLocalSocket socket;
 +        socket.connectToServer(QString::fromStdString("advanced-copier-"+std::to_string(getuid())));
 +        socket.waitForConnected();
@@ -110,9 +156,14 @@ diff -Naur pcmanfm-qt-0.16.0/pcmanfm/desktopwindow.cpp pcmanfm-qt-0.16.0-uc/pcma
 +            l << QString::fromLatin1(path().toString().get());
 +            sendRawOrderList(l, socket, 2);
 +            socket.waitForBytesWritten();
++            /* Ultracopier can REFUSE the job (an unsupported protocol like sftp://) and then
++             * transfers nothing at all: fall back to our own copy instead of losing the paste. */
++            ultracopierTookIt=!ultracopierRefusedOrder(socket, 2);
 +            socket.close();
++            if(ultracopierTookIt && isCut)
++                clipboard->clear(QClipboard::Clipboard);
 +        }
-+        else
++        if(!ultracopierTookIt)
 +            Fm::copyFilesToClipboard(paths);
      }
  }
@@ -128,7 +179,7 @@ diff -Naur pcmanfm-qt-0.16.0/pcmanfm/mainwindow.cpp pcmanfm-qt-0.16.0-uc/pcmanfm
  
  #include "tabpage.h"
  #include "launcher.h"
-@@ -1633,16 +1634,86 @@
+@@ -1633,16 +1634,137 @@
      }
  }
  
@@ -141,7 +192,11 @@ diff -Naur pcmanfm-qt-0.16.0/pcmanfm/mainwindow.cpp pcmanfm-qt-0.16.0-uc/pcmanfm
 +    out << idNextOrder;
 +    out << order;
 +    out.device()->seek(0);
-+    out << block.size();
++    /* (quint32), NOT block.size(): the wire format is a 4-byte big-endian size. Under Qt5
++     * QByteArray::size() is an int and happens to be right, but under Qt6 it is a qsizetype and
++     * would write EIGHT bytes over the four-byte placeholder above -- smashing the order id right
++     * after it, so Ultracopier could not parse the order at all (silently no copy). */
++    out << (quint32)block.size();
 +    do //cut string list and send it as block of 32KB
 +    {
 +        QByteArray blockToSend;
@@ -153,6 +208,41 @@ diff -Naur pcmanfm-qt-0.16.0/pcmanfm/mainwindow.cpp pcmanfm-qt-0.16.0-uc/pcmanfm
 +    while(block.size());
 +}
 +
++/* Did Ultracopier REFUSE the order we just sent (reply code 5004)? It answers a cp/mv order only
++ * when the transfer FINISHES, so waiting for that reply would block until the whole copy is done.
++ * All we need to know now is whether it took the job, so we send a cheap "server name?" query right
++ * after the order and wait for ITS reply: the socket is FIFO and Ultracopier answers in the order it
++ * receives, so once the name reply is in, a refusal of the order has necessarily been written too.
++ * Only an explicit refusal returns true -- no answer, or a server that died, counts as accepted, so
++ * a lost reply can never make us copy the same files a second time. */
++bool ultracopierRefusedOrderA(QLocalSocket &socket, quint32 orderId)
++{
++    const quint32 barrierOrderId=orderId+1;
++    sendRawOrderListA(QStringList() << QString::fromLatin1("server") << QString::fromLatin1("name?"), socket, barrierOrderId);
++    QByteArray buffer;
++    while(socket.state()==QLocalSocket::ConnectedState)
++    {
++        if(socket.bytesAvailable()<=0 && !socket.waitForReadyRead(2000))
++            return false;
++        buffer+=socket.readAll();
++        while(buffer.size()>=(int)(3*sizeof(quint32)))
++        {
++            QDataStream in(buffer);
++            in.setVersion(QDataStream::Qt_4_4);
++            quint32 frameSize=0,replyOrderId=0,returnCode=0;
++            in >> frameSize >> replyOrderId >> returnCode;
++            if(frameSize<3*sizeof(quint32) || (quint32)buffer.size()<frameSize)
++                break;//the frame is not complete yet
++            buffer.remove(0,frameSize);
++            if(replyOrderId==orderId && returnCode==5004)
++                return true;//refused: nothing was transferred, we have to do it ourselves
++            if(replyOrderId==barrierOrderId)
++                return false;//the barrier is back and no refusal came: Ultracopier took the job
++        }
++    }
++    return false;
++}
++
  void MainWindow::on_actionCopy_triggered() {
 +    QClipboard* clipboard = QApplication::clipboard();
 +    const QMimeData* data = clipboard->mimeData();
@@ -162,6 +252,7 @@ diff -Naur pcmanfm-qt-0.16.0/pcmanfm/mainwindow.cpp pcmanfm-qt-0.16.0-uc/pcmanfm
 -    copyFilesToClipboard(paths);
 +
 +    if(!paths.empty()) {
++        bool ultracopierTookIt=false;
 +        QLocalSocket socket;
 +        socket.connectToServer(QString::fromStdString("advanced-copier-"+std::to_string(getuid())));
 +        socket.waitForConnected();
@@ -177,9 +268,14 @@ diff -Naur pcmanfm-qt-0.16.0/pcmanfm/mainwindow.cpp pcmanfm-qt-0.16.0-uc/pcmanfm
 +            l << QString::fromLatin1(currentPage()->path().toString().get());
 +            sendRawOrderListA(l, socket, 2);
 +            socket.waitForBytesWritten();
++            /* Ultracopier can REFUSE the job (an unsupported protocol like sftp://) and then
++             * transfers nothing at all: fall back to our own copy instead of losing the paste. */
++            ultracopierTookIt=!ultracopierRefusedOrderA(socket, 2);
 +            socket.close();
++            if(ultracopierTookIt && isCut)
++                clipboard->clear(QClipboard::Clipboard);
 +        }
-+        else
++        if(!ultracopierTookIt)
 +            copyFilesToClipboard(paths);
 +    }
  }
@@ -193,6 +289,7 @@ diff -Naur pcmanfm-qt-0.16.0/pcmanfm/mainwindow.cpp pcmanfm-qt-0.16.0-uc/pcmanfm
 -    cutFilesToClipboard(paths);
 +
 +    if(!paths.empty()) {
++        bool ultracopierTookIt=false;
 +        QLocalSocket socket;
 +        socket.connectToServer(QString::fromStdString("advanced-copier-"+std::to_string(getuid())));
 +        socket.waitForConnected();
@@ -209,9 +306,14 @@ diff -Naur pcmanfm-qt-0.16.0/pcmanfm/mainwindow.cpp pcmanfm-qt-0.16.0-uc/pcmanfm
 +            l << QString::fromLatin1(currentPage()->path().toString().get());
 +            sendRawOrderListA(l, socket, 2);
 +            socket.waitForBytesWritten();
++            /* Ultracopier can REFUSE the job (an unsupported protocol like sftp://) and then
++             * transfers nothing at all: fall back to our own copy instead of losing the paste. */
++            ultracopierTookIt=!ultracopierRefusedOrderA(socket, 2);
 +            socket.close();
++            if(ultracopierTookIt && isCut)
++                clipboard->clear(QClipboard::Clipboard);
 +        }
-+        else
++        if(!ultracopierTookIt)
 +            cutFilesToClipboard(paths);
 +    }
  }

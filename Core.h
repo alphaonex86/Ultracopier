@@ -94,6 +94,9 @@ class Core : public QObject
             std::vector<RemainingTimeLogarithmicColumn> remainingTimeLogarithmicValue;
         };
         std::vector<CopyInstance> copyList;
+        /** \brief true if a loaded copy engine can do this transfer; else emit copyRefused() and return false
+          \param orderId the order to refuse if nothing can do it */
+        bool transferIsSupported(const Ultracopier::CopyMode &mode,const uint32_t &orderId,const std::vector<std::string> &protocolsUsedForTheSources,const std::string &protocolsUsedForTheDestination);
         /** open with specific source/destination
         \param move Copy or move
         \param ignoreMode if need ignore the mode
@@ -146,6 +149,13 @@ class Core : public QObject
     signals:
         void copyFinished(const uint32_t & orderId,bool withError) const;
         void copyCanceled(const uint32_t & orderId) const;
+        /** \brief the transfer will NOT run: no loaded copy engine can handle it
+         *
+         * Emitted instead of opening a transfer window when the protocols are not supported (or the
+         * engine refused the list). CopyListener turns it into transferRefused() for the file
+         * manager that sent the order, so the paste falls back to the file manager's own copy
+         * instead of being silently dropped. */
+        void copyRefused(const uint32_t & orderId) const;
         void askProductKey();
     public slots:
         /** \brief do copy with sources, but ask the destination */

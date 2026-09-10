@@ -120,10 +120,23 @@ void CliParser::cli(const std::vector<std::string> &ultracopierArguments, const 
                 }
                 content=QString::fromUtf8(data);
                 std::vector<std::string> transferListArguments=stringsplit(content.toStdString(),';');
+                /* The header has EXACTLY 4 fields ("Ultracopier;Transfer-list;<mode>;Ultracopier").
+                 * Check the SIZE before touching any of them: transferListArguments[3] on a shorter
+                 * line is out-of-bounds -- pointing ultracopier at any other file (a text file, a
+                 * truncated list) SEGFAULTED the whole app right here. */
+                if(transferListArguments.size()<4)
+                {
+                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"This file is not supported transfer list");
+                    QMessageBox::warning(NULL,tr("Warning"),tr("This file is not supported transfer list"));
+                    transferFile.close();
+                    return;
+                }
                 transferListArguments[3].erase(std::remove(transferListArguments[3].begin(), transferListArguments[3].end(),'\n'),transferListArguments[3].end());
+                transferListArguments[3].erase(std::remove(transferListArguments[3].begin(), transferListArguments[3].end(),'\r'),transferListArguments[3].end());
                 if(transferListArguments.at(0)!="Ultracopier" ||
                         transferListArguments.at(1)!="Transfer-list" ||
-                        (transferListArguments.at(2)!="Transfer" && transferListArguments.at(2)!="Copy" && transferListArguments.at(2)!="Move")
+                        (transferListArguments.at(2)!="Transfer" && transferListArguments.at(2)!="Copy" && transferListArguments.at(2)!="Move") ||
+                        transferListArguments.at(3)!="Ultracopier"
                         )
                 {
                     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"This file is not supported transfer list");
@@ -132,7 +145,13 @@ void CliParser::cli(const std::vector<std::string> &ultracopierArguments, const 
                     return;
                 }
                 transferFile.close();
-                emit newTransferList(transferListArguments.at(3),transferListArguments.at(2),ultracopierArguments.back());
+                /* The 4th field is the FORMAT marker, not a plugin name -- ListThread's importer
+                 * accepts no other value than "Ultracopier" there. Forwarding it as the engine NAME
+                 * made Core look for a plugin called "Ultracopier" while the engine is named
+                 * "Ultracopier Spec", so opening a list Ultracopier had exported ITSELF always died
+                 * with "Cannot find any engine with this name". An empty name = any compatible
+                 * engine, which is what this format means. */
+                emit newTransferList(std::string(),transferListArguments.at(2),ultracopierArguments.back());
             }
             else
             {

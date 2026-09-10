@@ -1149,45 +1149,45 @@ This version is compiled as version: %1.</source>
     <name>MkPath</name>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/MkPath.cpp" line="124"/>
-        <location filename="../../CopyEngine/Ultracopier-Spec/MkPath.cpp" line="464"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/MkPath.cpp" line="467"/>
         <source>Unable to remove</source>
         <translation>削除できません</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/MkPath.cpp" line="187"/>
-        <location filename="../../CopyEngine/Ultracopier-Spec/MkPath.cpp" line="210"/>
-        <location filename="../../CopyEngine/Ultracopier-Spec/MkPath.cpp" line="315"/>
-        <location filename="../../CopyEngine/Ultracopier-Spec/MkPath.cpp" line="363"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/MkPath.cpp" line="188"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/MkPath.cpp" line="211"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/MkPath.cpp" line="316"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/MkPath.cpp" line="364"/>
         <source>Unable to create the folder</source>
         <translation>フォルダーを作成できません</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/MkPath.cpp" line="227"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/MkPath.cpp" line="228"/>
         <source>The source folder don&apos;t exists</source>
         <translation>転送元のフォルダーが存在しません</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/MkPath.cpp" line="304"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/MkPath.cpp" line="305"/>
         <source>Unable to temporary rename the folder</source>
         <translation>フォルダーの一時的な名前変更ができません</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/MkPath.cpp" line="339"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/MkPath.cpp" line="340"/>
         <source>Unable to reverse temporary rename for real move</source>
         <translation>移動処理のための一時的な名前変更を元に戻せません</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/MkPath.cpp" line="348"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/MkPath.cpp" line="349"/>
         <source>Unable to do the final real move the folder</source>
         <translation>フォルダーの最終的な移動処理ができません</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/MkPath.cpp" line="379"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/MkPath.cpp" line="380"/>
         <source>Unable to move the folder</source>
         <translation>フォルダーを移動できません</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/MkPath.cpp" line="385"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/MkPath.cpp" line="386"/>
         <source>Unable to move the folder: errno: %1</source>
         <translation>フォルダーを移動できません: エラー番号 %1</translation>
     </message>
@@ -1965,12 +1965,12 @@ Error:%2</source>
         <translation>内部エラーです。開発元に報告してください!</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/async/ReadThread.cpp" line="563"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/async/ReadThread.cpp" line="566"/>
         <source>Unable to read the source file: </source>
         <translation>転送元ファイルを読み取れません: </translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/async/ReadThread.cpp" line="619"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/async/ReadThread.cpp" line="622"/>
         <source>File truncated during the read, possible data change</source>
         <translation>読み取り中にファイルが切り詰められました。データが変更された可能性があります</translation>
     </message>
@@ -2413,7 +2413,7 @@ Error:%2</source>
         <translation>転送先フォルダーを作成できません (エラー番号: %1)</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/async/WriteThread.cpp" line="566"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/async/WriteThread.cpp" line="568"/>
         <source>Internal error, please report it!</source>
         <translation>内部エラーが発生しました。報告をお願いします!</translation>
     </message>

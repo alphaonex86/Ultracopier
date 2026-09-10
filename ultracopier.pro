@@ -173,6 +173,30 @@ contains(DEFINES, ULTRACOPIER_PLUGIN_WINIOCP) {
                $$PWD/plugins/CopyEngine/Ultracopier-Spec/async/TransferThreadAsync.cpp
 }
 
+# KDE KIO support (remote protocols: sftp, smb, ftp, ...). OFF by default: without it the copy
+# engine declares only "file" and Core REFUSES a transfer using any other protocol (the refusal is
+# reported back, so a file manager falls back to its own copier). Turn it on with
+# `qmake ... DEFINES+=ULTRACOPIER_PLUGIN_KIO`.
+# KF6 ships CMake config files and, on most distributions, NO pkg-config module -- so use
+# pkg-config only when the module really is there, and otherwise fall back to the standard KF6
+# layout (override with KF6_INCLUDE_PATH=/... KF6_LIB_PATH=/... on the qmake command line).
+# MUST mirror plugins/CopyEngine/Ultracopier-Spec/CopyEngine.pro.
+contains(DEFINES, ULTRACOPIER_PLUGIN_KIO) {
+    SOURCES += $$PWD/plugins/CopyEngine/Ultracopier-Spec/ListThreadKio.cpp
+    packagesExist(KF6KIOCore) {
+        CONFIG += link_pkgconfig
+        PKGCONFIG += KF6KIOCore
+    } else {
+        isEmpty(KF6_INCLUDE_PATH): KF6_INCLUDE_PATH = /usr/include/KF6
+        INCLUDEPATH += $$KF6_INCLUDE_PATH \
+                       $$KF6_INCLUDE_PATH/KIOCore \
+                       $$KF6_INCLUDE_PATH/KIO \
+                       $$KF6_INCLUDE_PATH/KCoreAddons
+        !isEmpty(KF6_LIB_PATH): LIBS += -L$$KF6_LIB_PATH
+        LIBS += -lKF6KIOCore -lKF6CoreAddons
+    }
+}
+
 win32 {
     RESOURCES -= $$PWD/resources/resources-windows-qt-plugin.qrc
 

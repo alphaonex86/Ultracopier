@@ -1152,45 +1152,45 @@ Versione compilata come: %1.</translation>
     <name>MkPath</name>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/MkPath.cpp" line="124"/>
-        <location filename="../../CopyEngine/Ultracopier-Spec/MkPath.cpp" line="464"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/MkPath.cpp" line="467"/>
         <source>Unable to remove</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/MkPath.cpp" line="187"/>
-        <location filename="../../CopyEngine/Ultracopier-Spec/MkPath.cpp" line="210"/>
-        <location filename="../../CopyEngine/Ultracopier-Spec/MkPath.cpp" line="315"/>
-        <location filename="../../CopyEngine/Ultracopier-Spec/MkPath.cpp" line="363"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/MkPath.cpp" line="188"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/MkPath.cpp" line="211"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/MkPath.cpp" line="316"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/MkPath.cpp" line="364"/>
         <source>Unable to create the folder</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/MkPath.cpp" line="227"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/MkPath.cpp" line="228"/>
         <source>The source folder don&apos;t exists</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/MkPath.cpp" line="304"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/MkPath.cpp" line="305"/>
         <source>Unable to temporary rename the folder</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/MkPath.cpp" line="339"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/MkPath.cpp" line="340"/>
         <source>Unable to reverse temporary rename for real move</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/MkPath.cpp" line="348"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/MkPath.cpp" line="349"/>
         <source>Unable to do the final real move the folder</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/MkPath.cpp" line="379"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/MkPath.cpp" line="380"/>
         <source>Unable to move the folder</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/MkPath.cpp" line="385"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/MkPath.cpp" line="386"/>
         <source>Unable to move the folder: errno: %1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1967,12 +1967,12 @@ Errore: %2</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/async/ReadThread.cpp" line="563"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/async/ReadThread.cpp" line="566"/>
         <source>Unable to read the source file: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/async/ReadThread.cpp" line="619"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/async/ReadThread.cpp" line="622"/>
         <source>File truncated during the read, possible data change</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2415,7 +2415,7 @@ Errore: %2</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/async/WriteThread.cpp" line="566"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/async/WriteThread.cpp" line="568"/>
         <source>Internal error, please report it!</source>
         <translation type="unfinished"></translation>
     </message>

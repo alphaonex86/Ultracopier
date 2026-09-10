@@ -40,6 +40,16 @@ std::string stringimplode(const std::vector<std::string>& elems, char delim);
 std::string stringimplode(const std::queue<std::string>& elems, char delim);
 std::string stringimplode(const std::vector<std::string>& elems, const std::string &delim);
 
+/** \brief Return the protocol (URL scheme) of a source/destination string, "file" for a local path.
+ *
+ * A scheme here is TWO or more ASCII letters followed by ":/" ("sftp://host/x", "smb://share") -- the
+ * same shape ListThread::newCopy() already uses to spot a non-local source. Two letters minimum on
+ * purpose: a Windows drive letter ("C:/x", "C:\\x") is ONE letter and must stay a plain local path.
+ * The scheme is lower-cased, so "SFTP://" is recognised too. Everything else (a plain/relative path,
+ * a UNC path, a name that merely contains ':') is local, hence "file"; "file://..." is "file" as well.
+ * Hand-written (no std::regex): it runs on every source of every paste and must never throw. */
+std::string extractProtocol(const std::string &path);
+
 bool stringreplaceOne(std::wstring& str, const std::wstring& from, const std::wstring& to);
 uint8_t stringreplaceAll(std::wstring& str, const std::wstring& from, const std::wstring& to);
 bool stringEndsWith(std::wstring const &fullString, std::wstring const &ending);

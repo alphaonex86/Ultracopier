@@ -140,6 +140,38 @@ bool stringStartWith(std::string const &fullString, std::string const &starting)
     }
 }
 
+std::string extractProtocol(const std::string &path)
+{
+    size_t index=0;
+    while(index<path.size())
+    {
+        const char c=path.at(index);
+        if(c>='a' && c<='z')
+            index++;
+        else if(c>='A' && c<='Z')
+            index++;
+        else
+        {
+            // ":/" closes a scheme, but only if at least 2 letters came first (a Windows drive
+            // letter "C:/" is a local path, not a "c" protocol).
+            if(c==':' && index>=2 && (index+1)<path.size() && path.at(index+1)=='/')
+            {
+                std::string protocol=path.substr(0,index);
+                size_t i=0;
+                while(i<protocol.size())
+                {
+                    if(protocol.at(i)>='A' && protocol.at(i)<='Z')
+                        protocol[i]=(char)(protocol.at(i)-'A'+'a');
+                    i++;
+                }
+                return protocol;
+            }
+            return "file";
+        }
+    }
+    return "file";
+}
+
 bool stringStartWith(std::string const &fullString, char const &starting)
 {
     if (fullString.length()>0) {

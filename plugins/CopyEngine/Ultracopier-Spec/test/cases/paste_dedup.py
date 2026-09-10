@@ -32,7 +32,7 @@ def _blk(idn, order):
     body = struct.pack(">i", idn) + _qslist(order)
     return struct.pack(">i", 4 + len(body)) + body
 def _sockpath():
-    g = glob.glob(f"/tmp/advanced-copier-{os.getuid()}-{H.TEST_SOCKET_SUFFIX}*")
+    g = glob.glob(H.test_socket_glob("advanced-copier"))
     return g[0] if g else None
 def _send(order):
     p = _sockpath()

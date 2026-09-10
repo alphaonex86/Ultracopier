@@ -42,6 +42,8 @@ public slots:
     void transferFinished(const uint32_t &orderId,const bool &withError) override;
     /// \brief say to the client that's the copy/move is finished
     void transferCanceled(const uint32_t &orderId) override;
+    /// \brief say to the client that's the copy/move was REFUSED, so it has to do it itself
+    void transferRefused(const uint32_t &orderId) override;
     /// \brief to reload the translation, because the new language have been loaded
     void newLanguageLoaded() override;
 private:

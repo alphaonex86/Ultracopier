@@ -385,6 +385,48 @@ plugins/CopyEngine/Ultracopier-Spec/test/
 
 ---
 
+## 6b. The second driver: `lib/uclaunch.py` (CLI + local sockets)
+
+`harness.run()` answers one question -- *"run this cp/mv and is the destination tree right?"*.
+Two entry points of the shipping app are not that shape, and both were uncovered:
+
+* the **command line** (`CliParser`): `--help`, `--options`, `quit`, `uninstall`, `Transfer-list
+  <file>`, `*.urc`, `CBcp`/`CBmv <dest>`, `cp`/`mv` with `?`, and every malformed form. What is
+  judged is the process itself (alive? exit code? what did it print?) as much as the disk;
+* the **two local sockets** a running instance listens on -- `ultracopier-<uid>` (single instance /
+  CLI forward, `LocalListener`) and `advanced-copier-<uid>` (the catchcopy v0002 protocol the
+  patched file managers speak, `ServerCatchcopy`).
+
+`lib/uclaunch.py` adds exactly that, under the same rules as the harness (unmodified binary,
+isolated `$HOME`, external kill, bounded waits):
+
+```
+  Instance(tag, args=[...], cwd=..., display=...)   one resident ultracopier, own socket suffix
+    .wait_listening("cli"|"catchcopy")              bounded wait on the real socket
+    .cli([...])                                     a SECOND process -> argv forwarded, exits 1
+    .wait_until(predicate)                          bounded wait for a disk/state change
+    .stderr_text() / .mem_errors() / .alive()       evidence
+    (context manager: ALWAYS killed externally)
+
+  Catchcopy(instance)                               the file-manager side of the protocol
+    .handshake() / .send(id,[...]) / .read_reply_for(id)
+    .verdict(order_id, barrier_id)                  the accept/refuse question a patched file
+                                                    manager asks (order + "server name?" barrier)
+```
+
+Sockets live under `QDir::tempPath()` (`$TMPDIR`, else `/tmp`). Each instance uses the socket
+suffix `test-<tag>` -- distinct per sub-case, yet still matched by
+`harness._kill_all_ultracopier()`, so a stray instance is reaped like any other and can never hold
+the real user's socket. A `display=` instance runs on a private **Xvfb** with `QT_QPA_PLATFORM=xcb`
+and `WAYLAND_DISPLAY` cleared (otherwise Qt6 ignores `DISPLAY` on a Wayland desktop and the test
+would read the operator's real clipboard and pop windows on their screen).
+
+Cases using it: `cli_arguments.py` (every argument form), `listener_socket.py` (both sockets and
+the catchcopy wire format), `protocol_refused.py` (an unsupported protocol is refused and the
+client is told, so a file manager can fall back).
+
+---
+
 ## 7. Legend for the diagrammer
 
 - **Boxes** = components/processes. **Double-lined boxes** (`+===+`) = the main layers

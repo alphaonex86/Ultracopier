@@ -331,6 +331,18 @@ def write_config(home: pathlib.Path, *, file_collision, folder_collision, file_e
     return conf
 
 
+def temp_dir() -> str:
+    """Where Qt puts a plain QLocalServer socket: QDir::tempPath(), i.e. $TMPDIR when set and
+    /tmp otherwise. Hardcoding /tmp makes every socket look ABSENT on a box that exports TMPDIR
+    (this one does) -- which reads as "the app never started listening"."""
+    return os.environ.get("TMPDIR", "/tmp")
+
+
+def test_socket_glob(base="advanced-copier") -> str:
+    """Glob matching THIS suite's isolated sockets for `base` ("ultracopier" | "advanced-copier")."""
+    return os.path.join(temp_dir(), f"{base}-{os.getuid()}-{TEST_SOCKET_SUFFIX}*")
+
+
 def _test_ultracopier_pids():
     """PIDs of THIS suite's isolated test ultracopier(s): a process is one iff it carries
     ULTRACOPIER_SOCKET_SUFFIX=<suffix> in its /proc/<pid>/environ AND was exec'd as a binary
@@ -379,7 +391,7 @@ def _kill_all_ultracopier():
     time.sleep(0.5)
     uid = os.getuid()
     for base in ("ultracopier", "advanced-copier"):
-        for s in pathlib.Path("/tmp").glob(f"{base}-{uid}-{TEST_SOCKET_SUFFIX}*"):
+        for s in pathlib.Path(temp_dir()).glob(f"{base}-{uid}-{TEST_SOCKET_SUFFIX}*"):
             try: s.unlink()
             except OSError: pass
 

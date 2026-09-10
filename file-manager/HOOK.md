@@ -12,10 +12,42 @@ Patch: `dolphin-0002-add-ultracopier-advanced-copier-support-to-paste.patch`
 The flow:
 1. User presses Ctrl+V in Dolphin
 2. Patched `pasteToUrl()` tries `QLocalSocket::connectToServer("advanced-copier-{uid}")`
-3. If connected: sends file list + destination via Catchcopy protocol, Ultracopier handles the copy
-4. If not connected: falls back to standard `KIO::paste()` (native behavior)
+3. If connected: sends file list + destination via Catchcopy protocol, then asks for the verdict
+   (see below). If Ultracopier accepted, it handles the copy
+4. If not connected -- **or if Ultracopier REFUSED the order** -- falls back to standard
+   `KIO::paste()` (native behavior)
 
-Server-side listener: `plugins/Listener/catchcopy-v0002/catchcopy-api-0002/ServerCatchcopy.cpp`
+## Falling back when Ultracopier REFUSES the order
+
+Connecting is not enough: Ultracopier can be running and still be unable to do the job -- the
+obvious case is a protocol it has no copy engine for (`sftp://`, `smb://`, ... on a build without
+KIO). It then transfers **nothing at all**, so the file manager must do the copy itself; otherwise
+the paste is silently lost. Ultracopier answers such an order with the reply code **5004
+"transfer refused"** (`ServerCatchcopy::copyRefused`).
+
+Reading that reply needs one trick. Ultracopier replies to a `cp`/`mv` order only when the
+transfer **finishes** (1005/1006/1007), so simply waiting for "the reply" would block the file
+manager until the whole copy is done. What the patches do instead:
+
+1. send the `cp`/`mv` order (order id 2),
+2. immediately send a cheap `server name?` query (order id 3) as a **barrier**,
+3. read replies until the barrier's own reply (1004) comes back.
+
+The socket is FIFO and Ultracopier answers queries in the order it receives them, so once the
+barrier reply is in, a 5004 refusal of the order has necessarily already been written. Only an
+explicit 5004 makes the file manager copy the files itself; no reply at all (a server that died,
+an older Ultracopier) counts as *accepted*, so a lost reply can never duplicate a copy that did
+start. For a cut/move the clipboard is cleared only **after** the order was accepted -- on a
+refusal the fallback still needs its content.
+
+The same 5004 is delivered to `ClientCatchcopy` users (the Windows Explorer extension) as the
+`copyRefused(orderId)` signal; a client too old to know the code just reports an unknown reply.
+
+Server-side test coverage: `plugins/CopyEngine/Ultracopier-Spec/test/cases/protocol_refused.py`
+(the refusal contract, including the barrier sequence a file manager uses) and
+`.../cases/listener_socket.py` (the protocol itself).
+
+Server-side listener: `plugins/Listener/catchcopy/catchcopy-api-0002/ServerCatchcopy.cpp`
 
 ## Alternative: LD_PRELOAD .so hook
 

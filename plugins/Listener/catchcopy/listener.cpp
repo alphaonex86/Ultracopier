@@ -78,6 +78,12 @@ void Listener::transferCanceled(const uint32_t &orderId)
     server.copyCanceled(orderId);
 }
 
+void Listener::transferRefused(const uint32_t &orderId)
+{
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start, orderId: "+std::to_string(orderId));
+    server.copyRefused(orderId);
+}
+
 /// \brief to reload the translation, because the new language have been loaded
 void Listener::newLanguageLoaded()
 {

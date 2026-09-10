@@ -61,6 +61,15 @@ public:
       \see Core::newMove()
       */
     bool protocolsSupportedByTheCopyEngine(PluginInterface_CopyEngine * engine,const std::vector<std::string> &protocolsUsedForTheSources,const std::string &protocolsUsedForTheDestination);
+    /** \brief check if AT LEAST ONE loaded copy engine can handle these protocols for this mode
+      *
+      * Same matching as getCopyEngine() but without instantiating anything and without any dialog:
+      * Core asks this BEFORE opening a transfer, so an order using a protocol nobody supports
+      * ("sftp://..." on a build without KIO) is refused cleanly -- and the file manager that sent
+      * it is told, instead of the transfer silently doing nothing / writing into a junk local path.
+      \see Core::newTransfer()
+      */
+    bool isProtocolsSupported(const Ultracopier::CopyMode &mode,const std::vector<std::string> &protocolsUsedForTheSources,const std::string &protocolsUsedForTheDestination) const;
 private slots:
     void onePluginAdded(const PluginsAvailable &plugin);
     #ifndef ULTRACOPIER_PLUGIN_ALL_IN_ONE
@@ -93,6 +102,9 @@ private:
         LocalPluginOptions *options;
         QWidget *optionsWidget;
     };
+    /// \brief true if this plugin handles this mode and all these protocols (the shared matching rule)
+    static bool pluginSupport(const CopyEnginePlugin &copyEnginePlugin,const Ultracopier::CopyMode &mode,
+                              const std::vector<std::string> &protocolsUsedForTheSources,const std::string &protocolsUsedForTheDestination);
     std::vector<CopyEnginePlugin> pluginList;
     OptionDialog *optionDialog;
     bool isConnected;

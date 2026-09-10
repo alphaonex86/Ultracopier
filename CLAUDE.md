@@ -45,7 +45,13 @@ make -j$(nproc)
 ```
 
 ### Build with Optional Features
-- **KDE KIO Support** (for sftp, smb, ftp protocols): `-DULTRACOPIER_PLUGIN_KIO=ON`
+- **KDE KIO Support** (for sftp, smb, ftp protocols): CMake `-DULTRACOPIER_PLUGIN_KIO=ON`, or
+  qmake `DEFINES+=ULTRACOPIER_PLUGIN_KIO` (needs KF6 KIOCore; KF6 usually ships no pkg-config
+  module, so the `.pro` falls back to the standard KF6 layout -- override with
+  `KF6_INCLUDE_PATH=/... KF6_LIB_PATH=/...`). WITHOUT it the copy engine declares only the `file`
+  protocol and Core REFUSES any other one (`sftp://`, `smb://`, ...), reporting the refusal so a
+  patched file manager copies the files itself; see `test/cases/protocol_kio_accepted.py` and
+  `protocol_refused.py`.
 - **io_uring Support** (high-performance async I/O): Define `ULTRACOPIER_PLUGIN_IO_URING` in Variable.h (Linux only)
 - **Portable Version**: Define `ULTRACOPIER_VERSION_PORTABLE` in Variable.h
 

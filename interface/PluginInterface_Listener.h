@@ -37,6 +37,13 @@ class PluginInterface_Listener : public QObject
         virtual void transferFinished(const uint32_t &orderId,const bool &withError) = 0;
         /// \brief send when copy is canceled
         virtual void transferCanceled(const uint32_t &orderId) = 0;
+        /** \brief send when the transfer was REFUSED by Ultracopier and so will never run
+         *
+         * The client (a patched file manager) must then do the copy/move with its own engine --
+         * that is the whole point: an order Ultracopier cannot honour (an unsupported protocol,
+         * no compatible copy engine) must fall back, never silently vanish. NOT pure virtual, so a
+         * listener plugin that has no way to tell its client simply ignores it. */
+        virtual void transferRefused(const uint32_t &orderId){Q_UNUSED(orderId)}
         /// \brief to reload the translation, because the new language have been loaded
         virtual void newLanguageLoaded() = 0;
     signals:

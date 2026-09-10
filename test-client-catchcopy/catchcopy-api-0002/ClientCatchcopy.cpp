@@ -90,7 +90,10 @@ quint32 ClientCatchcopy::sendRawOrderList(const QStringList & order)
     out << idNextOrder;
     out << order;
     out.device()->seek(0);
-    out << block.size();
+    /* (quint32), NOT block.size(): under Qt6 QByteArray::size() is a qsizetype and would write
+     * EIGHT bytes over the four-byte placeholder above, smashing the orderId that follows it.
+     * The wire format is a 4-byte big-endian size. */
+    out << (quint32)block.size();
     if(idNextOrder!=1) // drop if internal protocol send
     {
         emit dataSend(idNextOrder,block);
@@ -371,6 +374,11 @@ bool ClientCatchcopy::parseReply(quint32 orderId,quint32 returnCode,QStringList 
         break;
         case 5003:
             emit protocolNotSupported(orderId);
+        break;
+        case 5004:
+            /* Ultracopier will NOT do this transfer (unsupported protocol, no compatible engine)
+             * and touched nothing: the client has to do it with its own copy engine. */
+            emit copyRefused(orderId);
         break;
         default:
             return false;

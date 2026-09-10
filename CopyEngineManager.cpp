@@ -178,6 +178,44 @@ void CopyEngineManager::onePluginWillBeUnloaded(const PluginsAvailable &plugin)
 }
 #endif
 
+/* The ONE matching rule, shared by getCopyEngine() (which instantiates the winner) and
+ * isProtocolsSupported() (which only answers yes/no, with no dialog and no instance). Kept in a
+ * single place so the "can we take this transfer?" answer Core asks BEFORE opening a window can
+ * never drift from the engine actually picked afterwards. */
+bool CopyEngineManager::pluginSupport(const CopyEnginePlugin &copyEnginePlugin,const Ultracopier::CopyMode &mode,
+    const std::vector<std::string> &protocolsUsedForTheSources,const std::string &protocolsUsedForTheDestination)
+{
+    if(mode==Ultracopier::Move && copyEnginePlugin.canDoOnlyCopy)
+        return false;
+    if(protocolsUsedForTheSources.size()==0)
+        return true;
+    if(!protocolsUsedForTheDestination.empty() && !vectorcontainsAtLeastOne(copyEnginePlugin.supportedProtocolsForTheDestination,protocolsUsedForTheDestination))
+        return false;
+    unsigned int indexProto=0;
+    while(indexProto<protocolsUsedForTheSources.size())
+    {
+        if(!vectorcontainsAtLeastOne(copyEnginePlugin.supportedProtocolsForTheSource,protocolsUsedForTheSources.at(indexProto)))
+            return false;
+        indexProto++;
+    }
+    return true;
+}
+
+bool CopyEngineManager::isProtocolsSupported(const Ultracopier::CopyMode &mode,
+    const std::vector<std::string> &protocolsUsedForTheSources,const std::string &protocolsUsedForTheDestination) const
+{
+    unsigned int index=0;
+    while(index<pluginList.size())
+    {
+        if(pluginSupport(pluginList.at(index),mode,protocolsUsedForTheSources,protocolsUsedForTheDestination))
+            return true;
+        index++;
+    }
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"no copy engine for protocolsUsedForTheSources: "+stringimplode(protocolsUsedForTheSources,";")+
+                             ", protocolsUsedForTheDestination: "+protocolsUsedForTheDestination);
+    return false;
+}
+
 CopyEngineManager::returnCopyEngine CopyEngineManager::getCopyEngine(const Ultracopier::CopyMode &mode,
     const std::vector<std::string> &protocolsUsedForTheSources,const std::string &protocolsUsedForTheDestination)
 {
@@ -189,33 +227,7 @@ CopyEngineManager::returnCopyEngine CopyEngineManager::getCopyEngine(const Ultra
     {
         const CopyEnginePlugin &copyEnginePlugin=pluginList.at(index);
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"pluginList.at("+std::to_string(index)+").name: "+copyEnginePlugin.name);
-        isTheGoodEngine=false;
-        if(mode!=Ultracopier::Move || !copyEnginePlugin.canDoOnlyCopy)
-        {
-            if(protocolsUsedForTheSources.size()==0)
-                isTheGoodEngine=true;
-            else
-            {
-                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"copyEnginePlugin.supportedProtocolsForTheDestination: "+stringimplode(copyEnginePlugin.supportedProtocolsForTheDestination,";"));
-                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"protocolsUsedForTheDestination: "+protocolsUsedForTheDestination);
-                if(protocolsUsedForTheDestination.empty() || vectorcontainsAtLeastOne(copyEnginePlugin.supportedProtocolsForTheDestination,protocolsUsedForTheDestination))
-                {
-                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"copyEnginePlugin.supportedProtocolsForTheSource: "+stringimplode(copyEnginePlugin.supportedProtocolsForTheSource,";"));
-                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"protocolsUsedForTheSources.at(indexProto): "+stringimplode(protocolsUsedForTheSources,";"));
-                    isTheGoodEngine=true;
-                    unsigned int indexProto=0;
-                    while(indexProto<protocolsUsedForTheSources.size())
-                    {
-                        if(!vectorcontainsAtLeastOne(copyEnginePlugin.supportedProtocolsForTheSource,protocolsUsedForTheSources.at(indexProto)))
-                        {
-                            isTheGoodEngine=false;
-                            break;
-                        }
-                        indexProto++;
-                    }
-                }
-            }
-        }
+        isTheGoodEngine=pluginSupport(copyEnginePlugin,mode,protocolsUsedForTheSources,protocolsUsedForTheDestination);
         if(isTheGoodEngine)
         {
             pluginList[index].intances.push_back(pluginList.at(index).factory->getInstance());

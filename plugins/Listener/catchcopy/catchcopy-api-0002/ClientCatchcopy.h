@@ -87,6 +87,8 @@ class ClientCatchcopy : public QObject
 		void copyFinished(quint32 orderId,bool withError);
 		/// \brief copy canceled
 		void copyCanceled(quint32 orderId);
+		/// \brief the transfer was REFUSED: Ultracopier did nothing, do it yourself
+		void copyRefused(quint32 orderId);
 		/// \brief have unknow order
 		void unknowOrder(quint32 orderId); //the server have not understand the order
 	private:

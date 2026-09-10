@@ -50,6 +50,8 @@ Core::~Core()
 void Core::newCopyWithoutDestination(const uint32_t &orderId,const std::vector<std::string> &protocolsUsedForTheSources,const std::vector<std::string> &sources)
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
+    if(!transferIsSupported(Ultracopier::Copy,orderId,protocolsUsedForTheSources,std::string()))
+        return;
     if(openNewCopyEngineInstance(Ultracopier::Copy,false,protocolsUsedForTheSources)==-1)
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Unable to get a copy engine instance");
@@ -57,13 +59,40 @@ void Core::newCopyWithoutDestination(const uint32_t &orderId,const std::vector<s
         return;
     }
     copyList.back().orderId.push_back(orderId);
-    copyList.back().engine->newCopy(sources);
+    if(!copyList.back().engine->newCopy(sources))
+    {
+        /* No destination was given, so the engine ASKED the user for one: a false here is almost
+         * always "the user cancelled that chooser", not a transfer we are unable to do. Telling
+         * the sender it was REFUSED would make a file manager copy the files itself -- exactly
+         * against what the user just decided. The (still open) window's own cancel is what
+         * notifies the client, so only log here. */
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"the transfer was not started (cancelled or refused list)");
+        return;
+    }
     copyList.back().interface->haveExternalOrder();
+}
+
+/* Answer "can any loaded copy engine do this transfer?" BEFORE anything is opened, and REFUSE it
+ * loudly if not. Checked here rather than deeper down because this is the last point where nothing
+ * has been created yet: no engine instance, no transfer window, no scan thread -- so a refusal
+ * costs the user nothing and the order can be handed back to whoever sent it (a file manager then
+ * copies it itself, see CopyListener::copyRefused()). It also keeps getCopyEngine()'s modal error
+ * off the listener socket path, where a modal would block the reply the client is waiting for. */
+bool Core::transferIsSupported(const Ultracopier::CopyMode &mode,const uint32_t &orderId,const std::vector<std::string> &protocolsUsedForTheSources,const std::string &protocolsUsedForTheDestination)
+{
+    if(copyEngineList->isProtocolsSupported(mode,protocolsUsedForTheSources,protocolsUsedForTheDestination))
+        return true;
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"transfer refused, unsupported protocol, sources: "+
+                             stringimplode(protocolsUsedForTheSources,";")+", destination: "+protocolsUsedForTheDestination);
+    emit copyRefused(orderId);
+    return false;
 }
 
 void Core::newTransfer(const Ultracopier::CopyMode &mode,const uint32_t &orderId,const std::vector<std::string> &protocolsUsedForTheSources,const std::vector<std::string> &sources,const std::string &protocolsUsedForTheDestination,const std::string &destination)
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start: "+stringimplode(sources,";")+", dest: "+destination+", mode: "+std::to_string(mode));
+    if(!transferIsSupported(mode,orderId,protocolsUsedForTheSources,protocolsUsedForTheDestination))
+        return;
     //search to group the window
     int GroupWindowWhen=stringtoint32(OptionEngine::optionEngine->getOptionValue("Ultracopier","GroupWindowWhen"));
     bool haveSameSource=false,haveSameDestination=false;
@@ -107,10 +136,21 @@ void Core::newTransfer(const Ultracopier::CopyMode &mode,const uint32_t &orderId
                         if(confirmed)
                         {
                             copyList[index].orderId.push_back(orderId);
+                            /* The engine ALSO validates the list and can reject it (an unusable
+                             * source form...). Ignoring that return used to make the order vanish
+                             * without a word; now the sender is told so it can do the copy itself. */
+                            bool accepted=false;
                             if(mode==Ultracopier::Copy)
-                                copyList.at(index).engine->newCopy(sources,destination);
+                                accepted=copyList.at(index).engine->newCopy(sources,destination);
                             else
-                                copyList.at(index).engine->newMove(sources,destination);
+                                accepted=copyList.at(index).engine->newMove(sources,destination);
+                            if(!accepted)
+                            {
+                                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"the copy engine refused the transfer list");
+                                vectorRemoveAll(copyList[index].orderId,orderId);
+                                emit copyRefused(orderId);
+                                return;
+                            }
                             copyList.at(index).interface->haveExternalOrder();
                             return;
                         }
@@ -128,10 +168,18 @@ void Core::newTransfer(const Ultracopier::CopyMode &mode,const uint32_t &orderId
         return;
     }
     copyList.back().orderId.push_back(orderId);
+    bool accepted=false;
     if(mode==Ultracopier::Copy)
-        copyList.back().engine->newCopy(sources,destination);
+        accepted=copyList.back().engine->newCopy(sources,destination);
     else
-        copyList.back().engine->newMove(sources,destination);
+        accepted=copyList.back().engine->newMove(sources,destination);
+    if(!accepted)
+    {
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"the copy engine refused the transfer list");
+        vectorRemoveAll(copyList.back().orderId,orderId);
+        emit copyRefused(orderId);
+        return;
+    }
     copyList.back().interface->haveExternalOrder();
 }
 
@@ -147,6 +195,8 @@ void Core::newMove(const uint32_t &orderId,const std::vector<std::string> &proto
 
 void Core::newMoveWithoutDestination(const uint32_t &orderId,const std::vector<std::string> &protocolsUsedForTheSources,const std::vector<std::string> &sources)
 {
+    if(!transferIsSupported(Ultracopier::Move,orderId,protocolsUsedForTheSources,std::string()))
+        return;
     if(openNewCopyEngineInstance(Ultracopier::Move,false,protocolsUsedForTheSources)==-1)
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Unable to get a copy engine instance");
@@ -154,7 +204,16 @@ void Core::newMoveWithoutDestination(const uint32_t &orderId,const std::vector<s
         return;
     }
     copyList.back().orderId.push_back(orderId);
-    copyList.back().engine->newMove(sources);
+    if(!copyList.back().engine->newMove(sources))
+    {
+        /* No destination was given, so the engine ASKED the user for one: a false here is almost
+         * always "the user cancelled that chooser", not a transfer we are unable to do. Telling
+         * the sender it was REFUSED would make a file manager copy the files itself -- exactly
+         * against what the user just decided. The (still open) window's own cancel is what
+         * notifies the client, so only log here. */
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"the transfer was not started (cancelled or refused list)");
+        return;
+    }
     copyList.back().interface->haveExternalOrder();
 }
 
@@ -544,10 +603,17 @@ void Core::actionInProgess(const Ultracopier::EngineActionInProgress &action)
             copyList.at(index).interface->actionInProgess(action);
         if(action==Ultracopier::Idle)
         {
+            /* Idle after a transfer means it is DONE, so the sender is told copyFinished -- with
+             * haveError so it learns whether anything went wrong. It used to be told copyCanceled
+             * here, i.e. every completed transfer was reported to the file manager (and to the
+             * Explorer extension, via catchcopy reply 1007) as CANCELED, and copyFinished was
+             * emitted nowhere at all: a client could not tell a finished job from an aborted one.
+             * copyCanceled now means only what it says -- see copyInstanceCanceledByIndex(). */
+            const bool withError=copyList.at(index).haveError;
             unsigned int index_sub_loop=0;
             while(index_sub_loop<copyList.at(index).orderId.size())
             {
-                emit copyCanceled(copyList.at(index).orderId.at(index_sub_loop));
+                emit copyFinished(copyList.at(index).orderId.at(index_sub_loop),withError);
                 index_sub_loop++;
             }
             copyList[index].orderId.clear();

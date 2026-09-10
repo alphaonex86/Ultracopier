@@ -278,13 +278,34 @@ std::vector<std::string> CopyListener::stripSeparator(std::vector<std::string> s
     return sources;
 }
 
+/* The protocols really used by this transfer, one entry per distinct scheme (extractProtocol()
+ * gives "file" for a plain path or a file:// URI). This list is what Core matches against the
+ * copy engines' supportedProtocolsForTheSource/Destination, so a source or destination the
+ * running engines cannot handle -- "sftp://root@host/x" on a build without KIO -- is REFUSED
+ * instead of being treated as a local path. Before this, every path was declared "file", so
+ * such an order was accepted and then silently did nothing (source side) or, worse, created a
+ * junk LOCAL folder named after the URL and copied into it (destination side). */
+std::vector<std::string> CopyListener::protocolsOf(const std::vector<std::string> &paths)
+{
+    std::vector<std::string> protocols;
+    unsigned int index=0;
+    while(index<paths.size())
+    {
+        const std::string protocol=extractProtocol(paths.at(index));
+        if(!vectorcontainsAtLeastOne(protocols,protocol))
+            protocols.push_back(protocol);
+        index++;
+    }
+    if(protocols.empty())
+        protocols.push_back("file");
+    return protocols;
+}
+
 /** new copy without destination have been pased by the CLI */
 void CopyListener::copyWithoutDestination(std::vector<std::string> sources)
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
-    std::vector<std::string> list;
-    list.push_back("file");
-    emit newCopyWithoutDestination(incrementOrderId(),list,stripSeparator(sources));
+    emit newCopyWithoutDestination(incrementOrderId(),protocolsOf(sources),stripSeparator(sources));
 }
 
 /* Normalize a source/destination string for the paste-dedup compare. The SAME paste can be
@@ -347,18 +368,14 @@ void CopyListener::copy(std::vector<std::string> sources,std::string destination
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
     if(isDuplicatePaste(0,sources,destination))
         return;
-    std::vector<std::string> list;
-    list.push_back("file");
-    emit newCopy(incrementOrderId(),list,stripSeparator(sources),"file",destination);
+    emit newCopy(incrementOrderId(),protocolsOf(sources),stripSeparator(sources),extractProtocol(destination),destination);
 }
 
 /** new move without destination have been pased by the CLI */
 void CopyListener::moveWithoutDestination(std::vector<std::string> sources)
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
-    std::vector<std::string> list;
-    list.push_back("file");
-    emit newMoveWithoutDestination(incrementOrderId(),list,stripSeparator(sources));
+    emit newMoveWithoutDestination(incrementOrderId(),protocolsOf(sources),stripSeparator(sources));
 }
 
 /** new move with destination have been pased by the CLI */
@@ -367,9 +384,7 @@ void CopyListener::move(std::vector<std::string> sources,std::string destination
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
     if(isDuplicatePaste(1,sources,destination))
         return;
-    std::vector<std::string> list;
-    list.push_back("file");
-    emit newMove(incrementOrderId(),list,stripSeparator(sources),"file",destination);
+    emit newMove(incrementOrderId(),protocolsOf(sources),stripSeparator(sources),extractProtocol(destination),destination);
 }
 
 void CopyListener::copyFinished(const quint32 & orderId,const bool &withError)
@@ -408,6 +423,31 @@ void CopyListener::copyCanceled(const uint32_t & orderId)
     }
 }
 
+void CopyListener::copyRefused(const uint32_t & orderId)
+{
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"transfer refused, orderId: "+std::to_string(orderId));
+    unsigned int index=0;
+    while(index<copyRunningList.size())
+    {
+        if(orderId==copyRunningList.at(index).orderId)
+        {
+            vectorRemoveAll(orderList,orderId);
+            if(copyRunningList.at(index).listenInterface!=NULL)
+                copyRunningList.at(index).listenInterface->transferRefused(copyRunningList.at(index).pluginOrderId);
+            copyRunningList.erase(copyRunningList.cbegin()+index);
+            /* No dialog on this path ON PURPOSE: the order came from a file manager, which is told
+             * to do the copy with its own engine, so from the user's point of view the paste just
+             * worked. A modal here would also block the event loop -- and with it the reply the
+             * client is waiting for -- until somebody clicks it. */
+            return;
+        }
+        index++;
+    }
+    // Not a listener order == it came from the command line: the user asked us directly, so tell them.
+    QMessageBox::warning(NULL,tr("Warning"),
+                         tr("The protocol of the source or of the destination is not supported"));
+}
+
 void CopyListener::newPluginCopyWithoutDestination(const uint32_t &orderId,const std::vector<std::string> &sources)
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"sources: "+stringimplode(sources,";"));
@@ -417,8 +457,13 @@ void CopyListener::newPluginCopyWithoutDestination(const uint32_t &orderId,const
     newCopyInformation.pluginOrderId	= orderId;
     newCopyInformation.orderId		= incrementOrderId();
     copyRunningList.push_back(newCopyInformation);
-    std::vector<std::string> stringList;stringList.push_back("file");
-    emit newCopyWithoutDestination(orderId,stringList,stripSeparator(sources));
+    orderList.push_back(newCopyInformation.orderId);
+    /* Register the order id BEFORE it is used: incrementOrderId() skips ids still in orderList,
+     * and copyFinished()/copyCanceled()/copyRefused() match on CopyRunning::orderId -- so the id
+     * handed to Core MUST be that same one. It used to forward the LISTENER PLUGIN's id instead,
+     * which only matched by luck while both counters happened to run in lockstep; one CLI transfer
+     * in between desynchronised them and the client then never got its "finished"/"refused" reply. */
+    emit newCopyWithoutDestination(newCopyInformation.orderId,protocolsOf(sources),stripSeparator(sources));
 }
 
 void CopyListener::newPluginCopy(const quint32 &orderId,const std::vector<std::string> &sources,const std::string &destination)
@@ -432,8 +477,13 @@ void CopyListener::newPluginCopy(const quint32 &orderId,const std::vector<std::s
     newCopyInformation.pluginOrderId	= orderId;
     newCopyInformation.orderId		= incrementOrderId();
     copyRunningList.push_back(newCopyInformation);
-    std::vector<std::string> stringList;stringList.push_back("file");
-    emit newCopy(orderId,stringList,stripSeparator(sources),"file",destination);
+    orderList.push_back(newCopyInformation.orderId);
+    /* Register the order id BEFORE it is used: incrementOrderId() skips ids still in orderList,
+     * and copyFinished()/copyCanceled()/copyRefused() match on CopyRunning::orderId -- so the id
+     * handed to Core MUST be that same one. It used to forward the LISTENER PLUGIN's id instead,
+     * which only matched by luck while both counters happened to run in lockstep; one CLI transfer
+     * in between desynchronised them and the client then never got its "finished"/"refused" reply. */
+    emit newCopy(newCopyInformation.orderId,protocolsOf(sources),stripSeparator(sources),extractProtocol(destination),destination);
 }
 
 void CopyListener::newPluginMoveWithoutDestination(const uint32_t &orderId,const std::vector<std::string> &sources)
@@ -445,8 +495,13 @@ void CopyListener::newPluginMoveWithoutDestination(const uint32_t &orderId,const
     newCopyInformation.pluginOrderId	= orderId;
     newCopyInformation.orderId		= incrementOrderId();
     copyRunningList.push_back(newCopyInformation);
-    std::vector<std::string> stringList;stringList.push_back("file");
-    emit newMoveWithoutDestination(orderId,stringList,stripSeparator(sources));
+    orderList.push_back(newCopyInformation.orderId);
+    /* Register the order id BEFORE it is used: incrementOrderId() skips ids still in orderList,
+     * and copyFinished()/copyCanceled()/copyRefused() match on CopyRunning::orderId -- so the id
+     * handed to Core MUST be that same one. It used to forward the LISTENER PLUGIN's id instead,
+     * which only matched by luck while both counters happened to run in lockstep; one CLI transfer
+     * in between desynchronised them and the client then never got its "finished"/"refused" reply. */
+    emit newMoveWithoutDestination(newCopyInformation.orderId,protocolsOf(sources),stripSeparator(sources));
 }
 
 void CopyListener::newPluginMove(const quint32 &orderId,const std::vector<std::string> &sources,const std::string &destination)
@@ -460,8 +515,13 @@ void CopyListener::newPluginMove(const quint32 &orderId,const std::vector<std::s
     newCopyInformation.pluginOrderId	= orderId;
     newCopyInformation.orderId		= incrementOrderId();
     copyRunningList.push_back(newCopyInformation);
-    std::vector<std::string> stringList;stringList.push_back("file");
-    emit newMove(orderId,stringList,stripSeparator(sources),"file",destination);
+    orderList.push_back(newCopyInformation.orderId);
+    /* Register the order id BEFORE it is used: incrementOrderId() skips ids still in orderList,
+     * and copyFinished()/copyCanceled()/copyRefused() match on CopyRunning::orderId -- so the id
+     * handed to Core MUST be that same one. It used to forward the LISTENER PLUGIN's id instead,
+     * which only matched by luck while both counters happened to run in lockstep; one CLI transfer
+     * in between desynchronised them and the client then never got its "finished"/"refused" reply. */
+    emit newMove(newCopyInformation.orderId,protocolsOf(sources),stripSeparator(sources),extractProtocol(destination),destination);
 }
 
 uint32_t CopyListener::incrementOrderId()
