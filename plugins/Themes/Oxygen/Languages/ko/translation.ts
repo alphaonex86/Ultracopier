@@ -35,7 +35,7 @@
         <translation type="unfinished">이동 목록</translation>
     </message>
     <message>
-        <location line="+465"/>
+        <location line="+466"/>
         <source>Don&apos;t close if errors are found</source>
         <translation type="unfinished">오류가 발견될 경우 닫지 않음</translation>
     </message>

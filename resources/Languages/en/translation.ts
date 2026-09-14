@@ -2201,36 +2201,36 @@ Error:%2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../plugins/Themes/Oxygen/interface.cpp" line="1197"/>
+        <location filename="../../../plugins/Themes/Oxygen/interface.cpp" line="1198"/>
         <source>Don&apos;t close if errors are found</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../plugins/Themes/Oxygen/interface.cpp" line="1198"/>
+        <location filename="../../../plugins/Themes/Oxygen/interface.cpp" line="1199"/>
         <source>Never close</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../plugins/Themes/Oxygen/interface.cpp" line="1199"/>
+        <location filename="../../../plugins/Themes/Oxygen/interface.cpp" line="1200"/>
         <source>Always close</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../plugins/Themes/Oxygen/interface.cpp" line="1201"/>
+        <location filename="../../../plugins/Themes/Oxygen/interface.cpp" line="1202"/>
         <source>File Name, 0KB</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../plugins/Themes/Oxygen/interface.cpp" line="1476"/>
-        <location filename="../../../plugins/Themes/Oxygen/interface.cpp" line="1488"/>
-        <location filename="../../../plugins/Themes/Oxygen/interface.cpp" line="1500"/>
+        <location filename="../../../plugins/Themes/Oxygen/interface.cpp" line="1477"/>
+        <location filename="../../../plugins/Themes/Oxygen/interface.cpp" line="1489"/>
+        <location filename="../../../plugins/Themes/Oxygen/interface.cpp" line="1501"/>
         <source>Select a color</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../plugins/Themes/Oxygen/interface.cpp" line="1575"/>
-        <location filename="../../../plugins/Themes/Oxygen/interface.cpp" line="1579"/>
-        <location filename="../../../plugins/Themes/Oxygen/interface.cpp" line="1581"/>
+        <location filename="../../../plugins/Themes/Oxygen/interface.cpp" line="1576"/>
+        <location filename="../../../plugins/Themes/Oxygen/interface.cpp" line="1580"/>
+        <location filename="../../../plugins/Themes/Oxygen/interface.cpp" line="1582"/>
         <source>%1 %2% of %3</source>
         <translation type="unfinished"></translation>
     </message>

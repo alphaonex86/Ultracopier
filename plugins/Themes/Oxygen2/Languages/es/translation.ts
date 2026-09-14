@@ -69,36 +69,36 @@
         <translation>Lista de movimiento</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="1383"/>
+        <location filename="../../interface.cpp" line="1381"/>
         <source>Don&apos;t close if errors are found</source>
         <translation>No cierre si se encuentran errores</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="1384"/>
+        <location filename="../../interface.cpp" line="1382"/>
         <source>Never close</source>
         <translation>Nunca cierre</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="1385"/>
+        <location filename="../../interface.cpp" line="1383"/>
         <source>Always close</source>
         <translation>Siempre cerrar</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="1387"/>
+        <location filename="../../interface.cpp" line="1385"/>
         <source>File Name, 0KB</source>
         <translation>Nombre de archivo, 0KB</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="1598"/>
-        <location filename="../../interface.cpp" line="1610"/>
-        <location filename="../../interface.cpp" line="1622"/>
+        <location filename="../../interface.cpp" line="1596"/>
+        <location filename="../../interface.cpp" line="1608"/>
+        <location filename="../../interface.cpp" line="1620"/>
         <source>Select a color</source>
         <translation>Seleccione un color</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="1710"/>
-        <location filename="../../interface.cpp" line="1721"/>
-        <location filename="../../interface.cpp" line="1730"/>
+        <location filename="../../interface.cpp" line="1708"/>
+        <location filename="../../interface.cpp" line="1719"/>
+        <location filename="../../interface.cpp" line="1728"/>
         <source>%1 %2% of %3 into %4 files</source>
         <translation>%1 %2% de %3 en %4 archivos</translation>
     </message>

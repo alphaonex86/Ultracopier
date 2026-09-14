@@ -9,24 +9,24 @@
         <translation>Datei %1/%2, Größe:%3/%4</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="1199"/>
+        <location filename="../../interface.cpp" line="1200"/>
         <source>Always close</source>
         <translation>Immer schließen</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="1201"/>
+        <location filename="../../interface.cpp" line="1202"/>
         <source>File Name, 0KB</source>
         <translation>Dateiname, 0KB</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="1198"/>
+        <location filename="../../interface.cpp" line="1199"/>
         <source>Never close</source>
         <translation>Niemals schließen</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="1575"/>
-        <location filename="../../interface.cpp" line="1579"/>
-        <location filename="../../interface.cpp" line="1581"/>
+        <location filename="../../interface.cpp" line="1576"/>
+        <location filename="../../interface.cpp" line="1580"/>
+        <location filename="../../interface.cpp" line="1582"/>
         <source>%1 %2% of %3</source>
         <translation>%1 %2% von %3</translation>
     </message>
@@ -57,14 +57,14 @@
         <translation>Verschieben Liste</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="1197"/>
+        <location filename="../../interface.cpp" line="1198"/>
         <source>Don&apos;t close if errors are found</source>
         <translation>Nicht schließen, wenn Fehler aufgetreten sind</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="1476"/>
-        <location filename="../../interface.cpp" line="1488"/>
-        <location filename="../../interface.cpp" line="1500"/>
+        <location filename="../../interface.cpp" line="1477"/>
+        <location filename="../../interface.cpp" line="1489"/>
+        <location filename="../../interface.cpp" line="1501"/>
         <source>Select a color</source>
         <translation>Farbe auswählen</translation>
     </message>
