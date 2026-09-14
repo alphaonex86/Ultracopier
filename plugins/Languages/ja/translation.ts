@@ -7,8 +7,9 @@
         <location filename="../../../CliParser.cpp" line="44"/>
         <location filename="../../../CliParser.cpp" line="117"/>
         <location filename="../../../CliParser.cpp" line="130"/>
-        <location filename="../../../CliParser.cpp" line="140"/>
-        <location filename="../../../CliParser.cpp" line="305"/>
+        <location filename="../../../CliParser.cpp" line="143"/>
+        <location filename="../../../CliParser.cpp" line="159"/>
+        <location filename="../../../CliParser.cpp" line="324"/>
         <source>Warning</source>
         <translation>警告</translation>
     </message>
@@ -18,42 +19,43 @@
         <translation>ファイルの読み取りに問題があるか、ファイルサイズが 0 です</translation>
     </message>
     <message>
-        <location filename="../../../CliParser.cpp" line="274"/>
-        <location filename="../../../CliParser.cpp" line="296"/>
+        <location filename="../../../CliParser.cpp" line="293"/>
+        <location filename="../../../CliParser.cpp" line="315"/>
         <source>The arguments possible are:</source>
         <translation>指定可能な引数:</translation>
     </message>
     <message>
-        <location filename="../../../CliParser.cpp" line="276"/>
-        <location filename="../../../CliParser.cpp" line="298"/>
+        <location filename="../../../CliParser.cpp" line="295"/>
+        <location filename="../../../CliParser.cpp" line="317"/>
         <source>To display the options</source>
         <translation>オプションを表示する</translation>
     </message>
     <message>
-        <location filename="../../../CliParser.cpp" line="277"/>
-        <location filename="../../../CliParser.cpp" line="299"/>
+        <location filename="../../../CliParser.cpp" line="296"/>
+        <location filename="../../../CliParser.cpp" line="318"/>
         <source>To quit the other instances (if running)</source>
         <translation>他のインスタンスを終了する (実行中の場合)</translation>
     </message>
     <message>
-        <location filename="../../../CliParser.cpp" line="279"/>
-        <location filename="../../../CliParser.cpp" line="301"/>
+        <location filename="../../../CliParser.cpp" line="298"/>
+        <location filename="../../../CliParser.cpp" line="320"/>
         <source>To copy sources to destination, separated by space. If destination is &quot;?&quot;, ultracopier will ask the user</source>
         <translation>コピー元をコピー先にコピーします。複数指定する場合はスペースで区切ります。コピー先に &quot;?&quot; を指定すると、ultracopier がユーザーに確認します</translation>
     </message>
     <message>
-        <location filename="../../../CliParser.cpp" line="280"/>
-        <location filename="../../../CliParser.cpp" line="302"/>
+        <location filename="../../../CliParser.cpp" line="299"/>
+        <location filename="../../../CliParser.cpp" line="321"/>
         <source>To move sources to destination, separated by space. If destination is &quot;?&quot;, ultracopier will ask the user</source>
         <translation>移動元を移動先に移動します。複数指定する場合はスペースで区切ります。移動先に &quot;?&quot; を指定すると、ultracopier がユーザーに確認します</translation>
     </message>
     <message>
-        <location filename="../../../CliParser.cpp" line="285"/>
+        <location filename="../../../CliParser.cpp" line="304"/>
         <source>Command not valid</source>
         <translation>無効なコマンドです</translation>
     </message>
     <message>
         <location filename="../../../CliParser.cpp" line="130"/>
+        <location filename="../../../CliParser.cpp" line="143"/>
         <source>This file is not supported transfer list</source>
         <translation>このファイルは対応していない転送リスト形式です</translation>
     </message>
@@ -68,24 +70,24 @@
         <translation>Ultracopier はすでに起動しています。通知領域のアイコン (時計の近く) をすべて表示し、タスクトレイのアイコンを右クリックして使用するか、通常のコピー &amp; ペーストを行ってください</translation>
     </message>
     <message>
-        <location filename="../../../CliParser.cpp" line="140"/>
+        <location filename="../../../CliParser.cpp" line="159"/>
         <source>Unable to open the transfer list file</source>
         <translation>転送リストファイルを開けません</translation>
     </message>
     <message>
-        <location filename="../../../CliParser.cpp" line="275"/>
-        <location filename="../../../CliParser.cpp" line="297"/>
+        <location filename="../../../CliParser.cpp" line="294"/>
+        <location filename="../../../CliParser.cpp" line="316"/>
         <source>To display this help</source>
         <translation>このヘルプを表示する</translation>
     </message>
     <message>
-        <location filename="../../../CliParser.cpp" line="278"/>
-        <location filename="../../../CliParser.cpp" line="300"/>
+        <location filename="../../../CliParser.cpp" line="297"/>
+        <location filename="../../../CliParser.cpp" line="319"/>
         <source>Open transfer list</source>
         <translation>転送リストを開く</translation>
     </message>
     <message>
-        <location filename="../../../CliParser.cpp" line="307"/>
+        <location filename="../../../CliParser.cpp" line="326"/>
         <source>Help</source>
         <translation>ヘルプ</translation>
     </message>
@@ -267,30 +269,30 @@
 <context>
     <name>CopyEngineManager</name>
     <message>
-        <location filename="../../../CopyEngineManager.cpp" line="234"/>
-        <location filename="../../../CopyEngineManager.cpp" line="239"/>
-        <location filename="../../../CopyEngineManager.cpp" line="262"/>
-        <location filename="../../../CopyEngineManager.cpp" line="279"/>
+        <location filename="../../../CopyEngineManager.cpp" line="246"/>
+        <location filename="../../../CopyEngineManager.cpp" line="251"/>
+        <location filename="../../../CopyEngineManager.cpp" line="274"/>
+        <location filename="../../../CopyEngineManager.cpp" line="291"/>
         <source>Warning</source>
         <translation>警告</translation>
     </message>
     <message>
-        <location filename="../../../CopyEngineManager.cpp" line="234"/>
+        <location filename="../../../CopyEngineManager.cpp" line="246"/>
         <source>Cannot find any copy engine with move support</source>
         <translation>移動をサポートするコピーエンジンが見つかりません</translation>
     </message>
     <message>
-        <location filename="../../../CopyEngineManager.cpp" line="262"/>
+        <location filename="../../../CopyEngineManager.cpp" line="274"/>
         <source>This copy engine does not support move</source>
         <translation>このコピーエンジンは移動をサポートしていません</translation>
     </message>
     <message>
-        <location filename="../../../CopyEngineManager.cpp" line="239"/>
+        <location filename="../../../CopyEngineManager.cpp" line="251"/>
         <source>Cannot find any compatible engine!</source>
         <translation>互換性のあるエンジンが見つかりません!</translation>
     </message>
     <message>
-        <location filename="../../../CopyEngineManager.cpp" line="279"/>
+        <location filename="../../../CopyEngineManager.cpp" line="291"/>
         <source>Cannot find any engine with this name: %1</source>
         <translation>指定された名前のエンジンが見つかりません: %1</translation>
     </message>
@@ -309,76 +311,86 @@
         <translation>コピー/移動リストの受信中にエラーが発生しました
 %1</translation>
     </message>
+    <message>
+        <location filename="../../../CopyListener.cpp" line="447"/>
+        <source>Warning</source>
+        <translation type="unfinished">警告</translation>
+    </message>
+    <message>
+        <location filename="../../../CopyListener.cpp" line="448"/>
+        <source>The protocol of the source or of the destination is not supported</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Core</name>
     <message>
-        <location filename="../../../Core.cpp" line="56"/>
-        <location filename="../../../Core.cpp" line="127"/>
-        <location filename="../../../Core.cpp" line="153"/>
-        <location filename="../../../Core.cpp" line="168"/>
-        <location filename="../../../Core.cpp" line="188"/>
-        <location filename="../../../Core.cpp" line="202"/>
-        <location filename="../../../Core.cpp" line="211"/>
-        <location filename="../../../Core.cpp" line="220"/>
+        <location filename="../../../Core.cpp" line="58"/>
+        <location filename="../../../Core.cpp" line="167"/>
+        <location filename="../../../Core.cpp" line="203"/>
         <location filename="../../../Core.cpp" line="227"/>
-        <location filename="../../../Core.cpp" line="241"/>
-        <location filename="../../../Core.cpp" line="275"/>
-        <location filename="../../../Core.cpp" line="414"/>
-        <location filename="../../../Core.cpp" line="419"/>
+        <location filename="../../../Core.cpp" line="247"/>
+        <location filename="../../../Core.cpp" line="261"/>
+        <location filename="../../../Core.cpp" line="270"/>
+        <location filename="../../../Core.cpp" line="279"/>
+        <location filename="../../../Core.cpp" line="286"/>
+        <location filename="../../../Core.cpp" line="300"/>
+        <location filename="../../../Core.cpp" line="334"/>
+        <location filename="../../../Core.cpp" line="473"/>
+        <location filename="../../../Core.cpp" line="478"/>
         <source>Error</source>
         <translation>エラー</translation>
     </message>
     <message>
-        <location filename="../../../Core.cpp" line="56"/>
-        <location filename="../../../Core.cpp" line="153"/>
-        <location filename="../../../Core.cpp" line="168"/>
-        <location filename="../../../Core.cpp" line="188"/>
-        <location filename="../../../Core.cpp" line="202"/>
-        <location filename="../../../Core.cpp" line="211"/>
-        <location filename="../../../Core.cpp" line="220"/>
-        <location filename="../../../Core.cpp" line="241"/>
+        <location filename="../../../Core.cpp" line="58"/>
+        <location filename="../../../Core.cpp" line="203"/>
+        <location filename="../../../Core.cpp" line="227"/>
+        <location filename="../../../Core.cpp" line="247"/>
+        <location filename="../../../Core.cpp" line="261"/>
+        <location filename="../../../Core.cpp" line="270"/>
+        <location filename="../../../Core.cpp" line="279"/>
+        <location filename="../../../Core.cpp" line="300"/>
         <source>Unable to get a copy engine instance</source>
         <translation>コピーエンジンのインスタンスを取得できません</translation>
     </message>
     <message>
-        <location filename="../../../Core.cpp" line="104"/>
+        <location filename="../../../Core.cpp" line="133"/>
         <source>Group window</source>
         <translation>グループウィンドウ</translation>
     </message>
     <message>
-        <location filename="../../../Core.cpp" line="104"/>
+        <location filename="../../../Core.cpp" line="133"/>
         <source>Do you want group the transfer with another actual running transfer?</source>
         <translation>この転送を、現在実行中の他の転送とグループ化しますか？</translation>
     </message>
     <message>
-        <location filename="../../../Core.cpp" line="127"/>
+        <location filename="../../../Core.cpp" line="167"/>
         <source>Unable to get a engine instance</source>
         <translation>エンジンインスタンスを取得できません</translation>
     </message>
     <message>
-        <location filename="../../../Core.cpp" line="227"/>
+        <location filename="../../../Core.cpp" line="286"/>
         <source>The argument for the mode is not valid</source>
         <translation>モードの引数が無効です</translation>
     </message>
     <message>
-        <location filename="../../../Core.cpp" line="1258"/>
+        <location filename="../../../Core.cpp" line="1324"/>
         <source>Do you want to copy? If no, it will be moved.</source>
         <translation>コピーしますか？「いいえ」を選択した場合は移動されます。</translation>
     </message>
     <message>
-        <location filename="../../../Core.cpp" line="275"/>
-        <location filename="../../../Core.cpp" line="414"/>
+        <location filename="../../../Core.cpp" line="334"/>
+        <location filename="../../../Core.cpp" line="473"/>
         <source>Unable to load the interface, copy aborted</source>
         <translation>インターフェースをロードできません。コピーを中止しました</translation>
     </message>
     <message>
-        <location filename="../../../Core.cpp" line="419"/>
+        <location filename="../../../Core.cpp" line="478"/>
         <source>Unable to load the copy engine, copy aborted</source>
         <translation>コピーエンジンをロードできません。コピーを中止しました</translation>
     </message>
     <message>
-        <location filename="../../../Core.cpp" line="1257"/>
+        <location filename="../../../Core.cpp" line="1323"/>
         <source>Transfer mode</source>
         <translation>転送モード</translation>
     </message>

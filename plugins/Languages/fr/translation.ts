@@ -7,8 +7,9 @@
         <location filename="../../../CliParser.cpp" line="44"/>
         <location filename="../../../CliParser.cpp" line="117"/>
         <location filename="../../../CliParser.cpp" line="130"/>
-        <location filename="../../../CliParser.cpp" line="140"/>
-        <location filename="../../../CliParser.cpp" line="305"/>
+        <location filename="../../../CliParser.cpp" line="143"/>
+        <location filename="../../../CliParser.cpp" line="159"/>
+        <location filename="../../../CliParser.cpp" line="324"/>
         <source>Warning</source>
         <translation>Avertissement</translation>
     </message>
@@ -18,36 +19,37 @@
         <translation>Problème à la lecture, ou taille de fichier nulle</translation>
     </message>
     <message>
-        <location filename="../../../CliParser.cpp" line="274"/>
-        <location filename="../../../CliParser.cpp" line="296"/>
+        <location filename="../../../CliParser.cpp" line="293"/>
+        <location filename="../../../CliParser.cpp" line="315"/>
         <source>The arguments possible are:</source>
         <translation>Les arguments possible sont:</translation>
     </message>
     <message>
-        <location filename="../../../CliParser.cpp" line="276"/>
-        <location filename="../../../CliParser.cpp" line="298"/>
+        <location filename="../../../CliParser.cpp" line="295"/>
+        <location filename="../../../CliParser.cpp" line="317"/>
         <source>To display the options</source>
         <translation>Afficher les options</translation>
     </message>
     <message>
-        <location filename="../../../CliParser.cpp" line="279"/>
-        <location filename="../../../CliParser.cpp" line="301"/>
+        <location filename="../../../CliParser.cpp" line="298"/>
+        <location filename="../../../CliParser.cpp" line="320"/>
         <source>To copy sources to destination, separated by space. If destination is &quot;?&quot;, ultracopier will ask the user</source>
         <translation>Pour copier les sources vers la destination, séparées par des espaces. Si la destination est &quot;?&quot;, Ultracopier demandera à l&apos;utilisateur</translation>
     </message>
     <message>
-        <location filename="../../../CliParser.cpp" line="280"/>
-        <location filename="../../../CliParser.cpp" line="302"/>
+        <location filename="../../../CliParser.cpp" line="299"/>
+        <location filename="../../../CliParser.cpp" line="321"/>
         <source>To move sources to destination, separated by space. If destination is &quot;?&quot;, ultracopier will ask the user</source>
         <translation>Pour copier les sources vers la destination, séparées par des espaces. Si la destination est &quot;?&quot;, Ultracopier demandera à l&apos;utilisateur</translation>
     </message>
     <message>
-        <location filename="../../../CliParser.cpp" line="285"/>
+        <location filename="../../../CliParser.cpp" line="304"/>
         <source>Command not valid</source>
         <translation>Ligne de commande invalide</translation>
     </message>
     <message>
         <location filename="../../../CliParser.cpp" line="130"/>
+        <location filename="../../../CliParser.cpp" line="143"/>
         <source>This file is not supported transfer list</source>
         <translation>Ce fichier n&apos;est pas une list de transfert supporté</translation>
     </message>
@@ -62,30 +64,30 @@
         <translation>Ultracopier est déjà en cours d&apos;exécution, affichez toutes les icônes de la zone de notification (près de l&apos;horloge), cliquez avec le bouton droit de la souris sur l&apos;icône de la barre d&apos;état système pour l&apos;utiliser ou copiez et collez simplement</translation>
     </message>
     <message>
-        <location filename="../../../CliParser.cpp" line="140"/>
+        <location filename="../../../CliParser.cpp" line="159"/>
         <source>Unable to open the transfer list file</source>
         <translation>Impossible d&apos;ouvrir le fichier de liste de transfert</translation>
     </message>
     <message>
-        <location filename="../../../CliParser.cpp" line="275"/>
-        <location filename="../../../CliParser.cpp" line="297"/>
+        <location filename="../../../CliParser.cpp" line="294"/>
+        <location filename="../../../CliParser.cpp" line="316"/>
         <source>To display this help</source>
         <translation>Pour afficher cette aide</translation>
     </message>
     <message>
-        <location filename="../../../CliParser.cpp" line="277"/>
-        <location filename="../../../CliParser.cpp" line="299"/>
+        <location filename="../../../CliParser.cpp" line="296"/>
+        <location filename="../../../CliParser.cpp" line="318"/>
         <source>To quit the other instances (if running)</source>
         <translation>Pour quiter l&apos;autre instance en cour</translation>
     </message>
     <message>
-        <location filename="../../../CliParser.cpp" line="278"/>
-        <location filename="../../../CliParser.cpp" line="300"/>
+        <location filename="../../../CliParser.cpp" line="297"/>
+        <location filename="../../../CliParser.cpp" line="319"/>
         <source>Open transfer list</source>
         <translation>Ouvrir la liste de transfert</translation>
     </message>
     <message>
-        <location filename="../../../CliParser.cpp" line="307"/>
+        <location filename="../../../CliParser.cpp" line="326"/>
         <source>Help</source>
         <translation>Aide</translation>
     </message>
@@ -267,30 +269,30 @@
 <context>
     <name>CopyEngineManager</name>
     <message>
-        <location filename="../../../CopyEngineManager.cpp" line="234"/>
-        <location filename="../../../CopyEngineManager.cpp" line="239"/>
-        <location filename="../../../CopyEngineManager.cpp" line="262"/>
-        <location filename="../../../CopyEngineManager.cpp" line="279"/>
+        <location filename="../../../CopyEngineManager.cpp" line="246"/>
+        <location filename="../../../CopyEngineManager.cpp" line="251"/>
+        <location filename="../../../CopyEngineManager.cpp" line="274"/>
+        <location filename="../../../CopyEngineManager.cpp" line="291"/>
         <source>Warning</source>
         <translation>Avertissement</translation>
     </message>
     <message>
-        <location filename="../../../CopyEngineManager.cpp" line="234"/>
+        <location filename="../../../CopyEngineManager.cpp" line="246"/>
         <source>Cannot find any copy engine with move support</source>
         <translation>Impossible de trouver un moteur avec le support du déplacement</translation>
     </message>
     <message>
-        <location filename="../../../CopyEngineManager.cpp" line="262"/>
+        <location filename="../../../CopyEngineManager.cpp" line="274"/>
         <source>This copy engine does not support move</source>
         <translation>Ce moteur de copie ne supporte pas les déplacements</translation>
     </message>
     <message>
-        <location filename="../../../CopyEngineManager.cpp" line="239"/>
+        <location filename="../../../CopyEngineManager.cpp" line="251"/>
         <source>Cannot find any compatible engine!</source>
         <translation>Impossible de trouver un moteur de copie compatible!</translation>
     </message>
     <message>
-        <location filename="../../../CopyEngineManager.cpp" line="279"/>
+        <location filename="../../../CopyEngineManager.cpp" line="291"/>
         <source>Cannot find any engine with this name: %1</source>
         <translation>Impossible de trouver un moteur portant ce nom: %1</translation>
     </message>
@@ -309,76 +311,86 @@
         <translation>Erreur pendant la réception de la liste de copy/déplacement
 %1</translation>
     </message>
+    <message>
+        <location filename="../../../CopyListener.cpp" line="447"/>
+        <source>Warning</source>
+        <translation type="unfinished">Avertissement</translation>
+    </message>
+    <message>
+        <location filename="../../../CopyListener.cpp" line="448"/>
+        <source>The protocol of the source or of the destination is not supported</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Core</name>
     <message>
-        <location filename="../../../Core.cpp" line="56"/>
-        <location filename="../../../Core.cpp" line="127"/>
-        <location filename="../../../Core.cpp" line="153"/>
-        <location filename="../../../Core.cpp" line="168"/>
-        <location filename="../../../Core.cpp" line="188"/>
-        <location filename="../../../Core.cpp" line="202"/>
-        <location filename="../../../Core.cpp" line="211"/>
-        <location filename="../../../Core.cpp" line="220"/>
+        <location filename="../../../Core.cpp" line="58"/>
+        <location filename="../../../Core.cpp" line="167"/>
+        <location filename="../../../Core.cpp" line="203"/>
         <location filename="../../../Core.cpp" line="227"/>
-        <location filename="../../../Core.cpp" line="241"/>
-        <location filename="../../../Core.cpp" line="275"/>
-        <location filename="../../../Core.cpp" line="414"/>
-        <location filename="../../../Core.cpp" line="419"/>
+        <location filename="../../../Core.cpp" line="247"/>
+        <location filename="../../../Core.cpp" line="261"/>
+        <location filename="../../../Core.cpp" line="270"/>
+        <location filename="../../../Core.cpp" line="279"/>
+        <location filename="../../../Core.cpp" line="286"/>
+        <location filename="../../../Core.cpp" line="300"/>
+        <location filename="../../../Core.cpp" line="334"/>
+        <location filename="../../../Core.cpp" line="473"/>
+        <location filename="../../../Core.cpp" line="478"/>
         <source>Error</source>
         <translation>Erreur</translation>
     </message>
     <message>
-        <location filename="../../../Core.cpp" line="56"/>
-        <location filename="../../../Core.cpp" line="153"/>
-        <location filename="../../../Core.cpp" line="168"/>
-        <location filename="../../../Core.cpp" line="188"/>
-        <location filename="../../../Core.cpp" line="202"/>
-        <location filename="../../../Core.cpp" line="211"/>
-        <location filename="../../../Core.cpp" line="220"/>
-        <location filename="../../../Core.cpp" line="241"/>
+        <location filename="../../../Core.cpp" line="58"/>
+        <location filename="../../../Core.cpp" line="203"/>
+        <location filename="../../../Core.cpp" line="227"/>
+        <location filename="../../../Core.cpp" line="247"/>
+        <location filename="../../../Core.cpp" line="261"/>
+        <location filename="../../../Core.cpp" line="270"/>
+        <location filename="../../../Core.cpp" line="279"/>
+        <location filename="../../../Core.cpp" line="300"/>
         <source>Unable to get a copy engine instance</source>
         <translation>Impossible d&apos;obtenir une instance du moteur de copie</translation>
     </message>
     <message>
-        <location filename="../../../Core.cpp" line="104"/>
+        <location filename="../../../Core.cpp" line="133"/>
         <source>Group window</source>
         <translation>Grouper des fenêtres</translation>
     </message>
     <message>
-        <location filename="../../../Core.cpp" line="104"/>
+        <location filename="../../../Core.cpp" line="133"/>
         <source>Do you want group the transfer with another actual running transfer?</source>
         <translation>Voulez vous grouper le transfert avec le transfert actuel?</translation>
     </message>
     <message>
-        <location filename="../../../Core.cpp" line="127"/>
+        <location filename="../../../Core.cpp" line="167"/>
         <source>Unable to get a engine instance</source>
         <translation>Impossible d&apos;otenir une instance du moteur de copie</translation>
     </message>
     <message>
-        <location filename="../../../Core.cpp" line="227"/>
+        <location filename="../../../Core.cpp" line="286"/>
         <source>The argument for the mode is not valid</source>
         <translation>L&apos;argument pour le mode n&apos;est pas valide</translation>
     </message>
     <message>
-        <location filename="../../../Core.cpp" line="1258"/>
+        <location filename="../../../Core.cpp" line="1324"/>
         <source>Do you want to copy? If no, it will be moved.</source>
         <translation>Voulez vous faire une copie? Si vous repondez non alors il sera déplacé.</translation>
     </message>
     <message>
-        <location filename="../../../Core.cpp" line="275"/>
-        <location filename="../../../Core.cpp" line="414"/>
+        <location filename="../../../Core.cpp" line="334"/>
+        <location filename="../../../Core.cpp" line="473"/>
         <source>Unable to load the interface, copy aborted</source>
         <translation>Impossible de charger l&apos;interface, copie annulée</translation>
     </message>
     <message>
-        <location filename="../../../Core.cpp" line="419"/>
+        <location filename="../../../Core.cpp" line="478"/>
         <source>Unable to load the copy engine, copy aborted</source>
         <translation>Impossible de charger le moteur de copie, copie annulée</translation>
     </message>
     <message>
-        <location filename="../../../Core.cpp" line="1257"/>
+        <location filename="../../../Core.cpp" line="1323"/>
         <source>Transfer mode</source>
         <translation>Mode de transfert</translation>
     </message>

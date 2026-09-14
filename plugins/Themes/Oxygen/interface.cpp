@@ -757,15 +757,16 @@ void Themes::isInPause(const bool &isInPause)
 /// \brief set have pause
 void Themes::havePause(const bool &havePause)
 {
-    // HIDE it, do not just grey it out: when the copy engine cannot pause at all (e.g. the
-    // Windows native_copy path, which is one uninterruptible OS call), a dead disabled
-    // button just looks broken. Stop/cancel stays visible and working.
-    ui->pauseButton->setVisible(havePause);
     m_havePause=havePause;
+    updatePause();
 }
 
 void Themes::updatePause()
 {
+    // Without pause support (the Windows native_copy path is one uninterruptible OS call) this
+    // button is still the Start/Resume control while the engine waits in pause, so keep it then
+    // and HIDE it once the transfer runs, rather than leave a dead greyed-out button.
+    ui->pauseButton->setVisible(m_havePause || storeIsInPause);
     if(storeIsInPause)
     {
         ui->pauseButton->setIcon(player_play);

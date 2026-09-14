@@ -7,8 +7,9 @@
         <location filename="../../../CliParser.cpp" line="44"/>
         <location filename="../../../CliParser.cpp" line="117"/>
         <location filename="../../../CliParser.cpp" line="130"/>
-        <location filename="../../../CliParser.cpp" line="140"/>
-        <location filename="../../../CliParser.cpp" line="305"/>
+        <location filename="../../../CliParser.cpp" line="143"/>
+        <location filename="../../../CliParser.cpp" line="159"/>
+        <location filename="../../../CliParser.cpp" line="324"/>
         <source>Warning</source>
         <translation>알림</translation>
     </message>
@@ -18,42 +19,43 @@
         <translation>파일 읽기 문제이거나 파일 크기가 0입니다.</translation>
     </message>
     <message>
-        <location filename="../../../CliParser.cpp" line="274"/>
-        <location filename="../../../CliParser.cpp" line="296"/>
+        <location filename="../../../CliParser.cpp" line="293"/>
+        <location filename="../../../CliParser.cpp" line="315"/>
         <source>The arguments possible are:</source>
         <translation type="unfinished">가능한 인수:</translation>
     </message>
     <message>
-        <location filename="../../../CliParser.cpp" line="276"/>
-        <location filename="../../../CliParser.cpp" line="298"/>
+        <location filename="../../../CliParser.cpp" line="295"/>
+        <location filename="../../../CliParser.cpp" line="317"/>
         <source>To display the options</source>
         <translation type="unfinished">옵션 표시</translation>
     </message>
     <message>
-        <location filename="../../../CliParser.cpp" line="277"/>
-        <location filename="../../../CliParser.cpp" line="299"/>
+        <location filename="../../../CliParser.cpp" line="296"/>
+        <location filename="../../../CliParser.cpp" line="318"/>
         <source>To quit the other instances (if running)</source>
         <translation type="unfinished">다른 인스턴스 종료 (실행 중일 경우)</translation>
     </message>
     <message>
-        <location filename="../../../CliParser.cpp" line="279"/>
-        <location filename="../../../CliParser.cpp" line="301"/>
+        <location filename="../../../CliParser.cpp" line="298"/>
+        <location filename="../../../CliParser.cpp" line="320"/>
         <source>To copy sources to destination, separated by space. If destination is &quot;?&quot;, ultracopier will ask the user</source>
         <translation>원본을 대상에 복사, 공백으로 구분. 대상이 &quot;?&quot;일 경우 프로그램이 사용자에게 확인합니다.</translation>
     </message>
     <message>
-        <location filename="../../../CliParser.cpp" line="280"/>
-        <location filename="../../../CliParser.cpp" line="302"/>
+        <location filename="../../../CliParser.cpp" line="299"/>
+        <location filename="../../../CliParser.cpp" line="321"/>
         <source>To move sources to destination, separated by space. If destination is &quot;?&quot;, ultracopier will ask the user</source>
         <translation>원본을 대상에 이동, 공백으로 구분. 대상이 &quot;?&quot;일 경우 프로그램이 사용자에게 확인합니다. </translation>
     </message>
     <message>
-        <location filename="../../../CliParser.cpp" line="285"/>
+        <location filename="../../../CliParser.cpp" line="304"/>
         <source>Command not valid</source>
         <translation>명령이 유효하지 않습니다.</translation>
     </message>
     <message>
         <location filename="../../../CliParser.cpp" line="130"/>
+        <location filename="../../../CliParser.cpp" line="143"/>
         <source>This file is not supported transfer list</source>
         <translation>이 파일은 지원되지 않는 전송 목록 파일 형식입니다.</translation>
     </message>
@@ -68,24 +70,24 @@
         <translation>Ultracopier가 이미 실행 중입니다. 트레이에 있는 아이콘에서 우-클릭하여 사용하거나 그냥 복사하여 붙여넣기 하세요. </translation>
     </message>
     <message>
-        <location filename="../../../CliParser.cpp" line="140"/>
+        <location filename="../../../CliParser.cpp" line="159"/>
         <source>Unable to open the transfer list file</source>
         <translation>전송 목록 파일을 열 수 없습니다.</translation>
     </message>
     <message>
-        <location filename="../../../CliParser.cpp" line="275"/>
-        <location filename="../../../CliParser.cpp" line="297"/>
+        <location filename="../../../CliParser.cpp" line="294"/>
+        <location filename="../../../CliParser.cpp" line="316"/>
         <source>To display this help</source>
         <translation type="unfinished">도움말 표시</translation>
     </message>
     <message>
-        <location filename="../../../CliParser.cpp" line="278"/>
-        <location filename="../../../CliParser.cpp" line="300"/>
+        <location filename="../../../CliParser.cpp" line="297"/>
+        <location filename="../../../CliParser.cpp" line="319"/>
         <source>Open transfer list</source>
         <translation type="unfinished">전송 목록 열기</translation>
     </message>
     <message>
-        <location filename="../../../CliParser.cpp" line="307"/>
+        <location filename="../../../CliParser.cpp" line="326"/>
         <source>Help</source>
         <translation type="unfinished">도움말</translation>
     </message>
@@ -267,30 +269,30 @@
 <context>
     <name>CopyEngineManager</name>
     <message>
-        <location filename="../../../CopyEngineManager.cpp" line="234"/>
-        <location filename="../../../CopyEngineManager.cpp" line="239"/>
-        <location filename="../../../CopyEngineManager.cpp" line="262"/>
-        <location filename="../../../CopyEngineManager.cpp" line="279"/>
+        <location filename="../../../CopyEngineManager.cpp" line="246"/>
+        <location filename="../../../CopyEngineManager.cpp" line="251"/>
+        <location filename="../../../CopyEngineManager.cpp" line="274"/>
+        <location filename="../../../CopyEngineManager.cpp" line="291"/>
         <source>Warning</source>
         <translation>알림</translation>
     </message>
     <message>
-        <location filename="../../../CopyEngineManager.cpp" line="234"/>
+        <location filename="../../../CopyEngineManager.cpp" line="246"/>
         <source>Cannot find any copy engine with move support</source>
         <translation>이동이 지원되는 복사 엔진을 찾을 수 없습니다.</translation>
     </message>
     <message>
-        <location filename="../../../CopyEngineManager.cpp" line="262"/>
+        <location filename="../../../CopyEngineManager.cpp" line="274"/>
         <source>This copy engine does not support move</source>
         <translation>이 복사 엔진은 이동을 지원하지 않습니다.</translation>
     </message>
     <message>
-        <location filename="../../../CopyEngineManager.cpp" line="239"/>
+        <location filename="../../../CopyEngineManager.cpp" line="251"/>
         <source>Cannot find any compatible engine!</source>
         <translation>호환되는 엔진을 찾을 수 없습니다!</translation>
     </message>
     <message>
-        <location filename="../../../CopyEngineManager.cpp" line="279"/>
+        <location filename="../../../CopyEngineManager.cpp" line="291"/>
         <source>Cannot find any engine with this name: %1</source>
         <translation type="unfinished">이 이름의 엔진을 찾을 수 없음: %1</translation>
     </message>
@@ -309,76 +311,86 @@
         <translation type="unfinished">복사/이동 목록 수신 중 오류 발생
 %1</translation>
     </message>
+    <message>
+        <location filename="../../../CopyListener.cpp" line="447"/>
+        <source>Warning</source>
+        <translation type="unfinished">알림</translation>
+    </message>
+    <message>
+        <location filename="../../../CopyListener.cpp" line="448"/>
+        <source>The protocol of the source or of the destination is not supported</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Core</name>
     <message>
-        <location filename="../../../Core.cpp" line="56"/>
-        <location filename="../../../Core.cpp" line="127"/>
-        <location filename="../../../Core.cpp" line="153"/>
-        <location filename="../../../Core.cpp" line="168"/>
-        <location filename="../../../Core.cpp" line="188"/>
-        <location filename="../../../Core.cpp" line="202"/>
-        <location filename="../../../Core.cpp" line="211"/>
-        <location filename="../../../Core.cpp" line="220"/>
+        <location filename="../../../Core.cpp" line="58"/>
+        <location filename="../../../Core.cpp" line="167"/>
+        <location filename="../../../Core.cpp" line="203"/>
         <location filename="../../../Core.cpp" line="227"/>
-        <location filename="../../../Core.cpp" line="241"/>
-        <location filename="../../../Core.cpp" line="275"/>
-        <location filename="../../../Core.cpp" line="414"/>
-        <location filename="../../../Core.cpp" line="419"/>
+        <location filename="../../../Core.cpp" line="247"/>
+        <location filename="../../../Core.cpp" line="261"/>
+        <location filename="../../../Core.cpp" line="270"/>
+        <location filename="../../../Core.cpp" line="279"/>
+        <location filename="../../../Core.cpp" line="286"/>
+        <location filename="../../../Core.cpp" line="300"/>
+        <location filename="../../../Core.cpp" line="334"/>
+        <location filename="../../../Core.cpp" line="473"/>
+        <location filename="../../../Core.cpp" line="478"/>
         <source>Error</source>
         <translation>오류</translation>
     </message>
     <message>
-        <location filename="../../../Core.cpp" line="56"/>
-        <location filename="../../../Core.cpp" line="153"/>
-        <location filename="../../../Core.cpp" line="168"/>
-        <location filename="../../../Core.cpp" line="188"/>
-        <location filename="../../../Core.cpp" line="202"/>
-        <location filename="../../../Core.cpp" line="211"/>
-        <location filename="../../../Core.cpp" line="220"/>
-        <location filename="../../../Core.cpp" line="241"/>
+        <location filename="../../../Core.cpp" line="58"/>
+        <location filename="../../../Core.cpp" line="203"/>
+        <location filename="../../../Core.cpp" line="227"/>
+        <location filename="../../../Core.cpp" line="247"/>
+        <location filename="../../../Core.cpp" line="261"/>
+        <location filename="../../../Core.cpp" line="270"/>
+        <location filename="../../../Core.cpp" line="279"/>
+        <location filename="../../../Core.cpp" line="300"/>
         <source>Unable to get a copy engine instance</source>
         <translation>복사 엔진 인스턴스를 가져올 수 없습니다.</translation>
     </message>
     <message>
-        <location filename="../../../Core.cpp" line="104"/>
+        <location filename="../../../Core.cpp" line="133"/>
         <source>Group window</source>
         <translation type="unfinished">그룹 창</translation>
     </message>
     <message>
-        <location filename="../../../Core.cpp" line="104"/>
+        <location filename="../../../Core.cpp" line="133"/>
         <source>Do you want group the transfer with another actual running transfer?</source>
         <translation type="unfinished">전송을 실제 실행 중인 다른 전송과 그룹화하시겠습니까?</translation>
     </message>
     <message>
-        <location filename="../../../Core.cpp" line="127"/>
+        <location filename="../../../Core.cpp" line="167"/>
         <source>Unable to get a engine instance</source>
         <translation>엔진 인스턴스를 가져올 수 없습니다.</translation>
     </message>
     <message>
-        <location filename="../../../Core.cpp" line="227"/>
+        <location filename="../../../Core.cpp" line="286"/>
         <source>The argument for the mode is not valid</source>
         <translation>모드에 대한 인수가 올바르지 않습니다.</translation>
     </message>
     <message>
-        <location filename="../../../Core.cpp" line="1258"/>
+        <location filename="../../../Core.cpp" line="1324"/>
         <source>Do you want to copy? If no, it will be moved.</source>
         <translation type="unfinished">복사하시겠습니까? 아니오를 선택하면 이동됩니다.</translation>
     </message>
     <message>
-        <location filename="../../../Core.cpp" line="275"/>
-        <location filename="../../../Core.cpp" line="414"/>
+        <location filename="../../../Core.cpp" line="334"/>
+        <location filename="../../../Core.cpp" line="473"/>
         <source>Unable to load the interface, copy aborted</source>
         <translation type="unfinished">인터페이스를 불러올 수 없음, 복사가 중단되었습니다</translation>
     </message>
     <message>
-        <location filename="../../../Core.cpp" line="419"/>
+        <location filename="../../../Core.cpp" line="478"/>
         <source>Unable to load the copy engine, copy aborted</source>
         <translation type="unfinished">복사 엔진을 불러올 수 없음, 복사가 중단되었습니다</translation>
     </message>
     <message>
-        <location filename="../../../Core.cpp" line="1257"/>
+        <location filename="../../../Core.cpp" line="1323"/>
         <source>Transfer mode</source>
         <translation type="unfinished">전송 모드</translation>
     </message>

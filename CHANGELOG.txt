@@ -68,3 +68,4 @@
 3.1.0.2: more check, check more bug and improve where I'm unsure
 3.1.0.3: better drag and drop, fix path not found, fix keep file date
 3.1.0.4: reject a source/destination protocol no copy engine supports (sftp://... was silently doing nothing, or creating a junk local folder) and tell the sender, so a patched file manager falls back to its own copy; report a finished transfer as finished instead of canceled; fix a crash opening a file that is not a transfer list, and make Transfer-list actually open; fix the catchcopy replies under Qt6
+3.1.0.5: fix for pause button
