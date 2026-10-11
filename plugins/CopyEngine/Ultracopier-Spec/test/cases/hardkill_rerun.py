@@ -88,7 +88,7 @@ def _kill_mid_write(backend: str, src: str, dest: str) -> str:
             proc.wait(timeout=10)
         except subprocess.TimeoutExpired:
             outcome = "failed"
-        subprocess.run(["pkill", "-9", "-x", "ultracopier"], capture_output=True)
+        H._kill_all_ultracopier()   # scoped: only THIS suite's instances, never the user's resident one
         shutil.rmtree(home, ignore_errors=True)
     return outcome
 

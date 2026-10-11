@@ -282,8 +282,13 @@ bool TransferThreadAsync::setFiles(const INTERNALTYPEPATH& source, const int64_t
     }
     if(!isRunning())
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"["+std::to_string(id)+"] The current thread is not running");
-    if(!TransferThread::setFiles(source,size,destination,mode))
-        return false;
+    // Reset the per-attempt flags BEFORE TransferThread::setFiles(): it emits the QUEUED start, and the
+    // transfer thread can run the whole preOperation -- a collision SKIP is two stat() calls -- and publish
+    // Idle + postOperationStopped (readyForReuse()=true) before this caller gets back here. Resetting after
+    // the call then clobbered that completion: sended_state_postOperationStopped=false with nothing left to
+    // set it again -> the thread was Idle, transferId 0, never reusable -> every file queued behind it was
+    // silently dropped (inode1_skip_pump, ~1 run in 7; with 16 threads each such skip poisons one thread).
+    // transfer_stat is Idle here (checked above), so no live attempt's flags are touched.
     transferProgression=0;
     checksumProgression=0;
     //transferSize=0;//set by ListThread at currentTransferThread->transferSize=currentActionToDoTransfer.size; very important to do parallel small file
@@ -295,6 +300,11 @@ bool TransferThreadAsync::setFiles(const INTERNALTYPEPATH& source, const int64_t
     writeIsOpenVariable=false;
     realMove=false;
     finalSkipNoRetry=false;//fresh transfer: not a pure-skip until the error policy sets it
+    if(!TransferThread::setFiles(source,size,destination,mode))
+    {
+        sended_state_postOperationStopped=true;// still the previous (finished) attempt: stays reusable
+        return false;
+    }
     return true;
 }
 
@@ -1303,13 +1313,22 @@ void TransferThreadAsync::skip()
             writeThread.fakeWriteIsStarted();
             readThread.fakeReadIsStopped();
             writeThread.fakeWriteIsStopped();*/
+            // Store Idle BEFORE the queued completion emits (the order every other completion emitter
+            // uses, and the fix the pipelined skip() already received). skip() runs on the CopyEngine
+            // thread while postOperationStopped() is a QueuedConnection into the concurrently-running
+            // ListThread, whose transferInodeIsClosed() drops the ONE-SHOT completion behind its
+            // getStat()!=Idle gate ("transfer thread not idle!"); emitting first let it read the still-
+            // Transfer stat -> entry never tombstoned, thread Idle yet owning its transferId,
+            // safetyReschedule refuses both rescues -> permanent end-of-copy HANG after the escalated
+            // Ask->Skip of an un-creatable symlink / failed same-drive move (symlink_privilege_hang,
+            // async, ~1 run in 10; the 3.0 fake-close path emitted from the transfer thread itself).
+            transfer_stat=TransferStat_Idle;
             emit readStopped();
             if(!sended_state_postOperationStopped)//emit once per attempt
             {
                 sended_state_postOperationStopped=true;
                 emit postOperationStopped();
             }
-            transfer_stat=TransferStat_Idle;
             emit pushStat(transfer_stat,transferId);
             return;
         }

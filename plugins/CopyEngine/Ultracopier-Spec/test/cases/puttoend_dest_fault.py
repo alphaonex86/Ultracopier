@@ -137,7 +137,7 @@ def _iouring_lane() -> bool:
                            capture_output=True, text=True, timeout=260)
     finally:
         wrapper.unlink(missing_ok=True)
-        subprocess.run(["pkill", "-9", "-x", "ultracopier"], capture_output=True)
+        H._kill_all_ultracopier()   # scoped: only THIS suite's instances, never the user's resident one
         shutil.rmtree(home, ignore_errors=True)
         shutil.rmtree(work, ignore_errors=True)
     for line in (r.stdout + r.stderr).splitlines():

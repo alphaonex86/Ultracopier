@@ -241,10 +241,10 @@ void ProductKey::httpFinished()
         return;
     }
     bannedList=QString::fromUtf8(reply->readAll());
-    if(bannedList.contains(lastKey) && bannedList.size()>5)
+    if(bannedList.contains(lastKey) && bannedList.size()>5 && !lastKey.isEmpty())
     {
         ultimate=false;
-        changeToUltimate();
+        bannedKey();
     }
     newUpdateTimer.stop();
     reply->deleteLater();

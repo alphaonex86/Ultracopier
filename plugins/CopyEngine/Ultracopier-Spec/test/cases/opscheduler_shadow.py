@@ -50,23 +50,10 @@ def _build_debug_uring() -> str:
     bdir = pathlib.Path(tempfile.gettempdir()) / "uc-opshadow-debug-uring"
     binp = bdir / "ultracopier"
     mk = bdir / "Makefile"
-    # qmake Makefiles do NOT track flag changes (no .cmd files): if the Makefile predates the
-    # ULTRACOPIER_DEBUG_CONSOLE define, stale objects built without it would be reused silently.
-    # Wipe the (case-owned, /tmp-private) dir and regenerate in that case.
-    if mk.exists() and "ULTRACOPIER_DEBUG_CONSOLE" not in mk.read_text(errors="replace"):
-        shutil.rmtree(bdir, ignore_errors=True)
-    bdir.mkdir(parents=True, exist_ok=True)
-    env = dict(os.environ)
-    if not mk.exists():
-        q = subprocess.run([_qmake(), "-o", "Makefile", str(UC_PRO), "-spec", "linux-g++",
-                            "CONFIG+=release", "DEFINES+=ULTRACOPIER_PLUGIN_IO_URING",
-                            "DEFINES+=ULTRACOPIER_DEBUG_CONSOLE"],
-                           cwd=bdir, env=env, capture_output=True, text=True)
-        if q.returncode != 0:
-            raise RuntimeError("qmake failed:\n" + q.stderr[-2000:])
-    m = subprocess.run(["make", f"-j{os.cpu_count()}"], cwd=bdir, env=env, capture_output=True, text=True)
-    if m.returncode != 0:
-        raise RuntimeError("make failed:\n" + (m.stderr or m.stdout)[-3000:])
+    # flags AND toolchain are stamped by H.qmake_build (a flag or Qt/gcc change wipes the objects: qmake
+    # Makefiles track neither, and stale objects were reused silently)
+    H.qmake_build(bdir, UC_PRO, ["CONFIG+=release", "DEFINES+=ULTRACOPIER_PLUGIN_IO_URING",
+                                 "DEFINES+=ULTRACOPIER_DEBUG_CONSOLE"], dict(os.environ), qmake=_qmake())
     if not binp.exists():
         raise RuntimeError(f"build finished but {binp} is missing")
     # Sanity: the DEBUG build must actually CONTAIN the observer (a NODEBUG build compiles it out).
@@ -132,7 +119,7 @@ def _run_and_collect(binpath: str, src: str, dest: str, timeout_s: int = 120):
             time.sleep(0.05)
         time.sleep(1.5)  # let the deferred folder-meta (SyncDate) actions + the Idle summary log settle
 
-        subprocess.run(["pkill", "-x", "ultracopier"])
+        H._kill_all_ultracopier()   # scoped: only THIS suite's instances, never the user's resident one
         time.sleep(0.5)
 
         diff = subprocess.run(["diff", "-rq", "--no-dereference", src, copied],

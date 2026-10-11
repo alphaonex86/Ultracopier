@@ -65,17 +65,11 @@ public:
 
     bool haveStartTime;
     bool native_copy;
-    void setBuffer(const bool buffer);
     #if defined(Q_OS_WIN32) || defined(Q_OS_LINUX)
     /// \brief progress hook used by the native-copy paths (public: called from the
     /// Windows CopyFileExW progress callback)
     void setProgression(const uint64_t &pos, const uint64_t &size);
     #endif
-
-    // Write collision tracking (replaces writeThread.writeFileList). Typed on the base
-    // so ListThread holds one pointer type regardless of which backend is compiled.
-    QMultiHash<QString, TransferThreadPipelined *> *writeFileList;
-    QMutex *writeFileListMutex;
 private slots:
     void preOperation();
     void postOperation();
@@ -120,7 +114,7 @@ protected:
     // ---- Backend I/O hooks: implemented by each subclass ------------------------
     /// \brief open the source; store the fd/handle internally; return 0 on success, -1 on error
     virtual int openSourceFile()=0;
-    /// \brief open the destination; return 0 on success, -1 on error, -2 on write collision
+    /// \brief open the destination; return 0 on success, -1 on error
     virtual int openDestFile(uint64_t startSize)=0;
     /// \brief close any open source/destination
     virtual void closeFiles()=0;
@@ -177,6 +171,15 @@ protected:
     void finalizeStoppedTransfer();
     void finalizeIfStopRequested();
 
+    /// \brief speed limit (async parity, WriteThread's waitNewClockForSpeed): called by the backend before it
+    /// ISSUES each new block read; every multiForBigSpeed blocks it waits one tick of ListThread's speed clock
+    /// (timeOfTheBlockCopyFinished releases one permit per tick). The pipelined backends had the clock plumbing
+    /// but never waited on it, so the UI's "limit speed" did nothing on io_uring/IOCP. Returns at once when no
+    /// limit is set. Counter reset per file by the caller (resetSpeedThrottle()).
+    void throttleBlockForSpeedLimit();
+    void resetSpeedThrottle() { blocksSinceSpeedTick=0; }
+    int blocksSinceSpeedTick;
+
     /// \brief fold a just-COMPLETED destination write extent [off, off+len) into the
     /// contiguous-from-0 low-water mark. MUST be called once per write completion with the
     /// LIVE (post-short-write-advance) fileOffset+result, never the logical chunk size --
@@ -188,6 +191,12 @@ protected:
     // ---- Shared state -----------------------------------------------------------
     uint64_t transferProgression;
     uint64_t checksumProgression; // bytes hashed so far during the post-copy verify
+    /// \brief set by runChecksumVerify() when BOTH digests were computed and DIFFER (a real content mismatch),
+    /// as opposed to a verify aborted by stop/skip. The mismatch handling keys on this, not on
+    /// "!ok && !stopIt && !needSkip": the policy's skip() for the mismatch error can land between the
+    /// verify's errorOnFile and that check (the error is emitted inside the verify), and then the corrupt
+    /// full-size destination was KEPT and counted complete (iouring_checksum_skip_hang, 1 run in 4).
+    bool checksumMismatchDetected;
     /// \brief largest offset N such that EVERY byte in [0,N) is written to the destination.
     /// Advanced only by recordCompletedWrite across contiguous extents; the safe resume point.
     uint64_t contiguousWrittenOffset;
@@ -209,18 +218,17 @@ protected:
 
     unsigned int blockSize;
     bool os_spec_flags;
-    bool bufferEnabled;
-
-    bool sended_state_readStopped;
-    bool readIsClosedVariable;
-    bool writeIsClosedVariable;
-    bool readIsOpenVariable;
-    bool writeIsOpenVariable;
     bool realMove;
     /// \brief did the destination PRE-EXIST with non-empty content before we touched it? Captured in
     /// preOperation() on the first leg only (resumeFromOffset==0; a resume prefix is OURS, not the
     /// user's). Backs destinationIsOursToRemove() for the #25 corrupt-dest cleanup.
     bool destinationPreExisted=false;
+    /// \brief true once openDestFile() succeeded for the CURRENT file: the destination now holds OUR bytes
+    /// (a partial after an error). A RESTART-FROM-0 retry re-runs preOperation(); it must then neither
+    /// re-capture destinationPreExisted (our partial is not the user's file) nor re-apply the collision
+    /// policy to it (fileCollision=Skip / if-newer skipped the file and left the partial counted as done).
+    /// Reset per file in setFiles().
+    bool destinationTouched=false;
 
     volatile bool putInPause;
     /// \brief true while the worker thread runs the copy of the current file (open..close): a stop()/skip()

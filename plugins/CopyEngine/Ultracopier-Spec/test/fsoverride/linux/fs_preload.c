@@ -35,6 +35,15 @@
  *                              at least 1) to exercise the partial-write loop.
  *     statfail:<substr>        stat/lstat/fstatat/statx of a matching path fails
  *                              with -1/EACCES (simulate metadata access denial).
+ *     fstatfail:<substr>[:<n>] ONLY fstat()/fstat64()/__fxstat*() on an fd whose path
+ *                              contains <substr> fails -1/EIO (the first <n> calls per path
+ *                              when <n> is given, else always); every path-based stat keeps
+ *                              working, so the scan lists the file and the engine opens it,
+ *                              and only the post-open size/mtime query fails (a flaky
+ *                              network/FUSE source answering the metadata query late). The
+ *                              fd path is resolved through /proc/self/fd when the fd was
+ *                              opened outside libc (io_uring openat), so it reaches the
+ *                              io_uring backend's fstat too.
  *     readfail:<substr>        read()/pread() of a path containing <substr> fails
  *                              with -1/EIO (a fully unreadable SOURCE file / dead
  *                              sector run -- the whole file cannot be read).
@@ -138,6 +147,7 @@ enum uc_verb {
                       * a content corruption the dest looks complete after; the checksum-verify
                       * re-read must catch it (and the engine remove the corrupt dest). */
     UC_STATFAIL,     /* stat family fails EACCES on matching path  */
+    UC_FSTATFAIL,    /* ONLY fstat/fstat64/__fxstat* (fd-based) fail EIO on matching path */
     UC_READFAIL,     /* read fails EIO on matching path            */
     UC_EIO_AFTER,    /* read fails EIO after N cumulative bytes/fd  */
     UC_FLAKY,        /* first N read attempts/path fail EIO        */
@@ -377,6 +387,15 @@ static void uc_parse(void)
             strncpy(r->arg, arg, UC_MAX_ARG - 1);
         } else if (strcmp(tok, "statfail") == 0) {
             r->verb = UC_STATFAIL;
+            strncpy(r->arg, arg, UC_MAX_ARG - 1);
+        } else if (strcmp(tok, "fstatfail") == 0) {
+            /* arg is "<substr>[:<n>]"; split on the LAST colon like eio_after. n==0 -> unbounded */
+            r->verb = UC_FSTATFAIL;
+            char *lastcolon = strrchr(arg, ':');
+            if (lastcolon != NULL) {
+                *lastcolon = '\0';
+                r->num = strtoll(lastcolon + 1, NULL, 10);
+            }
             strncpy(r->arg, arg, UC_MAX_ARG - 1);
         } else if (strcmp(tok, "readfail") == 0) {
             r->verb = UC_READFAIL;
@@ -720,6 +739,42 @@ static const char *uc_fd_path(int fd)
     if (fd < 0 || fd >= UC_MAX_FD)
         return NULL;
     return g_fdtab[fd].path;
+}
+
+/* fstatfail match for an fd: the remembered path, else the kernel's own /proc/self/fd link (an fd
+ * opened outside libc -- io_uring openat -- is never in g_fdtab). Only consulted when an fstatfail
+ * rule exists, so every other verb keeps its exact previous fd semantics. */
+static int uc_fstatfail_hit(int fd)
+{
+    if (uc_match(UC_FSTATFAIL, NULL) == NULL && g_rule_count == 0)
+        return 0;
+    int have_rule = 0;
+    for (int i = 0; i < g_rule_count; i++)
+        if (g_rules[i].verb == UC_FSTATFAIL)
+            have_rule = 1;
+    if (!have_rule)
+        return 0;
+    const char *path = uc_fd_path(fd);
+    char buf[4096];
+    if (path == NULL) {
+        char link[64];
+        snprintf(link, sizeof(link), "/proc/self/fd/%d", fd);
+        ssize_t n = readlink(link, buf, sizeof(buf) - 1);
+        if (n <= 0)
+            return 0;
+        buf[n] = '\0';
+        path = buf;
+    }
+    const struct uc_rule *r = uc_match(UC_FSTATFAIL, path);
+    if (r == NULL)
+        return 0;
+    if (r->num <= 0)
+        return 1;                       /* unbounded */
+    static long g_fstatfail_used = 0;   /* one rule in practice; counts fd-stat failures handed out */
+    if (g_fstatfail_used >= r->num)
+        return 0;
+    __sync_fetch_and_add(&g_fstatfail_used, 1);
+    return 1;
 }
 
 static void uc_forget_fd(int fd)
@@ -1259,6 +1314,10 @@ int fstat(int fd, struct stat *statbuf)
 {
     UC_REAL(fstat);
     const char *path = uc_fd_path(fd);
+    if (uc_fstatfail_hit(fd)) {
+        errno = EIO;
+        return -1;
+    }
     uc_account_stat(path);
     if (path != NULL && uc_match(UC_STATFAIL, path) != NULL) {
         errno = EACCES;
@@ -1314,6 +1373,10 @@ int __fxstat(int ver, int fd, struct stat *statbuf)
 {
     UC_REAL(__fxstat);
     const char *path = uc_fd_path(fd);
+    if (uc_fstatfail_hit(fd)) {
+        errno = EIO;
+        return -1;
+    }
     uc_account_stat(path);
     if (path != NULL && uc_match(UC_STATFAIL, path) != NULL) {
         errno = EACCES;
@@ -1396,6 +1459,10 @@ int fstat64(int fd, struct stat64 *statbuf)
 {
     UC_REAL(fstat64);
     const char *path = uc_fd_path(fd);
+    if (uc_fstatfail_hit(fd)) {
+        errno = EIO;
+        return -1;
+    }
     uc_account_stat(path);
     if (path != NULL && uc_match(UC_STATFAIL, path) != NULL) {
         errno = EACCES;

@@ -105,7 +105,7 @@ def run(backends=None, memcheck=H.NONE) -> bool:
         return ok
     finally:
         subprocess.run(["fusermount3", "-u", str(mnt)], stderr=subprocess.DEVNULL)
-        subprocess.run(["pkill", "-9", "-x", "ultracopier"], capture_output=True)
+        H._kill_all_ultracopier()   # scoped: only THIS suite's instances, never the user's resident one
 
 
 if __name__ == "__main__":

@@ -107,16 +107,22 @@ def run(backends=None, memcheck=H.NONE) -> bool:
         shutil.rmtree(src)
     src.mkdir(parents=True)
     # 3 small files (fit) + one 3 MiB file (will hit ENOSPC) -> total ~3.4 MiB into a 1.5 MiB tmpfs.
+    # The big file sorts LAST and the copy runs on ONE inode thread, so the three small files are
+    # written before the big one fills the volume: "the files that fit are copied" is then a fact,
+    # not the outcome of a 16-thread race for the last blocks (with the default thread count the
+    # kept ENOSPC salvage of the big file could starve a small one -- 1 run in 5 failed on the
+    # unmodified engine, so the old shape asserted an ordering the engine never promised).
     for n, sz in (("a.dat", 100000), ("b.dat", 120000), ("c.dat", 90000)):
         (src / n).write_bytes(bytes((i * 13) & 0xFF for i in range(sz)))
-    (src / "big.dat").write_bytes(bytes((i * 7) & 0xFF for i in range(3 * 1024 * 1024)))
+    (src / "z_big.dat").write_bytes(bytes((i * 7) & 0xFF for i in range(3 * 1024 * 1024)))
 
     dest = K.fresh_dest("ns_dest")
     pathlib.Path(dest).mkdir(parents=True, exist_ok=True)
     home = pathlib.Path(tempfile.mkdtemp(prefix="uc-ns-home-"))
     H.write_config(home, file_collision=H.FileCollision.OVERWRITE,
                    folder_collision=H.FolderCollision.MERGE,
-                   file_error=H.FileError.SKIP, folder_error=H.FolderError.SKIP)
+                   file_error=H.FileError.SKIP, folder_error=H.FolderError.SKIP,
+                   inode_threads=1)
 
     wrapper = pathlib.Path(tempfile.mkstemp(prefix="uc-ns-wrap-", suffix=".py")[1])
     wrapper.write_text(_WRAPPER)
@@ -127,7 +133,7 @@ def run(backends=None, memcheck=H.NONE) -> bool:
             capture_output=True, text=True, timeout=180)
     finally:
         wrapper.unlink(missing_ok=True)
-        subprocess.run(["pkill", "-9", "-x", "ultracopier"], capture_output=True)
+        H._kill_all_ultracopier()   # scoped: only THIS suite's instances, never the user's resident one
         shutil.rmtree(home, ignore_errors=True)
 
     for line in (r.stdout + r.stderr).splitlines():

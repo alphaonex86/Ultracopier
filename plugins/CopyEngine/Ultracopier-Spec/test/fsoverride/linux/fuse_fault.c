@@ -25,6 +25,11 @@
  *                                      claim the file complete. (Flip is buf[i]^0xFF, deterministic and
  *                                      idempotent across re-writes, so a retry re-corrupts identically.)
  *
+ *   DATE-SET failure (dest-side): UC_FUSE_UTIMEFAIL=<substr>  utimens() (path or fd form) of a path
+ *     containing <substr> fails EPERM while every data write succeeds -- a NAS / uid-squash mount
+ *     that stores the bytes but refuses the mtime: the engine must report it on THAT file and keep
+ *     the complete data (never misdirect the error's skip onto the next file).
+ *
  *   WRITE failure (dest-side, LOUD -- media disconnect/reconnect on the ring data plane):
  *     UC_FUSE_WFAIL=<substr>:<off>:<n> writes to a path containing <substr> at/after byte <off>
  *                                      fail EIO for the first <n> faulted attempts (USB target
@@ -54,6 +59,7 @@ static char g_fault_sub[512];   static long long g_fault_off=0;   static long g_
 static char g_delay_sub[512];   static long long g_delay_ms=0;
 static char g_wfault_sub[512];  static long long g_wfault_off=-1;
 static char g_wfail_sub[512];   static long long g_wfail_off=0;   static long g_wfail_n=0;
+static char g_utimefail_sub[512];  /* utimens() of a matching path -> EPERM (date-set refused, data fine) */
 static char g_openfail_sub[512];   /* open() of a matching path -> ENOENT, but getattr still succeeds:
                                     * a TOCTOU source-vanish (listed at scan, gone at transfer-open) that
                                     * reaches the io_uring openat, which the libc shim's `gone` cannot. */
@@ -182,6 +188,7 @@ static int ff_chown(const char *path,uid_t u,gid_t g,struct fuse_file_info *fi){
     (void)fi; char b[4608]; backpath(b,sizeof(b),path); return lchown(b,u,g)==0?0:-errno;
 }
 static int ff_utimens(const char *path,const struct timespec tv[2],struct fuse_file_info *fi){
+    if(g_utimefail_sub[0] && strstr(path,g_utimefail_sub)!=NULL) return -EPERM;
     (void)fi; char b[4608]; backpath(b,sizeof(b),path);
     return utimensat(AT_FDCWD,b,tv,AT_SYMLINK_NOFOLLOW)==0?0:-errno;
 }
@@ -227,6 +234,7 @@ int main(int argc,char *argv[])
     const char *dl=getenv("UC_FUSE_DELAY");
     if(dl) split_last(dl,g_delay_sub,sizeof(g_delay_sub),&g_delay_ms);
     const char *of=getenv("UC_FUSE_OPENFAIL"); if(of) strncpy(g_openfail_sub,of,sizeof(g_openfail_sub)-1);
+    const char *uf=getenv("UC_FUSE_UTIMEFAIL"); if(uf) strncpy(g_utimefail_sub,uf,sizeof(g_utimefail_sub)-1);
     const char *lm=getenv("UC_FUSE_READLOG_MATCH"); if(lm) strncpy(g_log_match,lm,sizeof(g_log_match)-1);
     const char *lp=getenv("UC_FUSE_READLOG_PATH");  if(lp) strncpy(g_log_path,lp,sizeof(g_log_path)-1);
     return fuse_main(argc,argv,&ff_ops,NULL);

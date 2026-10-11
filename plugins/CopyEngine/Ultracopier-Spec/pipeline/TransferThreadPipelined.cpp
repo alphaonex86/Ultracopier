@@ -40,17 +40,9 @@ TransferThreadPipelined::TransferThreadPipelined() :
     haveStartTime=false;
     native_copy=false;
     checksumProgression=0;
-    writeFileList=nullptr;
-    writeFileListMutex=nullptr;
+    checksumMismatchDetected=false;
     blockSize=ULTRACOPIER_PLUGIN_DEFAULT_BLOCK_SIZE*1024;
     os_spec_flags=false;
-    bufferEnabled=true;
-
-    sended_state_readStopped=false;
-    readIsClosedVariable=false;
-    writeIsClosedVariable=false;
-    readIsOpenVariable=false;
-    writeIsOpenVariable=false;
     realMove=false;
     size_at_open=0;
     mtime_at_open=0;
@@ -66,6 +58,8 @@ TransferThreadPipelined::TransferThreadPipelined() :
     putInPause=false;
     workerInsidePipeline=false;
     stopFinalized=false;
+    destinationTouched=false;
+    blocksSinceSpeedTick=0;
 
     #ifdef ULTRACOPIER_PLUGIN_SPEED_SUPPORT
     multiForBigSpeed=0;
@@ -157,36 +151,49 @@ bool TransferThreadPipelined::setFiles(const INTERNALTYPEPATH& source, const int
     }
     if(!isRunning())
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"["+std::to_string(id)+"] The current thread is not running");
-    if(!TransferThread::setFiles(source,size,destination,mode))
-        return false;
+    // Reset BEFORE TransferThread::setFiles(): it emits the QUEUED start and the worker can already be inside
+    // (or past) preOperation when this caller resumes -- resetting then would clobber the new attempt's state
+    // (the async backend lost its reuse flag this way; see TransferThreadAsync::setFiles). Idle here (checked).
     transferProgression=0;
     checksumProgression=0;
-    sended_state_readStopped=false;
-    readIsClosedVariable=false;
-    writeIsClosedVariable=false;
-    readIsOpenVariable=false;
-    writeIsOpenVariable=false;
     realMove=false;
+    destinationTouched=false;
     // A NEW file always starts fresh: a stale resumeFromOffset here would make openDestFile
     // keep/trim a just-created destination to a previous file's offset (cross-file corruption).
     contiguousWrittenOffset=0;
     resumeFromOffset=0;
     completedWriteExtents.clear();
-    return true;
+    return TransferThread::setFiles(source,size,destination,mode);
 }
 
 void TransferThreadPipelined::resetExtraVariable()
 {
     transferProgression=0;
     checksumProgression=0;
-    readIsOpenVariable=false;
-    writeIsOpenVariable=false;
     // The contiguous water-mark and its pending extents belong to a single transfer attempt;
     // clear them here. resumeFromOffset is DELIBERATELY NOT cleared: resumeAfterErrorAndSeek()
     // sets it just before this runs on the resume leg, and every restart path zeroes it itself.
     contiguousWrittenOffset=0;
     completedWriteExtents.clear();
+    // A checksum mismatch belongs to ONE attempt: left set, a MOVE whose retry then VERIFIED fine still
+    // read copyFailed and kept its source (the move silently degraded to a copy).
+    fileContentError=false;
     TransferThread::resetExtraVariable();
+}
+
+void TransferThreadPipelined::throttleBlockForSpeedLimit()
+{
+    #ifdef ULTRACOPIER_PLUGIN_SPEED_SUPPORT
+    if(multiForBigSpeed<=0)
+        return;
+    blocksSinceSpeedTick++;
+    if(blocksSinceSpeedTick>=multiForBigSpeed)
+    {
+        blocksSinceSpeedTick=0;
+        // bounded: the clock releases a permit every interval; stop()/the dtor/setMultiForBigSpeed(0) release too
+        waitNewClockForSpeed.acquire();
+    }
+    #endif
 }
 
 void TransferThreadPipelined::recordCompletedWrite(uint64_t off, uint64_t len)
@@ -222,7 +229,10 @@ void TransferThreadPipelined::preOperation()
     // truncate/overwrite, on the first leg only (resumeFromOffset>0 means the existing dest is OUR
     // resume prefix, not the user's file). destinationIsOursToRemove() reads this so the #25
     // corrupt-dest cleanup never deletes a user's pre-existing destination.
-    if(resumeFromOffset==0)
+    // ...and ONLY on the first attempt of this file (destinationTouched): after a restart-from-0 retry the
+    // destination holds OUR partial, which must not be promoted to "the user's pre-existing file" (that
+    // disabled the partial trim, the corrupt-dest unlink and the cancel cleanup for the rest of the file).
+    if(resumeFromOffset==0 && !destinationTouched)
         destinationPreExisted = is_file(destination) && TransferThread::file_stat_size(destination)>0;
 
     if(isSame())
@@ -235,7 +245,10 @@ void TransferThreadPipelined::preOperation()
     // prefix -- we wrote [0,resumeFromOffset) and will keep+append to it via openDestFile. It must
     // NOT be treated as a collision and overwritten/unlinked here, or the prefix is destroyed and
     // openDestFile's keep-prefix guard then forces a restart from 0 (defeating the resume).
-    if(resumeFromOffset==0 && destinationExists())
+    // Same for a restart-from-0 retry: the collision policy was already applied on the first attempt; re-run
+    // against our own partial, fileCollision=Skip / "overwrite if newer" SKIPPED the file and counted the
+    // partial as done (iouring_retry_restart_collision).
+    if(resumeFromOffset==0 && !destinationTouched && destinationExists())
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] destination exists");
         return;
@@ -530,8 +543,6 @@ bool TransferThreadPipelined::tryNativeCopy()
         // error already emitted above
         return true;
     }
-    readIsClosedVariable=true;
-    writeIsClosedVariable=true;
     checkIfAllIsClosedAndDoOperations();
     return true;
 }
@@ -540,14 +551,30 @@ void TransferThreadPipelined::ifCanStartTransfer()
 {
     realMove=false;
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] start "+internalStringTostring(source)+"->"+internalStringTostring(destination));
-    if(transfer_stat!=TransferStat_WaitForTheTransfer || !canStartTransfer)
+    if(!canStartTransfer)
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"["+std::to_string(id)+
                                  "] transfer_stat:"+std::to_string(transfer_stat)+
                                  ", canStartTransfer: "+std::to_string(canStartTransfer)+", transfert id: "+std::to_string(transferId));
         return;
     }
-    transfer_stat=TransferStat_Transfer;
+    // The WORKER owns the file from here, and claims it ATOMICALLY: a stop()/skip() that already moved the
+    // state away from WaitForTheTransfer (to Idle) wins and this worker must not start; one that lands after
+    // the claim sees Transfer + workerInsidePipeline and defers to this worker's tail. Setting the flags only
+    // further down (after mkpath / isSameDrive / rename) left a window where the caller finalized the attempt
+    // (Idle, paths cleared) while the worker went on to open+copy with empty paths and then finalized a
+    // SECOND time -- onto the NEXT file ListThread had meanwhile handed to this thread.
+    stopFinalized.store(false);
+    workerInsidePipeline.store(true);
+    TransferStat expectedStat=TransferStat_WaitForTheTransfer;
+    if(!transfer_stat.compare_exchange_strong(expectedStat,TransferStat_Transfer))
+    {
+        workerInsidePipeline.store(false);
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"["+std::to_string(id)+
+                                 "] transfer_stat:"+std::to_string(transfer_stat)+
+                                 ", canStartTransfer: "+std::to_string(canStartTransfer)+", transfert id: "+std::to_string(transferId));
+        return;
+    }
 
     // Check/create destination folder
     const size_t destinationIndex=destination.rfind('/');
@@ -558,7 +585,10 @@ void TransferThreadPipelined::ifCanStartTransfer()
             if(!TransferThread::mkpath(path))
             {
                 ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] Unable to create the destination folder: "+TransferThread::internalStringTostring(path));
+                writeError=true;// destination-side error-wait: stop()/skip() need a flag to finish it
                 emit errorOnFile(destination,tr("Unable to create the destination folder, errno: %1").arg(QString::number(errno)).toStdString());
+                workerInsidePipeline.store(false);
+                finalizeIfStopRequested();
                 return;
             }
     }
@@ -585,20 +615,17 @@ void TransferThreadPipelined::ifCanStartTransfer()
         }
         else if(successFull)
         {
-            readIsClosedVariable=true;
-            writeIsClosedVariable=true;
             checkIfAllIsClosedAndDoOperations();
+            workerInsidePipeline.store(false);
             return;
         }
     }
 
     if(!realMove)
     {
-        // From here to the end of this branch the WORKER owns the file: a stop()/skip() that lands
-        // meanwhile only raises the flags, and the tail below (or finalizeIfStopRequested after a
-        // synchronous helper) publishes the one Idle + postOperationStopped.
-        stopFinalized.store(false);
-        workerInsidePipeline.store(true);
+        // The WORKER owns the file (claimed above): a stop()/skip() that lands meanwhile only raises the
+        // flags, and the tail below (or finalizeIfStopRequested after a synchronous helper) publishes the
+        // one Idle + postOperationStopped.
 
         // Symlink handling is backend-specific: the POSIX backend recreates the link,
         // the Windows backend follows it and copies the target. The hook returns true
@@ -631,40 +658,24 @@ void TransferThreadPipelined::ifCanStartTransfer()
             finalizeIfStopRequested();
             return;
         }
-        readIsOpenVariable=true;
 
         // resumeFromOffset is 0 for a normal/first transfer (-> openDestFile creates a fresh
         // destination, byte-for-byte the previous behaviour) and >0 only on a media-reconnect
         // RESUME, where it equals the verified contiguousWrittenOffset and the backend keeps the
         // destination prefix [0,resumeFromOffset) and trims any out-of-order tail above it.
-        const int destRet=openDestFile(resumeFromOffset);
-        if(destRet<0)
+        if(openDestFile(resumeFromOffset)<0)
         {
             workerInsidePipeline.store(false);
-            if(destRet==-2) // collision, not an error
-                return;
             writeError=true;
             closeFiles(); // closes the already-open source handle/fd
             emit errorOnFile(destination,errorString_internal);
             finalizeIfStopRequested();
             return;
         }
-        writeIsOpenVariable=true;
+        destinationTouched=true;// from here the destination holds OUR bytes (see preOperation's retry guards)
 
         // Do the pipeline transfer
         doTransferPipeline();
-
-        // Remove write collision entry
-        if(writeFileList!=nullptr && writeFileListMutex!=nullptr)
-        {
-            QMutexLocker lock_mutex(writeFileListMutex);
-            #ifdef WIDESTRING
-            QString qtFile=QString::fromStdWString(destination);
-            #else
-            QString qtFile=QString::fromStdString(destination);
-            #endif
-            writeFileList->remove(qtFile,this);
-        }
 
         /* Set the source date/time on the destination while its handle/fd is STILL OPEN,
            before closeFiles(). This avoids the per-file reopen-just-to-set-times that
@@ -686,10 +697,6 @@ void TransferThreadPipelined::ifCanStartTransfer()
 
         // Close files
         closeFiles();
-        readIsClosedVariable=true;
-        writeIsClosedVariable=true;
-        readIsOpenVariable=false;
-        writeIsOpenVariable=false;
 
         if(!readError && !writeError && !stopIt)
         {
@@ -718,15 +725,14 @@ void TransferThreadPipelined::ifCanStartTransfer()
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] stop copy in error "+
                                  TransferThread::internalStringTostring(source)+"->"+TransferThread::internalStringTostring(destination)+
                                  " "+strError+"("+std::to_string(terr)+")");
+        workerInsidePipeline.store(false);
         if(stopIt)
         {
-            if(!source.empty() && deletePartiallyTransferredFiles && destinationIsOursToRemove())   // #9: keep a user's pre-existing dest on cancel
-                if(exists(source) && source!=destination)
-                    if(!unlink(destination))
-                        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+
-                                                 "] unable to remove the partial destination: "+
-                                                 TransferThread::internalStringTostring(destination));
-            resetExtraVariable();
+            // a failed same-drive rename leaves no partial (rename is atomic): just publish the ONE Idle +
+            // postOperationStopped the cancel waits for (resetExtraVariable alone left the thread in Transfer
+            // forever -> checkIfReadyToCancel never saw Idle)
+            if(!stopFinalized.exchange(true))
+                finalizeStoppedTransfer();
             return;
         }
         if(readError)
@@ -757,6 +763,7 @@ bool TransferThreadPipelined::applyDateTimeOnOpenDestination()
 
 bool TransferThreadPipelined::runChecksumVerify()
 {
+    checksumMismatchDetected=false;
     XXH3_state_t *srcState = XXH3_createState();
     XXH3_state_t *dstState = XXH3_createState();
     if(srcState==NULL || dstState==NULL)
@@ -875,6 +882,7 @@ bool TransferThreadPipelined::runChecksumVerify()
     }
     if(sizeMismatch || srcDigest!=dstDigest)
     {
+        checksumMismatchDetected=true;
         char hashStr[64];
         std::snprintf(hashStr,sizeof(hashStr),"0x%016llx vs 0x%016llx",
                       (unsigned long long)srcDigest,(unsigned long long)dstDigest);
@@ -920,7 +928,10 @@ void TransferThreadPipelined::checkIfAllIsClosedAndDoOperations()
         transfer_stat=TransferStat_Checksum;
         emit pushStat(transfer_stat,transferId);
         const bool checksumOk=runChecksumVerify();
-        if(!stopIt && !needSkip && !checksumOk)
+        // A DETECTED mismatch is handled even if a stop/skip landed meanwhile (the policy's own skip() for
+        // this very error can arrive before this line): the corrupt destination must never survive as a
+        // complete-looking file. A verify merely ABORTED by stop/skip (no mismatch) falls through as before.
+        if(!checksumOk && checksumMismatchDetected)
         {
             fileContentError=true;
             // Remove the content-corrupt destination so a full-size WRONG file can't be mistaken for a
@@ -939,7 +950,15 @@ void TransferThreadPipelined::checkIfAllIsClosedAndDoOperations()
                                              TransferThread::internalStringTostring(destination));
                     emit errorOnFile(destination,tr("Checksum mismatch and the corrupt destination could not be removed").toStdString());
                 }
-            transfer_stat=TransferStat_PostTransfer;
+            // ERROR-WAIT (same shape as a data-plane error): the policy decides -- skip / put-to-end / retry /
+            // cancel -- and skip()/stop() finish it from the caller, or finalizeIfStopRequested() below if the
+            // decision already landed. Parking in PostTransfer WEDGED the thread: skip()/stop() treat
+            // PostTransfer as "the worker's own completion tail, it reaches Idle by itself" and only raised
+            // needSkip -> never Idle, every file queued behind it on this thread never copied, cancel never
+            // completed (iouring_checksum_skip_hang). Only Retry worked.
+            transfer_stat=TransferStat_Transfer;
+            workerInsidePipeline.store(false);
+            finalizeIfStopRequested();
             return;
         }
     }
@@ -953,6 +972,20 @@ void TransferThreadPipelined::checkIfAllIsClosedAndDoOperations()
     // order the source was unlink()'d first, so that failure destroyed the user's only copy. Run the
     // post-op first and treat a critical failure like copyFailed -> keep the source for retry.
     const bool postOpOk = doFilePostOperation();
+    if(!postOpOk && !stopIt && !needSkip)
+    {
+        // doFilePostOperation() emitted errorOnFile (destination vanished, or keepDate and the date-set was
+        // refused -- a NAS/uid-squash mount): ERROR-WAIT so the policy acts on THIS file. Completing anyway
+        // handed this thread its next file before the twice-queued error reached CopyEngine, whose skip() /
+        // put-to-end then hit the NEXT file (silently dropped / the wrong entry requeued). The data is
+        // complete, so a skip KEEPS the destination (needRemove=false) and a MOVE keeps its source until a
+        // clean retry (iouring_postop_date_error).
+        needRemove=false;
+        transfer_stat=TransferStat_Transfer;
+        workerInsidePipeline.store(false);
+        finalizeIfStopRequested();
+        return;
+    }
 
     if(mode==Ultracopier::Move && !realMove)
     {
@@ -1010,6 +1043,10 @@ void TransferThreadPipelined::stop()
     if(transfer_stat!=TransferStat_Transfer)
         return;// PostTransfer/Checksum/PostOperation: the worker is inside its own completion tail, it reaches Idle
     pauseMutex.release();
+    #ifdef ULTRACOPIER_PLUGIN_SPEED_SUPPORT
+    if(waitNewClockForSpeed.available()<=1)
+        waitNewClockForSpeed.release();// a worker blocked on the speed clock wakes and sees stopIt (bounded like the clock tick)
+    #endif
     // The worker is BLOCKED in doTransferPipeline()'s completion wait. Interrupt it so it notices stopIt
     // and closes its OWN handles/fds (default = closeFiles() here; IOCP polls stopIt itself and overrides
     // this to a no-op to avoid the cross-thread CloseHandle race -- see interruptTransferForStop()).
@@ -1069,6 +1106,10 @@ void TransferThreadPipelined::skip()
             return;
         }
         pauseMutex.release();
+        #ifdef ULTRACOPIER_PLUGIN_SPEED_SUPPORT
+        if(waitNewClockForSpeed.available()<=1)
+            waitNewClockForSpeed.release();// see stop()
+        #endif
         // Interrupt the blocked worker (default closeFiles(); IOCP no-op + self-poll -- see stop()).
         interruptTransferForStop();
         if(workerInsidePipeline.load())
@@ -1403,7 +1444,3 @@ void TransferThreadPipelined::resume()
     pauseMutex.release();
 }
 
-void TransferThreadPipelined::setBuffer(const bool buffer)
-{
-    this->bufferEnabled=buffer;
-}

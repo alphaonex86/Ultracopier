@@ -3,6 +3,8 @@
 the pipelined io_uring TransferThread (unit/engine_api_uring_test.pro). Drives the public engine API
 on a running io_uring transfer:
   * plain copy  -> reaches Idle, byte-identical;
+  * pause       -> pause() mid-transfer HALTS the destination growth (realByteTransfered plateau),
+                   then resume() completes the copy byte-identical (the pipelined pause semaphore);
   * cancel      -> cancel() mid-transfer reaches canBeDeleted() within 20 s and no PARTIAL file is
                    left (the in-flight one is removed, files finished before the cancel stay).
                    Before: stop() only interrupted the worker and the thread never went Idle from
@@ -92,6 +94,22 @@ def run(backends=None, memcheck=H.NONE) -> bool:
     ok1 = (rc == 0 and done and content)
     print(f"      [plain]  done={done} content_identical={content} -> {'PASS' if ok1 else 'FAIL'}")
     results.append(ok1)
+
+    # pause mid-flight: dest growth must plateau while paused, then complete on resume
+    src = _mk_src("engapiu_pause_src", 6, 48 * 1024 * 1024)
+    dest = K.fresh_dest("engapiu_pause_dest")
+    rc, out = _run(binp, src, dest, env, mode="pause")
+    mp = re.search(r"PAUSE isInPause=(\d) drained=(\d+) plateau=(\d+) halted=(\d)", out)
+    halted = bool(mp and mp.group(4) == "1")
+    done_p = bool(re.search(r"DONE done=1", out))
+    content_p = _diff_ok(src, dest)
+    ok_p = (rc == 0 and halted and done_p and content_p)
+    print(f"      [pause]  halted_while_paused={halted} done={done_p} content_identical={content_p} -> {'PASS' if ok_p else 'FAIL'}")
+    if not ok_p:
+        for l in out.strip().splitlines()[-3:]:
+            print(f"        {l}")
+    results.append(ok_p)
+    shutil.rmtree(src, ignore_errors=True); shutil.rmtree(dest, ignore_errors=True)
 
     # cancel mid-flight: the partial is REMOVED with deletePartiallyTransferredFiles (default) and KEPT
     # as a faithful, contiguous prefix without it (UC_TEST_KEEP_PARTIALS=1; trimDestinationToContiguous)

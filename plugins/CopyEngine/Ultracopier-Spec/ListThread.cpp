@@ -85,12 +85,10 @@ ListThread::ListThread(FacilityInterface * facilityInterface) :
     safetyStallTicks                = 0;
 
     //can't be static into WriteThread, linked by instance then by ListThread
-    #if defined(ULTRACOPIER_PLUGIN_IO_URING) || defined(ULTRACOPIER_PLUGIN_WINIOCP)
-    writeFileList=new QMultiHash<QString,TransferThreadPipelined *>();
-    #else
+    #if !defined(ULTRACOPIER_PLUGIN_IO_URING) && !defined(ULTRACOPIER_PLUGIN_WINIOCP)
     writeFileList=new QMultiHash<QString,WriteThread *>();
-    #endif
     writeFileListMutex=new QMutex();
+    #endif
 
     #ifdef ULTRACOPIER_PLUGIN_DEBUG_WINDOW
     if(!connect(&timerUpdateDebugDialog,&QTimer::timeout,this,&ListThread::timedUpdateDebugDialog))
@@ -160,8 +158,10 @@ ListThread::~ListThread()
     wait();
     // ListThread's own write-collision list/mutex (allocated in the ctor) are never shared to a
     // transfer thread (each thread gets its own in createTransferThread), so free them here.
+    #if !defined(ULTRACOPIER_PLUGIN_IO_URING) && !defined(ULTRACOPIER_PLUGIN_WINIOCP)
     delete writeFileList;       writeFileList=nullptr;
     delete writeFileListMutex;  writeFileListMutex=nullptr;
+    #endif
     #if (defined(ULTRACOPIER_PLUGIN_IO_URING) || defined(ULTRACOPIER_PLUGIN_WINIOCP)) && defined(ULTRACOPIER_PLUGIN_DEBUG)
     if(opShadowSched!=nullptr && !opShadowSummaryLogged)
         ULTRACOPIER_DEBUGCONSOLE(opShadowViolations==0?Ultracopier::DebugLevel_Notice:Ultracopier::DebugLevel_Critical,
@@ -819,16 +819,15 @@ void ListThread::checkIfReadyToCancel()
             // resumeNotStarted() locking writeFileListMutex, so freeing it before the join is a
             // use-after-free (ASan-confirmed). Each transfer thread owns its own pair (createTransferThread),
             // so freeing after the join is safe (not shared, no double-free).
-            #if defined(ULTRACOPIER_PLUGIN_IO_URING) || defined(ULTRACOPIER_PLUGIN_WINIOCP)
-            auto * const doomedWriteFileList=transferThreadList.at(index)->writeFileList;
-            auto * const doomedWriteFileListMutex=transferThreadList.at(index)->writeFileListMutex;
-            #else
+            #if !defined(ULTRACOPIER_PLUGIN_IO_URING) && !defined(ULTRACOPIER_PLUGIN_WINIOCP)
             auto * const doomedWriteFileList=transferThreadList.at(index)->writeThread.writeFileList;
             auto * const doomedWriteFileListMutex=transferThreadList.at(index)->writeThread.writeFileListMutex;
             #endif
             delete transferThreadList.at(index);//->deleteLayer();
+            #if !defined(ULTRACOPIER_PLUGIN_IO_URING) && !defined(ULTRACOPIER_PLUGIN_WINIOCP)
             delete doomedWriteFileList;
             delete doomedWriteFileListMutex;
+            #endif
             transferThreadList[index]=NULL;
             transferThreadList.erase(transferThreadList.cbegin()+index);
             loop_size=(int)transferThreadList.size();
@@ -1733,10 +1732,7 @@ void ListThread::createTransferThread()
     last->setRsync(rsync);
     #endif
 
-    #if defined(ULTRACOPIER_PLUGIN_IO_URING) || defined(ULTRACOPIER_PLUGIN_WINIOCP)
-    last->writeFileList=new QMultiHash<QString,TransferThreadPipelined *>();
-    last->writeFileListMutex=new QMutex();
-    #else
+    #if !defined(ULTRACOPIER_PLUGIN_IO_URING) && !defined(ULTRACOPIER_PLUGIN_WINIOCP)
     last->writeThread.writeFileList=new QMultiHash<QString,WriteThread *>();
     last->writeThread.writeFileListMutex=new QMutex();
     #endif
@@ -1770,7 +1766,14 @@ void ListThread::createTransferThread()
     #ifdef ULTRACOPIER_PLUGIN_SPEED_SUPPORT
     last->setMultiForBigSpeed(multiForBigSpeed);
     //speed limitation
+    #if defined(ULTRACOPIER_PLUGIN_IO_URING) || defined(ULTRACOPIER_PLUGIN_WINIOCP)
+    // DIRECT: the pipelined worker IS the transfer thread, and it blocks on the speed semaphore inside its
+    // copy loop, so a QUEUED tick could never be delivered to it (its event loop is not running) -> the
+    // throttle deadlocked. The slot only releases a QSemaphore (thread-safe), so run it on the clock's thread.
+    connect(clockForTheCopySpeed,	&QTimer::timeout,			last,	&TransferThreadImpl::timeOfTheBlockCopyFinished,		Qt::DirectConnection);
+    #else
     connect(clockForTheCopySpeed,	&QTimer::timeout,			last,	&TransferThreadImpl::timeOfTheBlockCopyFinished,		Qt::QueuedConnection);
+    #endif
     #endif
 
     last->setObjectName(QStringLiteral("transfer %1").arg(transferThreadList.size()-1));
@@ -1809,16 +1812,15 @@ void ListThread::deleteTransferThread()
                 // Join (delete -> ~TransferThreadAsync waits the threads) BEFORE freeing the per-thread
                 // write-collision list/mutex -- freeing before the join is a use-after-free (the
                 // WriteThread may still lock writeFileListMutex in internalClose()->resumeNotStarted()).
-                #if defined(ULTRACOPIER_PLUGIN_IO_URING) || defined(ULTRACOPIER_PLUGIN_WINIOCP)
-                auto * const doomedWriteFileList=transferThreadList.at(index)->writeFileList;
-                auto * const doomedWriteFileListMutex=transferThreadList.at(index)->writeFileListMutex;
-                #else
+                #if !defined(ULTRACOPIER_PLUGIN_IO_URING) && !defined(ULTRACOPIER_PLUGIN_WINIOCP)
                 auto * const doomedWriteFileList=transferThreadList.at(index)->writeThread.writeFileList;
                 auto * const doomedWriteFileListMutex=transferThreadList.at(index)->writeThread.writeFileListMutex;
                 #endif
                 delete transferThreadList.at(index);//->deleteLayer();
+                #if !defined(ULTRACOPIER_PLUGIN_IO_URING) && !defined(ULTRACOPIER_PLUGIN_WINIOCP)
                 delete doomedWriteFileList;
                 delete doomedWriteFileListMutex;
+                #endif
                 transferThreadList[index]=NULL;
                 transferThreadList.erase(transferThreadList.cbegin()+index);
                 loop_size--;

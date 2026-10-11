@@ -101,7 +101,6 @@ TransferThreadWin::TransferThreadWin()
     destHandle=INVALID_HANDLE_VALUE;
     sourceFileSize=0;
     readOffset=0;
-    writeOffset=0;
 
     for(int i=0;i<NUM_BUFFERS;i++)
     {
@@ -201,7 +200,10 @@ void TransferThreadWin::initPipelineBuffers()
             pipelineBuffers[i].data=(char*)malloc(bs);
             if(pipelineBuffers[i].data==nullptr)
             {
+                // an error-wait like any other failure: without a flag the base reported the (empty)
+                // destination COMPLETE and a MOVE then deleted its source
                 errorString_internal="Out of memory allocating pipeline buffers";
+                writeError=true;
                 emit errorOnFile(source,errorString_internal);
                 return;
             }
@@ -213,6 +215,7 @@ void TransferThreadWin::initPipelineBuffers()
             if(pipelineBuffers[i].ov==nullptr)
             {
                 errorString_internal="Out of memory allocating pipeline buffers";
+                writeError=true;
                 emit errorOnFile(source,errorString_internal);
                 return;
             }
@@ -261,13 +264,24 @@ int TransferThreadWin::openSourceFile()
         return -1;
     }
     LARGE_INTEGER li;
-    if(GetFileSizeEx(h,&li))
+    if(!GetFileSizeEx(h,&li))
     {
-        size_at_open=li.QuadPart;
-        sourceFileSize=(uint64_t)li.QuadPart;
+        // The size is what the pipeline reads: with 0 nothing was read, "0 == 0 bytes" and the file was
+        // reported COMPLETE with an EMPTY destination (a MOVE then deleted the source). Fail the open ->
+        // the error policy (retry/skip) handles it. Same fix as io_uring's fstat (iouring_fstat_fail).
+        errorString_internal="GetFileSizeEx: "+winErrorString(GetLastError());
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] Unable to size the opened source: "+
+                                 TransferThread::internalStringTostring(source)+", error: "+errorString_internal);
+        CloseHandle(h);
+        return -1;
     }
-    else
-        sourceFileSize=0;
+    size_at_open=li.QuadPart;
+    sourceFileSize=(uint64_t)li.QuadPart;
+    // Never keep the PREVIOUS file's time on a failed query: the resume gate requires a non-zero
+    // sub-second mtime, so 0 makes it refuse a resume (restart from 0 -- the safe side).
+    mtime_at_open=0;
+    mtime_nsec_at_open=0;
+    ctime_at_open=0;
     FILETIME ftMod;
     if(GetFileTime(h,nullptr,nullptr,&ftMod))
     {
@@ -301,32 +315,14 @@ int TransferThreadWin::openDestFile(uint64_t startSize)
             }
     }
 
-    // Check write collision
-    if(writeFileList!=nullptr && writeFileListMutex!=nullptr)
-    {
-        QMutexLocker lock_mutex(writeFileListMutex);
-        #ifdef WIDESTRING
-        QString qtFile=QString::fromStdWString(destination);
-        #else
-        QString qtFile=QString::fromStdString(destination);
-        #endif
-        if(writeFileList->count(qtFile,this)==0)
-        {
-            writeFileList->insert(qtFile,this);
-            if(writeFileList->count(qtFile)>1)
-            {
-                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] in waiting because same file is found");
-                return -2; // collision, not an error
-            }
-        }
-    }
-
     const std::wstring destPath=iocpFinalPath(destination);
-    // CRITICAL: CREATE_ALWAYS truncates the destination to 0 on every open, which would destroy
-    // the prefix we need to keep on a media-reconnect RESUME. Use OPEN_ALWAYS when startSize>0
-    // (resume: open the existing dest, preserving [0,startSize)); CREATE_ALWAYS otherwise (normal
-    // first transfer: a fresh, truncated destination -- byte-for-byte the old behaviour).
-    const DWORD disposition=(startSize>0)?OPEN_ALWAYS:CREATE_ALWAYS;
+    // CREATE_ALWAYS truncates the destination to 0 at open. That is right ONLY for a genuinely fresh
+    // destination. OPEN_ALWAYS (no truncation) for a media-reconnect RESUME (startSize>0: keep the prefix
+    // [0,startSize)) AND for a fresh OVERWRITE of a user's PRE-EXISTING destination (#9, as io_uring): the old
+    // content stays until the whole new content is in place and is only then cut to the new size (end of
+    // doTransferPipeline), so a source that turns out unreadable at byte 0 leaves the user's file untouched
+    // instead of a 0-byte wreck. Data safety over the CREATE_ALWAYS shortcut (operator decision 2026-10-06).
+    const DWORD disposition=(startSize>0 || destinationPreExisted)?OPEN_ALWAYS:CREATE_ALWAYS;
     DWORD destFlags=FILE_FLAG_OVERLAPPED;
     if(os_spec_flags)
         destFlags|=FILE_FLAG_SEQUENTIAL_SCAN;   // mirror the source hint: the dest is a whole-file
@@ -453,7 +449,6 @@ void TransferThreadWin::doTransferPipeline()
     // byte-for-byte the old behaviour). On a media-reconnect resume, resumeFromOffset is the
     // verified contiguous prefix already on disk, so reads/writes continue from there.
     readOffset=(int64_t)resumeFromOffset;
-    writeOffset=(int64_t)resumeFromOffset;
     transferProgression=resumeFromOffset;
     contiguousWrittenOffset=resumeFromOffset;
     completedWriteExtents.clear();
@@ -462,6 +457,7 @@ void TransferThreadWin::doTransferPipeline()
     int writesInFlight=0;
     bool readDone=false;
     bool errorOccurred=false;
+    resetSpeedThrottle();
 
     // Issue an overlapped ReadFile on buffer idx (offset stored in its OVERLAPPED).
     // Returns false only on a real submission error (not ERROR_IO_PENDING); a
@@ -478,6 +474,9 @@ void TransferThreadWin::doTransferPipeline()
             const DWORD e=GetLastError();
             if(e!=ERROR_IO_PENDING)
             {
+                // a SYNCHRONOUS failure queues no completion packet: the buffer is NOT in flight (left as
+                // Reading, the drain waited its deadline for it and quarantined it)
+                pipelineBuffers[idx].state=PipelineBuffer::Free;
                 errorString_internal="Read error: "+winErrorString(e);
                 return false;
             }
@@ -496,6 +495,7 @@ void TransferThreadWin::doTransferPipeline()
             const DWORD e=GetLastError();
             if(e!=ERROR_IO_PENDING)
             {
+                pipelineBuffers[idx].state=PipelineBuffer::Free;// synchronous failure: no packet will come
                 errorString_internal="Write error: "+winErrorString(e);
                 return false;
             }
@@ -511,6 +511,9 @@ void TransferThreadWin::doTransferPipeline()
             readDone=true;
             break;
         }
+        throttleBlockForSpeedLimit();// speed limit: one tick of the clock every multiForBigSpeed blocks
+        if(stopIt)
+            break;
         unsigned int toRead=blockSize;
         if((uint64_t)(readOffset+toRead)>sourceFileSize)
             toRead=(unsigned int)(sourceFileSize-readOffset);
@@ -567,7 +570,13 @@ void TransferThreadWin::doTransferPipeline()
             break;
         }
 
-        for(ULONG ci=0;ci<numEntries && !errorOccurred && !stopIt;ci++)
+        // EVERY completion of this file is ACCOUNTED (counter + buffer state) -- even after an error or a stop
+        // has been seen. This batch is already dequeued: a completion left unaccounted made the cancel-drain
+        // wait its full deadline for a packet that could never come, QUARANTINE a buffer the kernel no longer
+        // owned and recreate the port -- a 2 s stall + up to 8 leaked buffers PER failing file on a dying disk
+        // (the io_uring twin: iouring_faulty_hdd_many). Only the issuing of NEW I/O stops at the first
+        // error/stop (the file is abandoned).
+        for(ULONG ci=0;ci<numEntries;ci++)
         {
             const ULONG_PTR key=entries[ci].lpCompletionKey;
             const DWORD result=entries[ci].dwNumberOfBytesTransferred;
@@ -575,33 +584,40 @@ void TransferThreadWin::doTransferPipeline()
             const bool isEof=(status==0xC0000011UL);         // STATUS_END_OF_FILE
             const bool isError=(((LONG)status)<0) && !isEof;
             const int bufIdx=bufferIndexForOverlapped(entries[ci].lpOverlapped);
+            const bool abandon=errorOccurred || stopIt;
             if(bufIdx<0)
             {
-                // Completion for an unknown OVERLAPPED (should not happen) — ignore.
+                // Completion for an unknown OVERLAPPED (should not happen) -- ignore.
                 ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] completion for unknown overlapped");
+                continue;
             }
-            else if(key==KEY_SOURCE)
+            PipelineBuffer &buf=pipelineBuffers[bufIdx];
+            if(key==KEY_SOURCE)
             {
                 // Read completion (analog of OP_READ_TAG)
                 readsInFlight--;
                 if(isError)
                 {
-                    errorString_internal="Read error, NTSTATUS 0x"+std::to_string((unsigned long)status);
-                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] "+errorString_internal);
-                    readError=true;
-                    errorOccurred=true;
-                    emit errorOnFile(source,errorString_internal);
+                    buf.state=PipelineBuffer::Free;
+                    if(!errorOccurred)// one error per attempt
+                    {
+                        errorString_internal="Read error, NTSTATUS 0x"+std::to_string((unsigned long)status);
+                        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] "+errorString_internal);
+                        readError=true;
+                        errorOccurred=true;
+                        emit errorOnFile(source,errorString_internal);
+                    }
                 }
+                else if(abandon)
+                    buf.state=PipelineBuffer::Free;// accounted, not written: the file is being abandoned
                 else if(result==0 || isEof)
                 {
                     // EOF before the chunk was full: the source SHRANK since the scan. The bytes already
                     // in the buffer are still written (the end-of-copy size check then reports the change).
                     readDone=true;
-                    if(pipelineBuffers[bufIdx].bytesUsed>0)
+                    if(buf.bytesUsed>0)
                     {
-                        if(!issueWrite(bufIdx,pipelineBuffers[bufIdx].data,
-                                       (unsigned int)pipelineBuffers[bufIdx].bytesUsed,
-                                       pipelineBuffers[bufIdx].fileOffset))
+                        if(!issueWrite(bufIdx,buf.data,(unsigned int)buf.bytesUsed,buf.fileOffset))
                         {
                             writeError=true;
                             errorOccurred=true;
@@ -611,20 +627,17 @@ void TransferThreadWin::doTransferPipeline()
                             writesInFlight++;
                     }
                     else
-                        pipelineBuffers[bufIdx].state=PipelineBuffer::Free;
+                        buf.state=PipelineBuffer::Free;
                 }
                 else
                 {
-                    pipelineBuffers[bufIdx].bytesUsed+=result;
-                    if((unsigned int)pipelineBuffers[bufIdx].bytesUsed<pipelineBuffers[bufIdx].chunkSize)
+                    buf.bytesUsed+=result;
+                    if((unsigned int)buf.bytesUsed<buf.chunkSize)
                     {
                         // Short read: fetch the rest of this chunk into the same buffer
                         // before writing, so partial reads under load can't corrupt data.
-                        const unsigned int rem=pipelineBuffers[bufIdx].chunkSize-(unsigned int)pipelineBuffers[bufIdx].bytesUsed;
-                        if(!issueRead(bufIdx,
-                                      pipelineBuffers[bufIdx].data+pipelineBuffers[bufIdx].bytesUsed,
-                                      rem,
-                                      pipelineBuffers[bufIdx].fileOffset+pipelineBuffers[bufIdx].bytesUsed))
+                        const unsigned int rem=buf.chunkSize-(unsigned int)buf.bytesUsed;
+                        if(!issueRead(bufIdx,buf.data+buf.bytesUsed,rem,buf.fileOffset+buf.bytesUsed))
                         {
                             readError=true;
                             errorOccurred=true;
@@ -638,9 +651,7 @@ void TransferThreadWin::doTransferPipeline()
                         // Chunk fully read -> write it back at the exact offset it came
                         // from (NOT a global write cursor): completions arrive out of
                         // order, so completion-order writing scrambled the file.
-                        if(!issueWrite(bufIdx,pipelineBuffers[bufIdx].data,
-                                       (unsigned int)pipelineBuffers[bufIdx].bytesUsed,
-                                       pipelineBuffers[bufIdx].fileOffset))
+                        if(!issueWrite(bufIdx,buf.data,(unsigned int)buf.bytesUsed,buf.fileOffset))
                         {
                             writeError=true;
                             errorOccurred=true;
@@ -657,70 +668,81 @@ void TransferThreadWin::doTransferPipeline()
                 writesInFlight--;
                 if(isError)
                 {
-                    errorString_internal="Write error, NTSTATUS 0x"+std::to_string((unsigned long)status);
-                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] "+errorString_internal);
-                    writeError=true;
-                    errorOccurred=true;
-                    emit errorOnFile(destination,errorString_internal);
-                }
-                else
-                {
-                    transferProgression+=result;
-                    // Fold this completed extent into the contiguous low-water mark, using the LIVE
-                    // fileOffset+result BEFORE the short-write advance below, so out-of-order overlapped
-                    // completions merge correctly and contiguousWrittenOffset stays the true written-
-                    // from-0 prefix (the only safe resume point; transferProgression may sit above a hole).
-                    recordCompletedWrite((uint64_t)pipelineBuffers[bufIdx].fileOffset,(uint64_t)result);
-                    // Handle short write
-                    if((int)result<pipelineBuffers[bufIdx].bytesUsed)
+                    buf.state=PipelineBuffer::Free;
+                    if(!errorOccurred)
                     {
-                        const int remaining=pipelineBuffers[bufIdx].bytesUsed-(int)result;
-                        memmove(pipelineBuffers[bufIdx].data,pipelineBuffers[bufIdx].data+result,remaining);
-                        pipelineBuffers[bufIdx].bytesUsed=remaining;
-                        pipelineBuffers[bufIdx].fileOffset+=result;
-                        if(!issueWrite(bufIdx,pipelineBuffers[bufIdx].data,(unsigned int)remaining,pipelineBuffers[bufIdx].fileOffset))
-                        {
-                            writeError=true;
-                            errorOccurred=true;
-                            emit errorOnFile(destination,errorString_internal);
-                        }
-                        else
-                            writesInFlight++;
+                        errorString_internal="Write error, NTSTATUS 0x"+std::to_string((unsigned long)status);
+                        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] "+errorString_internal);
+                        writeError=true;
+                        errorOccurred=true;
+                        emit errorOnFile(destination,errorString_internal);
+                    }
+                    continue;
+                }
+                transferProgression+=result;
+                // Fold this completed extent into the contiguous low-water mark, using the LIVE
+                // fileOffset+result BEFORE the short-write advance below, so out-of-order overlapped
+                // completions merge correctly and contiguousWrittenOffset stays the true written-
+                // from-0 prefix (the only safe resume point; transferProgression may sit above a hole).
+                recordCompletedWrite((uint64_t)buf.fileOffset,(uint64_t)result);
+                // Handle short write
+                if((int)result<buf.bytesUsed)
+                {
+                    if(abandon)
+                    {
+                        buf.state=PipelineBuffer::Free;// the rest of the chunk is not re-issued
+                        continue;
+                    }
+                    const int remaining=buf.bytesUsed-(int)result;
+                    memmove(buf.data,buf.data+result,remaining);
+                    buf.bytesUsed=remaining;
+                    buf.fileOffset+=result;
+                    if(!issueWrite(bufIdx,buf.data,(unsigned int)remaining,buf.fileOffset))
+                    {
+                        writeError=true;
+                        errorOccurred=true;
+                        emit errorOnFile(destination,errorString_internal);
+                    }
+                    else
+                        writesInFlight++;
+                    continue;
+                }
+
+                // Write completed fully -> reuse this buffer for the next chunk
+                buf.state=PipelineBuffer::Free;
+                if(abandon)
+                    continue;
+
+                // Queue next read if data remains
+                if(!readDone && (uint64_t)readOffset<sourceFileSize)
+                {
+                    throttleBlockForSpeedLimit();
+                    if(stopIt)
+                        continue;
+                    unsigned int toRead=blockSize;
+                    if((uint64_t)(readOffset+toRead)>sourceFileSize)
+                        toRead=(unsigned int)(sourceFileSize-readOffset);
+                    // Clamp to the buffer's allocated capacity (see initial-batch note).
+                    if(toRead>buf.allocSize)
+                        toRead=buf.allocSize;
+                    buf.fileOffset=readOffset;
+                    buf.chunkSize=toRead;
+                    buf.bytesUsed=0;
+                    if(!issueRead(bufIdx,buf.data,toRead,readOffset))
+                    {
+                        readError=true;
+                        errorOccurred=true;
+                        emit errorOnFile(source,errorString_internal);
                     }
                     else
                     {
-                        // Write completed fully -> reuse this buffer for the next chunk
-                        pipelineBuffers[bufIdx].state=PipelineBuffer::Free;
-
-                        // Queue next read if data remains
-                        if(!readDone && !stopIt && (uint64_t)readOffset<sourceFileSize)
-                        {
-                            unsigned int toRead=blockSize;
-                            if((uint64_t)(readOffset+toRead)>sourceFileSize)
-                                toRead=(unsigned int)(sourceFileSize-readOffset);
-                            // Clamp to the buffer's allocated capacity (see initial-batch note).
-                            if(toRead>pipelineBuffers[bufIdx].allocSize)
-                                toRead=pipelineBuffers[bufIdx].allocSize;
-                            pipelineBuffers[bufIdx].fileOffset=readOffset;
-                            pipelineBuffers[bufIdx].chunkSize=toRead;
-                            pipelineBuffers[bufIdx].bytesUsed=0;
-                            if(!issueRead(bufIdx,pipelineBuffers[bufIdx].data,toRead,readOffset))
-                            {
-                                readError=true;
-                                errorOccurred=true;
-                                emit errorOnFile(source,errorString_internal);
-                            }
-                            else
-                            {
-                                readOffset+=toRead;
-                                readsInFlight++;
-                            }
-                        }
-                        else if((uint64_t)readOffset>=sourceFileSize)
-                        {
-                            readDone=true;
-                        }
+                        readOffset+=toRead;
+                        readsInFlight++;
                     }
+                }
+                else if((uint64_t)readOffset>=sourceFileSize)
+                {
+                    readDone=true;
                 }
             }
         }
@@ -737,11 +759,11 @@ void TransferThreadWin::doTransferPipeline()
         // them, which BOUNDS the drain. CancelIoEx alone only REQUESTS cancellation and an IRP wedged in
         // the device / a filesystem minifilter (dying sector, Defender under load) can outlive any wait.
         closeFiles();
-        const DWORD deadline=GetTickCount()+2000;
+        const ULONGLONG deadline=GetTickCount64()+2000;// 64-bit: a 32-bit wrap inside the window blocked for days
         while(readsInFlight>0 || writesInFlight>0)
         {
-            const DWORD now=GetTickCount();
-            const DWORD waitMs=(now>=deadline)?0:(deadline-now);
+            const ULONGLONG now=GetTickCount64();
+            const DWORD waitMs=(now>=deadline)?0:(DWORD)(deadline-now);
             ULONG numEntries=0;
             if(!GetQueuedCompletionStatusEx(iocp,entries,NUM_BUFFERS,&numEntries,waitMs,FALSE))
                 break; // timed out with ops STILL in flight -> a genuinely wedged IRP; quarantine below
@@ -811,22 +833,53 @@ void TransferThreadWin::doTransferPipeline()
             emit errorOnFile(source,errorString_internal);
         }
         else
-            // Whole file contiguously written -> resume water-mark equals the file size. (On the ERROR
-            // path leave contiguousWrittenOffset at its true mid-file value so resumeAfterErrorAndSeek()
-            // reads the real safe offset.)
-            contiguousWrittenOffset=(uint64_t)sourceFileSize;
+        {
+            // a pre-existing destination longer than the source keeps a stale tail: cut it, now that the whole
+            // new content is in place (the open deliberately did not truncate it, guard #9 -- as io_uring)
+            LARGE_INTEGER newEnd;
+            newEnd.QuadPart=(LONGLONG)sourceFileSize;
+            if(destinationPreExisted && resumeFromOffset==0 &&
+               (!SetFilePointerEx(destHandle,newEnd,nullptr,FILE_BEGIN) || !SetEndOfFile(destHandle)))
+            {
+                errorString_internal="Unable to truncate: "+winErrorString(GetLastError());
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] "+errorString_internal);
+                writeError=true;
+                errorOccurred=true;
+                emit errorOnFile(destination,errorString_internal);
+            }
+            else
+                // Whole file contiguously written -> resume water-mark equals the file size. (On the ERROR
+                // path leave contiguousWrittenOffset at its true mid-file value so resumeAfterErrorAndSeek()
+                // reads the real safe offset.)
+                contiguousWrittenOffset=(uint64_t)sourceFileSize;
+        }
     }
 
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] doTransferPipeline end, transferred: "+std::to_string(transferProgression));
 }
 void TransferThreadWin::trimDestinationToContiguous()
 {
-    if(destHandle==INVALID_HANDLE_VALUE)
-        return;
     LARGE_INTEGER pos;
     pos.QuadPart=(LONGLONG)contiguousWrittenOffset;
-    if(!SetFilePointerEx(destHandle,pos,nullptr,FILE_BEGIN) || !SetEndOfFile(destHandle))
+    HANDLE h=destHandle;
+    // The error/stop drain closes the handles FIRST (CloseHandle is what bounds a wedged IRP), so by the time
+    // the base asks for the trim the handle is gone -- the kept salvage of a fault-skip was then left with
+    // whatever landed out of order above the contiguous prefix (zero-filled gap, NOT a faithful prefix).
+    // Reopen by path (plain synchronous handle) just to cut it; nothing of ours is in flight any more.
+    const bool reopened=(h==INVALID_HANDLE_VALUE);
+    if(reopened)
+    {
+        h=CreateFileW(iocpFinalPath(destination).c_str(),GENERIC_WRITE,FILE_SHARE_READ,nullptr,OPEN_EXISTING,FILE_ATTRIBUTE_NORMAL,nullptr);
+        if(h==INVALID_HANDLE_VALUE)
+        {
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] unable to reopen the partial destination to trim it: "+winErrorString(GetLastError()));
+            return;
+        }
+    }
+    if(!SetFilePointerEx(h,pos,nullptr,FILE_BEGIN) || !SetEndOfFile(h))
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] unable to trim the partial destination: "+winErrorString(GetLastError()));
+    if(reopened)
+        CloseHandle(h);
 }
 
 bool TransferThreadWin::remainSourceOpen() const
@@ -980,8 +1033,18 @@ bool TransferThreadWin::trySymlinkCopy()
             return true;
         }
     }
-    readIsClosedVariable=true;
-    writeIsClosedVariable=true;
+    // The reparse point was recreated at the destination (every failure path returned above). As on POSIX:
+    // realMove=true keeps the completion from running the checksum re-open through the link (a dangling
+    // target made that a spurious "unable to re-open" error) and from treating it as a byte copy; a MOVE
+    // then completes by removing the SOURCE link/junction here (DeleteFileW || RemoveDirectoryW). Without
+    // it a cross-drive MOVE of a junction kept the source (is_file() is false for it) and silently became
+    // a copy. COPY keeps the source. (Return checked per the FS-mutation rule.)
+    realMove=true;
+    if(mode==Ultracopier::Move && source!=destination)
+        if(!unlink(source))
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+
+                                     "] reparse-point move: unable to remove the source link: "+
+                                     internalStringTostring(source)+" ("+TransferThread::GetLastErrorStdStr()+")");
     checkIfAllIsClosedAndDoOperations();
     return true;
 }

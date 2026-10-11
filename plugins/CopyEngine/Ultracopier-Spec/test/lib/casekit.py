@@ -10,7 +10,7 @@ Every case:
 These helpers keep each case file small and readable.
 """
 from __future__ import annotations
-import os, shutil, subprocess, pathlib
+import os, shutil, subprocess, pathlib, time
 from . import harness as H
 
 DEFAULT_BACKENDS = [H.ASYNC, H.IO_URING]
@@ -388,3 +388,53 @@ def for_backends(backends, fn) -> bool:
             print(f"    [{b}] {'PASS' if res else 'FAIL'}")
             ok = ok and bool(res)
     return ok
+
+
+# ---------------------------------------------------------------------------
+# FUSE fault rig (fsoverride/linux/fuse_fault.c): the ONLY way to fault the io_uring / IOCP
+# DATA plane, which bypasses the libc shim. One helper instead of a copy of the boilerplate
+# in every case.
+# ---------------------------------------------------------------------------
+def fuse_bin():
+    """Build (if needed) and return the FUSE fault injector path, or None when libfuse3 /
+    fusermount3 / /dev/fuse are unavailable (the caller then SKIPS cleanly)."""
+    fso = pathlib.Path(__file__).resolve().parents[1] / "fsoverride"
+    if not (pathlib.Path("/dev/fuse").exists() and shutil.which("fusermount3")):
+        return None
+    if subprocess.run(["pkg-config", "--exists", "fuse3"]).returncode != 0:
+        return None
+    out = fso / "build" / "fuse_fault"
+    subprocess.run(["make", "-C", str(fso), "fuse_fault"], check=True,
+                   stdout=subprocess.DEVNULL, stderr=subprocess.PIPE)
+    return out if out.exists() else None
+
+
+class FuseMount:
+    """`with FuseMount("tag", UC_FUSE_FAULT="BAD:0:1000000") as m:` -> m.back (the real backing
+    dir to populate BEFORE/AFTER mount, same content) and m.mnt (the faulting view to hand to
+    ultracopier). m is None-like (bool False) when FUSE is unavailable or the mount failed."""
+    def __init__(self, tag: str, **fuse_env):
+        self.tag = tag
+        self.fuse_env = fuse_env
+        self.back = pathlib.Path(fresh_dest(f"fuse-{tag}-back"))
+        self.mnt = pathlib.Path(fresh_dest(f"fuse-{tag}-mnt"))
+        self.mounted = False
+
+    def __enter__(self):
+        exe = fuse_bin()
+        if exe is None:
+            return None
+        subprocess.run(["fusermount3", "-u", str(self.mnt)], stderr=subprocess.DEVNULL)
+        env = dict(os.environ, UC_FUSE_BACKING=str(self.back), **self.fuse_env)
+        subprocess.run([str(exe), str(self.mnt), "-s"], env=env, check=True)   # auto-daemonizes
+        for _ in range(50):
+            if subprocess.run(["mountpoint", "-q", str(self.mnt)]).returncode == 0:
+                self.mounted = True
+                return self
+            time.sleep(0.1)
+        return None
+
+    def __exit__(self, *exc):
+        if self.mounted:
+            subprocess.run(["fusermount3", "-u", str(self.mnt)], stderr=subprocess.DEVNULL)
+        return False

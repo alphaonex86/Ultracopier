@@ -77,7 +77,7 @@ def _cyclic(backend):
         time.sleep(2)
         c2 = open(f"/proc/{pid}/stat").read().split()[13:15] if pid and os.path.exists(f"/proc/{pid}/stat") else None
         ticks = (int(c2[0]) + int(c2[1])) - (int(c1[0]) + int(c1[1])) if c1 and c2 else -1
-        subprocess.run(["pkill", "-9", "-x", "ultracopier"], env=env, capture_output=True)
+        p.kill()   # OUR instance only (its suffix differs from the harness one), never the user's resident copy
         try: p.wait(timeout=5)
         except subprocess.TimeoutExpired: pass
         spinning = ticks > 150   # >1.5s CPU in a 2s window == pegging a core in the resolution loop
@@ -88,7 +88,7 @@ def _cyclic(backend):
     finally:
         for p in (base, home):
             shutil.rmtree(p, ignore_errors=True)
-        subprocess.run(["pkill", "-9", "-x", "ultracopier"], capture_output=True)
+        H._kill_all_ultracopier()   # scoped: only THIS suite's instances, never the user's resident one
     print(f"      [{backend}] {note}")
     return ok
 

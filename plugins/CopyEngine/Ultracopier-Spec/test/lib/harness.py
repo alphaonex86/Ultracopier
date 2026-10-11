@@ -133,6 +133,41 @@ def load_config() -> configparser.ConfigParser:
 # ---------------------------------------------------------------------------
 # Building / locating the per-backend binary (nodebug so DebugModel never inflates RAM)
 # ---------------------------------------------------------------------------
+def toolchain_id(env=None) -> str:
+    """Qt + compiler identity of the build environment (part of every build-dir stamp): an upgrade of
+    either must trigger a clean rebuild, see binary_for()."""
+    def q(argv):
+        try:
+            return subprocess.run(argv, env=env, capture_output=True, text=True, timeout=30).stdout.strip()
+        except (OSError, subprocess.TimeoutExpired):
+            return "?"
+    return q(["qmake6", "-query", "QT_VERSION"]) + "/gcc-" + q(["gcc", "-dumpfullversion"])
+
+
+def qmake_build(bdir, pro, flags, env=None, qmake="qmake6", spec="linux-g++"):
+    """Build `pro` into `bdir` with qmake+make, STAMPING flags AND toolchain: when either changes the
+    objects are wiped first (make tracks neither system headers nor flags). The one build routine
+    every test build dir uses -- the harness backends, the KIO variant, the debug observer build --
+    so no case can keep a stale-object binary after a Qt/gcc upgrade (see binary_for)."""
+    bdir = pathlib.Path(bdir)
+    bdir.mkdir(parents=True, exist_ok=True)
+    env = env if env is not None else dict(os.environ)
+    stamp = bdir / ".uc-qmake-flags"
+    want = "\n".join(list(flags) + ["toolchain=" + toolchain_id(env)])
+    if not (bdir / "Makefile").exists() or not stamp.exists() or stamp.read_text() != want:
+        if (bdir / "Makefile").exists():
+            subprocess.run(["make", "clean"], cwd=bdir, env=env,
+                           stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        q = subprocess.run([qmake, "-o", "Makefile", str(pro), "-spec", spec] + list(flags),
+                           cwd=bdir, env=env, capture_output=True, text=True)
+        if q.returncode != 0:
+            raise RuntimeError(f"qmake failed in {bdir}:\n{q.stdout[-1500:]}\n{q.stderr[-1500:]}")
+        stamp.write_text(want)
+    m = subprocess.run(["make", f"-j{os.cpu_count()}"], cwd=bdir, env=env, capture_output=True, text=True)
+    if m.returncode != 0:
+        raise RuntimeError(f"make failed in {bdir}:\n{(m.stderr or m.stdout)[-3000:]}")
+
+
 def binary_for(backend: str, cfg: configparser.ConfigParser, asan=False, tsan=False) -> str:
     key = {ASYNC: "async", IO_URING: "io_uring"}.get(backend)
     if asan:
@@ -203,16 +238,12 @@ def binary_for(backend: str, cfg: configparser.ConfigParser, asan=False, tsan=Fa
     # the existing Makefile in place, so the new file silently never compiles and the tests quietly
     # exercise a binary without it. That is exactly how CollisionDialogHook.cpp came out missing (and,
     # per the note above, the earlier window_close hook bug). A flags stamp makes it self-correcting.
-    flags_stamp = bdir / ".uc-qmake-flags"
-    want_flags = "\n".join(flags)
-    stale_flags = (not flags_stamp.exists()) or flags_stamp.read_text() != want_flags
-    if not (bdir / "Makefile").exists() or stale_flags:
-        subprocess.run(["qmake6", "-o", "Makefile", str(SOURCES / "ultracopier.pro"),
-                        "-spec", "linux-g++"] + flags, cwd=bdir, env=env, check=True,
-                       stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-        flags_stamp.write_text(want_flags)
-    subprocess.run(["make", f"-j{os.cpu_count()}"], cwd=bdir, env=env, check=True,
-                   stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+    # The TOOLCHAIN is part of the stamp too (qmake_build). make does not track system headers, so after
+    # a Qt or compiler upgrade every old .o (compiled against the previous Qt headers) is merely RELINKED
+    # with the freshly compiled ones -> two incompatible instantiations of the same Qt template in one
+    # binary -> SIGSEGV at startup (seen 2026-10-06: QStringList emplace in LocalListener after the
+    # Qt 6.10 -> 6.11.2 upgrade; every test build dir was 100% stale). A stamp change wipes the objects.
+    qmake_build(bdir, SOURCES / "ultracopier.pro", flags, env)
     return str(binpath)
 
 

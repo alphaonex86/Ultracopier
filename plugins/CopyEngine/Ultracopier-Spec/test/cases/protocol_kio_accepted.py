@@ -63,19 +63,7 @@ def _build_kio_binary() -> str:
     # case is about the protocol decision, which is backend-independent.
     env["PKG_CONFIG_LIBDIR"] = "/tmp/uc-empty-pc"
     os.makedirs("/tmp/uc-empty-pc", exist_ok=True)
-    stamp = _BUILD / ".uc-qmake-flags"
-    want = "\n".join(flags)
-    if not (_BUILD / "Makefile").exists() or not stamp.exists() or stamp.read_text() != want:
-        r = subprocess.run(["qmake6", "-o", "Makefile", str(_SOURCES / "ultracopier.pro"),
-                            "-spec", "linux-g++"] + flags, cwd=_BUILD, env=env,
-                           capture_output=True, text=True)
-        if r.returncode != 0:
-            raise RuntimeError(f"qmake (KIO) failed:\n{r.stdout[-1500:]}\n{r.stderr[-1500:]}")
-        stamp.write_text(want)
-    r = subprocess.run(["make", f"-j{os.cpu_count()}"], cwd=_BUILD, env=env,
-                       capture_output=True, text=True)
-    if r.returncode != 0:
-        raise RuntimeError(f"build (KIO) failed:\n{r.stdout[-2000:]}\n{r.stderr[-2000:]}")
+    H.qmake_build(_BUILD, _SOURCES / "ultracopier.pro", flags, env)   # flags + toolchain stamped, clean on change
     return str(_BUILD / "ultracopier")
 
 

@@ -122,7 +122,7 @@ def _run_once(binp: str, fuse: str, checksum: bool):
             capture_output=True, text=True, timeout=180)
     finally:
         wf.unlink(missing_ok=True)
-        subprocess.run(["pkill", "-9", "-x", "ultracopier"], capture_output=True)
+        H._kill_all_ultracopier()   # scoped: only THIS suite's instances, never the user's resident one
         shutil.rmtree(home, ignore_errors=True)
     crashed, good, reread, victim_present = True, False, 0, True
     for line in (r.stdout + r.stderr).splitlines():

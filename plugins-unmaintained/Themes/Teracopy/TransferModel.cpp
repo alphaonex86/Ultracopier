@@ -210,17 +210,21 @@ QList<quint64> TransferModel::synchronizeItems(const QList<Ultracopier::ReturnAc
             {
                 if(currentIndexSearch>0 && action.userAction.position<=currentIndexSearch)
                     currentIndexSearch--;
-                if(action.userAction.position<0)
+                /* Remove by ID, never at userAction.position: the engine drops a finished entry
+                   with an O(1) tombstone and compacts its list only every 512 of them, so the
+                   position it ships is a PHYSICAL slot of a sparse list and runs ahead of this
+                   dense one -- removing at it deleted the WRONG row and left the finished file
+                   displayed forever, so the list never emptied ("blocked at 99%"). */
+                int removeIndex=0;
+                while(removeIndex<transfertItemList.size())
                 {
-                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("id: %1, position is wrong: %3").arg(action.addAction.id).arg(action.userAction.position));
-                    break;
+                    if(transfertItemList.at(removeIndex).id==action.addAction.id)
+                    {
+                        transfertItemList.removeAt(removeIndex);
+                        break;
+                    }
+                    removeIndex++;
                 }
-                if(action.userAction.position>(transfertItemList.size()-1))
-                {
-                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("id: %1, position is wrong: %3").arg(action.addAction.id).arg(action.userAction.position));
-                    break;
-                }
-                transfertItemList.removeAt(action.userAction.position);
                 currentFile++;
                 startId.remove(action.addAction.id);
                 stopId.remove(action.addAction.id);

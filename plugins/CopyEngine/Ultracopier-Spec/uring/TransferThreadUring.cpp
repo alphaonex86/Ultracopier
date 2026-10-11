@@ -30,7 +30,6 @@ TransferThreadUring::TransferThreadUring()
     destFd=-1;
     sourceFileSize=0;
     readOffset=0;
-    writeOffset=0;
 
     for(int i=0;i<NUM_BUFFERS;i++)
     {
@@ -110,19 +109,26 @@ void TransferThreadUring::run()
 
 void TransferThreadUring::initPipelineBuffers()
 {
+    // Snapshot blockSize ONCE: the speed limiter changes it from the ListThread without a lock; read twice,
+    // allocSize could record a size LARGER than the block actually malloc'd (IOCP had the same guard).
+    const unsigned int bs=blockSize;
     for(int i=0;i<NUM_BUFFERS;i++)
     {
-        if(pipelineBuffers[i].data==nullptr || pipelineBuffers[i].allocSize!=blockSize)
+        if(pipelineBuffers[i].data==nullptr || pipelineBuffers[i].allocSize!=bs)
         {
             free(pipelineBuffers[i].data);
-            pipelineBuffers[i].data=(char*)malloc(blockSize);
+            pipelineBuffers[i].allocSize=0;
+            pipelineBuffers[i].data=(char*)malloc(bs);
             if(pipelineBuffers[i].data==nullptr)
             {
+                // an error-wait like any other failure: without a flag the base reported the (empty)
+                // destination COMPLETE and a MOVE then deleted its source
                 errorString_internal="Out of memory allocating pipeline buffers";
+                writeError=true;
                 emit errorOnFile(source,errorString_internal);
                 return;
             }
-            pipelineBuffers[i].allocSize=blockSize;
+            pipelineBuffers[i].allocSize=bs;
         }
         pipelineBuffers[i].bytesUsed=0;
         pipelineBuffers[i].state=PipelineBuffer::Free;
@@ -162,6 +168,8 @@ int TransferThreadUring::openSourceFile()
     while(true)
     {
         int ret=io_uring_wait_cqe(&ring,&cqe);
+        if(ret==-EINTR)
+            continue;// a signal interrupted the wait: the openat is still in flight, its CQE is still ours
         if(ret<0)
         {
             errorString_internal="io_uring_wait_cqe for openat source failed: "+std::string(strerror(-ret));
@@ -194,7 +202,19 @@ int TransferThreadUring::openSourceFile()
         posix_fadvise(fd,0,0,POSIX_FADV_NOREUSE);
     }
     struct stat st;
-    if(fstat(fd,&st)==0)
+    if(fstat(fd,&st)!=0)
+    {
+        // The size is what the pipeline reads: without it sourceFileSize stayed 0, nothing was read,
+        // "0 == 0 bytes" and the file was reported COMPLETE with an EMPTY destination (a MOVE then deleted
+        // the source). Fail the open -> the error policy (retry/skip) handles it (iouring_fstat_fail).
+        const int terr=errno;
+        errorString_internal="fstat: "+std::string(strerror(terr));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] Unable to stat the opened source: "+
+                                 sourcePath+", error: "+errorString_internal);
+        if(::close(fd)!=0)
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] unable to close the source after a failed fstat: "+std::string(strerror(errno)));
+        return -1;
+    }
     {
         size_at_open=st.st_size;
         // Capture FULL-precision mtime + ctime for the media-reconnect resume gate (see
@@ -210,10 +230,6 @@ int TransferThreadUring::openSourceFile()
         ctime_at_open=(uint64_t)st.st_ctim.tv_sec;
         #endif
         sourceFileSize=st.st_size;
-    }
-    else
-    {
-        sourceFileSize=0;
     }
     // Store internally and report success; the base class no longer captures the fd.
     sourceFd=fd;
@@ -236,26 +252,6 @@ int TransferThreadUring::openDestFile(uint64_t startSize)
             }
     }
 
-    // Check write collision
-    if(writeFileList!=nullptr && writeFileListMutex!=nullptr)
-    {
-        QMutexLocker lock_mutex(writeFileListMutex);
-        #ifdef WIDESTRING
-        QString qtFile=QString::fromStdWString(destination);
-        #else
-        QString qtFile=QString::fromStdString(destination);
-        #endif
-        if(writeFileList->count(qtFile,this)==0)
-        {
-            writeFileList->insert(qtFile,this);
-            if(writeFileList->count(qtFile)>1)
-            {
-                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] in waiting because same file is found");
-                return -2; // collision, not an error
-            }
-        }
-    }
-
     const std::string destPath=TransferThread::internalStringTostring(destination);
     struct io_uring_sqe *sqe=io_uring_get_sqe(&ring);
     if(!sqe)
@@ -275,6 +271,8 @@ int TransferThreadUring::openDestFile(uint64_t startSize)
     while(true)
     {
         int ret=io_uring_wait_cqe(&ring,&cqe);
+        if(ret==-EINTR)
+            continue;// see openSourceFile
         if(ret<0)
         {
             errorString_internal="io_uring_wait_cqe for openat dest failed: "+std::string(strerror(-ret));
@@ -460,7 +458,6 @@ void TransferThreadUring::doTransferPipeline()
     // verified contiguous prefix already on disk, so reads/writes continue from there and the
     // already-written prefix is not re-read. The initial read loop below starts at readOffset.
     readOffset=resumeFromOffset;
-    writeOffset=resumeFromOffset;
     transferProgression=resumeFromOffset;
     contiguousWrittenOffset=resumeFromOffset;
     completedWriteExtents.clear();
@@ -470,6 +467,7 @@ void TransferThreadUring::doTransferPipeline()
     bool readDone=false;
     bool errorOccurred=false;
     fileGeneration++;// every read/write of THIS file carries it; a late CQE of an older file is dropped
+    resetSpeedThrottle();
 
     // Submit initial batch of reads
     {
@@ -481,7 +479,16 @@ void TransferThreadUring::doTransferPipeline()
                 readDone=true;
                 break;
             }
-            unsigned int toRead=blockSize;
+            // speed limit: flush what is already prepped so the device works while we wait for the clock tick
+            if(multiForBigSpeed>0 && submitted>0)
+            {
+                io_uring_submit(&ring);
+                submitted=0;
+            }
+            throttleBlockForSpeedLimit();
+            if(stopIt)
+                break;
+            unsigned int toRead=pipelineBuffers[i].allocSize;// the buffer's OWN size, never the live blockSize (see the main loop)
             if((uint64_t)(readOffset+toRead)>sourceFileSize)
                 toRead=(unsigned int)(sourceFileSize-readOffset);
 
@@ -547,7 +554,13 @@ void TransferThreadUring::doTransferPipeline()
         unsigned int numCqes=io_uring_peek_batch_cqe(&ring,cqes,RING_DEPTH);
         bool needSubmit=false;
 
-        for(unsigned int ci=0;ci<numCqes && !errorOccurred && !stopIt;ci++)
+        // EVERY completion of this file is ACCOUNTED (counter + buffer state) -- even after an error or a stop
+        // has been seen. This batch is already dequeued (cq_advance below): a completion left unaccounted made
+        // the cancel-drain wait its full deadline for a CQE that could never come and then QUARANTINE a buffer
+        // the kernel no longer owned -- a 2 s stall + up to 8 leaked buffers PER failing file, i.e. hours and
+        // gigabytes on the dying disk this engine exists for (iouring_faulty_hdd_many). Only the issuing of
+        // NEW I/O stops at the first error/stop (the file is abandoned).
+        for(unsigned int ci=0;ci<numCqes;ci++)
         {
             struct io_uring_cqe *cqe=cqes[ci];
             uint64_t userData=io_uring_cqe_get_data64(cqe);
@@ -563,71 +576,76 @@ void TransferThreadUring::doTransferPipeline()
             int result=cqe->res;
             if(opType!=OP_READ_TAG && opType!=OP_WRITE_TAG)
                 continue;// swept close/cancel completions of an earlier file: not ours to account
-            if(((userData>>GEN_SHIFT)&0xFF)!=fileGeneration)
+            if(((userData>>GEN_SHIFT)&GEN_MASK)!=fileGeneration)
                 continue;// a late completion of a PREVIOUS file's orphaned op: its buffer is quarantined
+            const bool abandon=errorOccurred || stopIt;
+            PipelineBuffer &buf=pipelineBuffers[bufIdx];
 
             if(opType==OP_READ_TAG)
             {
                 readsInFlight--;
                 if(result<0)
                 {
-                    errorString_internal="Read error: "+std::string(strerror(-result));
-                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] "+errorString_internal);
-                    readError=true;
-                    errorOccurred=true;
-                    emit errorOnFile(source,errorString_internal);
-                    break;
+                    buf.state=PipelineBuffer::Free;
+                    if(!errorOccurred)// one error per attempt
+                    {
+                        errorString_internal="Read error: "+std::string(strerror(-result));
+                        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] "+errorString_internal);
+                        readError=true;
+                        errorOccurred=true;
+                        emit errorOnFile(source,errorString_internal);
+                    }
                 }
-                if(result==0)
+                else if(abandon)
+                    buf.state=PipelineBuffer::Free;// accounted, not written: the file is being abandoned
+                else if(result==0)
                 {
                     // EOF before the chunk was full: the source SHRANK since the scan. The bytes already
                     // in the buffer are still written (the end-of-copy size check then reports the change).
                     readDone=true;
-                    if(pipelineBuffers[bufIdx].bytesUsed>0)
+                    if(buf.bytesUsed>0)
                     {
                         struct io_uring_sqe *sqe=io_uring_get_sqe(&ring);
                         if(!sqe)
                         {
+                            buf.state=PipelineBuffer::Free;
                             errorString_internal="io_uring_get_sqe failed for write";
                             errorOccurred=true;
                             writeError=true;
                             emit errorOnFile(destination,errorString_internal);
-                            break;
+                            continue;
                         }
-                        pipelineBuffers[bufIdx].state=PipelineBuffer::Writing;
-                        io_uring_prep_write(sqe,destFd,pipelineBuffers[bufIdx].data,
-                                            pipelineBuffers[bufIdx].bytesUsed,pipelineBuffers[bufIdx].fileOffset);
+                        buf.state=PipelineBuffer::Writing;
+                        io_uring_prep_write(sqe,destFd,buf.data,buf.bytesUsed,buf.fileOffset);
                         io_uring_sqe_set_data64(sqe,dataTag(OP_WRITE_TAG,bufIdx));
                         writesInFlight++;
                         needSubmit=true;
                     }
                     else
-                        pipelineBuffers[bufIdx].state=PipelineBuffer::Free;
+                        buf.state=PipelineBuffer::Free;
                 }
                 else
                 {
-                    pipelineBuffers[bufIdx].bytesUsed+=result;
+                    buf.bytesUsed+=result;
 
                     struct io_uring_sqe *sqe=io_uring_get_sqe(&ring);
                     if(!sqe)
                     {
+                        buf.state=PipelineBuffer::Free;
                         errorString_internal="io_uring_get_sqe failed for write";
                         errorOccurred=true;
                         writeError=true;
                         emit errorOnFile(destination,errorString_internal);
-                        break;
+                        continue;
                     }
-                    if((unsigned int)pipelineBuffers[bufIdx].bytesUsed<pipelineBuffers[bufIdx].chunkSize)
+                    if((unsigned int)buf.bytesUsed<buf.chunkSize)
                     {
                         // Short read: fetch the rest of this chunk into the same buffer
                         // before writing, so partial reads under load can't corrupt data.
-                        const unsigned int rem=pipelineBuffers[bufIdx].chunkSize-(unsigned int)pipelineBuffers[bufIdx].bytesUsed;
-                        io_uring_prep_read(sqe,sourceFd,
-                                           pipelineBuffers[bufIdx].data+pipelineBuffers[bufIdx].bytesUsed,
-                                           rem,
-                                           pipelineBuffers[bufIdx].fileOffset+pipelineBuffers[bufIdx].bytesUsed);
+                        const unsigned int rem=buf.chunkSize-(unsigned int)buf.bytesUsed;
+                        io_uring_prep_read(sqe,sourceFd,buf.data+buf.bytesUsed,rem,buf.fileOffset+buf.bytesUsed);
                         io_uring_sqe_set_data64(sqe,dataTag(OP_READ_TAG,bufIdx));
-                        pipelineBuffers[bufIdx].state=PipelineBuffer::Reading;
+                        buf.state=PipelineBuffer::Reading;
                         readsInFlight++;
                     }
                     else
@@ -635,51 +653,60 @@ void TransferThreadUring::doTransferPipeline()
                         // Chunk fully read -> write it back at the exact offset it came
                         // from (NOT a global write cursor): io_uring completions arrive
                         // out of order, so completion-order writing scrambled the file.
-                        pipelineBuffers[bufIdx].state=PipelineBuffer::Writing;
-                        io_uring_prep_write(sqe,destFd,pipelineBuffers[bufIdx].data,
-                                            pipelineBuffers[bufIdx].bytesUsed,pipelineBuffers[bufIdx].fileOffset);
+                        buf.state=PipelineBuffer::Writing;
+                        io_uring_prep_write(sqe,destFd,buf.data,buf.bytesUsed,buf.fileOffset);
                         io_uring_sqe_set_data64(sqe,dataTag(OP_WRITE_TAG,bufIdx));
                         writesInFlight++;
                     }
                     needSubmit=true;
                 }
             }
-            else if(opType==OP_WRITE_TAG)
+            else // OP_WRITE_TAG
             {
                 writesInFlight--;
                 if(result<0)
                 {
-                    errorString_internal="Write error: "+std::string(strerror(-result));
-                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] "+errorString_internal);
-                    writeError=true;
-                    errorOccurred=true;
-                    emit errorOnFile(destination,errorString_internal);
-                    break;
+                    buf.state=PipelineBuffer::Free;
+                    if(!errorOccurred)
+                    {
+                        errorString_internal="Write error: "+std::string(strerror(-result));
+                        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] "+errorString_internal);
+                        writeError=true;
+                        errorOccurred=true;
+                        emit errorOnFile(destination,errorString_internal);
+                    }
+                    continue;
                 }
                 transferProgression+=result;
                 // Fold this completed extent into the contiguous low-water mark. MUST use the LIVE
                 // fileOffset+result (this completion's bytes) BEFORE the short-write advance below,
                 // so out-of-order completions are merged correctly and contiguousWrittenOffset stays
                 // the true written-from-0 prefix (the only safe resume point).
-                recordCompletedWrite(pipelineBuffers[bufIdx].fileOffset,(uint64_t)result);
+                recordCompletedWrite(buf.fileOffset,(uint64_t)result);
                 // Handle short write
-                if(result<pipelineBuffers[bufIdx].bytesUsed)
+                if(result<buf.bytesUsed)
                 {
-                    int remaining=pipelineBuffers[bufIdx].bytesUsed-result;
-                    memmove(pipelineBuffers[bufIdx].data,pipelineBuffers[bufIdx].data+result,remaining);
-                    pipelineBuffers[bufIdx].bytesUsed=remaining;
-                    pipelineBuffers[bufIdx].fileOffset+=result;
+                    if(abandon)
+                    {
+                        buf.state=PipelineBuffer::Free;// the rest of the chunk is not re-issued
+                        continue;
+                    }
+                    int remaining=buf.bytesUsed-result;
+                    memmove(buf.data,buf.data+result,remaining);
+                    buf.bytesUsed=remaining;
+                    buf.fileOffset+=result;
 
                     struct io_uring_sqe *sqe=io_uring_get_sqe(&ring);
                     if(!sqe)
                     {
+                        buf.state=PipelineBuffer::Free;
                         errorString_internal="io_uring_get_sqe failed for short write retry";
                         errorOccurred=true;
                         writeError=true;
                         emit errorOnFile(destination,errorString_internal);
-                        break;
+                        continue;
                     }
-                    io_uring_prep_write(sqe,destFd,pipelineBuffers[bufIdx].data,remaining,pipelineBuffers[bufIdx].fileOffset);
+                    io_uring_prep_write(sqe,destFd,buf.data,remaining,buf.fileOffset);
                     io_uring_sqe_set_data64(sqe,dataTag(OP_WRITE_TAG,bufIdx));
                     writesInFlight++;
                     needSubmit=true;
@@ -687,24 +714,36 @@ void TransferThreadUring::doTransferPipeline()
                 }
 
                 // Write completed fully -> reuse this buffer for the next chunk
-                pipelineBuffers[bufIdx].state=PipelineBuffer::Free;
+                buf.state=PipelineBuffer::Free;
+                if(abandon)
+                    continue;
 
-                // Queue next read if data remains
-                if(!readDone && !stopIt && (uint64_t)readOffset<sourceFileSize)
+                // Queue next read if data remains. The chunk is sized to the buffer's OWN allocation, never
+                // the live blockSize: the speed limiter (ListThread) changes blockSize without a lock, and a
+                // block that GREW mid-file made the kernel write past the smaller buffer -> heap corruption
+                // (iouring_speed_change; the IOCP backend already clamped).
+                if(!readDone && (uint64_t)readOffset<sourceFileSize)
                 {
-                    unsigned int toRead=blockSize;
+                    unsigned int toRead=buf.allocSize;
                     if((uint64_t)(readOffset+toRead)>sourceFileSize)
                         toRead=(unsigned int)(sourceFileSize-readOffset);
 
-                    struct io_uring_sqe *sqe=io_uring_get_sqe(&ring);
+                    // speed limit: submit the SQEs already prepped in this batch before blocking on the clock
+                    if(multiForBigSpeed>0 && needSubmit)
+                    {
+                        io_uring_submit(&ring);
+                        needSubmit=false;
+                    }
+                    throttleBlockForSpeedLimit();
+                    struct io_uring_sqe *sqe=(stopIt?nullptr:io_uring_get_sqe(&ring));
                     if(sqe)
                     {
-                        pipelineBuffers[bufIdx].fileOffset=readOffset;
-                        pipelineBuffers[bufIdx].chunkSize=toRead;
-                        pipelineBuffers[bufIdx].bytesUsed=0;
-                        io_uring_prep_read(sqe,sourceFd,pipelineBuffers[bufIdx].data,toRead,readOffset);
+                        buf.fileOffset=readOffset;
+                        buf.chunkSize=toRead;
+                        buf.bytesUsed=0;
+                        io_uring_prep_read(sqe,sourceFd,buf.data,toRead,readOffset);
                         io_uring_sqe_set_data64(sqe,dataTag(OP_READ_TAG,bufIdx));
-                        pipelineBuffers[bufIdx].state=PipelineBuffer::Reading;
+                        buf.state=PipelineBuffer::Reading;
                         readOffset+=toRead;
                         readsInFlight++;
                         needSubmit=true;
@@ -754,7 +793,7 @@ void TransferThreadUring::doTransferPipeline()
             if(io_uring_wait_cqe_timeout(&ring,&cqe,&deadline)<0)
                 break;// -ETIME: genuinely wedged -> quarantine below
             const uint64_t userData=io_uring_cqe_get_data64(cqe);
-            if(((userData>>GEN_SHIFT)&0xFF)==fileGeneration)
+            if(((userData>>GEN_SHIFT)&GEN_MASK)==fileGeneration)
             {
                 if((userData&OP_MASK)==OP_READ_TAG)
                 {
@@ -924,8 +963,6 @@ bool TransferThreadUring::trySymlinkCopy()
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+
                                      "] symlink move: unable to remove source link: "+
                                      internalStringTostring(source)+" ("+strerror(errno)+")");
-    readIsClosedVariable=true;
-    writeIsClosedVariable=true;
     checkIfAllIsClosedAndDoOperations();
     return true;
 }

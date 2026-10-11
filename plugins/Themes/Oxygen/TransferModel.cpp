@@ -376,16 +376,12 @@ std::vector<uint64_t> TransferModel::synchronizeItems(const std::vector<Ultracop
             {
                 if(currentIndexSearch>0 && action.userAction.position<=currentIndexSearch)
                     currentIndexSearch--;
-                if(action.userAction.position<0)
-                {
-                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("id: %1, position is wrong: %3").arg(action.addAction.id).arg(action.userAction.position).toStdString());
-                    break;
-                }
-                if((unsigned int)action.userAction.position>(transfertItemList.size()-1))
-                {
-                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("id: %1, position is wrong: %3").arg(action.addAction.id).arg(action.userAction.position).toStdString());
-                    break;
-                }
+                /* Remove by ID only -- never bounds-check userAction.position against the rows.
+                   The engine removes a finished file with an O(1) tombstone and compacts its
+                   list only every 512 of them, so the position it ships is a PHYSICAL slot of a
+                   sparse list and runs ahead of this dense one. Rejecting the action on it left
+                   finished files displayed forever, so the list never emptied and the window
+                   never closed ("blocked at 99%"). Same rule as the fast path above. */
                 // Defer the physical erase; compacted in one pass (see applyPendingRemovals).
                 idsToRemove.insert(action.addAction.id);
                 currentFile++;

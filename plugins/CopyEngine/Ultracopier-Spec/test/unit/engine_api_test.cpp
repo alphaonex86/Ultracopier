@@ -13,11 +13,22 @@
 //   * cancel       -> cancel() mid-transfer reaches canBeDeleted() (every transfer thread went Idle)
 //                    and the partial destination is removed. A 3.1 regression left the engine
 //                    waiting forever (leaked engine + threads, partial file kept).
+//   * speedlimit   -> ONE inode thread, setSpeedLimitation(512 KB/s) for the whole copy: the copy of
+//                    a known byte count must take at least the time the limit implies (a lower bound,
+//                    so load can only make it pass more easily). The pipelined backends ignored the
+//                    speed clock entirely (the UI offered a limit that did nothing).
+//   * speedchange  -> ONE inode thread, a speed limit set BEFORE the copy (the limiter shrinks the
+//                    transfer block below the option's blockSize) and REMOVED once the first bytes
+//                    have landed: the transfer threads' blockSize grows while their I/O buffers are
+//                    still the small ones. The pipelined backends must size every read to the
+//                    buffer actually allocated (never the live blockSize) or the kernel writes past
+//                    the heap block -> heap corruption / wrong bytes. Asserts a clean Idle + the
+//                    caller diffs the content.
 //
 // I/O is slowed by the LD_PRELOAD shim (UC_FS_SCENARIO=slow:<ms>) so the copy is long enough to
 // catch it mid-flight and pause it. Async backend only (libc I/O; io_uring bypasses libc).
 //
-// argv: <src> <dest> [pause|cancel|puttoend]
+// argv: <src> <dest> [pause|cancel|puttoend|speedchange|speedlimit]
 #include "CopyEngine.h"
 #include "../../../interface/FacilityInterface.h"
 #include "../../../interface/PluginInterface_CopyEngine.h"
@@ -94,6 +105,8 @@ int main(int argc, char **argv) {
     const bool doPause = (argc > 3 && std::string(argv[3]) == "pause");
     const bool doCancel = (argc > 3 && std::string(argv[3]) == "cancel");
     const bool doPutToEnd = (argc > 3 && std::string(argv[3]) == "puttoend");
+    const bool doSpeedChange = (argc > 3 && std::string(argv[3]) == "speedchange");
+    const bool doSpeedLimit = (argc > 3 && std::string(argv[3]) == "speedlimit");
 
     StubFacility facility;
     CopyEngine engine(&facility);
@@ -101,9 +114,13 @@ int main(int argc, char **argv) {
     // put-to-end: ONE inode thread from the start (the deferred file comes back to the same thread);
     // sizing to 16 then shrinking would tear 15 threads down right before the scan thread starts,
     // which trips libtsan's thread-registry CHECK on pthread_t reuse (Qt detached threads)
-    configure(engine, doPutToEnd ? 1 : 16);
+    configure(engine, (doPutToEnd || doSpeedChange || doSpeedLimit) ? 1 : 16);
     if (doPutToEnd)
         engine.setFileError(2);      // put to the end of the list (one deferred retry)
+    if (doSpeedChange)
+        engine.setSpeedLimitation(256);    // 256 KB/s: interval > MAXTIMERINTERVAL -> the limiter shrinks the 64 KB block to ~25 KB
+    if (doSpeedLimit)
+        engine.setSpeedLimitation(512);    // 512 KB/s for the whole copy (one ~51 KB block per 100 ms tick)
 
     bool sawActive = false, done = false, canDelete = false;
     QObject::connect(&engine, &PluginInterface_CopyEngine::actionInProgess,
@@ -122,7 +139,7 @@ int main(int argc, char **argv) {
     engine.newCopy(std::vector<std::string>{src}, dest);
 
     QElapsedTimer t; t.start();
-    bool paused = false, pauseReported = false, cancelled = false;
+    bool paused = false, pauseReported = false, cancelled = false, speedLifted = false;
     qint64 cancelAt = 0;
     // after a cancel only canBeDeleted() ends the wait (Idle alone is not the engine's teardown signal)
     while (!(done && !doCancel) && !canDelete && t.elapsed() < 120000) {
@@ -131,6 +148,11 @@ int main(int argc, char **argv) {
         if (doCancel && !cancelled && sawActive && d > srcTotal / 10 && d < (srcTotal * 7) / 10) {
             engine.cancel(); cancelled = true; cancelAt = t.elapsed();
             std::printf("CANCEL at destBytes=%llu/%llu\n", (unsigned long long)d, (unsigned long long)srcTotal);
+        }
+        // Lift the speed limit as soon as the copy is in flight: the buffers were sized under the limit.
+        if (doSpeedChange && !speedLifted && sawActive && d > 0) {
+            engine.setSpeedLimitation(0); speedLifted = true;
+            std::printf("SPEEDLIFT at destBytes=%llu/%llu\n", (unsigned long long)d, (unsigned long long)srcTotal);
         }
         if (cancelled && t.elapsed() - cancelAt > 20000) {
             std::printf("CANCEL-TIMEOUT canBeDeleted never came in 20s\n");
@@ -154,10 +176,10 @@ int main(int argc, char **argv) {
             engine.resume();
         }
     }
-    std::printf("DONE done=%d canDelete=%d destBytes=%llu/%llu paused=%d cancelled=%d\n",
+    std::printf("DONE done=%d canDelete=%d destBytes=%llu/%llu paused=%d cancelled=%d speedLifted=%d elapsedMs=%lld\n",
                 done ? 1 : 0, canDelete ? 1 : 0,
                 (unsigned long long)treeBytes(dest), (unsigned long long)srcTotal, paused ? 1 : 0,
-                cancelled ? 1 : 0);
+                cancelled ? 1 : 0, speedLifted ? 1 : 0, (long long)t.elapsed());
     if (doCancel)
         return canDelete ? 0 : 1;
     return (done || canDelete) ? 0 : 1;

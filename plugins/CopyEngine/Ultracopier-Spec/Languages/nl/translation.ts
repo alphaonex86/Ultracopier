@@ -4,96 +4,106 @@
 <context>
     <name>CopyEngine</name>
     <message>
-        <location filename="../../CopyEngine.cpp" line="479"/>
-        <location filename="../../CopyEngine.cpp" line="502"/>
+        <location filename="../../CopyEngine.cpp" line="482"/>
+        <location filename="../../CopyEngine.cpp" line="505"/>
         <source>The engine is forced to move, you can&apos;t copy with it</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="556"/>
-        <location filename="../../CopyEngine.cpp" line="579"/>
+        <location filename="../../CopyEngine.cpp" line="559"/>
+        <location filename="../../CopyEngine.cpp" line="582"/>
         <source>The engine is forced to copy, you can&apos;t move with it</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="603"/>
+        <location filename="../../CopyEngine.cpp" line="606"/>
         <source>Destination</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="603"/>
+        <location filename="../../CopyEngine.cpp" line="606"/>
         <source>Use the actual destination &quot;%1&quot;?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="768"/>
+        <location filename="../../CopyEngine.cpp" line="780"/>
         <source>The mode has been forced previously. This is an internal error, please report it</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="940"/>
+        <location filename="../../CopyEngine.cpp" line="952"/>
         <source>Supported only on Windows and Linux</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="1113"/>
-        <location filename="../../CopyEngine.cpp" line="1116"/>
-        <location filename="../../CopyEngine.cpp" line="1121"/>
-        <location filename="../../CopyEngine.cpp" line="1125"/>
+        <location filename="../../CopyEngine.cpp" line="1126"/>
+        <location filename="../../CopyEngine.cpp" line="1129"/>
+        <location filename="../../CopyEngine.cpp" line="1134"/>
+        <location filename="../../CopyEngine.cpp" line="1138"/>
         <source>Ask</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="1114"/>
-        <location filename="../../CopyEngine.cpp" line="1118"/>
-        <location filename="../../CopyEngine.cpp" line="1122"/>
-        <location filename="../../CopyEngine.cpp" line="1126"/>
+        <location filename="../../CopyEngine.cpp" line="1127"/>
+        <location filename="../../CopyEngine.cpp" line="1131"/>
+        <location filename="../../CopyEngine.cpp" line="1135"/>
+        <location filename="../../CopyEngine.cpp" line="1139"/>
         <source>Skip</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="1117"/>
+        <location filename="../../CopyEngine.cpp" line="1130"/>
         <source>Merge</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="1119"/>
-        <location filename="../../CopyEngine.cpp" line="1131"/>
+        <location filename="../../CopyEngine.cpp" line="1132"/>
+        <location filename="../../CopyEngine.cpp" line="1144"/>
         <source>Rename</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="1123"/>
+        <location filename="../../CopyEngine.cpp" line="1136"/>
         <source>Put at the end</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="1127"/>
+        <location filename="../../CopyEngine.cpp" line="1140"/>
         <source>Overwrite</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="1128"/>
+        <location filename="../../CopyEngine.cpp" line="1141"/>
         <source>Overwrite if different</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="1129"/>
+        <location filename="../../CopyEngine.cpp" line="1142"/>
         <source>Overwrite if newer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="1130"/>
+        <location filename="../../CopyEngine.cpp" line="1143"/>
         <source>Overwrite if older</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="1201"/>
+        <location filename="../../CopyEngine.cpp" line="1145"/>
+        <source>Overwrite if not same size</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../CopyEngine.cpp" line="1146"/>
+        <source>Overwrite if modification date differs</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../CopyEngine.cpp" line="1216"/>
         <source>Options error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="1201"/>
+        <location filename="../../CopyEngine.cpp" line="1216"/>
         <source>Options engine is not loaded. Unable to access the filters</source>
         <translation type="unfinished"></translation>
     </message>
@@ -101,76 +111,76 @@
 <context>
     <name>CopyEngineFactory</name>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="62"/>
-        <location filename="../../CopyEngineFactory.cpp" line="395"/>
+        <location filename="../../CopyEngineFactory.cpp" line="64"/>
+        <location filename="../../CopyEngineFactory.cpp" line="397"/>
         <source>Supported only on Windows and Linux</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="531"/>
-        <location filename="../../CopyEngineFactory.cpp" line="534"/>
-        <location filename="../../CopyEngineFactory.cpp" line="539"/>
-        <location filename="../../CopyEngineFactory.cpp" line="543"/>
+        <location filename="../../CopyEngineFactory.cpp" line="533"/>
+        <location filename="../../CopyEngineFactory.cpp" line="536"/>
+        <location filename="../../CopyEngineFactory.cpp" line="541"/>
+        <location filename="../../CopyEngineFactory.cpp" line="545"/>
         <source>Ask</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="532"/>
-        <location filename="../../CopyEngineFactory.cpp" line="536"/>
-        <location filename="../../CopyEngineFactory.cpp" line="540"/>
-        <location filename="../../CopyEngineFactory.cpp" line="544"/>
+        <location filename="../../CopyEngineFactory.cpp" line="534"/>
+        <location filename="../../CopyEngineFactory.cpp" line="538"/>
+        <location filename="../../CopyEngineFactory.cpp" line="542"/>
+        <location filename="../../CopyEngineFactory.cpp" line="546"/>
         <source>Skip</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="535"/>
+        <location filename="../../CopyEngineFactory.cpp" line="537"/>
         <source>Merge</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="537"/>
-        <location filename="../../CopyEngineFactory.cpp" line="549"/>
+        <location filename="../../CopyEngineFactory.cpp" line="539"/>
+        <location filename="../../CopyEngineFactory.cpp" line="551"/>
         <source>Rename</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="541"/>
+        <location filename="../../CopyEngineFactory.cpp" line="543"/>
         <source>Put at the end</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="545"/>
+        <location filename="../../CopyEngineFactory.cpp" line="547"/>
         <source>Overwrite</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="546"/>
+        <location filename="../../CopyEngineFactory.cpp" line="548"/>
         <source>Overwrite if different</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="547"/>
+        <location filename="../../CopyEngineFactory.cpp" line="549"/>
         <source>Overwrite if newer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="548"/>
+        <location filename="../../CopyEngineFactory.cpp" line="550"/>
         <source>Overwrite if older</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="564"/>
-        <location filename="../../CopyEngineFactory.cpp" line="603"/>
+        <location filename="../../CopyEngineFactory.cpp" line="566"/>
+        <location filename="../../CopyEngineFactory.cpp" line="605"/>
         <source>Options error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="564"/>
+        <location filename="../../CopyEngineFactory.cpp" line="566"/>
         <source>Options engine is not loaded. Unable to access the filters</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="603"/>
+        <location filename="../../CopyEngineFactory.cpp" line="605"/>
         <source>Options engine is not loaded, can&apos;t access to the filters</source>
         <translation type="unfinished"></translation>
     </message>
@@ -395,8 +405,6 @@
     <message>
         <location filename="../../Filters.cpp" line="117"/>
         <location filename="../../Filters.cpp" line="155"/>
-        <location filename="../../Filters.cpp" line="217"/>
-        <location filename="../../Filters.cpp" line="256"/>
         <source>Full match</source>
         <translation type="unfinished"></translation>
     </message>
@@ -432,49 +440,49 @@
 <context>
     <name>ListThread</name>
     <message>
-        <location filename="../../ListThreadListChange.cpp" line="253"/>
-        <location filename="../../ListThreadListChange.cpp" line="424"/>
+        <location filename="../../ListThreadListChange.cpp" line="255"/>
+        <location filename="../../ListThreadListChange.cpp" line="426"/>
         <source>Unable do to move or copy item into wrong forced mode: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ListThreadListChange.cpp" line="260"/>
-        <location filename="../../ListThreadListChange.cpp" line="431"/>
+        <location filename="../../ListThreadListChange.cpp" line="262"/>
+        <location filename="../../ListThreadListChange.cpp" line="433"/>
         <source>Unable to save the transfer list: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ListThreadListChange.cpp" line="281"/>
+        <location filename="../../ListThreadListChange.cpp" line="283"/>
         <source>Problem reading file, or file-size is 0</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ListThreadListChange.cpp" line="288"/>
+        <location filename="../../ListThreadListChange.cpp" line="290"/>
         <source>Wrong header: &quot;%1&quot;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ListThreadListChange.cpp" line="297"/>
+        <location filename="../../ListThreadListChange.cpp" line="299"/>
         <source>The transfer list is in mixed mode, but this instance is not in this mode</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ListThreadListChange.cpp" line="306"/>
+        <location filename="../../ListThreadListChange.cpp" line="308"/>
         <source>The transfer list is in copy mode, but this instance is not in this mode</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ListThreadListChange.cpp" line="312"/>
+        <location filename="../../ListThreadListChange.cpp" line="314"/>
         <source>The transfer list is in move mode, but this instance is not in this mode</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ListThreadListChange.cpp" line="376"/>
+        <location filename="../../ListThreadListChange.cpp" line="378"/>
         <source>Some errors have been found during the line parsing</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ListThreadListChange.cpp" line="384"/>
+        <location filename="../../ListThreadListChange.cpp" line="386"/>
         <source>Unable to open the transfer list: %1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -482,46 +490,51 @@
 <context>
     <name>MkPath</name>
     <message>
-        <location filename="../../MkPath.cpp" line="188"/>
-        <location filename="../../MkPath.cpp" line="211"/>
-        <location filename="../../MkPath.cpp" line="316"/>
-        <location filename="../../MkPath.cpp" line="364"/>
+        <location filename="../../MkPath.cpp" line="172"/>
+        <source>The destination folder already exists</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../MkPath.cpp" line="197"/>
+        <location filename="../../MkPath.cpp" line="220"/>
+        <location filename="../../MkPath.cpp" line="325"/>
+        <location filename="../../MkPath.cpp" line="373"/>
         <source>Unable to create the folder</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../MkPath.cpp" line="228"/>
+        <location filename="../../MkPath.cpp" line="237"/>
         <source>The source folder don&apos;t exists</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../MkPath.cpp" line="305"/>
+        <location filename="../../MkPath.cpp" line="314"/>
         <source>Unable to temporary rename the folder</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../MkPath.cpp" line="340"/>
+        <location filename="../../MkPath.cpp" line="349"/>
         <source>Unable to reverse temporary rename for real move</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../MkPath.cpp" line="349"/>
+        <location filename="../../MkPath.cpp" line="358"/>
         <source>Unable to do the final real move the folder</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../MkPath.cpp" line="380"/>
+        <location filename="../../MkPath.cpp" line="389"/>
         <source>Unable to move the folder</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../MkPath.cpp" line="386"/>
+        <location filename="../../MkPath.cpp" line="395"/>
         <source>Unable to move the folder: errno: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../MkPath.cpp" line="124"/>
-        <location filename="../../MkPath.cpp" line="467"/>
+        <location filename="../../MkPath.cpp" line="476"/>
         <source>Unable to remove</source>
         <translation type="unfinished"></translation>
     </message>
@@ -539,7 +552,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../async/ReadThread.cpp" line="622"/>
+        <location filename="../../async/ReadThread.cpp" line="625"/>
         <source>File truncated during the read, possible data change</source>
         <translation type="unfinished"></translation>
     </message>
@@ -596,29 +609,29 @@
     <name>ScanFileOrFolder</name>
     <message>
         <location filename="../../ScanFileOrFolder.cpp" line="382"/>
-        <location filename="../../ScanFileOrFolder.cpp" line="706"/>
+        <location filename="../../ScanFileOrFolder.cpp" line="707"/>
         <source>Blacklisted folder</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ScanFileOrFolder.cpp" line="529"/>
-        <location filename="../../ScanFileOrFolder.cpp" line="531"/>
-        <location filename="../../ScanFileOrFolder.cpp" line="638"/>
-        <location filename="../../ScanFileOrFolder.cpp" line="640"/>
+        <location filename="../../ScanFileOrFolder.cpp" line="530"/>
+        <location filename="../../ScanFileOrFolder.cpp" line="532"/>
+        <location filename="../../ScanFileOrFolder.cpp" line="639"/>
+        <location filename="../../ScanFileOrFolder.cpp" line="641"/>
         <source>%name% - copy%suffix%</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ScanFileOrFolder.cpp" line="540"/>
-        <location filename="../../ScanFileOrFolder.cpp" line="542"/>
-        <location filename="../../ScanFileOrFolder.cpp" line="649"/>
-        <location filename="../../ScanFileOrFolder.cpp" line="651"/>
+        <location filename="../../ScanFileOrFolder.cpp" line="541"/>
+        <location filename="../../ScanFileOrFolder.cpp" line="543"/>
+        <location filename="../../ScanFileOrFolder.cpp" line="650"/>
+        <location filename="../../ScanFileOrFolder.cpp" line="652"/>
         <source>%name% - copy (%number%)%suffix%</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ScanFileOrFolder.cpp" line="716"/>
-        <location filename="../../ScanFileOrFolder.cpp" line="720"/>
+        <location filename="../../ScanFileOrFolder.cpp" line="717"/>
+        <location filename="../../ScanFileOrFolder.cpp" line="721"/>
         <source>Problem with folder read</source>
         <translation type="unfinished"></translation>
     </message>
@@ -626,24 +639,24 @@
 <context>
     <name>TransferThread</name>
     <message>
-        <location filename="../../TransferThread.cpp" line="692"/>
+        <location filename="../../TransferThread.cpp" line="717"/>
         <source>%name% - copy%suffix%</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../TransferThread.cpp" line="699"/>
+        <location filename="../../TransferThread.cpp" line="724"/>
         <source>%name% - copy (%number%)%suffix%</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../TransferThread.cpp" line="732"/>
-        <location filename="../../TransferThread.cpp" line="983"/>
+        <location filename="../../TransferThread.cpp" line="757"/>
+        <location filename="../../TransferThread.cpp" line="1008"/>
         <source>File not found</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../TransferThread.cpp" line="983"/>
-        <location filename="../../TransferThread.cpp" line="1028"/>
+        <location filename="../../TransferThread.cpp" line="1008"/>
+        <location filename="../../TransferThread.cpp" line="1053"/>
         <source>Unable to change the date</source>
         <translation type="unfinished"></translation>
     </message>
@@ -656,46 +669,46 @@
 <context>
     <name>TransferThreadAsync</name>
     <message>
-        <location filename="../../async/TransferThreadAsync.cpp" line="409"/>
+        <location filename="../../async/TransferThreadAsync.cpp" line="413"/>
         <source>Wrong modification date or unable to get it, you can disable time transfer to do it</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../async/TransferThreadAsync.cpp" line="509"/>
-        <location filename="../../async/TransferThreadAsync.cpp" line="527"/>
+        <location filename="../../async/TransferThreadAsync.cpp" line="513"/>
+        <location filename="../../async/TransferThreadAsync.cpp" line="531"/>
         <source>Unable to create the destination folder: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../async/TransferThreadAsync.cpp" line="512"/>
-        <location filename="../../async/TransferThreadAsync.cpp" line="529"/>
+        <location filename="../../async/TransferThreadAsync.cpp" line="516"/>
+        <location filename="../../async/TransferThreadAsync.cpp" line="533"/>
         <source>Unable to create the destination folder, errno: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../async/TransferThreadAsync.cpp" line="963"/>
+        <location filename="../../async/TransferThreadAsync.cpp" line="968"/>
         <source>Checksum: unable to allocate xxh3 state</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../async/TransferThreadAsync.cpp" line="978"/>
-        <location filename="../../async/TransferThreadAsync.cpp" line="996"/>
+        <location filename="../../async/TransferThreadAsync.cpp" line="983"/>
+        <location filename="../../async/TransferThreadAsync.cpp" line="1001"/>
         <source>Checksum: unable to re-open source: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../async/TransferThreadAsync.cpp" line="987"/>
-        <location filename="../../async/TransferThreadAsync.cpp" line="1005"/>
+        <location filename="../../async/TransferThreadAsync.cpp" line="992"/>
+        <location filename="../../async/TransferThreadAsync.cpp" line="1010"/>
         <source>Checksum: unable to re-open destination: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../async/TransferThreadAsync.cpp" line="1068"/>
+        <location filename="../../async/TransferThreadAsync.cpp" line="1073"/>
         <source>Checksum: read error during verify</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../async/TransferThreadAsync.cpp" line="1076"/>
+        <location filename="../../async/TransferThreadAsync.cpp" line="1081"/>
         <source>Checksum mismatch (xxh3-64): </source>
         <translation type="unfinished"></translation>
     </message>
@@ -703,44 +716,44 @@
 <context>
     <name>TransferThreadPipelined</name>
     <message>
-        <location filename="../../pipeline/TransferThreadPipelined.cpp" line="260"/>
+        <location filename="../../pipeline/TransferThreadPipelined.cpp" line="264"/>
         <source>Wrong modification date or unable to get it, you can disable time transfer to do it</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../pipeline/TransferThreadPipelined.cpp" line="525"/>
+        <location filename="../../pipeline/TransferThreadPipelined.cpp" line="561"/>
         <source>Unable to create the destination folder, errno: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../pipeline/TransferThreadPipelined.cpp" line="705"/>
+        <location filename="../../pipeline/TransferThreadPipelined.cpp" line="768"/>
         <source>Checksum: unable to allocate xxh3 state</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../pipeline/TransferThreadPipelined.cpp" line="720"/>
-        <location filename="../../pipeline/TransferThreadPipelined.cpp" line="738"/>
+        <location filename="../../pipeline/TransferThreadPipelined.cpp" line="783"/>
+        <location filename="../../pipeline/TransferThreadPipelined.cpp" line="801"/>
         <source>Checksum: unable to re-open source: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../pipeline/TransferThreadPipelined.cpp" line="729"/>
-        <location filename="../../pipeline/TransferThreadPipelined.cpp" line="747"/>
+        <location filename="../../pipeline/TransferThreadPipelined.cpp" line="792"/>
+        <location filename="../../pipeline/TransferThreadPipelined.cpp" line="810"/>
         <source>Checksum: unable to re-open destination: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../pipeline/TransferThreadPipelined.cpp" line="810"/>
+        <location filename="../../pipeline/TransferThreadPipelined.cpp" line="873"/>
         <source>Checksum: read error during verify</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../pipeline/TransferThreadPipelined.cpp" line="818"/>
+        <location filename="../../pipeline/TransferThreadPipelined.cpp" line="881"/>
         <source>Checksum mismatch (xxh3-64): </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../pipeline/TransferThreadPipelined.cpp" line="877"/>
+        <location filename="../../pipeline/TransferThreadPipelined.cpp" line="940"/>
         <source>Checksum mismatch and the corrupt destination could not be removed</source>
         <translation type="unfinished"></translation>
     </message>
@@ -748,41 +761,57 @@
 <context>
     <name>TransferThreadUring</name>
     <message>
-        <location filename="../../uring/TransferThreadUring.cpp" line="229"/>
+        <location filename="../../uring/TransferThreadUring.cpp" line="233"/>
         <source>Unable to create the destination folder, errno: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../uring/TransferThreadUring.cpp" line="798"/>
+        <source>File truncated during the read, possible data change</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>TransferThreadWin</name>
     <message>
-        <location filename="../../win-iocp/TransferThreadWin.cpp" line="283"/>
+        <location filename="../../win-iocp/TransferThreadWin.cpp" line="298"/>
         <source>Unable to create the destination folder, errno: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../win-iocp/TransferThreadWin.cpp" line="807"/>
+        <source>File truncated during the read, possible data change</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>WriteThread</name>
     <message>
-        <location filename="../../async/WriteThread.cpp" line="212"/>
+        <location filename="../../async/WriteThread.cpp" line="214"/>
         <source>Path resolution error (Empty path)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../async/WriteThread.cpp" line="241"/>
-        <location filename="../../async/WriteThread.cpp" line="274"/>
+        <location filename="../../async/WriteThread.cpp" line="243"/>
+        <location filename="../../async/WriteThread.cpp" line="276"/>
         <source>Unable to create the destination folder: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../async/WriteThread.cpp" line="252"/>
-        <location filename="../../async/WriteThread.cpp" line="276"/>
+        <location filename="../../async/WriteThread.cpp" line="254"/>
+        <location filename="../../async/WriteThread.cpp" line="278"/>
         <source>Unable to create the destination folder, errno: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../async/WriteThread.cpp" line="568"/>
+        <location filename="../../async/WriteThread.cpp" line="570"/>
         <source>Internal error, please report it!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../async/WriteThread.cpp" line="972"/>
+        <location filename="../../async/WriteThread.cpp" line="983"/>
+        <source>Unable to close the destination: </source>
         <translation type="unfinished"></translation>
     </message>
 </context>

@@ -298,12 +298,10 @@ private:
     void opShadowCompleteSetMetaDir(uint64_t actionId); ///< hook 3: an ActionType_SyncDate action launched
     #endif
     //can't be static into WriteThread, linked by instance then by ListThread
-    #if defined(ULTRACOPIER_PLUGIN_IO_URING) || defined(ULTRACOPIER_PLUGIN_WINIOCP)
-    QMultiHash<QString,TransferThreadPipelined *> *writeFileList;
-    #else
+    #if !defined(ULTRACOPIER_PLUGIN_IO_URING) && !defined(ULTRACOPIER_PLUGIN_WINIOCP)
     QMultiHash<QString,WriteThread *> *writeFileList;
-    #endif
     QMutex       *writeFileListMutex;
+    #endif
 
     QSemaphore          mkpathTransfer;
     std::string             sourceDrive;

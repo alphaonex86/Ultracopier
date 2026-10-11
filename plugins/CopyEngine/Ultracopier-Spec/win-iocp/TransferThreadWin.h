@@ -52,7 +52,7 @@ private:
         OVERLAPPED *ov;     // per-buffer overlapped struct, heap-allocated WITH the data block so a wedged
                             // IRP that outlives the drain keeps writing its status into a quarantined
                             // OVERLAPPED, never into the one the next file re-arms; Offset = file offset
-        enum State { Free, Reading, WriteReady, Writing } state;
+        enum State { Free, Reading, Writing } state;
     };
     PipelineBuffer pipelineBuffers[NUM_BUFFERS];
 
@@ -71,7 +71,6 @@ private:
     HANDLE destHandle;
     uint64_t sourceFileSize;
     int64_t readOffset;
-    int64_t writeOffset;
 
     // Completion-key constants for CreateIoCompletionPort(): source handle posts with
     // KEY_SOURCE, destination with KEY_DEST. The specific buffer is recovered from the
