@@ -64,3 +64,6 @@ CMakeLists.txt.user*
 
 # Test runtime staging data
 winlane_stage/
+
+# Python
+__pycache__/
