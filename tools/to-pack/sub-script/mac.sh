@@ -1,5 +1,22 @@
 #!/bin/bash
 
+# macOS build, run entirely on this Linux host from the local osxcross prefix
+# (history: qemu mac VM 192.168.158.34 -> osxcross LXC root@2803:1920::2:ff08
+# -> local prefix, no remote host anymore). Same flow as CatchChallenger's
+# test/testingcompilationmac.py. The prefix holds:
+#   - osxcross (clang, target darwin20.4 = macOS 11+) + <arch>-apple-darwin20.4-cmake wrappers
+#   - Qt 6.5.3 for macOS (universal x86_64+arm64 frameworks/plugins)
+#   - Qt 6.5.3 host-native (Linux ELF) moc/uic/rcc; this workstation's own Qt 6.11
+#     tools do NOT work: their cmake configs call _qt_internal_should_include_targets(),
+#     undefined in 6.5.3's cmake modules -> configure error
+#   - rcodesign (cargo install apple-codesign --locked --root <prefix>): ad-hoc signing,
+#     install_name_tool breaks the arm64 signatures and Apple Silicon refuses to run them
+#   - libdmg-hfsplus `dmg` + genisoimage (Debian build: the host's cdrtools mkisofs
+#     lacks the siconv charset tables, `-hfs` dies on 'Unknown HFS charset cp10000')
+# ninja, lld, ccache and python3 come from this host.
+# Universal binary: build once per arch, lipo the two executables into one
+# .app; the Qt frameworks are already fat so one deploy pass covers both.
+
 if [ "${TEMP_PATH}" = "" ]
 then
 	exit;
@@ -8,268 +25,144 @@ fi
 mkdir -p ${TEMP_PATH}
 cd ${TEMP_PATH}/
 
-IPMAC="192.168.158.34"
-SSHUSER="user"
-QTVERSION="5.4.0"
-QTVERSIONMAJ="5.4"
+OSXPREFIX="/mnt/data/perso/progs/catchchallenger-osxcross"
+OSXQT="${OSXPREFIX}/qt6-macos/6.5.3/macos"
+OSXHOSTQTCMAKE="${OSXPREFIX}/qt6-host/6.5.3/gcc_64/lib/cmake"
+OSXCROSSBIN="${OSXPREFIX}/osxcross/target/bin"
+OSXISOTOOL="${OSXPREFIX}/bin/genisoimage"
+OSXDMGBIN="${OSXPREFIX}/libdmg-hfsplus/build/dmg/dmg"
+OSXCODESIGN="${OSXPREFIX}/bin/rcodesign"
+ARCHS="x86_64 arm64"
+LIPOTRIPLE="x86_64-apple-darwin20.4"
+WORKDIR="${TEMP_PATH}/mac-build"
+SRCDIR="${WORKDIR}/sources"
+APPNAME="Ultracopier.app"
+EXENAME="Ultracopier"
 
-ssh root@${IPMAC} "cd /usr/bin/;ln -s /Applications/Xcode.app/Contents/Developer//Toolchains/XcodeDefault.xctoolchain/usr/bin/otool"
-ssh root@${IPMAC} "mkdir /opt/;mkdir /opt/local/;mkdir /opt/local/lib/;cd /opt/local/lib/;ln -s /usr/lib/libz.1.dylib"
-
-#compil "ultracopier" 1 0
-function compil {
-	DEBUG=$2
-	ULTIMATE=$3
-	cd ${TEMP_PATH}/
-	TARGET=$1
-	STATIC=$4
-	DEBUGREAL=${5}
-	if [ $DEBUGREAL -eq 1 ]
+for TOOL in ${OSXCROSSBIN}/${LIPOTRIPLE}-cmake ${OSXISOTOOL} ${OSXDMGBIN} ${OSXCODESIGN}
+do
+	if [ ! -x ${TOOL} ]
 	then
-		LIBEXT="_debug.dylib"
-		CONFIGARG="debug"
-	else
-		LIBEXT=".dylib"
-		CONFIGARG="release"
+		echo "osxcross toolchain incomplete: ${TOOL} missing"
+		exit
 	fi
-	FINAL_ARCHIVE="${TARGET}-mac-os-x-${ULTRACOPIER_VERSION}.dmg"
-	if [ ! -e ${FINAL_ARCHIVE} ]
+done
+if [ ! -d ${OSXQT} ] || [ ! -d ${OSXHOSTQTCMAKE} ]
+then
+	echo "osxcross toolchain incomplete: Qt 6.5.3 (macos and/or host) missing under ${OSXPREFIX}"
+	exit
+fi
+
+# MACOSX_DEPLOYMENT_TARGET=11.0; without it clang's availability checks reject
+# std::filesystem in the Qt headers (needs 10.15+). CCACHE_DIR is pinned inside
+# the prefix so the mac objects never mix with this workstation's cache.
+source ${OSXPREFIX}/env.sh > /dev/null 2>&1
+export PATH=${OSXCROSSBIN}:${PATH}
+export CCACHE_DIR=${OSXPREFIX}/ccache
+
+FINAL_ARCHIVE="ultracopier-mac-os-x-${ULTRACOPIER_VERSION}.dmg"
+if [ ! -e ${FINAL_ARCHIVE} ]
+then
+	echo "Making Mac dmg: ${FINAL_ARCHIVE} ..."
+
+	echo "try rsync"
+	# Source only -- never copy in-source build artifacts (stale *.o, or moc_*/qrc_*/ui_* from
+	# a different Qt); they get reused by mtime and break the build (same as android.sh).
+	mkdir -p ${SRCDIR}
+	rsync -art --delete --delete-excluded ${ULTRACOPIER_SOURCE}/ ${SRCDIR}/ --exclude=/.git/ --exclude=/build/ --exclude=/build-*/ --exclude=/test/ --exclude=/tools/ --exclude='*.o' --exclude='*.a' --exclude='*.so' --exclude='*.dylib' --exclude='*.exe' --exclude='*.dll' --exclude='moc_*.cpp' --exclude='moc_*.h' --exclude='qrc_*.cpp' --exclude='ui_*.h' --exclude='.qmake.stash' --exclude='*.pro.user' --exclude='CMakeLists.txt.user' --exclude='*.app'
+	if [ $? -ne 0 ]
 	then
-		echo "Making Mac dmg: ${FINAL_ARCHIVE} ..."
-
-		rm -Rf ${TEMP_PATH}/${TARGET}-mac-os-x/
-		cp -aRf ${ULTRACOPIER_SOURCE}/ ${TEMP_PATH}/${TARGET}-mac-os-x/
-		find ${TEMP_PATH}/${TARGET}-mac-os-x/ -name "*.pro.user" -exec rm {} \; > /dev/null 2>&1
-		find ${TEMP_PATH}/${TARGET}-mac-os-x/ -name "*-build-desktop" -type d -exec rm -Rf {} \; > /dev/null 2>&1
-		find ${TEMP_PATH}/${TARGET}-mac-os-x/ -name "informations.xml" -exec sed -i -r "s/<architecture>.*<\/architecture>/<architecture>mac-os-x<\/architecture>/g" {} \; > /dev/null 2>&1
-		find ${TEMP_PATH}/${TARGET}-mac-os-x/ -name "informations.xml" -exec sed -i -r "s/<version>.*<\/version>/<version>${ULTRACOPIER_VERSION}<\/version>/g" {} \; > /dev/null 2>&1
-		find ${TEMP_PATH}/${TARGET}-mac-os-x/ -name "informations.xml" -exec sed -i -r "s/<pubDate>.*<\pubDate>/<pubDate>`date +%s`<\pubDate>/g" {} \; > /dev/null 2>&1
-		find ${TEMP_PATH}/${TARGET}-mac-os-x/ -name "Variable.h" -exec sed -i "s/#define ULTRACOPIER_VERSION_PORTABLE/\/\/#define ULTRACOPIER_VERSION_PORTABLE/g" {} \; > /dev/null 2>&1
-		find ${TEMP_PATH}/${TARGET}-mac-os-x/ -name "Variable.h" -exec sed -i "s/#define ULTRACOPIER_VERSION_PORTABLEAPPS/\/\/#define ULTRACOPIER_VERSION_PORTABLEAPPS/g" {} \; > /dev/null 2>&1
-		if [ ${DEBUG} -eq 1 ]
-		then
-			find ${TEMP_PATH}/${TARGET}-mac-os-x/ -name "Variable.h" -exec sed -i "s/\/\/#define ULTRACOPIER_DEBUG/#define ULTRACOPIER_DEBUG/g" {} \; > /dev/null 2>&1
-			find ${TEMP_PATH}/${TARGET}-mac-os-x/ -name "Variable.h" -exec sed -i "s/\/\/#define ULTRACOPIER_PLUGIN_DEBUG/#define ULTRACOPIER_PLUGIN_DEBUG/g" {} \; > /dev/null 2>&1
-			find ${TEMP_PATH}/${TARGET}-mac-os-x/ -name "Variable.h" -exec sed -i "s/\/\/#define ULTRACOPIER_PLUGIN_DEBUG_WINDOW/#define ULTRACOPIER_PLUGIN_DEBUG_WINDOW/g" {} \; > /dev/null 2>&1
-		else
-			find ${TEMP_PATH}/${TARGET}-mac-os-x/ -name "Variable.h" -exec sed -i "s/#define ULTRACOPIER_DEBUG/\/\/#define ULTRACOPIER_DEBUG/g" {} \; > /dev/null 2>&1
-			find ${TEMP_PATH}/${TARGET}-mac-os-x/ -name "Variable.h" -exec sed -i "s/#define ULTRACOPIER_PLUGIN_DEBUG/\/\/#define ULTRACOPIER_PLUGIN_DEBUG/g" {} \; > /dev/null 2>&1
-			find ${TEMP_PATH}/${TARGET}-mac-os-x/ -name "Variable.h" -exec sed -i "s/#define ULTRACOPIER_PLUGIN_DEBUG_WINDOW/\/\/#define ULTRACOPIER_PLUGIN_DEBUG_WINDOW/g" {} \; > /dev/null 2>&1
-		fi
-		if [ $STATIC -eq 1 ]
-		then
-			find ${TEMP_PATH}/${TARGET}-mac-os-x/ -name "Variable.h" -exec sed -i "s/\/\/#define ULTRACOPIER_PLUGIN_ALL_IN_ONE/#define ULTRACOPIER_PLUGIN_ALL_IN_ONE/g" {} \; > /dev/null 2>&1
-		else
-
-			find ${TEMP_PATH}/${TARGET}-mac-os-x/ -name "Variable.h" -exec sed -i "s/#define ULTRACOPIER_PLUGIN_ALL_IN_ONE/\/\/#define ULTRACOPIER_PLUGIN_ALL_IN_ONE/g" {} \; > /dev/null 2>&1
-		fi
-		if [ $ULTIMATE -eq 1 ]
-		then
-			find ${TEMP_PATH}/${TARGET}-mac-os-x/ -name "Variable.h" -exec sed -i "s/\/\/#define ULTRACOPIER_VERSION_ULTIMATE/#define ULTRACOPIER_VERSION_ULTIMATE/g" {} \; > /dev/null 2>&1
-		else
-			find ${TEMP_PATH}/${TARGET}-mac-os-x/ -name "Variable.h" -exec sed -i "s/#define ULTRACOPIER_VERSION_ULTIMATE/\/\/#define ULTRACOPIER_VERSION_ULTIMATE/g" {} \; > /dev/null 2>&1
-		fi
-
-		echo "try connect"
-		ssh ${SSHUSER}@${IPMAC} "rm -fR /Users/${SSHUSER}/Desktop/ultracopier/"
-		echo "try rsync"
-		rsync -art ${TEMP_PATH}/${TARGET}-mac-os-x/ ${SSHUSER}@${IPMAC}:/Users/${SSHUSER}/Desktop/ultracopier/
-
-		echo "try qmake"
-		BASEAPPNAME="ultracopier.app"
-		ssh ${SSHUSER}@${IPMAC} "cd /Users/${SSHUSER}/Desktop/ultracopier/;/Users/user/Qt${QTVERSION}/${QTVERSIONMAJ}/clang_64/bin/qmake /Users/${SSHUSER}/Desktop/ultracopier/ultracopier-core.pro -spec macx-g++ -config ${CONFIGARG}"
-		echo "try make"
-		ssh ${SSHUSER}@${IPMAC} "cd /Users/${SSHUSER}/Desktop/ultracopier/;/Applications/Xcode.app/Contents/Developer/usr/bin/gnumake -j 3 > /dev/null > /dev/null"
-		RETURN_CODE=$?
-		if [ $? -ne 0 ]
-		then
-			echo "make failed on the mac: ${RETURN_CODE}"
-			exit
-		fi
-		echo "try make plugins"
-		ssh ${SSHUSER}@${IPMAC} "cd /Users/${SSHUSER}/Desktop/ultracopier/plugins/CopyEngine/Ultracopier/;/Users/user/Qt${QTVERSION}/${QTVERSIONMAJ}/clang_64/bin/qmake /Users/${SSHUSER}/Desktop/ultracopier/plugins/CopyEngine/Ultracopier/*.pro -spec macx-g++ -config ${CONFIGARG}"
-		ssh ${SSHUSER}@${IPMAC} "cd /Users/${SSHUSER}/Desktop/ultracopier/plugins/CopyEngine/Ultracopier/;/Applications/Xcode.app/Contents/Developer/usr/bin/gnumake -j 3 > /dev/null"
-		RETURN_CODE=$?
-		if [ $? -ne 0 ]
-		then
-			echo "make failed on the mac: ${RETURN_CODE}"
-			exit
-		fi
-		ssh ${SSHUSER}@${IPMAC} "cd /Users/${SSHUSER}/Desktop/ultracopier/plugins/Listener/catchcopy/;/Users/user/Qt${QTVERSION}/${QTVERSIONMAJ}/clang_64/bin/qmake /Users/${SSHUSER}/Desktop/ultracopier/plugins/Listener/catchcopy/*.pro -spec macx-g++ -config ${CONFIGARG}"
-		ssh ${SSHUSER}@${IPMAC} "cd /Users/${SSHUSER}/Desktop/ultracopier/plugins/Listener/catchcopy/;/Applications/Xcode.app/Contents/Developer/usr/bin/gnumake -j 3 > /dev/null"
-		RETURN_CODE=$?
-		if [ $? -ne 0 ]
-		then
-			echo "make failed on the mac: ${RETURN_CODE}"
-			exit
-		fi
-		ssh ${SSHUSER}@${IPMAC} "cd /Users/${SSHUSER}/Desktop/ultracopier/plugins/Themes/Oxygen/;/Users/user/Qt${QTVERSION}/${QTVERSIONMAJ}/clang_64/bin/qmake /Users/${SSHUSER}/Desktop/ultracopier/plugins/Themes/Oxygen/*.pro -spec macx-g++ -config ${CONFIGARG}"
-		ssh ${SSHUSER}@${IPMAC} "cd /Users/${SSHUSER}/Desktop/ultracopier/plugins/Themes/Oxygen/;/Applications/Xcode.app/Contents/Developer/usr/bin/gnumake -j 3 > /dev/null"
-		RETURN_CODE=$?
-		if [ $? -ne 0 ]
-		then
-			echo "make failed on the mac: ${RETURN_CODE}"
-			exit
-		fi
-		if [ ${ULTIMATE} -eq 1 ]
-		then
-			echo "do the ultimate plugin"
-			ssh ${SSHUSER}@${IPMAC} "cd /Users/${SSHUSER}/Desktop/ultracopier/plugins-alternative/Themes/Windows/;/Users/user/Qt${QTVERSION}/${QTVERSIONMAJ}/clang_64/bin/qmake /Users/${SSHUSER}/Desktop/ultracopier/plugins-alternative/Themes/Windows/*.pro -spec macx-g++ -config ${CONFIGARG}" > /dev/null 2>&1
-			ssh ${SSHUSER}@${IPMAC} "cd /Users/${SSHUSER}/Desktop/ultracopier/plugins-alternative/Themes/Windows/;/Applications/Xcode.app/Contents/Developer/usr/bin/gnumake -j 3 > /dev/null"
-			RETURN_CODE=$?
-			if [ $? -ne 0 ]
-			then
-				echo "make failed on the mac: ${RETURN_CODE}"
-				exit
-			fi
-			ssh ${SSHUSER}@${IPMAC} "cd /Users/${SSHUSER}/Desktop/ultracopier/plugins-alternative/Themes/Teracopy/;/Users/user/Qt${QTVERSION}/${QTVERSIONMAJ}/clang_64/bin/qmake /Users/${SSHUSER}/Desktop/ultracopier/plugins-alternative/Themes/Teracopy/*.pro -spec macx-g++ -config ${CONFIGARG}" > /dev/null 2>&1
-			ssh ${SSHUSER}@${IPMAC} "cd /Users/${SSHUSER}/Desktop/ultracopier/plugins-alternative/Themes/Teracopy/;/Applications/Xcode.app/Contents/Developer/usr/bin/gnumake -j 3 > /dev/null"
-			RETURN_CODE=$?
-			if [ $? -ne 0 ]
-			then
-				echo "make failed on the mac: ${RETURN_CODE}"
-				exit
-			fi
-			ssh ${SSHUSER}@${IPMAC} "mkdir -p /Users/${SSHUSER}/Desktop/ultracopier/${BASEAPPNAME}/Contents/MacOS/Themes/Windows/"
-			ssh ${SSHUSER}@${IPMAC} "mkdir -p /Users/${SSHUSER}/Desktop/ultracopier/${BASEAPPNAME}/Contents/MacOS/Themes/Teracopy/"
-			ssh ${SSHUSER}@${IPMAC} "cp /Users/${SSHUSER}/Desktop/ultracopier/plugins-alternative/Themes/Windows/informations.xml /Users/${SSHUSER}/Desktop/ultracopier/${BASEAPPNAME}/Contents/MacOS/Themes/Windows/informations.xml"
-			ssh ${SSHUSER}@${IPMAC} "cp /Users/${SSHUSER}/Desktop/ultracopier/plugins-alternative/Themes/Teracopy/informations.xml /Users/${SSHUSER}/Desktop/ultracopier/${BASEAPPNAME}/Contents/MacOS/Themes/Teracopy/informations.xml"
-			ssh ${SSHUSER}@${IPMAC} "cp /Users/${SSHUSER}/Desktop/ultracopier/plugins-alternative/Themes/Windows/libinterface${LIBEXT} /Users/${SSHUSER}/Desktop/ultracopier/${BASEAPPNAME}/Contents/MacOS/Themes/Windows/libinterface${LIBEXT}"
-			ssh ${SSHUSER}@${IPMAC} "cp /Users/${SSHUSER}/Desktop/ultracopier/plugins-alternative/Themes/Teracopy/libinterface${LIBEXT} /Users/${SSHUSER}/Desktop/ultracopier/${BASEAPPNAME}/Contents/MacOS/Themes/Teracopy/libinterface${LIBEXT}"
-			ssh ${SSHUSER}@${IPMAC} "rsync -aqrt /Users/${SSHUSER}/Desktop/ultracopier/plugins-alternative/Themes/Windows/Languages/ /Users/${SSHUSER}/Desktop/ultracopier/${BASEAPPNAME}/Contents/MacOS/Themes/Windows/Languages/"
-			ssh ${SSHUSER}@${IPMAC} "rsync -aqrt /Users/${SSHUSER}/Desktop/ultracopier/plugins-alternative/Themes/Teracopy/Languages/ /Users/${SSHUSER}/Desktop/ultracopier/${BASEAPPNAME}/Contents/MacOS/Themes/Teracopy/Languages/"
-			ssh ${SSHUSER}@${IPMAC} "/Applications/Xcode.app//Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/install_name_tool -change QtGui.framework/Versions/5/QtGui @executable_path/../Frameworks/QtGui.framework/Versions/5/QtGui /Users/${SSHUSER}/Desktop/ultracopier/${BASEAPPNAME}/Contents/MacOS/Themes/Windows/libinterface${LIBEXT}"
-			ssh ${SSHUSER}@${IPMAC} "/Applications/Xcode.app//Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/install_name_tool -change QtCore.framework/Versions/5/QtCore @executable_path/../Frameworks/QtCore.framework/Versions/5/QtCore /Users/${SSHUSER}/Desktop/ultracopier/${BASEAPPNAME}/Contents/MacOS/Themes/Windows/libinterface${LIBEXT}"
-			ssh ${SSHUSER}@${IPMAC} "/Applications/Xcode.app//Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/install_name_tool -change QtNetwork.framework/Versions/5/QtNetwork @executable_path/../Frameworks/QtNetwork.framework/Versions/5/QtNetwork /Users/${SSHUSER}/Desktop/ultracopier/${BASEAPPNAME}/Contents/MacOS/Themes/Windows/libinterface${LIBEXT}"
-			ssh ${SSHUSER}@${IPMAC} "/Applications/Xcode.app//Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/install_name_tool -change QtGui.framework/Versions/5/QtGui @executable_path/../Frameworks/QtGui.framework/Versions/5/QtGui /Users/${SSHUSER}/Desktop/ultracopier/${BASEAPPNAME}/Contents/MacOS/Themes/Teracopy/libinterface${LIBEXT}"
-			ssh ${SSHUSER}@${IPMAC} "/Applications/Xcode.app//Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/install_name_tool -change QtCore.framework/Versions/5/QtCore @executable_path/../Frameworks/QtCore.framework/Versions/5/QtCore /Users/${SSHUSER}/Desktop/ultracopier/${BASEAPPNAME}/Contents/MacOS/Themes/Teracopy/libinterface${LIBEXT}"
-			ssh ${SSHUSER}@${IPMAC} "/Applications/Xcode.app//Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/install_name_tool -change QtNetwork.framework/Versions/5/QtNetwork @executable_path/../Frameworks/QtNetwork.framework/Versions/5/QtNetwork /Users/${SSHUSER}/Desktop/ultracopier/${BASEAPPNAME}/Contents/MacOS/Themes/Teracopy/libinterface${LIBEXT}"
-		fi
-		echo "make the folder"
-		ssh ${SSHUSER}@${IPMAC} "mkdir /Users/${SSHUSER}/Desktop/ultracopier/${BASEAPPNAME}/Contents/Frameworks"
-
-		ssh ${SSHUSER}@${IPMAC} "mkdir -p /Users/${SSHUSER}/Desktop/ultracopier/${BASEAPPNAME}/Contents/MacOS/CopyEngine/Ultracopier/"
-		ssh ${SSHUSER}@${IPMAC} "mkdir -p /Users/${SSHUSER}/Desktop/ultracopier/${BASEAPPNAME}/Contents/MacOS/Languages/"
-		ssh ${SSHUSER}@${IPMAC} "mkdir -p /Users/${SSHUSER}/Desktop/ultracopier/${BASEAPPNAME}/Contents/MacOS/Listener/catchcopy/"
-
-		echo "put the informations.xml"
-		ssh ${SSHUSER}@${IPMAC} "cp /Users/${SSHUSER}/Desktop/ultracopier/plugins/CopyEngine/Ultracopier/informations.xml /Users/${SSHUSER}/Desktop/ultracopier/${BASEAPPNAME}/Contents/MacOS/CopyEngine/Ultracopier/informations.xml"
-		ssh ${SSHUSER}@${IPMAC} "cp /Users/${SSHUSER}/Desktop/ultracopier/plugins/Listener/catchcopy/informations.xml /Users/${SSHUSER}/Desktop/ultracopier/${BASEAPPNAME}/Contents/MacOS/Listener/catchcopy/informations.xml"
-
-		ssh ${SSHUSER}@${IPMAC} "cp /Users/${SSHUSER}/Desktop/ultracopier/plugins/CopyEngine/Ultracopier/libcopyEngine${LIBEXT} /Users/${SSHUSER}/Desktop/ultracopier/${BASEAPPNAME}/Contents/MacOS/CopyEngine/Ultracopier/libcopyEngine${LIBEXT}"
-		ssh ${SSHUSER}@${IPMAC} "cp /Users/${SSHUSER}/Desktop/ultracopier/plugins/Listener/catchcopy/liblistener${LIBEXT} /Users/${SSHUSER}/Desktop/ultracopier/${BASEAPPNAME}/Contents/MacOS/Listener/catchcopy/liblistener${LIBEXT}"
-
-		ssh ${SSHUSER}@${IPMAC} "rsync -aqrt /Users/${SSHUSER}/Desktop/ultracopier/plugins/Languages/ /Users/${SSHUSER}/Desktop/ultracopier/${BASEAPPNAME}/Contents/MacOS/Languages/"
-		ssh ${SSHUSER}@${IPMAC} "rsync -aqrt /Users/${SSHUSER}/Desktop/ultracopier/plugins/CopyEngine/Ultracopier/Languages/ /Users/${SSHUSER}/Desktop/ultracopier/${BASEAPPNAME}/Contents/MacOS/CopyEngine/Ultracopier/Languages/"
-		ssh ${SSHUSER}@${IPMAC} "find /Users/${SSHUSER}/Desktop/ultracopier/${BASEAPPNAME}/Contents/MacOS/ -iname \"*.ts\" -exec rm {} \; > /dev/null 2>&1"
-
-		echo "finish the link"
-		ssh ${SSHUSER}@${IPMAC} "/Applications/Xcode.app//Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/install_name_tool -change QtGui.framework/Versions/5/QtGui @executable_path/../Frameworks/QtGui.framework/Versions/5/QtGui /Users/${SSHUSER}/Desktop/ultracopier/${BASEAPPNAME}/Contents/MacOS/CopyEngine/Ultracopier/libcopyEngine${LIBEXT}"
-		ssh ${SSHUSER}@${IPMAC} "/Applications/Xcode.app//Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/install_name_tool -change QtCore.framework/Versions/5/QtCore @executable_path/../Frameworks/QtCore.framework/Versions/5/QtCore /Users/${SSHUSER}/Desktop/ultracopier/${BASEAPPNAME}/Contents/MacOS/CopyEngine/Ultracopier/libcopyEngine${LIBEXT}"
-		ssh ${SSHUSER}@${IPMAC} "/Applications/Xcode.app//Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/install_name_tool -change QtNetwork.framework/Versions/5/QtNetwork @executable_path/../Frameworks/QtNetwork.framework/Versions/5/QtNetwork /Users/${SSHUSER}/Desktop/ultracopier/${BASEAPPNAME}/Contents/MacOS/CopyEngine/Ultracopier/libcopyEngine${LIBEXT}"
-		ssh ${SSHUSER}@${IPMAC} "/Applications/Xcode.app//Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/install_name_tool -change QtGui.framework/Versions/5/QtGui @executable_path/../Frameworks/QtGui.framework/Versions/5/QtGui /Users/${SSHUSER}/Desktop/ultracopier/${BASEAPPNAME}/Contents/MacOS/Listener/catchcopy/liblistener${LIBEXT}"
-		ssh ${SSHUSER}@${IPMAC} "/Applications/Xcode.app//Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/install_name_tool -change QtCore.framework/Versions/5/QtCore @executable_path/../Frameworks/QtCore.framework/Versions/5/QtCore /Users/${SSHUSER}/Desktop/ultracopier/${BASEAPPNAME}/Contents/MacOS/Listener/catchcopy/liblistener${LIBEXT}"
-		ssh ${SSHUSER}@${IPMAC} "/Applications/Xcode.app//Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/install_name_tool -change QtNetwork.framework/Versions/5/QtNetwork @executable_path/../Frameworks/QtNetwork.framework/Versions/5/QtNetwork /Users/${SSHUSER}/Desktop/ultracopier/${BASEAPPNAME}/Contents/MacOS/Listener/catchcopy/liblistener${LIBEXT}"
-		ssh ${SSHUSER}@${IPMAC} "mkdir -p /Users/${SSHUSER}/Desktop/ultracopier/${BASEAPPNAME}/Contents/MacOS/Themes/Oxygen/"
-		ssh ${SSHUSER}@${IPMAC} "cp /Users/${SSHUSER}/Desktop/ultracopier/plugins/Themes/Oxygen/informations.xml /Users/${SSHUSER}/Desktop/ultracopier/${BASEAPPNAME}/Contents/MacOS/Themes/Oxygen/informations.xml"
-		ssh ${SSHUSER}@${IPMAC} "cp /Users/${SSHUSER}/Desktop/ultracopier/plugins/Themes/Oxygen/libinterface${LIBEXT} /Users/${SSHUSER}/Desktop/ultracopier/${BASEAPPNAME}/Contents/MacOS/Themes/Oxygen/libinterface${LIBEXT}"
-		ssh ${SSHUSER}@${IPMAC} "rsync -aqrt /Users/${SSHUSER}/Desktop/ultracopier/plugins/Themes/Oxygen/Languages/ /Users/${SSHUSER}/Desktop/ultracopier/${BASEAPPNAME}/Contents/MacOS/Themes/Oxygen/Languages/"
-		ssh ${SSHUSER}@${IPMAC} "/Applications/Xcode.app//Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/install_name_tool -change QtGui.framework/Versions/5/QtGui @executable_path/../Frameworks/QtGui.framework/Versions/5/QtGui /Users/${SSHUSER}/Desktop/ultracopier/${BASEAPPNAME}/Contents/MacOS/Themes/Oxygen/libinterface${LIBEXT}"
-		ssh ${SSHUSER}@${IPMAC} "/Applications/Xcode.app//Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/install_name_tool -change QtCore.framework/Versions/5/QtCore @executable_path/../Frameworks/QtCore.framework/Versions/5/QtCore /Users/${SSHUSER}/Desktop/ultracopier/${BASEAPPNAME}/Contents/MacOS/Themes/Oxygen/libinterface${LIBEXT}"
-		ssh ${SSHUSER}@${IPMAC} "/Applications/Xcode.app//Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/install_name_tool -change QtNetwork.framework/Versions/5/QtNetwork @executable_path/../Frameworks/QtNetwork.framework/Versions/5/QtNetwork /Users/${SSHUSER}/Desktop/ultracopier/${BASEAPPNAME}/Contents/MacOS/Themes/Oxygen/libinterface${LIBEXT}"
-		ssh ${SSHUSER}@${IPMAC} "cd /Users/${SSHUSER}/Desktop/ultracopier/;/Users/user/Qt${QTVERSION}/${QTVERSIONMAJ}/clang_64/bin/macdeployqt ${BASEAPPNAME}/ -dmg"
-		rsync -art ${SSHUSER}@${IPMAC}:/Users/${SSHUSER}/Desktop/ultracopier/ultracopier.dmg ${TEMP_PATH}/${FINAL_ARCHIVE}
-		if [ ! -e ${FINAL_ARCHIVE} ]; then
-			echo "${FINAL_ARCHIVE} not exists!";
-			exit;
-		fi
-		ssh ${SSHUSER}@${IPMAC} "rm -fR /Users/${SSHUSER}/Desktop/ultracopier/"
-		echo "Making binary debug Mac dmg... done"
-	else
-		echo "Archive already exists: ${FINAL_ARCHIVE}"
+		echo "rsync of the sources failed"
+		exit
 	fi
-}
 
-function compil_plugin {
-	DEBUG=$2
-	cd ${TEMP_PATH}/
-	TARGET=$1
-	SUBFOLDER=$3
+	# Stamp informations.xml (compiled into the binary via static-plugins.qrc) on the
+	# copy only; the original source tree stays untouched. Re-done on every run
+	# because the rsync above re-syncs the pristine files.
+	find ${SRCDIR} -name informations.xml -exec sed -i -r -e 's|<architecture>.*</architecture>|<architecture>mac-os-x</architecture>|g' -e "s|<version>.*</version>|<version>${ULTRACOPIER_VERSION}</version>|g" -e "s|<pubDate>.*</pubDate>|<pubDate>`date +%s`</pubDate>|g" {} \;
 
-	rsync -art --delete ${ULTRACOPIER_SOURCE}/ ${TEMP_PATH}/${TARGET}-mac-os-x/
-
-	cd ${TEMP_PATH}/${TARGET}-mac-os-x/${SUBFOLDER}/
-	for plugins_cat in `ls -1`
+	# Configure + build each arch. The shipping defines (NOAUDIO, ALL_IN_ONE(_DIRECT),
+	# NODEBUG) are hardcoded in CMakeLists.txt, so no Variable.h editing is needed.
+	# Qt6_DIR/FIND_ROOT_PATH pinning: the osxcross toolchain sets
+	# CMAKE_FIND_ROOT_PATH_MODE_PACKAGE=ONLY, restricting find_package() to the SDK,
+	# and the host-native moc/uic/rcc must come from the prefix's Qt 6.5.3 host build
+	# instead of the Mach-O ones in the mac Qt (same flags as testingcompilationmac.py).
+	for ARCH in ${ARCHS}
 	do
-		if [ -d ${plugins_cat} ] && [ "${plugins_cat}" != "Languages" ]
+		TRIPLE="${ARCH}-apple-darwin20.4"
+		BUILDDIR="${WORKDIR}/build-${ARCH}"
+		echo "try cmake configure (${ARCH})"
+		rm -rf ${BUILDDIR}
+		mkdir -p ${BUILDDIR}
+		${OSXCROSSBIN}/${TRIPLE}-cmake -S ${SRCDIR} -B ${BUILDDIR} -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_FIND_ROOT_PATH_MODE_PACKAGE=BOTH "-DCMAKE_FIND_ROOT_PATH=${OSXQT};${OSXHOSTQTCMAKE}" "-DCMAKE_PREFIX_PATH=${OSXQT};/usr" -DQt6_DIR=${OSXQT}/lib/cmake/Qt6 -DQt6CoreTools_DIR=${OSXHOSTQTCMAKE}/Qt6CoreTools -DQt6GuiTools_DIR=${OSXHOSTQTCMAKE}/Qt6GuiTools -DQt6WidgetsTools_DIR=${OSXHOSTQTCMAKE}/Qt6WidgetsTools -DQt6DBusTools_DIR=${OSXHOSTQTCMAKE}/Qt6DBusTools -DCMAKE_C_COMPILER_LAUNCHER=ccache -DCMAKE_CXX_COMPILER_LAUNCHER=ccache "-DCMAKE_EXE_LINKER_FLAGS=-fuse-ld=lld"
+		if [ $? -ne 0 ]
 		then
-			cd ${TEMP_PATH}/${TARGET}-mac-os-x/${SUBFOLDER}/${plugins_cat}/
-			for plugins_name in `ls -1`
-			do
-				if [ -f ${plugins_name}/informations.xml ]
-				then
-					find ${plugins_name}/ -name "informations.xml" -exec sed -i -r "s/1\.0\.0\.0/${ULTRACOPIER_VERSION}/g" {} \; > /dev/null 2>&1
-					ULTRACOPIER_PLUGIN_VERSION=`grep -F "<version>" ${plugins_name}/informations.xml | sed -r "s/^.*([0-9]+\.[0-9]+\.[0-9]+\.[0-9]+).*$/\1/g"`
-					# && [ ${plugins_name} != "Windows" ] -> for the plugins interface
-					if [ -d ${plugins_name} ] && [ ! -f "${TEMP_PATH}/plugins/${plugins_cat}/${plugins_name}/${plugins_cat}-${plugins_name}-${ULTRACOPIER_PLUGIN_VERSION}-mac-os-x.urc" ] && [ ${plugins_name} != "dbus" ] && [ ${plugins_cat} != "SessionLoader" ]
-					then
-						echo "pack the mac for the alternative plugin: ${plugins_cat}/${plugins_name}"
-						mkdir -p ${TEMP_PATH}/plugins/${plugins_cat}/${plugins_name}/
-
-						find ${plugins_name}/ -name "*.pro.user" -exec rm {} \; > /dev/null 2>&1
-						find ${plugins_name}/ -name "*-build-desktop" -type d -exec rm -Rf {} \; > /dev/null 2>&1
-						find ${plugins_name}/ -name "informations.xml" -exec sed -i -r "s/<architecture>.*<\/architecture>/<architecture>mac-os-x<\/architecture>/g" {} \; > /dev/null 2>&1
-						find ${plugins_name}/ -name "Variable.h" -exec sed -i "s/#define ULTRACOPIER_VERSION_PORTABLE/\/\/#define ULTRACOPIER_VERSION_PORTABLE/g" {} \; > /dev/null 2>&1
-						find ${plugins_name}/ -name "Variable.h" -exec sed -i "s/#define ULTRACOPIER_VERSION_PORTABLEAPPS/\/\/#define ULTRACOPIER_VERSION_PORTABLEAPPS/g" {} \; > /dev/null 2>&1
-						if [ ${DEBUG} -eq 1 ]
-						then
-							find ${plugins_name}/ -name "Variable.h" -exec sed -i "s/\/\/#define ULTRACOPIER_DEBUG/#define ULTRACOPIER_DEBUG/g" {} \; > /dev/null 2>&1
-							find ${plugins_name}/ -name "Variable.h" -exec sed -i "s/\/\/#define ULTRACOPIER_PLUGIN_DEBUG/#define ULTRACOPIER_PLUGIN_DEBUG/g" {} \; > /dev/null 2>&1
-							find ${plugins_name}/ -name "Variable.h" -exec sed -i "s/\/\/#define ULTRACOPIER_PLUGIN_DEBUG_WINDOW/#define ULTRACOPIER_PLUGIN_DEBUG_WINDOW/g" {} \; > /dev/null 2>&1
-						else
-							find ${plugins_name}/ -name "Variable.h" -exec sed -i "s/#define ULTRACOPIER_DEBUG/\/\/#define ULTRACOPIER_DEBUG/g" {} \; > /dev/null 2>&1
-							find ${plugins_name}/ -name "Variable.h" -exec sed -i "s/#define ULTRACOPIER_PLUGIN_DEBUG/\/\/#define ULTRACOPIER_PLUGIN_DEBUG/g" {} \; > /dev/null 2>&1
-							find ${plugins_name}/ -name "Variable.h" -exec sed -i "s/#define ULTRACOPIER_PLUGIN_DEBUG_WINDOW/\/\/#define ULTRACOPIER_PLUGIN_DEBUG_WINDOW/g" {} \; > /dev/null 2>&1
-						fi
-
-						ssh ${SSHUSER}@${IPMAC} "rm -fR /Users/${SSHUSER}/Desktop/ultracopier/"
-						rsync -art ${TEMP_PATH}/${TARGET}-mac-os-x/ ${SSHUSER}@${IPMAC}:/Users/${SSHUSER}/Desktop/ultracopier/
-						ssh ${SSHUSER}@${IPMAC} "cd /Users/${SSHUSER}/Desktop/ultracopier/${SUBFOLDER}/${plugins_cat}/${plugins_name}/;/Users/user/Qt${QTVERSION}/${QTVERSIONMAJ}/clang_64/bin/qmake /Users/${SSHUSER}/Desktop/ultracopier/${SUBFOLDER}/${plugins_cat}/${plugins_name}/*.pro -spec macx-g++ -config ${CONFIGARG}"
-						ssh ${SSHUSER}@${IPMAC} "cd /Users/${SSHUSER}/Desktop/ultracopier/${SUBFOLDER}/${plugins_cat}/${plugins_name}/;/Applications/Xcode.app/Contents/Developer/usr/bin/gnumake -j 3 > /dev/null"
-						RETURN_CODE=$?
-						if [ $? -ne 0 ]
-						then
-							echo "make failed on the mac: ${RETURN_CODE}"
-							exit
-						fi
-						ssh ${SSHUSER}@${IPMAC} "/Applications/Xcode.app//Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/install_name_tool -change QtGui.framework/Versions/5/QtGui @executable_path/../Frameworks/QtGui.framework/Versions/5/QtGui /Users/${SSHUSER}/Desktop/ultracopier/${SUBFOLDER}/${plugins_cat}/${plugins_name}/*${LIBEXT}"
-						ssh ${SSHUSER}@${IPMAC} "/Applications/Xcode.app//Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/install_name_tool -change QtCore.framework/Versions/5/QtCore @executable_path/../Frameworks/QtCore.framework/Versions/5/QtCore /Users/${SSHUSER}/Desktop/ultracopier/${SUBFOLDER}/${plugins_cat}/${plugins_name}/*${LIBEXT}"
-						ssh ${SSHUSER}@${IPMAC} "/Applications/Xcode.app//Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/install_name_tool -change QtNetwork.framework/Versions/5/QtNetwork @executable_path/../Frameworks/QtNetwork.framework/Versions/5/QtNetwork /Users/${SSHUSER}/Desktop/ultracopier/${SUBFOLDER}/${plugins_cat}/${plugins_name}/*${LIBEXT}"
-						rsync -art "${SSHUSER}@${IPMAC}:/Users/${SSHUSER}/Desktop/ultracopier/${SUBFOLDER}/${plugins_cat}/${plugins_name}/*${LIBEXT}" ${plugins_name}/
-						if [ ! -e ${plugins_name}/*.dylib ]; then
-							echo "no .dylib file!";
-						else
-							find ${plugins_name}/ -iname "*.ts" -exec rm {} \;
-							find ${plugins_name}/ -maxdepth 1 -mindepth 1 -type f ! -iname "*.dylib" ! -iname "informations.xml" -exec rm {} \;
-							find ${plugins_name}/ -maxdepth 1 -mindepth 1 -type d ! -iname "Languages" -exec rm -Rf {} \;
-							/usr/bin/find ${plugins_name}/ -type d -empty -delete > /dev/null 2>&1
-							/usr/bin/find ${plugins_name}/ -type d -empty -delete > /dev/null 2>&1
-							/usr/bin/find ${plugins_name}/ -type d -empty -delete > /dev/null 2>&1
-							/usr/bin/find ${plugins_name}/ -type d -empty -delete > /dev/null 2>&1
-
-							tar --posix -c -f - ${plugins_name}/ | xz -9 --check=crc32 > ${TEMP_PATH}/plugins/${plugins_cat}/${plugins_name}/${plugins_cat}-${plugins_name}-${ULTRACOPIER_PLUGIN_VERSION}-mac-os-x.urc
-						fi
-					fi
-				fi
-			done
+			echo "cmake configure failed (${ARCH})"
+			exit
 		fi
-		cd ${TEMP_PATH}/${TARGET}-mac-os-x/${SUBFOLDER}/
+		echo "try build (${ARCH})"
+		${OSXCROSSBIN}/${TRIPLE}-cmake --build ${BUILDDIR} -j$(nproc)
+		if [ $? -ne 0 ]
+		then
+			echo "build failed (${ARCH})"
+			exit
+		fi
 	done
-}
 
-compil "ultracopier" 0 0 0 0 0
-compil "ultracopier-ultimate" 0 1 0 0 0
-compil "ultracopier-debug" 1 0 0 0 0
+	echo "try lipo (universal .app)"
+	APPU="${WORKDIR}/${APPNAME}"
+	rm -rf ${APPU}
+	cp -a ${WORKDIR}/build-x86_64/${APPNAME} ${APPU} && \
+	${OSXCROSSBIN}/${LIPOTRIPLE}-lipo -create ${WORKDIR}/build-x86_64/${APPNAME}/Contents/MacOS/${EXENAME} ${WORKDIR}/build-arm64/${APPNAME}/Contents/MacOS/${EXENAME} -output ${APPU}/Contents/MacOS/${EXENAME} && \
+	${OSXCROSSBIN}/${LIPOTRIPLE}-lipo -info ${APPU}/Contents/MacOS/${EXENAME}
+	if [ $? -ne 0 ]
+	then
+		echo "lipo merge failed"
+		exit
+	fi
 
-compil_plugin "ultracopier" 0 "plugins-alternative"
-compil_plugin "ultracopier" 0 "plugins"
+	# CMakeLists.txt only knows the 3.0 project version; stamp the full one.
+	python3 -c "import plistlib,sys;f=sys.argv[1];p=plistlib.load(open(f,'rb'));p['CFBundleVersion']='${ULTRACOPIER_VERSION}';p['CFBundleShortVersionString']='${ULTRACOPIER_VERSION}';plistlib.dump(p,open(f,'wb'))" ${APPU}/Contents/Info.plist
+	if [ $? -ne 0 ]
+	then
+		echo "Info.plist stamping failed"
+		exit
+	fi
+
+	# Qt's macdeployqt is a Mach-O binary that can't run on Linux; the
+	# Linux-native equivalent bundles the Qt frameworks + plugins into the .app and
+	# rewrites the install names to @executable_path/../Frameworks/, ad-hoc signs it and
+	# fails if anything in the bundle would not load on a real Mac.
+	echo "try macdeployqt_linux"
+	python3 ${BASE_PWD}/sub-script/macdeployqt_linux.py --app ${APPU} --qt ${OSXQT} --osxcross-bin ${OSXCROSSBIN} --triple ${LIPOTRIPLE} --rcodesign ${OSXCODESIGN}
+	if [ $? -ne 0 ]
+	then
+		echo "macdeployqt_linux.py failed"
+		exit
+	fi
+
+	# No hdiutil on Linux: genisoimage makes an HFS hybrid image of a staging dir
+	# holding the .app, then libdmg-hfsplus converts it to a compressed .dmg.
+	echo "try dmg"
+	STAGE=$(mktemp -d ${WORKDIR}/dmg-stage.XXXXXX)
+	ISO=$(mktemp ${WORKDIR}/dmg.XXXXXX.iso)
+	cp -a ${APPU} ${STAGE}/ && \
+	${OSXISOTOOL} -quiet -V Ultracopier -no-pad -r -hfs -o ${ISO} ${STAGE} && \
+	${OSXDMGBIN} ${ISO} ${WORKDIR}/ultracopier.dmg > /dev/null
+	if [ $? -ne 0 ]
+	then
+		echo "dmg packaging failed"
+		rm -rf ${STAGE} ${ISO}
+		exit
+	fi
+	rm -rf ${STAGE} ${ISO}
+
+	cp ${WORKDIR}/ultracopier.dmg ${TEMP_PATH}/${FINAL_ARCHIVE}
+	if [ ! -e ${FINAL_ARCHIVE} ]; then
+		echo "${FINAL_ARCHIVE} not exists!";
+		exit;
+	fi
+	echo "Making Mac dmg... done"
+else
+	echo "Archive already exists: ${FINAL_ARCHIVE}"
+fi

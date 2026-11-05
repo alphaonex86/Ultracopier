@@ -87,8 +87,9 @@ def _run_net(argv, **kw) -> subprocess.CompletedProcess:
 class _Box:
     """A thin wrapper around `ssh host ...` / `scp ... host:...` for one Windows box."""
 
-    def __init__(self, host: str):
+    def __init__(self, host: str, extra_opts=()):
         self.host = host
+        self.opts = _SSH_OPTS + list(extra_opts)   # e.g. -i key / -o Port= for the Windows 11 VM
 
     # -- raw remote shell (the box's default shell; we always invoke powershell.exe --
     #    explicitly so behaviour is identical whether the SSH default is cmd or pwsh) -----
@@ -96,7 +97,7 @@ class _Box:
         # errors="replace": a non-English Windows box (e.g. Spanish, cp850/cp1252) emits bytes that
         # are not valid UTF-8; decode tolerantly so the ASCII we actually parse (numbers/keywords)
         # survives instead of raising UnicodeDecodeError.
-        return _run_net(["ssh", *_SSH_OPTS, self.host, remote_argv_str],
+        return _run_net(["ssh", *self.opts, self.host, remote_argv_str],
                         capture_output=True, text=True, errors="replace", timeout=timeout)
 
     def ps(self, script: str, timeout=120) -> subprocess.CompletedProcess:
@@ -138,7 +139,7 @@ class _Box:
             # scp the single archive to a HOME-RELATIVE path (the only reliable form on
             # Windows OpenSSH). A unique name so concurrent runs don't collide.
             tar_name = f"uc-stage-{uuid.uuid4().hex[:8]}.tar"
-            r = _run_net(["scp", *_SSH_OPTS, tar_local, f"{self.host}:{tar_name}"],
+            r = _run_net(["scp", *self.opts, tar_local, f"{self.host}:{tar_name}"],
                                capture_output=True, text=True, errors="replace", timeout=timeout)
             if r.returncode != 0:
                 raise RuntimeError(f"scp archive {local} -> ~/{tar_name} failed: {r.stderr.strip()}")
@@ -178,7 +179,7 @@ class _Box:
             if r.returncode != 0:
                 raise RuntimeError(f"local tar (contents) of {local} failed: {r.stderr.strip()}")
             tar_name = f"uc-seed-{uuid.uuid4().hex[:8]}.tar"
-            r = _run_net(["scp", *_SSH_OPTS, tar_local, f"{self.host}:{tar_name}"],
+            r = _run_net(["scp", *self.opts, tar_local, f"{self.host}:{tar_name}"],
                                capture_output=True, text=True, errors="replace", timeout=timeout)
             if r.returncode != 0:
                 raise RuntimeError(f"scp seed archive -> ~/{tar_name} failed: {r.stderr.strip()}")
@@ -626,7 +627,7 @@ def _scp_file(box: _Box, local: str, remote_win: str) -> None:
     """scp ONE local file to a Windows path on the box (scp to a HOME-relative name -- the only
     form OpenSSH-on-Windows accepts reliably -- then Move it to the target)."""
     name = f"uc-f-{uuid.uuid4().hex[:8]}{pathlib.Path(local).suffix}"
-    r = _run_net(["scp", *_SSH_OPTS, local, f"{box.host}:{name}"],
+    r = _run_net(["scp", *box.opts, local, f"{box.host}:{name}"],
                        capture_output=True, text=True, errors="replace", timeout=300)
     if r.returncode != 0:
         raise RuntimeError(f"scp {local} -> ~/{name} failed: {r.stderr.strip()}")

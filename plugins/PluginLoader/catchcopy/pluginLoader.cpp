@@ -114,7 +114,10 @@ static std::wstring pasteDestFolder()
             return std::wstring(p);
         return std::wstring();
     }
-    std::wstring res;
+    // Windows 11 tabs share one top-level HWND: the active tab is the first ShellTabWindowClass
+    // child in Z-order. NULL (XP) or no tab match -> first window match, the pre-tabs behaviour.
+    const HWND activeTab=FindWindowExW(fg,NULL,L"ShellTabWindowClass",NULL);
+    std::wstring res,firstMatch;
     IShellWindows* psw=NULL;
     if(SUCCEEDED(CoCreateInstance(uc_CLSID_ShellWindows,NULL,CLSCTX_ALL,uc_IID_IShellWindows,(void**)&psw)) && psw!=NULL)
     {
@@ -138,6 +141,8 @@ static std::wstring pasteDestFolder()
                             IShellBrowser* sb=NULL;
                             if(SUCCEEDED(sp->QueryService(SID_STopLevelBrowser,IID_IShellBrowser,(void**)&sb)) && sb!=NULL)
                             {
+                                HWND tab=NULL;
+                                const bool isActiveTab=(activeTab==NULL || (SUCCEEDED(sb->GetWindow(&tab)) && tab==activeTab));
                                 IShellView* sv=NULL;
                                 if(SUCCEEDED(sb->QueryActiveShellView(&sv)) && sv!=NULL)
                                 {
@@ -150,7 +155,14 @@ static std::wstring pasteDestFolder()
                                             LPITEMIDLIST pidl=NULL;
                                             if(SUCCEEDED(pf->GetCurFolder(&pidl)) && pidl!=NULL)
                                             {
-                                                wchar_t p[MAX_PATH]; if(SHGetPathFromIDListW(pidl,p)) res=p;
+                                                wchar_t p[MAX_PATH];
+                                                if(SHGetPathFromIDListW(pidl,p))
+                                                {
+                                                    if(isActiveTab)
+                                                        res=p;
+                                                    else if(firstMatch.empty())
+                                                        firstMatch=p;
+                                                }
                                                 CoTaskMemFree(pidl);
                                             }
                                             pf->Release();
@@ -172,6 +184,8 @@ static std::wstring pasteDestFolder()
         }
         psw->Release();
     }
+    if(res.empty())
+        return firstMatch;
     return res;
 }
 

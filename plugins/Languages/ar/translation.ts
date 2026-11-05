@@ -2308,46 +2308,46 @@ Error:%2</source>
 <context>
     <name>TransferThreadAsync</name>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/async/TransferThreadAsync.cpp" line="413"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/async/TransferThreadAsync.cpp" line="423"/>
         <source>Wrong modification date or unable to get it, you can disable time transfer to do it</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/async/TransferThreadAsync.cpp" line="513"/>
-        <location filename="../../CopyEngine/Ultracopier-Spec/async/TransferThreadAsync.cpp" line="531"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/async/TransferThreadAsync.cpp" line="523"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/async/TransferThreadAsync.cpp" line="541"/>
         <source>Unable to create the destination folder: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/async/TransferThreadAsync.cpp" line="516"/>
-        <location filename="../../CopyEngine/Ultracopier-Spec/async/TransferThreadAsync.cpp" line="533"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/async/TransferThreadAsync.cpp" line="526"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/async/TransferThreadAsync.cpp" line="543"/>
         <source>Unable to create the destination folder, errno: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/async/TransferThreadAsync.cpp" line="968"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/async/TransferThreadAsync.cpp" line="978"/>
         <source>Checksum: unable to allocate xxh3 state</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/async/TransferThreadAsync.cpp" line="983"/>
-        <location filename="../../CopyEngine/Ultracopier-Spec/async/TransferThreadAsync.cpp" line="1001"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/async/TransferThreadAsync.cpp" line="993"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/async/TransferThreadAsync.cpp" line="1011"/>
         <source>Checksum: unable to re-open source: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/async/TransferThreadAsync.cpp" line="992"/>
-        <location filename="../../CopyEngine/Ultracopier-Spec/async/TransferThreadAsync.cpp" line="1010"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/async/TransferThreadAsync.cpp" line="1002"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/async/TransferThreadAsync.cpp" line="1020"/>
         <source>Checksum: unable to re-open destination: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/async/TransferThreadAsync.cpp" line="1073"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/async/TransferThreadAsync.cpp" line="1083"/>
         <source>Checksum: read error during verify</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/async/TransferThreadAsync.cpp" line="1081"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/async/TransferThreadAsync.cpp" line="1091"/>
         <source>Checksum mismatch (xxh3-64): </source>
         <translation type="unfinished"></translation>
     </message>
@@ -2355,44 +2355,44 @@ Error:%2</source>
 <context>
     <name>TransferThreadPipelined</name>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/pipeline/TransferThreadPipelined.cpp" line="264"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/pipeline/TransferThreadPipelined.cpp" line="277"/>
         <source>Wrong modification date or unable to get it, you can disable time transfer to do it</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/pipeline/TransferThreadPipelined.cpp" line="561"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/pipeline/TransferThreadPipelined.cpp" line="589"/>
         <source>Unable to create the destination folder, errno: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/pipeline/TransferThreadPipelined.cpp" line="768"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/pipeline/TransferThreadPipelined.cpp" line="775"/>
         <source>Checksum: unable to allocate xxh3 state</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/pipeline/TransferThreadPipelined.cpp" line="783"/>
-        <location filename="../../CopyEngine/Ultracopier-Spec/pipeline/TransferThreadPipelined.cpp" line="801"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/pipeline/TransferThreadPipelined.cpp" line="790"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/pipeline/TransferThreadPipelined.cpp" line="808"/>
         <source>Checksum: unable to re-open source: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/pipeline/TransferThreadPipelined.cpp" line="792"/>
-        <location filename="../../CopyEngine/Ultracopier-Spec/pipeline/TransferThreadPipelined.cpp" line="810"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/pipeline/TransferThreadPipelined.cpp" line="799"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/pipeline/TransferThreadPipelined.cpp" line="817"/>
         <source>Checksum: unable to re-open destination: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/pipeline/TransferThreadPipelined.cpp" line="873"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/pipeline/TransferThreadPipelined.cpp" line="880"/>
         <source>Checksum: read error during verify</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/pipeline/TransferThreadPipelined.cpp" line="881"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/pipeline/TransferThreadPipelined.cpp" line="889"/>
         <source>Checksum mismatch (xxh3-64): </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/pipeline/TransferThreadPipelined.cpp" line="940"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/pipeline/TransferThreadPipelined.cpp" line="951"/>
         <source>Checksum mismatch and the corrupt destination could not be removed</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2400,12 +2400,12 @@ Error:%2</source>
 <context>
     <name>TransferThreadUring</name>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/uring/TransferThreadUring.cpp" line="233"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/uring/TransferThreadUring.cpp" line="249"/>
         <source>Unable to create the destination folder, errno: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/uring/TransferThreadUring.cpp" line="798"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/uring/TransferThreadUring.cpp" line="837"/>
         <source>File truncated during the read, possible data change</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2413,12 +2413,12 @@ Error:%2</source>
 <context>
     <name>TransferThreadWin</name>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/win-iocp/TransferThreadWin.cpp" line="298"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/win-iocp/TransferThreadWin.cpp" line="312"/>
         <source>Unable to create the destination folder, errno: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/win-iocp/TransferThreadWin.cpp" line="807"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/win-iocp/TransferThreadWin.cpp" line="829"/>
         <source>File truncated during the read, possible data change</source>
         <translation type="unfinished"></translation>
     </message>

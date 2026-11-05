@@ -425,6 +425,17 @@ Cases using it: `cli_arguments.py` (every argument form), `listener_socket.py` (
 the catchcopy wire format), `protocol_refused.py` (an unsupported protocol is refused and the
 client is told, so a file manager can fall back).
 
+## 6c. The Windows 11 VM lane: `lib/win11vm.py` (GUI session)
+
+For behaviour that needs a real interactive Windows desktop (Explorer, the PluginLoader Ctrl+V
+keyboard hook). `win11vm/vm.sh install` builds a local QEMU guest once (Secure Boot + swtpm TPM2,
+unattended, local admin `uc` auto-logged-on, sshd on `127.0.0.1:2222` with the VM's own key, Windows
+Update off). A case boots it headless when down (`[win11vm] dir`), cross-builds `ultracopier.exe` with
+MXE, deploys exe + DLLs, and runs its PowerShell driver as an `Interactive` scheduled task so injected
+keys reach the logged-on session. `vm.sh shot` grabs the guest screen as failure evidence.
+
+Case using it: `explorer_tabs_paste.py` (Ctrl+V lands in the ACTIVE Explorer tab, done by Ultracopier).
+
 ---
 
 ## 7. Legend for the diagrammer

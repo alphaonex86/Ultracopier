@@ -693,46 +693,46 @@
 <context>
     <name>TransferThreadAsync</name>
     <message>
-        <location filename="../../async/TransferThreadAsync.cpp" line="413"/>
+        <location filename="../../async/TransferThreadAsync.cpp" line="423"/>
         <source>Wrong modification date or unable to get it, you can disable time transfer to do it</source>
         <translation>수정 날짜가 잘못되었거나 가져올 수 없습니다. 시간 보내기를 비활성화할 수 있습니다.</translation>
     </message>
     <message>
-        <location filename="../../async/TransferThreadAsync.cpp" line="513"/>
-        <location filename="../../async/TransferThreadAsync.cpp" line="531"/>
+        <location filename="../../async/TransferThreadAsync.cpp" line="523"/>
+        <location filename="../../async/TransferThreadAsync.cpp" line="541"/>
         <source>Unable to create the destination folder: </source>
         <translation type="unfinished">대상 폴더를 만들 수 없음:</translation>
     </message>
     <message>
-        <location filename="../../async/TransferThreadAsync.cpp" line="516"/>
-        <location filename="../../async/TransferThreadAsync.cpp" line="533"/>
+        <location filename="../../async/TransferThreadAsync.cpp" line="526"/>
+        <location filename="../../async/TransferThreadAsync.cpp" line="543"/>
         <source>Unable to create the destination folder, errno: %1</source>
         <translation type="unfinished">대상 폴더를 만들 수 없음. Errno: %1</translation>
     </message>
     <message>
-        <location filename="../../async/TransferThreadAsync.cpp" line="968"/>
+        <location filename="../../async/TransferThreadAsync.cpp" line="978"/>
         <source>Checksum: unable to allocate xxh3 state</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../async/TransferThreadAsync.cpp" line="983"/>
-        <location filename="../../async/TransferThreadAsync.cpp" line="1001"/>
+        <location filename="../../async/TransferThreadAsync.cpp" line="993"/>
+        <location filename="../../async/TransferThreadAsync.cpp" line="1011"/>
         <source>Checksum: unable to re-open source: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../async/TransferThreadAsync.cpp" line="992"/>
-        <location filename="../../async/TransferThreadAsync.cpp" line="1010"/>
+        <location filename="../../async/TransferThreadAsync.cpp" line="1002"/>
+        <location filename="../../async/TransferThreadAsync.cpp" line="1020"/>
         <source>Checksum: unable to re-open destination: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../async/TransferThreadAsync.cpp" line="1073"/>
+        <location filename="../../async/TransferThreadAsync.cpp" line="1083"/>
         <source>Checksum: read error during verify</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../async/TransferThreadAsync.cpp" line="1081"/>
+        <location filename="../../async/TransferThreadAsync.cpp" line="1091"/>
         <source>Checksum mismatch (xxh3-64): </source>
         <translation type="unfinished"></translation>
     </message>
@@ -740,44 +740,44 @@
 <context>
     <name>TransferThreadPipelined</name>
     <message>
-        <location filename="../../pipeline/TransferThreadPipelined.cpp" line="264"/>
+        <location filename="../../pipeline/TransferThreadPipelined.cpp" line="277"/>
         <source>Wrong modification date or unable to get it, you can disable time transfer to do it</source>
         <translation type="unfinished">수정 날짜가 잘못되었거나 가져올 수 없습니다. 시간 보내기를 비활성화할 수 있습니다.</translation>
     </message>
     <message>
-        <location filename="../../pipeline/TransferThreadPipelined.cpp" line="561"/>
+        <location filename="../../pipeline/TransferThreadPipelined.cpp" line="589"/>
         <source>Unable to create the destination folder, errno: %1</source>
         <translation type="unfinished">대상 폴더를 만들 수 없음. Errno: %1</translation>
     </message>
     <message>
-        <location filename="../../pipeline/TransferThreadPipelined.cpp" line="768"/>
+        <location filename="../../pipeline/TransferThreadPipelined.cpp" line="775"/>
         <source>Checksum: unable to allocate xxh3 state</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../pipeline/TransferThreadPipelined.cpp" line="783"/>
-        <location filename="../../pipeline/TransferThreadPipelined.cpp" line="801"/>
+        <location filename="../../pipeline/TransferThreadPipelined.cpp" line="790"/>
+        <location filename="../../pipeline/TransferThreadPipelined.cpp" line="808"/>
         <source>Checksum: unable to re-open source: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../pipeline/TransferThreadPipelined.cpp" line="792"/>
-        <location filename="../../pipeline/TransferThreadPipelined.cpp" line="810"/>
+        <location filename="../../pipeline/TransferThreadPipelined.cpp" line="799"/>
+        <location filename="../../pipeline/TransferThreadPipelined.cpp" line="817"/>
         <source>Checksum: unable to re-open destination: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../pipeline/TransferThreadPipelined.cpp" line="873"/>
+        <location filename="../../pipeline/TransferThreadPipelined.cpp" line="880"/>
         <source>Checksum: read error during verify</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../pipeline/TransferThreadPipelined.cpp" line="881"/>
+        <location filename="../../pipeline/TransferThreadPipelined.cpp" line="889"/>
         <source>Checksum mismatch (xxh3-64): </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../pipeline/TransferThreadPipelined.cpp" line="940"/>
+        <location filename="../../pipeline/TransferThreadPipelined.cpp" line="951"/>
         <source>Checksum mismatch and the corrupt destination could not be removed</source>
         <translation type="unfinished"></translation>
     </message>
@@ -785,12 +785,12 @@
 <context>
     <name>TransferThreadUring</name>
     <message>
-        <location filename="../../uring/TransferThreadUring.cpp" line="233"/>
+        <location filename="../../uring/TransferThreadUring.cpp" line="249"/>
         <source>Unable to create the destination folder, errno: %1</source>
         <translation type="unfinished">대상 폴더를 만들 수 없음. Errno: %1</translation>
     </message>
     <message>
-        <location filename="../../uring/TransferThreadUring.cpp" line="798"/>
+        <location filename="../../uring/TransferThreadUring.cpp" line="837"/>
         <source>File truncated during the read, possible data change</source>
         <translation type="unfinished"></translation>
     </message>
@@ -802,12 +802,12 @@
 <context>
     <name>TransferThreadWin</name>
     <message>
-        <location filename="../../win-iocp/TransferThreadWin.cpp" line="298"/>
+        <location filename="../../win-iocp/TransferThreadWin.cpp" line="312"/>
         <source>Unable to create the destination folder, errno: %1</source>
         <translation type="unfinished">대상 폴더를 만들 수 없음. Errno: %1</translation>
     </message>
     <message>
-        <location filename="../../win-iocp/TransferThreadWin.cpp" line="807"/>
+        <location filename="../../win-iocp/TransferThreadWin.cpp" line="829"/>
         <source>File truncated during the read, possible data change</source>
         <translation type="unfinished"></translation>
     </message>

@@ -1,12 +1,12 @@
 #!/bin/bash
-
-export TEMP_PATH="/mnt/world/ultracopier-temp/"
-export ULTRACOPIER_SOURCE="/home/user/Desktop/ultracopier/sources/"
+export TEMP_PATH="/mnt/data/perso/tmpfs/ultracopier-temp/"
+export ULTRACOPIER_SOURCE="/mnt/data/perso/progs/ultracopier/sources/"
+export ULTRACOPIERSOURCESPATH="/mnt/data/perso/progs/ultracopier/sources/"
 export BASE_PWD=`pwd`
 
 cd ${BASE_PWD}
 
-export ULTRACOPIER_VERSION=`grep -F "ULTRACOPIER_VERSION" ${ULTRACOPIER_SOURCE}/Variable.h | grep -F "1.2" | sed -r "s/^.*([0-9]+\.[0-9]+\.[0-9]+\.[0-9]+).*$/\1/g"`
+export ULTRACOPIER_VERSION=`grep -F "ULTRACOPIER_VERSION" ${ULTRACOPIERSOURCESPATH}/Version.h | grep -F "3.1" | sed -r "s/^.*([0-9]+\.[0-9]+\.[0-9]+\.[0-9]+).*$/\1/g"`
 function valid_ip()
 {
     local  ip=$1
